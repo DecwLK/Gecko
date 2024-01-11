@@ -3,7 +3,7 @@ on: [pull_request, push]
 jobs:
   checkstyle:
     name: runner / checkstyle
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: dbelyaev/action-checkstyle@master

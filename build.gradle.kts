@@ -1,9 +1,15 @@
 plugins {
     id("java")
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "org.gecko"
+version = "0.1"
+
+javafx {
+    version = "21.0.1"
+    modules("javafx.controls")
+}
 
 repositories {
     mavenCentral()

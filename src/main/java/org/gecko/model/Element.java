@@ -1,4 +1,5 @@
 package org.gecko.model;
 
-public class Element {
+public interface Element {
+    public void accept(ElementVisitor visitor);
 }

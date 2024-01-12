@@ -1,13 +1,16 @@
 package org.gecko.viewmodel;
 
 import javafx.beans.property.StringProperty;
-import org.gecko.model.Element;
+import lombok.Getter;
+import lombok.Setter;
+import org.gecko.model.Contract;
 
-// TODO: Extend T with Contract.
-public class ContractViewModel<T extends Element> extends AbstractViewModelElement<T> implements Renamable {
+public class ContractViewModel<T extends Contract> extends AbstractViewModelElement<T> implements Renamable {
     private StringProperty name;
-    private StringProperty preCondition;
-    private StringProperty postCondition;
+
+    @Getter @Setter private StringProperty preCondition;
+
+    @Getter @Setter private StringProperty postCondition;
 
     public ContractViewModel(T target) {
         super(target);
@@ -24,6 +27,7 @@ public class ContractViewModel<T extends Element> extends AbstractViewModelEleme
         return null;
     }
 
+    @Override
     public void setName(String name) {
         // TODO
     }

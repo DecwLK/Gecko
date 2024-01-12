@@ -2,15 +2,24 @@ package org.gecko.viewmodel;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
-import org.gecko.model.Element;
+import lombok.Getter;
+import lombok.Setter;
+import org.gecko.model.Contract;
+import org.gecko.model.Edge;
+import org.gecko.model.Kind;
+import org.gecko.model.State;
 
-// TODO: Extend T with Edge.
-public class EdgeViewModel<T extends Element> extends PositionableViewModelElement<T> {
-    // TODO: private Property<Kind> kind;
+@Setter @Getter
+public class EdgeViewModel<T extends Edge> extends PositionableViewModelElement<T> {
+    private Property<Kind> kind;
+
     private IntegerProperty priority;
-    private ContractViewModel<T> contract;
-    private StateViewModel<T> source;
-    private StateViewModel<T> destination;
+
+    private ContractViewModel<Contract> contract;
+
+    private StateViewModel<State> source;
+
+    private StateViewModel<State> destination;
 
     public EdgeViewModel(T target) {
         super(target);

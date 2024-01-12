@@ -2,20 +2,27 @@ package org.gecko.viewmodel;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
-import org.gecko.model.Element;
+import lombok.Getter;
+import lombok.Setter;
+import org.gecko.model.Contract;
 import javafx.scene.paint.Color;
+import org.gecko.model.Region;
+import org.gecko.model.State;
 
-// TODO: Extend T with Region.
-public class RegionViewModel<T extends Element> extends BlockViewModelElement<T> {
+import java.util.List;
+
+@Getter @Setter
+public class RegionViewModel<T extends Region> extends BlockViewModelElement<T> {
     private Property<Color> color;
-    private ContractViewModel<T> contract;
+    private ContractViewModel<Contract> contract;
     private StringProperty invariant;
+    private List<StateViewModel<State>> states;
 
     public RegionViewModel(T target) {
         super(target);
     }
 
-    public void addState(StateViewModel<T> state) {
+    public void addState(StateViewModel<State> state) {
         // TODO
     }
 }

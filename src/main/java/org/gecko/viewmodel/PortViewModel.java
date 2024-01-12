@@ -1,11 +1,14 @@
 package org.gecko.viewmodel;
 
-import org.gecko.model.Element;
 import javafx.beans.property.Property;
+import lombok.Getter;
+import lombok.Setter;
+import org.gecko.model.Variable;
+import org.gecko.model.Visibility;
 
-// TODO: Extend T with Variable.
-public class PortViewModel<T extends Element> extends BlockViewModelElement<T> {
-    // TODO: private Property<Visibility> visibility;
+@Setter @Getter
+public class PortViewModel<T extends Variable> extends BlockViewModelElement<T> {
+    private Property<Visibility> visibility;
 
     public PortViewModel(T target) {
         super(target);

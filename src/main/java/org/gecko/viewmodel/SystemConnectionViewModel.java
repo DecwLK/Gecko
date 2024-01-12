@@ -1,11 +1,14 @@
 package org.gecko.viewmodel;
 
-import org.gecko.model.Element;
+import lombok.Getter;
+import lombok.Setter;
+import org.gecko.model.SystemConnection;
+import org.gecko.model.Variable;
 
-// TODO: Extend T with SystemConnection.
-public class SystemConnectionViewModel<T extends Element> extends PositionableViewModelElement<T> {
-    private PortViewModel<T> source;
-    private PortViewModel<T> destination;
+@Getter @Setter
+public class SystemConnectionViewModel<T extends SystemConnection> extends PositionableViewModelElement<T> {
+    private PortViewModel<Variable> source;
+    private PortViewModel<Variable> destination;
 
     SystemConnectionViewModel(T target) {
         super(target);

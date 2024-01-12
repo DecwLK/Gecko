@@ -1,12 +1,15 @@
 package org.gecko.viewmodel;
 
 import javafx.beans.property.StringProperty;
-import org.gecko.model.Element;
+import lombok.Getter;
+import lombok.Setter;
+import org.gecko.model.System;
+import org.gecko.model.Variable;
 
-// TODO: Extend T with System.
-public class SystemViewModel<T extends Element> extends BlockViewModelElement<T> {
+@Getter @Setter
+public class SystemViewModel<T extends System> extends BlockViewModelElement<T> {
    private StringProperty code;
-   private PortViewModel<T> ports;
+   private PortViewModel<Variable> ports;
 
     public SystemViewModel(T target) {
         super(target);

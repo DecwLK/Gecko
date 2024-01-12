@@ -1,4 +1,4 @@
 package org.gecko.exceptions;
 
-public class GeckoException {
+public class GeckoException extends Exception {
 }

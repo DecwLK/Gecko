@@ -1,4 +1,6 @@
 package org.gecko.view.views.viewelement;
 
-public class PortViewElement { //TODO implements what?
+import javafx.scene.layout.Pane;
+
+public class PortViewElement extends Pane {
 }

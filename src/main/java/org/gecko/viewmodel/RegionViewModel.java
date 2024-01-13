@@ -4,17 +4,17 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-import javafx.scene.paint.Color;
 import org.gecko.model.Condition;
 import org.gecko.model.Region;
-import javafx.collections.FXCollections;
-
 import java.util.Random;
 
-@Getter @Setter
+@Setter
+@Getter
 public class RegionViewModel extends BlockViewModelElement<Region> {
     private Property<Color> color;
     private ContractViewModel contract;

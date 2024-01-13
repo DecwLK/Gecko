@@ -8,7 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.State;
 
-@Getter @Setter
+@Setter
+@Getter
 public class StateViewModel extends BlockViewModelElement<State> {
     private BooleanProperty isStartState;
     private ObservableList<ContractViewModel> contracts;

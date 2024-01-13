@@ -8,10 +8,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.System;
 
-@Getter @Setter
+@Getter
+@Setter
 public class SystemViewModel extends BlockViewModelElement<System> {
-   private StringProperty code;
-   private ObservableList<PortViewModel> ports;
+    private StringProperty code;
+    private ObservableList<PortViewModel> ports;
 
     public SystemViewModel(System target) {
         super(target);

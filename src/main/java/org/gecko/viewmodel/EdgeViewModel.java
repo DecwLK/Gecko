@@ -9,7 +9,8 @@ import lombok.Setter;
 import org.gecko.model.Edge;
 import org.gecko.model.Kind;
 
-@Setter @Getter
+@Setter
+@Getter
 public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     private Property<Kind> kind;
 

@@ -9,7 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Element;
 
-@Getter @Setter
+@Getter
+@Setter
 public abstract class PositionableViewModelElement<T extends Element> extends AbstractViewModelElement<T> {
     private Property<Point2D> position;
     private Property<Point2D> size;

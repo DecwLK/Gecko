@@ -11,5 +11,5 @@ public abstract class AbstractViewModelElement<T extends Element> {
         this.target = target;
     }
 
-    abstract public void updateTarget();
+    public abstract void updateTarget();
 }

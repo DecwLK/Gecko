@@ -29,9 +29,9 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
         // Moves bottom-right corner with delta.
         Point2D currentSizeValue = super.getSize().getValue();
 
-        double newXCoordinate = currentSizeValue.getX() + delta.getX();
-        double newYCoordinate = currentSizeValue.getY() + delta.getY();
-        Point2D newSize = new Point2D(newXCoordinate, newYCoordinate);
+        double xCoordinate = currentSizeValue.getX() + delta.getX();
+        double yCoordinate = currentSizeValue.getY() + delta.getY();
+        Point2D newSize = new Point2D(xCoordinate, yCoordinate);
 
         super.setSize(new SimpleObjectProperty<>(newSize));
     }
@@ -42,16 +42,16 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
         Point2D currentSizeValue = super.getSize().getValue();
 
         // Update top-left corner's position:
-        double newXCoordinate = currentPositionValue.getX() + delta.getX();
-        double newYCoordinate = currentPositionValue.getY() + delta.getY();
-        Point2D newPosition = new Point2D(newXCoordinate, newYCoordinate);
+        double xCoordinate = currentPositionValue.getX() + delta.getX();
+        double yCoordinate = currentPositionValue.getY() + delta.getY();
+        Point2D newPosition = new Point2D(xCoordinate, yCoordinate);
 
         super.setPosition(new SimpleObjectProperty<>(newPosition));
 
         // Update bottom-right corner's position:
-        newXCoordinate = currentSizeValue.getX() + delta.getX();
-        newYCoordinate = currentSizeValue.getY() + delta.getY();
-        newPosition = new Point2D(newXCoordinate, newYCoordinate);
+        xCoordinate = currentSizeValue.getX() + delta.getX();
+        yCoordinate = currentSizeValue.getY() + delta.getY();
+        newPosition = new Point2D(xCoordinate, yCoordinate);
 
         super.setSize(new SimpleObjectProperty<>(newPosition));
     }
@@ -74,21 +74,21 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
             Point2D newPosition = currentPositionValue;
             Point2D newSize = currentSizeValue;
 
-            double newXCoordinate;
-            double newYCoordinate;
+            double xCoordinate;
+            double yCoordinate;
 
             if (startPoint.equals(topRightCorner)) {
-                newYCoordinate = currentPositionValue.getY() + delta.getY();
-                newPosition = new Point2D(currentPositionValue.getX(), newYCoordinate);
+                yCoordinate = currentPositionValue.getY() + delta.getY();
+                newPosition = new Point2D(currentPositionValue.getX(), yCoordinate);
 
-                newXCoordinate = currentSizeValue.getX() + delta.getX();
-                newSize = new Point2D(newXCoordinate, currentSizeValue.getY());
-            } else if (startPoint.equals(bottomLeftCorner)){
-                newXCoordinate = currentPositionValue.getX() + delta.getX();
-                newPosition = new Point2D(newXCoordinate, currentPositionValue.getY());
+                xCoordinate = currentSizeValue.getX() + delta.getX();
+                newSize = new Point2D(xCoordinate, currentSizeValue.getY());
+            } else if (startPoint.equals(bottomLeftCorner)) {
+                xCoordinate = currentPositionValue.getX() + delta.getX();
+                newPosition = new Point2D(xCoordinate, currentPositionValue.getY());
 
-                newYCoordinate = currentSizeValue.getY() + delta.getY();
-                newSize = new Point2D(currentSizeValue.getX(), newYCoordinate);
+                yCoordinate = currentSizeValue.getY() + delta.getY();
+                newSize = new Point2D(currentSizeValue.getX(), yCoordinate);
             }
 
             super.setPosition(new SimpleObjectProperty<>(newPosition));

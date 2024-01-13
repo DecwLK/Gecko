@@ -7,7 +7,8 @@ import lombok.Setter;
 import org.gecko.model.Variable;
 import org.gecko.model.Visibility;
 
-@Setter @Getter
+@Setter
+@Getter
 public class PortViewModel extends BlockViewModelElement<Variable> {
     private Property<Visibility> visibility;
 

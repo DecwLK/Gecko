@@ -5,14 +5,13 @@ import javafx.beans.value.ObservableObjectValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.gecko.tools.Tool;
 
 import java.util.List;
 
-@Getter @Setter
-public abstract class EditorViewModel {
+@Data
+public class EditorViewModel {
     private Property<Point2D> pivot;
     private Property<Double> zoomScale;
     private ObservableObjectValue<Tool> currentTool;
@@ -21,16 +20,22 @@ public abstract class EditorViewModel {
     private final ObservableList<PositionableViewModelElement<?>> containedPositionableViewModelElements;
     private List<Tool> tools;
     private SelectionManager selectionManager;
+    private boolean isAutomatonEditor;
 
-    protected EditorViewModel(SystemViewModel systemViewModel) {
+    public EditorViewModel(SystemViewModel systemViewModel, boolean isAutomatonEditor) {
         currentSystem = systemViewModel;
         containedPositionableViewModelElements = FXCollections.observableArrayList();
+        this.isAutomatonEditor = isAutomatonEditor;
         //TODO stub
     }
 
     public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
         //TODO stub
         return null;
+    }
+
+    public void moveToFocusedElement() {
+        //TODO stub
     }
 
 }

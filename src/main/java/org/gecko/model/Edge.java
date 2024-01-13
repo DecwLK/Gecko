@@ -11,6 +11,8 @@ public class Edge implements Element {
     private State destination;
 
     public Edge(State source, State destination, Contract contract, Kind kind, int priority) {
+        this.source = source;
+        this.destination = destination;
         this.contract = contract;
         this.kind = kind;
         this.priority = priority;

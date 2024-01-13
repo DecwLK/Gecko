@@ -1,40 +1,35 @@
 package org.gecko.model;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 public class System implements Renamable, Element {
-    @Getter
-    private System parent;
-    @Getter
-    private String code;
-    @Getter
-    private Automaton automaton;
-    @Getter
-    private List<System> children;
+    @Getter private System parent;
+    @Getter private String code;
+    @Getter private Automaton automaton;
+    @Getter private List<System> children;
     private List<SystemConnection> connections;
     private List<Variable> variables;
 
     public void addChild(System child) {
-        //TODO stub
+        // TODO stub
         children.add(child);
     }
 
     @Override
     public void accept(ElementVisitor visitor) {
-        //TODO stub
+        // TODO stub
     }
 
     @Override
     public String getName() {
-        //TODO stub
+        // TODO stub
         return null;
     }
 
     @Override
     public void setName(String name) {
-        //TODO stub
+        // TODO stub
     }
 }

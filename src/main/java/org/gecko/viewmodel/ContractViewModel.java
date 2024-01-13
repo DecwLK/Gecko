@@ -1,8 +1,7 @@
 package org.gecko.viewmodel;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Contract;
@@ -16,6 +15,9 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
 
     public ContractViewModel(Contract target) {
         super(target);
+        this.name = new SimpleStringProperty(target.getName());
+        this.preCondition = new SimpleStringProperty(target.getPreCondition().getCondition());
+        this.postCondition = new SimpleStringProperty(target.getPreCondition().getCondition());
     }
 
     @Override
@@ -25,12 +27,12 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
 
     @Override
     public String getName() {
-        // TODO
-        return null;
+        return this.name.getValue();
     }
 
     @Override
     public void setName(String name) {
-        // TODO
+        // TODO: further checks before updating?
+        this.name.setValue(name);
     }
 }

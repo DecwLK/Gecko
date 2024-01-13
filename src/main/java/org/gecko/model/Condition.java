@@ -4,5 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class Condition {
-    private String condition;
+    private final String condition;
+
+    public Condition(String condition) {
+        this.condition = condition;
+    }
 }

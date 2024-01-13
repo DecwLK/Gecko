@@ -1,5 +1,6 @@
 package org.gecko.viewmodel;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import org.gecko.model.Element;
@@ -9,17 +10,18 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
 
     BlockViewModelElement(T target) {
         super(target);
+        this.name = new SimpleStringProperty();
     }
 
     @Override
     public String getName() {
-        // TODO
-        return null;
+        return this.name.getValue();
     }
 
     @Override
     public void setName(String name) {
-        // TODO
+        // TODO: further checks before updating?
+        this.name.setValue(name);
     }
 
     public void move(Point2D delta) {

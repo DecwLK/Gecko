@@ -1,26 +1,21 @@
 package org.gecko.model;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class Variable implements Renamable, Element {
-    private Visibility visibility;
     private String name;
     private String type;
+    private Visibility visibility;
+
+    public Variable(String name, String type, Visibility visibility) {
+        this.visibility = visibility;
+        this.name = name;
+        this.type = type;
+    }
 
     @Override
     public void accept(ElementVisitor visitor) {
-        //TODO stub
-    }
-
-    @Override
-    public String getName() {
-        //TODO stub
-        return null;
-    }
-
-    @Override
-    public void setName(String name) {
-        //TODO stub
+        visitor.visit(this);
     }
 }

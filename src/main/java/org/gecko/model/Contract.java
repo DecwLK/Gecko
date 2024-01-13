@@ -1,31 +1,21 @@
 package org.gecko.model;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class Contract implements Renamable, Element {
+    private String name;
     private Condition preCondition;
     private Condition postCondition;
 
-    public Contract(Condition preCondition, Condition postCondition) {
-        //TODO stub
+    public Contract(String name, Condition preCondition, Condition postCondition) {
+        this.name = name;
         this.preCondition = preCondition;
         this.postCondition = postCondition;
     }
 
     @Override
     public void accept(ElementVisitor visitor) {
-        //TODO stub
-    }
-
-    @Override
-    public String getName() {
-        //TODO stub
-        return null;
-    }
-
-    @Override
-    public void setName(String name) {
-        //TODO stub
+        visitor.visit(this);
     }
 }

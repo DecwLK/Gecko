@@ -11,5 +11,17 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
 
     SystemConnectionViewModel(SystemConnection target) {
         super(target);
+        this.source = new PortViewModel(target.getSource());
+        this.destination = new PortViewModel(target.getDestination());
+    }
+
+    @Override
+    public void updateTarget() {
+        // TODO
+    }
+
+    @Override
+    public void accept(PositionableViewModelElementVisitor visitor) {
+        visitor.visit(this);
     }
 }

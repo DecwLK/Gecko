@@ -8,7 +8,7 @@ public class MoveEdgeViewModelElementAction extends Action {
             ActionFactory actionFactory,
             EdgeViewModel edgeViewModel,
             StateViewModel stateViewModel,
-            boolean isSJource) {
+            boolean isSource) {
     }
 
     @Override

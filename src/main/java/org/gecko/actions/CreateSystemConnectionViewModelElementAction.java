@@ -8,8 +8,8 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
 
     CreateSystemConnectionViewModelElementAction(
             ActionFactory actionFactory,
-            ViewModelFactory viewModelFactory,
             GeckoViewModel geckoViewModel,
+            ViewModelFactory viewModelFactory,
             PortViewModel source,
             PortViewModel destination) {}
 

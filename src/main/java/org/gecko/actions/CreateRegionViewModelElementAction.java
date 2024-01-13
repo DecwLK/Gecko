@@ -8,8 +8,8 @@ public class CreateRegionViewModelElementAction extends Action {
 
     CreateRegionViewModelElementAction(
             ActionFactory actionFactory,
-            ViewModelFactory viewModelFactory,
             GeckoViewModel geckoViewModel,
+            ViewModelFactory viewModelFactory,
             Point2D position) {}
 
     @Override

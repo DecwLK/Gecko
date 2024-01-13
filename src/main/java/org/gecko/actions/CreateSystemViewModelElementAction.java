@@ -8,8 +8,8 @@ public class CreateSystemViewModelElementAction extends Action {
 
     CreateSystemViewModelElementAction(
             ActionFactory actionFactory,
-            ViewModelFactory viewModelFactory,
             GeckoViewModel geckoViewModel,
+            ViewModelFactory viewModelFactory,
             Point2D position) {}
 
     @Override

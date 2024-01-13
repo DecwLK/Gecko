@@ -7,14 +7,15 @@ import org.gecko.viewmodel.ViewModelFactory;
 public class CreatePortViewModelElementAction extends Action {
     CreatePortViewModelElementAction(
             ActionFactory actionFactory,
-            ViewModelFactory viewModelFactory,
             GeckoViewModel geckoViewModel,
+            ViewModelFactory viewModelFactory,
             Point2D position) {}
 
     CreatePortViewModelElementAction(
             ActionFactory actionFactory,
-            ViewModelFactory viewModelFactory,
-            GeckoViewModel geckoViewModel) {}
+            GeckoViewModel geckoViewModel,
+            ViewModelFactory viewModelFactory
+            ) {}
 
     @Override
     void run() {}

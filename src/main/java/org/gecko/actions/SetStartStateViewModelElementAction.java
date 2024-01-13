@@ -7,13 +7,11 @@ public class SetStartStateViewModelElementAction extends Action {
 
     SetStartStateViewModelElementAction(
             ActionFactory actionFactory,
-            StateViewModel stateViewModel,
-            EditorViewModel editorViewModel) {}
+            EditorViewModel editorViewModel,
+            StateViewModel stateViewModel) {}
 
     @Override
-    void run() {
-
-    }
+    void run() {}
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

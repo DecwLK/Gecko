@@ -7,8 +7,8 @@ public class CreateContractViewModelElementAction extends Action {
 
     CreateContractViewModelElementAction(
             ActionFactory actionFactory,
-            StateViewModel stateViewModel,
-            GeckoViewModel geckoViewModel) {}
+            GeckoViewModel geckoViewModel,
+            StateViewModel stateViewModel) {}
 
     @Override
     void run() {}

@@ -19,7 +19,25 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
 
     @Override
     public void updateTarget() {
-        // TODO
+        // Update name:
+        if (super.getName() == null || this.getName().isEmpty()) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!super.getName().equals(super.getTarget().getName())) {
+            super.getTarget().setName(super.getName());
+        }
+
+        // Update visibility:
+        if (this.visibility == null || this.visibility.getValue() == null) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.visibility.getValue().equals(super.getTarget().getVisibility())) {
+            super.getTarget().setVisibility(this.visibility.getValue());
+        }
     }
 
     @Override

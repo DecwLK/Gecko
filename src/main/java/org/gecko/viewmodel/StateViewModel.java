@@ -22,12 +22,28 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
     @Override
     public void updateTarget() {
-        // TODO
+        // Update name:
+        if (super.getName() == null || super.getName().isEmpty()) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!super.getName().equals(super.getTarget().getName())) {
+            super.getTarget().setName(super.getName());
+        }
+
+        // Update isStartState:
+        // TODO: Start state change handled beforehand. Has to be taken care of in automaton also.
+        if (this.isStartState == null || this.isStartState.getValue() == null) {
+            // TODO: Throw exception.
+            return;
+        }
     }
 
     public void addContract(ContractViewModel contract) {
         // TODO: prior checks
         this.contracts.add(contract);
+        super.getTarget().addContract(contract.getTarget());
     }
 
     @Override

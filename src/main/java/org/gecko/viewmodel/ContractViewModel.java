@@ -4,7 +4,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.model.Condition;
 import org.gecko.model.Contract;
+
+import java.io.IOException;
 
 public class ContractViewModel extends AbstractViewModelElement<Contract> implements Renamable {
     private StringProperty name;
@@ -22,7 +25,35 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
 
     @Override
     public void updateTarget() {
-        // TODO
+        // Update name:
+        if (this.name == null || this.name.getValue() == null || this.name.getValue().isEmpty()) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.name.getValue().equals(super.getTarget().getName())) {
+            super.getTarget().setName(this.name.getValue());
+        }
+
+        // Update precondition:
+        if (this.preCondition == null || this.preCondition.getValue() == null || this.preCondition.getValue().isEmpty()) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.preCondition.getValue().equals(super.getTarget().getPreCondition().getCondition())) {
+            super.getTarget().setPreCondition(new Condition(this.preCondition.getValue()));
+        }
+
+        // Update postcondition:
+        if (this.postCondition == null || this.postCondition.getValue() == null || this.postCondition.getValue().isEmpty()) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.postCondition.getValue().equals(super.getTarget().getPostCondition().getCondition())) {
+            super.getTarget().setPostCondition(new Condition(this.postCondition.getValue()));
+        }
     }
 
     @Override

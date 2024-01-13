@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.Setter;
 import javafx.scene.paint.Color;
+import org.gecko.model.Condition;
 import org.gecko.model.Region;
 import javafx.collections.FXCollections;
 
@@ -37,12 +38,43 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
 
     @Override
     public void updateTarget() {
-        // TODO
+        // Update name:
+        if (super.getName() == null || super.getName().isEmpty()) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!super.getName().equals(super.getTarget().getName())) {
+            super.getTarget().setName(super.getName());
+        }
+
+        // Update contract:
+        if (this.contract == null || this.contract.getTarget() == null) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.contract.getTarget().equals(super.getTarget().getPreAndPostCondition())) {
+            super.getTarget().setPreAndPostCondition(this.contract.getTarget());
+        }
+
+        // Update invariant:
+        if (this.invariant == null || this.invariant.getValue() == null || this.invariant.getValue().isEmpty()) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.invariant.getValue().equals(super.getTarget().getInvariant().getCondition())) {
+            super.getTarget().setInvariant(new Condition(this.invariant.getValue()));
+        }
+
+        // TODO: Update states.
     }
 
     public void addState(StateViewModel state) {
         // TODO: prior checks
         this.states.add(state);
+        super.getTarget().addState(state.getTarget());
     }
 
     @Override

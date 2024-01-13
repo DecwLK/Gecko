@@ -17,7 +17,25 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
 
     @Override
     public void updateTarget() {
-        // TODO
+        // Update source:
+        if (this.source == null || this.source.getTarget() == null) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.source.getTarget().equals(super.getTarget().getSource())) {
+            super.getTarget().setSource(this.source.getTarget());
+        }
+
+        // Update destination:
+        if (this.destination == null || this.destination.getTarget() == null) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.destination.getTarget().equals(super.getTarget().getDestination())) {
+            super.getTarget().setDestination(this.destination.getTarget());
+        }
     }
 
     @Override

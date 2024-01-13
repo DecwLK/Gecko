@@ -32,7 +32,56 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
 
     @Override
     public void updateTarget() {
-        // TODO
+        // Update kind:
+        if (this.kind == null || this.kind.getValue() == null) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.kind.getValue().equals(super.getTarget().getKind())) {
+            super.getTarget().setKind(this.kind.getValue());
+        }
+
+        // Update priority:
+        // TODO: Are there any restrictions regarding what a priority can be? e.g. Are negative numbers allowed?
+        if (this.priority == null || this.priority.getValue() == null) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.priority.getValue().equals(super.getTarget().getPriority())) {
+            super.getTarget().setPriority(this.priority.getValue());
+        }
+
+        // Update contract:
+        if (this.contract == null || this.contract.getTarget() == null) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.contract.getTarget().equals(super.getTarget().getContract())) {
+            super.getTarget().setContract(this.contract.getTarget());
+        }
+
+        // Update source:
+        if (this.source == null || this.source.getTarget() == null) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.source.getTarget().equals(super.getTarget().getSource())) {
+            super.getTarget().setSource(this.source.getTarget());
+        }
+
+        // Update destination:
+        if (this.destination == null || this.destination.getTarget() == null) {
+            // TODO: Throw exception.
+            return;
+        }
+
+        if (!this.destination.getTarget().equals(super.getTarget().getDestination())) {
+            super.getTarget().setDestination(this.destination.getTarget());
+        }
     }
 
     @Override

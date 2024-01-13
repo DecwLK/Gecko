@@ -3,15 +3,17 @@ package org.gecko.viewmodel;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ObservableObjectValue;
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 import org.gecko.model.Element;
 import org.gecko.model.GeckoModel;
 
 import java.util.HashMap;
 
-@Getter @Setter
+@Data
 public class GeckoViewModel {
+    @Getter(AccessLevel.NONE)
     private final HashMap<Element, PositionableViewModelElement<?>> modelToViewModel;
     private final GeckoModel geckoModel;
     private final ViewModelFactory viewModelFactory;
@@ -26,6 +28,19 @@ public class GeckoViewModel {
     }
 
     public void switchEditor(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
+        //TODO stub
+    }
+
+    public PositionableViewModelElement<?> getViewModelElement(Element element) {
+        //TODO stub
+        return null;
+    }
+
+    public void addViewModelElement(PositionableViewModelElement<?> element) {
+        //TODO stub
+    }
+
+    public void deleteViewModelElement(PositionableViewModelElement<?> element) {
         //TODO stub
     }
 }

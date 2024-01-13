@@ -1,13 +1,12 @@
 package org.gecko.viewmodel;
 
 import javafx.collections.ObservableList;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 import java.util.Stack;
 
-@Getter @Setter
+@Data
 public class SelectionManager {
     private Stack<List<PositionableViewModelElement<?>>> undoSelectionStack;
     private Stack<List<PositionableViewModelElement<?>>> redoSelectionStack;

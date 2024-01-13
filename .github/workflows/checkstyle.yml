@@ -7,4 +7,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run checkstyle
-        run: java -jar checkstyle.jar -c google_checkstyle.xml . 
+        run: java -jar $CHECKSTYLE_ACTION_DIR/checkstyle.jar -c $CHECKSTYLE_ACTION_DIR/google_checkstyle.xml . 

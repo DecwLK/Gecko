@@ -16,7 +16,7 @@ jobs:
   build:
 
     container:
-      image: ubuntu_unzip:latest
+      image: ubuntu:latest
 
     runs-on: self-hosted
     steps:
@@ -28,7 +28,7 @@ jobs:
         distribution: 'oracle'
         cache: 'gradle'
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+      uses: gradle/gradle-build-action@v2
       with:
         gradle-version: current
         arguments: build

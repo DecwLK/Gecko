@@ -1,33 +1,42 @@
 package org.gecko.model;
 
-import lombok.Getter;
+import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class Region implements Renamable, Element {
-    @Getter
+    private String name;
     private Condition invariant;
     private Contract preAndPostCondition;
-    @Getter
-    private List<State> states;
+    private final List<State> states;
 
-    public Region(Condition invariant, Contract preAndPostCondition) {
+    public Region(String name, Condition invariant, Contract preAndPostCondition) {
+        this.name = name;
         this.invariant = invariant;
         this.preAndPostCondition = preAndPostCondition;
+        this.states = new ArrayList<>();
     }
+
     @Override
     public void accept(ElementVisitor visitor) {
-        //TODO stub
+        visitor.visit(this);
     }
 
-    @Override
-    public String getName() {
-        //TODO stub
-        return null;
+    public void addState(State state) {
+        states.add(state);
     }
 
-    @Override
-    public void setName(String name) {
-        //TODO stub
+    public void addStates(List<State> states) {
+        this.states.addAll(states);
+    }
+
+    public void removeState(State state) {
+        states.remove(state);
+    }
+
+    public void removeStates(List<State> states) {
+        this.states.removeAll(states);
     }
 }

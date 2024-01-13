@@ -5,32 +5,33 @@ import org.gecko.viewmodel.*;
 public class ViewElementCreatorVisitor implements PositionableViewModelElementVisitor {
 
     @Override
-    public void visit(SystemViewModel systemViewModel) {
-
+    public Void visit(SystemViewModel systemViewModel) {
+        return null;
     }
 
     @Override
-    public void visit(RegionViewModel regionViewModel) {
-
+    public Void visit(RegionViewModel regionViewModel) {
+        return null;
     }
 
     @Override
-    public void visit(SystemConnectionViewModel systemConnectionViewModel) {
-
+    public Void visit(SystemConnectionViewModel systemConnectionViewModel) {
+        return null;
     }
 
     @Override
-    public void visit(EdgeViewModel edgeViewModel) {
-
+    public Void visit(EdgeViewModel edgeViewModel) {
+        return null;
     }
 
     @Override
-    public void visit(StateViewModel stateViewModel) {
-
+    public Void visit(StateViewModel stateViewModel) {
+        return null;
     }
 
-    @Override
-    public void visit(PortViewModel portViewModel) {
 
+    @Override
+    public Void visit(PortViewModel portViewModel) {
+        return null;
     }
 }

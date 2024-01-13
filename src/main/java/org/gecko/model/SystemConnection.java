@@ -1,8 +1,8 @@
 package org.gecko.model;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class SystemConnection implements Element {
     private Variable source;
     private Variable destination;
@@ -11,8 +11,9 @@ public class SystemConnection implements Element {
         this.source = source;
         this.destination = destination;
     }
+
     @Override
     public void accept(ElementVisitor visitor) {
-        //TODO stub
+        visitor.visit(this);
     }
 }

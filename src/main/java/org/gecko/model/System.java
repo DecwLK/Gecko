@@ -1,35 +1,79 @@
 package org.gecko.model;
 
-import lombok.Getter;
+import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class System implements Renamable, Element {
-    @Getter private System parent;
-    @Getter private String code;
-    @Getter private Automaton automaton;
-    @Getter private List<System> children;
-    private List<SystemConnection> connections;
-    private List<Variable> variables;
+    private String name;
+    private System parent;
+    private String code;
+    private Automaton automaton;
+    private final List<System> children;
+    private final List<SystemConnection> connections;
+    private final List<Variable> variables;
+
+    public System(String name, String code, Automaton automaton) {
+        this.name = name;
+        this.code = code;
+        this.automaton = automaton;
+        this.children = new ArrayList<>();
+        this.connections = new ArrayList<>();
+        this.variables = new ArrayList<>();
+    }
 
     public void addChild(System child) {
-        // TODO stub
         children.add(child);
+    }
+
+    public void addChildren(List<System> children) {
+        this.children.addAll(children);
+    }
+
+    public void removeChild(System child) {
+        children.remove(child);
+    }
+
+    public void removeChildren(List<System> children) {
+        this.children.removeAll(children);
+    }
+
+    public void addConnection(SystemConnection connection) {
+        connections.add(connection);
+    }
+
+    public void addConnections(List<SystemConnection> connections) {
+        this.connections.addAll(connections);
+    }
+
+    public void removeConnection(SystemConnection connection) {
+        connections.remove(connection);
+    }
+
+    public void removeConnections(List<SystemConnection> connections) {
+        this.connections.removeAll(connections);
+    }
+
+    public void addVariable(Variable variable) {
+        variables.add(variable);
+    }
+
+    public void addVariables(List<Variable> variables) {
+        this.variables.addAll(variables);
+    }
+
+    public void removeVariable(Variable variable) {
+        variables.remove(variable);
+    }
+
+    public void removeVariables(List<Variable> variables) {
+        this.variables.removeAll(variables);
     }
 
     @Override
     public void accept(ElementVisitor visitor) {
-        // TODO stub
-    }
-
-    @Override
-    public String getName() {
-        // TODO stub
-        return null;
-    }
-
-    @Override
-    public void setName(String name) {
-        // TODO stub
+        visitor.visit(this);
     }
 }

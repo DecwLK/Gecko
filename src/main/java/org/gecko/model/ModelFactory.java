@@ -1,43 +1,76 @@
 package org.gecko.model;
 
 public class ModelFactory {
-    public State createState(Automaton automaton) {
-        //TODO stub
-        return new State();
+
+    //TODO defaults are temporary and need to be changed
+    private static int NUM_ELEMENTS = 0;
+    private static final String DEFAULT_NAME = "Element_%d";
+    private static final String DEFAULT_TYPE = "int";
+    private static final String DEFAULT_CONDITION = "true";
+    private static final Kind DEFAULT_KIND = Kind.HIT;
+    private static final int DEFAULT_PRIORITY = 0;
+    private static final String DEFAULT_CODE = null;
+    private static final Visibility DEFAULT_VISIBILITY = Visibility.INPUT;
+
+    private static String getDefaultName() {
+        return DEFAULT_NAME.formatted(NUM_ELEMENTS++);
     }
 
-    public Edge createEdge(Automaton automaton, Contract contract, Kind kind, int priority) {
-        //TODO stub
-        return new Edge(contract, kind, priority);
+    private static Contract getDefaultContract() {
+        return new Contract(getDefaultName(), new Condition(DEFAULT_CONDITION), new Condition(DEFAULT_CONDITION));
+    }
+
+    public State createState(Automaton automaton) {
+        State state = new State(DEFAULT_NAME.formatted(NUM_ELEMENTS++));
+        automaton.addState(state);
+        return state;
+    }
+
+    public Edge createEdge(Automaton automaton, State source, State target) {
+        if (!automaton.getStates().contains(source) || !automaton.getStates().contains(target)) {
+            throw new IllegalArgumentException("Source and target states must be in the automaton"); //TODO better exception
+        }
+        Edge edge = new Edge(source, target, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
+        automaton.addEdge(edge);
+        return edge;
     }
 
     public System createSystem(System parentSystem) {
-        //TODO stub
-        return new System();
+        System system = new System(getDefaultName(), DEFAULT_CODE, null);
+        parentSystem.addChild(system);
+        return system;
     }
 
     public Variable createVariable(System system) {
-        //TODO stub
-        return new Variable();
+        Variable variable = new Variable(getDefaultName(), DEFAULT_TYPE, DEFAULT_VISIBILITY);
+        system.addVariable(variable);
+        return variable;
     }
 
     public SystemConnection createSystemConnection(System system, Variable source, Variable destination) {
-        //TODO stub
-        return new SystemConnection(source, destination);
+        if (!system.getVariables().contains(source) || !system.getVariables().contains(destination)) {
+            throw new IllegalArgumentException("Source and destination variables must be in the system"); //TODO better exception
+        }
+        SystemConnection connection = new SystemConnection(source, destination);
+        system.addConnection(connection);
+        return connection;
     }
 
-    public Contract createContract(State state, Condition preCondition, Condition postCondition) {
-        //TODO stub
-        return new Contract(preCondition, postCondition);
+    public Contract createContract(State state) {
+        Contract contract = new Contract(getDefaultName(), new Condition(DEFAULT_CONDITION), new Condition(DEFAULT_CONDITION));
+        state.addContract(contract);
+        return contract;
     }
 
-    public Region createRegion(Automaton automaton, Condition invariant, Contract preAndPostCondition) {
-        //TODO stub
-        return new Region(invariant, preAndPostCondition);
+    public Region createRegion(Automaton automaton) {
+        Region region = new Region(getDefaultName(), new Condition(DEFAULT_CONDITION), getDefaultContract());
+        automaton.addRegion(region);
+        return region;
     }
 
-    public Automaton createAutomaton(System system, State startState) {
-        //TODO stub
-        return new Automaton(startState);
+    public Automaton createAutomaton(System system) {
+        Automaton automaton = new Automaton();
+        system.setAutomaton(automaton);
+        return automaton;
     }
 }

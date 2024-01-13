@@ -2,6 +2,8 @@ package org.gecko.viewmodel;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,17 +15,15 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     private Property<Point2D> size;
     private BooleanProperty isSelected;
 
-
     PositionableViewModelElement(T target) {
         super(target);
+        this.position = new SimpleObjectProperty<>(new Point2D(0, 0));
+        this.size = new SimpleObjectProperty<>(new Point2D(-1, 1));
+        this.isSelected = new SimpleBooleanProperty(false);
     }
 
-    @Override
-    public void updateTarget() {
-        // TODO
-    }
+    // TODO: Is there any relevant update operation that should take place at this level?
+    public abstract void updateTarget();
 
-    public void accept() {
-        // TODO: Add parameter PositionableViewModelVisitor.
-    }
+    public abstract void accept(PositionableViewModelElementVisitor visitor);
 }

@@ -1,4 +1,9 @@
 package org.gecko.io;
 
-public class FileParser {
+import org.gecko.application.Gecko;
+
+import java.io.File;
+
+public interface FileParser {
+    Gecko parse(File file);
 }

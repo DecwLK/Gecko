@@ -16,7 +16,7 @@ jobs:
   build:
 
     container:
-      image: ubuntu:latest
+      image: ubuntu_unzip:latest
 
     runs-on: self-hosted
     steps:

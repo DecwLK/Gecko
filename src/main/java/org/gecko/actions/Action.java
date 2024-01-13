@@ -1,4 +1,6 @@
 package org.gecko.actions;
 
-public class Action {
+public abstract class Action {
+    abstract void run();
+    abstract Action getUndoAction(ActionFactory actionFactory);
 }

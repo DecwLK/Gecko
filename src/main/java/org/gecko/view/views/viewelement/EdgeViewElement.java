@@ -3,9 +3,8 @@ package org.gecko.view.views.viewelement;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import org.gecko.viewmodel.EdgeViewModel;
-import org.gecko.viewmodel.PositionableViewModelElement;
 
-public class EdgeViewElement  extends ConnectionViewElement {
+public class EdgeViewElement extends ConnectionViewElement implements ViewElement<EdgeViewModel> {
 
     @Override
     public Node drawElement() {
@@ -23,7 +22,7 @@ public class EdgeViewElement  extends ConnectionViewElement {
     }
 
     @Override
-    public void bindTo(PositionableViewModelElement<?> target) {
+    public void bindTo(EdgeViewModel target) {
 
     }
 

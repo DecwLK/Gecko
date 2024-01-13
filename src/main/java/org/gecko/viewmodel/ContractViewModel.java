@@ -1,6 +1,8 @@
 package org.gecko.viewmodel;
 
 import javafx.beans.property.StringProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Contract;

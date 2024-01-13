@@ -2,9 +2,9 @@ package org.gecko.view.views.viewelement;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import org.gecko.viewmodel.PositionableViewModelElement;
+import org.gecko.viewmodel.SystemConnectionViewModel;
 
-public class SystemConnectionViewElement extends ConnectionViewElement {
+public class SystemConnectionViewElement extends ConnectionViewElement implements ViewElement<SystemConnectionViewModel> {
 
     @Override
     public Node drawElement() {
@@ -12,7 +12,7 @@ public class SystemConnectionViewElement extends ConnectionViewElement {
     }
 
     @Override
-    public PositionableViewModelElement<?> getTarget() {
+    public SystemConnectionViewModel getTarget() {
         return null;
     }
 
@@ -22,7 +22,7 @@ public class SystemConnectionViewElement extends ConnectionViewElement {
     }
 
     @Override
-    public void bindTo(PositionableViewModelElement<?> target) {
+    public void bindTo(SystemConnectionViewModel target) {
 
     }
 

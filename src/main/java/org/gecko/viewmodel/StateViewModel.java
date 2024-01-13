@@ -4,16 +4,14 @@ import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.Setter;
-import org.gecko.model.Contract;
 import org.gecko.model.State;
-import java.util.List;
 
 @Getter @Setter
-public class StateViewModel<T extends State> extends BlockViewModelElement<T> {
+public class StateViewModel extends BlockViewModelElement<State> {
     private BooleanProperty isStartState;
-    private ObservableList<ContractViewModel<Contract>> contracts;
+    private ObservableList<ContractViewModel> contracts;
 
-    public StateViewModel(T target) {
+    public StateViewModel(State target) {
         super(target);
     }
 }

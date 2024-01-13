@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Contract;
 
-public class ContractViewModel<T extends Contract> extends AbstractViewModelElement<T> implements Renamable {
+public class ContractViewModel extends AbstractViewModelElement<Contract> implements Renamable {
     private StringProperty name;
 
     @Getter @Setter private StringProperty preCondition;
 
     @Getter @Setter private StringProperty postCondition;
 
-    public ContractViewModel(T target) {
+    public ContractViewModel(Contract target) {
         super(target);
     }
 

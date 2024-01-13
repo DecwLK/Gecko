@@ -3,14 +3,13 @@ package org.gecko.viewmodel;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.SystemConnection;
-import org.gecko.model.Variable;
 
 @Getter @Setter
-public class SystemConnectionViewModel<T extends SystemConnection> extends PositionableViewModelElement<T> {
-    private PortViewModel<Variable> source;
-    private PortViewModel<Variable> destination;
+public class SystemConnectionViewModel extends PositionableViewModelElement<SystemConnection> {
+    private PortViewModel source;
+    private PortViewModel destination;
 
-    SystemConnectionViewModel(T target) {
+    SystemConnectionViewModel(SystemConnection target) {
         super(target);
     }
 }

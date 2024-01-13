@@ -4,25 +4,23 @@ import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.gecko.model.Contract;
 import javafx.scene.paint.Color;
 import org.gecko.model.Region;
-import org.gecko.model.State;
 
 import java.util.List;
 
 @Getter @Setter
-public class RegionViewModel<T extends Region> extends BlockViewModelElement<T> {
+public class RegionViewModel extends BlockViewModelElement<Region> {
     private Property<Color> color;
-    private ContractViewModel<Contract> contract;
+    private ContractViewModel contract;
     private StringProperty invariant;
-    private List<StateViewModel<State>> states;
+    private List<StateViewModel> states;
 
-    public RegionViewModel(T target) {
+    public RegionViewModel(Region target) {
         super(target);
     }
 
-    public void addState(StateViewModel<State> state) {
+    public void addState(StateViewModel state) {
         // TODO
     }
 }

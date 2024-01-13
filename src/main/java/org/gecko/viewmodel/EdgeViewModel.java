@@ -4,24 +4,22 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import lombok.Getter;
 import lombok.Setter;
-import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.Kind;
-import org.gecko.model.State;
 
 @Setter @Getter
-public class EdgeViewModel<T extends Edge> extends PositionableViewModelElement<T> {
+public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     private Property<Kind> kind;
 
     private IntegerProperty priority;
 
-    private ContractViewModel<Contract> contract;
+    private ContractViewModel contract;
 
-    private StateViewModel<State> source;
+    private StateViewModel source;
 
-    private StateViewModel<State> destination;
+    private StateViewModel destination;
 
-    public EdgeViewModel(T target) {
+    public EdgeViewModel(Edge target) {
         super(target);
     }
 }

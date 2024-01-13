@@ -7,10 +7,10 @@ import org.gecko.model.Variable;
 import org.gecko.model.Visibility;
 
 @Setter @Getter
-public class PortViewModel<T extends Variable> extends BlockViewModelElement<T> {
+public class PortViewModel extends BlockViewModelElement<Variable> {
     private Property<Visibility> visibility;
 
-    public PortViewModel(T target) {
+    public PortViewModel(Variable target) {
         super(target);
     }
 }

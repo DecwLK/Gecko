@@ -4,8 +4,6 @@ jobs:
   checkstyle:
     name: runner / checkstyle
     runs-on: self-hosted
-    container:
-      image: ubuntu:latest
     steps:
       - uses: actions/checkout@v4
       - name: Run checkstyle

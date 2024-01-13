@@ -8,9 +8,9 @@ public class Edge implements Element {
     private Kind kind;
     private int priority;
     private State source;
-    private State target;
+    private State destination;
 
-    public Edge(State source, State target, Contract contract, Kind kind, int priority) {
+    public Edge(State source, State destination, Contract contract, Kind kind, int priority) {
         this.contract = contract;
         this.kind = kind;
         this.priority = priority;

@@ -26,8 +26,8 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         this.kind = new SimpleObjectProperty<>(target.getKind());
         this.priority = new SimpleIntegerProperty(target.getPriority());
         this.contract = new ContractViewModel(target.getContract());
-        // TODO: this.source = new StateViewModel(target.getSource());
-        // TODO: this.destination = new StateViewModel(target.getDestination());
+        this.source = new StateViewModel(target.getSource());
+        this.destination = new StateViewModel(target.getDestination());
     }
 
     @Override

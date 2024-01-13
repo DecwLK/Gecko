@@ -23,7 +23,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     public RegionViewModel(Region target) {
         super(target);
         super.setName(target.getName());
-        // TODO: this.contract = new ContractViewModel(target.getContract());
+        this.contract = new ContractViewModel(target.getPreAndPostCondition());
         this.invariant = new SimpleStringProperty(target.getInvariant().getCondition());
         this.states = FXCollections.observableArrayList();
 

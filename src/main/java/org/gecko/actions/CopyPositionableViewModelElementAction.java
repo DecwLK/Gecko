@@ -7,12 +7,13 @@ import java.util.List;
 
 public class CopyPositionableViewModelElementAction extends Action {
     CopyPositionableViewModelElementAction(
-            ActionFactory actionFactory,
             EditorViewModel editorViewModel,
             List<PositionableViewModelElement<?>> positionableViewModelElement) {}
 
     @Override
-    void run() {}
+    void run() {
+        //TODO how does copy work?
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

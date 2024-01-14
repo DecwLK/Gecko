@@ -4,7 +4,7 @@ import org.gecko.viewmodel.SelectionManager;
 
 public class ScaleBlockViewModelElementAction extends Action {
     ScaleBlockViewModelElementAction(
-            ActionFactory actionFactory, SelectionManager selectionManager, double scaleFactor) {}
+            SelectionManager selectionManager, double scaleFactor) {}
 
     @Override
     void run() {}

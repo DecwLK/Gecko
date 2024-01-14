@@ -6,11 +6,9 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import java.util.List;
 
 public class PastePositionableViewModelElementAction extends Action {
-    PastePositionableViewModelElementAction(
-            ActionFactory actionFactory, GeckoViewModel geckoViewModel) {}
+    PastePositionableViewModelElementAction(GeckoViewModel geckoViewModel) {}
 
     PastePositionableViewModelElementAction(
-            ActionFactory actionFactory,
             GeckoViewModel geckoViewModel,
             List<PositionableViewModelElement<?>> elements) {}
 

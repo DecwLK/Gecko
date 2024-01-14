@@ -7,12 +7,10 @@ import java.util.List;
 
 public class DeletePositionableViewModelElementAction extends Action {
     DeletePositionableViewModelElementAction(
-            ActionFactory actionFactory,
             GeckoViewModel geckoViewModel,
             PositionableViewModelElement<?> element) {}
 
     DeletePositionableViewModelElementAction(
-            ActionFactory actionFactory,
             GeckoViewModel geckoViewModel,
             List<PositionableViewModelElement<?>> elements) {}
 

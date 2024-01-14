@@ -1,17 +1,27 @@
 package org.gecko.actions;
 
-import org.gecko.model.Visibility;
+import org.gecko.viewmodel.GeckoViewModel;
+import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
 public class CreateVariableAction extends Action {
 
-    public CreateVariableAction(ActionFactory actionFactory, SystemViewModel systemViewModel, Visibility visibility) {}
+    private final GeckoViewModel geckoViewModel;
+    private final SystemViewModel parentSystem;
+    private PortViewModel createdPortViewModel;
+
+    public CreateVariableAction(GeckoViewModel geckoViewModel, SystemViewModel parentSystem) {
+        this.geckoViewModel = geckoViewModel;
+        this.parentSystem = parentSystem;
+    }
 
     @Override
-    void run() {}
+    void run() {
+        createdPortViewModel = geckoViewModel.getViewModelFactory().createPortViewModelIn(parentSystem);
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return null;
+        return actionFactory.createDeletePositionableViewModelElementAction(createdPortViewModel);
     }
 }

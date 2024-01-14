@@ -6,7 +6,6 @@ import org.gecko.viewmodel.EditorViewModel;
 public class ZoomAction extends Action {
 
     ZoomAction(
-            ActionFactory actionFactory,
             EditorViewModel editorViewModel,
             Point2D pivot,
             double factor) {}

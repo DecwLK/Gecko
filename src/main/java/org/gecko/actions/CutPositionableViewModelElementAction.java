@@ -7,7 +7,6 @@ import java.util.List;
 
 public class CutPositionableViewModelElementAction extends Action {
     CutPositionableViewModelElementAction(
-            ActionFactory actionFactory,
             EditorViewModel editorViewModel,
             List<PositionableViewModelElement<?>> elements) {}
 

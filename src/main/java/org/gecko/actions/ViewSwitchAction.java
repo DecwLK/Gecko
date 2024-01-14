@@ -5,7 +5,6 @@ import org.gecko.viewmodel.SystemViewModel;
 
 public class ViewSwitchAction extends Action {
     ViewSwitchAction(
-            ActionFactory actionFactory,
             SystemViewModel systemViewModel,
             EditorViewModel currentEditorViewModel,
             boolean isAutomaton) {}

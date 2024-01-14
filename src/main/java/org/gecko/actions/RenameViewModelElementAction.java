@@ -5,7 +5,7 @@ import org.gecko.viewmodel.Renamable;
 public class RenameViewModelElementAction extends Action {
 
     RenameViewModelElementAction(
-            ActionFactory actionFactory, Renamable renamable, String newName) {}
+            Renamable renamable, String newName) {}
 
     @Override
     void run() {}

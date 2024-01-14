@@ -8,13 +8,11 @@ import java.util.List;
 public class SelectAction extends Action {
 
     SelectAction(
-            ActionFactory actionFactory,
             EditorViewModel editorViewModel,
             PositionableViewModelElement<?> element,
             boolean newSelection) {}
 
     SelectAction(
-            ActionFactory actionFactory,
             EditorViewModel editorViewModel,
             List<PositionableViewModelElement<?>> elements,
             boolean newSelection) {}

@@ -7,7 +7,6 @@ import java.util.List;
 
 public class RestorePositionableViewModelElementAction extends Action {
     RestorePositionableViewModelElementAction(
-            ActionFactory actionFactory,
             GeckoViewModel geckoViewModel,
             List<PositionableViewModelElement<?>> elements) {}
 

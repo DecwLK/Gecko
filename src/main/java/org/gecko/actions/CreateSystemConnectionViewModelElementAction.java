@@ -2,22 +2,36 @@ package org.gecko.actions;
 
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
-import org.gecko.viewmodel.ViewModelFactory;
+import org.gecko.viewmodel.SystemConnectionViewModel;
+import org.gecko.viewmodel.SystemViewModel;
 
 public class CreateSystemConnectionViewModelElementAction extends Action {
 
+    private final GeckoViewModel geckoViewModel;
+    private final PortViewModel source;
+    private final PortViewModel destination;
+    private SystemConnectionViewModel createdSystemConnectionViewModel;
+
     CreateSystemConnectionViewModelElementAction(
-            ActionFactory actionFactory,
             GeckoViewModel geckoViewModel,
-            ViewModelFactory viewModelFactory,
             PortViewModel source,
-            PortViewModel destination) {}
+            PortViewModel destination) {
+        this.geckoViewModel = geckoViewModel;
+        this.source = source;
+        this.destination = destination;
+    }
 
     @Override
-    void run() {}
+    void run() {
+        SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
+        createdSystemConnectionViewModel = geckoViewModel.getViewModelFactory().createSystemConnectionViewModelIn(currentParentSystem);
+        createdSystemConnectionViewModel.setSource(source);
+        createdSystemConnectionViewModel.setDestination(destination);
+        createdSystemConnectionViewModel.updateTarget();
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return null;
+        return actionFactory.createDeletePositionableViewModelElementAction(createdSystemConnectionViewModel);
     }
 }

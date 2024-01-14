@@ -5,7 +5,7 @@ import org.gecko.viewmodel.SelectionManager;
 public class SelectionHistoryForwardAction extends Action {
 
     public SelectionHistoryForwardAction(
-            ActionFactory actionFactory, SelectionManager selectionManager) {}
+            SelectionManager selectionManager) {}
 
     @Override
     void run() {}

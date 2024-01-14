@@ -6,7 +6,6 @@ import org.gecko.viewmodel.StateViewModel;
 public class SetStartStateViewModelElementAction extends Action {
 
     SetStartStateViewModelElementAction(
-            ActionFactory actionFactory,
             EditorViewModel editorViewModel,
             StateViewModel stateViewModel) {}
 

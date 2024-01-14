@@ -5,7 +5,7 @@ import org.gecko.viewmodel.EditorViewModel;
 
 public class PanAction extends Action {
 
-    PanAction(ActionFactory actionFactory, EditorViewModel editorViewModel, Point2D offset) {
+    PanAction(EditorViewModel editorViewModel, Point2D offset) {
     }
 
     @Override

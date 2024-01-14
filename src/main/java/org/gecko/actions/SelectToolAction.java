@@ -5,7 +5,7 @@ import org.gecko.viewmodel.EditorViewModel;
 
 public class SelectToolAction extends Action {
 
-    SelectToolAction(ActionFactory actionFactory, EditorViewModel editorViewModel, Tool tool) {
+    SelectToolAction(EditorViewModel editorViewModel, Tool tool) {
     }
 
     @Override

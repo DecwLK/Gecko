@@ -5,7 +5,6 @@ import org.gecko.viewmodel.EditorViewModel;
 
 public class FocusPositionableViewModelElementAction extends Action {
     public FocusPositionableViewModelElementAction(
-            ActionFactory actionFactory,
             EditorViewModel editorViewModel,
             PositionableViewModelElement<?> positionableViewModelElement) {
     }

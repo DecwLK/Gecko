@@ -5,7 +5,6 @@ import org.gecko.viewmodel.StateViewModel;
 
 public class MoveEdgeViewModelElementAction extends Action {
     MoveEdgeViewModelElementAction(
-            ActionFactory actionFactory,
             EdgeViewModel edgeViewModel,
             StateViewModel stateViewModel,
             boolean isSource) {

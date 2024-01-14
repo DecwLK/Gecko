@@ -6,9 +6,9 @@ import java.util.Stack;
 
 public class ActionManager {
     @Getter
-    private ActionFactory actionFactory;
-    private Stack<Action> undoStack;
-    private Stack<Action> redoStack;
+    private final ActionFactory actionFactory;
+    private final Stack<Action> undoStack;
+    private final Stack<Action> redoStack;
 
     public ActionManager(ActionFactory actionFactory) {
         this.actionFactory = actionFactory;
@@ -17,14 +17,32 @@ public class ActionManager {
     }
 
     public void undo() {
-        //TODO stub
+        if (undoStack.isEmpty()) {
+            return;
+        }
+        Action action = undoStack.pop();
+        action.run();
+        redoStack.push(action.getUndoAction(actionFactory));
     }
 
     public void redo() {
-        //TODO stub
+        if (redoStack.isEmpty()) {
+            return;
+        }
+        Action action = redoStack.pop();
+        action.run();
+        Action undoAction = action.getUndoAction(actionFactory);
+        if (undoAction != null) {
+            undoStack.push(undoAction);
+        }
     }
 
     public void run(Action action) {
-        //TODO register action if undoable
+        action.run();
+        Action undoAction = action.getUndoAction(actionFactory);
+        if (undoAction != null) {
+            undoStack.push(undoAction);
+        }
+        redoStack.clear();
     }
 }

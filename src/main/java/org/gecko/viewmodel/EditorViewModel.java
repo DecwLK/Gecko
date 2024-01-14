@@ -18,7 +18,7 @@ public class EditorViewModel {
     private ObservableObjectValue<PositionableViewModelElement<?>> focusedElement;
     private final SystemViewModel currentSystem;
     private final ObservableList<PositionableViewModelElement<?>> containedPositionableViewModelElements;
-    private List<Tool> tools;
+    private List<List<Tool>> tools;
     private SelectionManager selectionManager;
     private boolean isAutomatonEditor;
 

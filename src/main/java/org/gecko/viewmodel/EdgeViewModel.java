@@ -44,7 +44,8 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         }
 
         // Update priority:
-        // TODO: Are there any restrictions regarding what a priority can be? e.g. Are negative numbers allowed?
+        // TODO: Are there any restrictions regarding what a priority can be? e.g. Are negative
+        // numbers allowed?
         if (this.priority == null || this.priority.getValue() == null) {
             // TODO: Throw exception.
             return;
@@ -86,7 +87,7 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     }
 
     @Override
-    public void accept(PositionableViewModelElementVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(PositionableViewModelElementVisitor visitor) {
+        return visitor.visit(this);
     }
 }

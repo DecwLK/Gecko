@@ -1,4 +1,6 @@
 package org.gecko.view.views.shortcuts;
 
-public class ShortcutHandler { //TODO how does this work?
+public abstract class ShortcutHandler {
+    public void registerShortcuts() {
+    }
 }

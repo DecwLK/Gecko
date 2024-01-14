@@ -48,7 +48,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
     }
 
     @Override
-    public void accept(PositionableViewModelElementVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(PositionableViewModelElementVisitor visitor) {
+        return visitor.visit(this);
     }
 }

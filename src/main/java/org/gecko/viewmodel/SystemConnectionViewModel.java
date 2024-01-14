@@ -39,7 +39,7 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     }
 
     @Override
-    public void accept(PositionableViewModelElementVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(PositionableViewModelElementVisitor visitor) {
+        return visitor.visit(this);
     }
 }

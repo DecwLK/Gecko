@@ -59,7 +59,9 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         }
 
         // Update invariant:
-        if (this.invariant == null || this.invariant.getValue() == null || this.invariant.getValue().isEmpty()) {
+        if (this.invariant == null
+                || this.invariant.getValue() == null
+                || this.invariant.getValue().isEmpty()) {
             // TODO: Throw exception.
             return;
         }
@@ -78,7 +80,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     }
 
     @Override
-    public void accept(PositionableViewModelElementVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(PositionableViewModelElementVisitor visitor) {
+        return visitor.visit(this);
     }
 }

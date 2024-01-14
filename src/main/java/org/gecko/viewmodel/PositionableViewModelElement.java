@@ -26,5 +26,5 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     // TODO: Is there any relevant update operation that should take place at this level?
     public abstract void updateTarget();
 
-    public abstract void accept(PositionableViewModelElementVisitor visitor);
+    public abstract Object accept(PositionableViewModelElementVisitor visitor);
 }

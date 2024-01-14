@@ -86,7 +86,7 @@ public class ActionFactory {
     public MoveSystemConnectionViewModelElementAction
             createMoveSystemConnectionViewModelElementAction(
                     SystemConnectionViewModel systemConnectionViewModel,
-                    SystemViewModel systemViewModel,
+                    PortViewModel systemViewModel,
                     boolean isSource) {
         return new MoveSystemConnectionViewModelElementAction(systemConnectionViewModel, systemViewModel, isSource);
     }

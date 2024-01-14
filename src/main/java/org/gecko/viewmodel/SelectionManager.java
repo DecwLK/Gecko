@@ -13,24 +13,31 @@ public class SelectionManager {
     private ObservableList<PositionableViewModelElement<?>> currentSelection;
 
     public void goBack() {
-        //TODO stub
+        redoSelectionStack.push(currentSelection);
+        currentSelection.clear();
+        currentSelection.addAll(undoSelectionStack.pop());
     }
     public void goForward() {
-        //TODO stub
+        select(redoSelectionStack.pop());
     }
     public void select(PositionableViewModelElement<?> element) {
-        //TODO stub
+        select(List.of(element));
     }
     public void select(List<PositionableViewModelElement<?>> elements) {
-        //TODO stub
+        undoSelectionStack.push(currentSelection);
+        redoSelectionStack.clear();
+        currentSelection.clear();
+        currentSelection.addAll(elements);
     }
     public void deselect(PositionableViewModelElement<?> element) {
-        //TODO stub
+        deselect(List.of(element));
     }
     public void deselect(List<PositionableViewModelElement<?>> elements) {
-        //TODO stub
+        undoSelectionStack.push(currentSelection);
+        redoSelectionStack.clear();
+        currentSelection.removeAll(elements);
     }
     public void deselectAll() {
-        //TODO stub
+        deselect(currentSelection);
     }
 }

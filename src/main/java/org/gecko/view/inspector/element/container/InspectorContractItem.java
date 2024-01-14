@@ -35,14 +35,14 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
         HBox contractPreCondition = new HBox();
 
         InspectorContractField preConditionField =
-                new InspectorContractField(contractViewModel.getPreCondition());
+                new InspectorContractField(contractViewModel.getPreConditionProperty());
         contractFields.add(preConditionField);
         contractPreCondition.getChildren().addAll(new InspectorLabel("L:Pre:"), preConditionField);
 
         HBox contractPostCondition = new HBox();
 
         InspectorContractField postConditionField =
-                new InspectorContractField(contractViewModel.getPostCondition());
+                new InspectorContractField(contractViewModel.getPostConditionProperty());
         contractFields.add(postConditionField);
         contractPostCondition
                 .getChildren()
@@ -78,14 +78,14 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
                 .getChildren()
                 .addAll(
                         new InspectorLabel("L:Pre:"),
-                        new InspectorContractField(contractViewModel.getPreCondition()));
+                        new InspectorContractField(contractViewModel.getPreConditionProperty()));
 
         HBox contractPostCondition = new HBox();
         contractPostCondition
                 .getChildren()
                 .addAll(
                         new InspectorLabel("L:Post:"),
-                        new InspectorContractField(contractViewModel.getPostCondition()));
+                        new InspectorContractField(contractViewModel.getPostConditionProperty()));
 
         HBox contractInvariant = new HBox();
         contractInvariant

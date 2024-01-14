@@ -9,7 +9,7 @@ public class InspectorContractComboBox extends AbstractInspectorComboBox<Inspect
     public InspectorContractComboBox(ActionManager actionManager, EdgeViewModel viewModel) {
         viewModel
                 .getSource()
-                .getContracts()
+                .getContractsProperty()
                 .forEach(
                         contract -> {
                             getItems()

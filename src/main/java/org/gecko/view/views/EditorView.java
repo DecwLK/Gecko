@@ -40,7 +40,7 @@ public class EditorView {
 
         // View element creator listener
         viewModel
-                .getContainedPositionableViewModelElements()
+                .getContainedPositionableViewModelElementsProperty()
                 .addListener(
                         (ListChangeListener<PositionableViewModelElement<?>>)
                                 change -> {
@@ -49,7 +49,7 @@ public class EditorView {
 
         // Inspector creator listener
         viewModel
-                .getFocusedElement()
+                .getFocusedElementProperty()
                 .addListener(
                         (observable, oldValue, newValue) -> {
                             if (newValue != null) {

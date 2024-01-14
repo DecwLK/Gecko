@@ -12,7 +12,7 @@ public class InspectorRegionColorItem extends HBox implements InspectorElement<H
         getChildren()
                 .addAll(
                         new InspectorLabel("L: Color"),
-                        new InspectorColorPicker(regionViewModel.getColor()));
+                        new InspectorColorPicker(regionViewModel.getColorProperty()));
     }
 
     @Override

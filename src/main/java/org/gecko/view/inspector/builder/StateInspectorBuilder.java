@@ -30,7 +30,7 @@ public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewMod
 
         // Set start state
         addInspectorElement(
-                new InspectorSetStartStateButton(actionManager, editorViewModel, viewModel));
+                new InspectorSetStartStateButton(actionManager, viewModel));
 
         addInspectorElement(new InspectorSeparator());
 

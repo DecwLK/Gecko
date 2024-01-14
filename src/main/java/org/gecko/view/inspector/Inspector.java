@@ -34,11 +34,9 @@ public class Inspector extends ScrollPane {
         selectionButtons
                 .getChildren()
                 .addAll(
-                        new InspectorSelectionBackwardButton(
-                                        actionManager, editorViewModel.getSelectionManager())
+                        new InspectorSelectionBackwardButton(actionManager)
                                 .getControl(),
-                        new InspectorSelectionForwardButton(
-                                        actionManager, editorViewModel.getSelectionManager())
+                        new InspectorSelectionForwardButton(actionManager)
                                 .getControl());
         inspectorDecorations
                 .getChildren()

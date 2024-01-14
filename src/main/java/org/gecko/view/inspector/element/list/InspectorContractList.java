@@ -10,7 +10,7 @@ import org.gecko.viewmodel.StateViewModel;
 public class InspectorContractList extends AbstractInspectorList<InspectorContractItem> {
     public InspectorContractList(ActionManager actionManager, StateViewModel stateViewModel) {
         ObservableList<InspectorContractItem> items = getItems();
-        ObservableList<ContractViewModel> contractViewModels = stateViewModel.getContracts();
+        ObservableList<ContractViewModel> contractViewModels = stateViewModel.getContractsProperty();
 
         // Create a listener for contractViewModels changes and update inspector items accordingly
         ListChangeListener<ContractViewModel> contractViewModelListener =

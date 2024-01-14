@@ -6,7 +6,6 @@ import org.gecko.view.inspector.element.combobox.InspectorContractComboBox;
 import org.gecko.view.inspector.element.combobox.InspectorKindComboBox;
 import org.gecko.view.inspector.element.container.InspectorEdgeStateLabel;
 import org.gecko.view.inspector.element.textfield.InspectorPriorityField;
-import org.gecko.view.inspector.element.textfield.InspectorTextField;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
@@ -18,22 +17,22 @@ public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel
         super(actionManager, viewModel);
 
         // Kind
-        addInspectorElement(new InspectorKindComboBox(getViewModel().getKind()));
+        addInspectorElement(new InspectorKindComboBox(getViewModel().getKindProperty()));
         addInspectorElement(new InspectorSeparator());
 
         // Connected states
         addInspectorElement(
                 new InspectorEdgeStateLabel(
-                        actionManager, editorViewModel, viewModel.getSource(), "L:Source"));
+                        actionManager, viewModel.getSource(), "L:Source"));
 
         addInspectorElement(
                 new InspectorEdgeStateLabel(
-                        actionManager, editorViewModel, viewModel.getSource(), "L:Target"));
+                        actionManager, viewModel.getSource(), "L:Target"));
 
         addInspectorElement(new InspectorSeparator());
 
         // Priority
-        addInspectorElement(new InspectorPriorityField(viewModel.getPriority()));
+        addInspectorElement(new InspectorPriorityField(viewModel.getPriorityProperty()));
 
         addInspectorElement(new InspectorSeparator());
 

@@ -6,7 +6,6 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
-import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class ToolBarBuilder {
                         actionManager.run(
                                 actionManager
                                         .getActionFactory()
-                                        .createSelectToolAction(editorViewModel, tool));
+                                        .createSelectToolAction(tool));
                     });
 
             toolBar.getItems().add(toolButton);

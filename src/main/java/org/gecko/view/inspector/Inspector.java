@@ -17,6 +17,8 @@ import java.util.List;
 
 public class Inspector extends ScrollPane {
 
+    private boolean isCollapsed = false;
+
     public Inspector(
             List<InspectorElement<?>> elements,
             ActionManager actionManager,
@@ -53,6 +55,16 @@ public class Inspector extends ScrollPane {
 
         setContent(vBox);
         setFitToWidth(true);
+    }
+
+    public void toggleCollapse() {
+        isCollapsed = !isCollapsed;
+
+        if (isCollapsed) {
+            setPrefWidth(0);
+        } else {
+            setPrefWidth(300);
+        }
     }
 
     public Node getView() {

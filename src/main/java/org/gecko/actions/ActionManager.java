@@ -24,7 +24,7 @@ public class ActionManager {
         //TODO stub
     }
 
-    void run(Action action) {
+    public void run(Action action) {
         //TODO register action if undoable
     }
 }

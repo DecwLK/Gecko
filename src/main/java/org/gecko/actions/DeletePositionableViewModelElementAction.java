@@ -14,7 +14,7 @@ public class DeletePositionableViewModelElementAction extends Action {
     DeletePositionableViewModelElementAction(
             ActionFactory actionFactory,
             GeckoViewModel geckoViewModel,
-            List<PositionableViewModelElement<?>> element) {}
+            List<PositionableViewModelElement<?>> elements) {}
 
     @Override
     void run() {}

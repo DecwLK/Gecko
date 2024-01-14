@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
+import lombok.Getter;
 import org.gecko.model.Element;
 
 public abstract class BlockViewModelElement<T extends Element> extends PositionableViewModelElement<T> implements Renamable {

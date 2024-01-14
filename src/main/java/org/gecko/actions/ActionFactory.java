@@ -2,7 +2,9 @@ package org.gecko.actions;
 
 import javafx.geometry.Point2D;
 import org.gecko.model.SystemConnection;
+import org.gecko.model.Visibility;
 import org.gecko.tools.Tool;
+import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
@@ -30,45 +32,41 @@ public class ActionFactory {
     }
 
     public CreateContractViewModelElementAction createCreateContractViewModelElementAction(
-            GeckoViewModel geckoViewModel, StateViewModel stateViewModel) {
+            StateViewModel stateViewModel) {
         return new CreateContractViewModelElementAction(this, geckoViewModel, stateViewModel);
     }
 
     public CreateEdgeViewModelElementAction createCreateEdgeViewModelElementAction(
-            GeckoViewModel geckoViewModel,
-            ViewModelFactory viewModelFactory,
-            StateViewModel source,
-            StateViewModel destination) {
+            ViewModelFactory viewModelFactory, StateViewModel source, StateViewModel destination) {
         return new CreateEdgeViewModelElementAction(
                 this, geckoViewModel, viewModelFactory, source, destination);
     }
 
     public CreatePortViewModelElementAction createCreatePortViewModelElementAction(
-            GeckoViewModel geckoViewModel, ViewModelFactory viewModelFactory) {
+            ViewModelFactory viewModelFactory) {
         return new CreatePortViewModelElementAction(this, geckoViewModel, viewModelFactory);
     }
 
     public CreatePortViewModelElementAction createCreatePortViewModelElementAction(
-            GeckoViewModel geckoViewModel, ViewModelFactory viewModelFactory, Point2D position) {
+            ViewModelFactory viewModelFactory, Point2D position) {
         return new CreatePortViewModelElementAction(
                 this, geckoViewModel, viewModelFactory, position);
     }
 
     public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(
-            GeckoViewModel geckoViewModel, ViewModelFactory viewModelFactory, Point2D position) {
+            ViewModelFactory viewModelFactory, Point2D position) {
         return new CreateRegionViewModelElementAction(
                 this, geckoViewModel, viewModelFactory, position);
     }
 
     public CreateStateViewModelElementAction createCreateStateViewModelElementAction(
-            GeckoViewModel geckoViewModel, ViewModelFactory viewModelFactory, Point2D position) {
+            ViewModelFactory viewModelFactory, Point2D position) {
         return new CreateStateViewModelElementAction(
                 this, geckoViewModel, viewModelFactory, position);
     }
 
     public CreateSystemConnectionViewModelElementAction
             createCreateSystemConnectionViewModelElementAction(
-                    GeckoViewModel geckoViewModel,
                     ViewModelFactory viewModelFactory,
                     PortViewModel source,
                     PortViewModel destination) {
@@ -77,9 +75,13 @@ public class ActionFactory {
     }
 
     public CreateSystemViewModelElementAction createCreateSystemViewModelElementAction(
-            GeckoViewModel geckoViewModel, ViewModelFactory viewModelFactory, Point2D position) {
+            ViewModelFactory viewModelFactory, Point2D position) {
         return new CreateSystemViewModelElementAction(
                 this, geckoViewModel, viewModelFactory, position);
+    }
+
+    public CreateVariableAction createCreateVariableAction(SystemViewModel systemViewModel, Visibility visibility) {
+        return new CreateVariableAction(this, systemViewModel, visibility);
     }
 
     public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction(
@@ -88,8 +90,18 @@ public class ActionFactory {
     }
 
     public DeleteContractViewModelAction createDeleteContractViewModelAction(
-            GeckoViewModel geckoViewModel, StateViewModel parent) {
-        return new DeleteContractViewModelAction(this, geckoViewModel, parent);
+            StateViewModel parent, ContractViewModel contractViewModel) {
+        return new DeleteContractViewModelAction(this, geckoViewModel, parent, contractViewModel);
+    }
+
+    public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction(
+            PositionableViewModelElement<?> element) {
+        return new DeletePositionableViewModelElementAction(this, geckoViewModel, element);
+    }
+
+    public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction(
+            List<PositionableViewModelElement<?>> elements) {
+        return new DeletePositionableViewModelElementAction(this, geckoViewModel, elements);
     }
 
     public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(
@@ -114,13 +126,12 @@ public class ActionFactory {
         return new PanAction(this, editorViewModel, pivot);
     }
 
-    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
-            GeckoViewModel geckoViewModel) {
+    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction() {
         return new PastePositionableViewModelElementAction(this, geckoViewModel);
     }
 
     public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
-            GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
+            List<PositionableViewModelElement<?>> elements) {
         return new PastePositionableViewModelElementAction(this, geckoViewModel, elements);
     }
 
@@ -131,13 +142,18 @@ public class ActionFactory {
 
     public RestorePositionableViewModelElementAction
             createRestorePositionableViewModelElementAction(
-                    GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
+                    List<PositionableViewModelElement<?>> elements) {
         return new RestorePositionableViewModelElementAction(this, geckoViewModel, elements);
     }
 
     public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(
             SelectionManager selectionManager, double scaleFactor) {
         return new ScaleBlockViewModelElementAction(this, selectionManager, scaleFactor);
+    }
+
+    public FocusPositionableViewModelElementAction createFocusPositionableViewModelElementAction(
+            EditorViewModel editorViewModel, PositionableViewModelElement<?> element) {
+        return new FocusPositionableViewModelElementAction(this, editorViewModel, element);
     }
 
     public SelectAction createSelectAction(

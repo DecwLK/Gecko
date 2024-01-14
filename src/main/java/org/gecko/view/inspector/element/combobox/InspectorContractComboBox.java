@@ -1,6 +1,23 @@
 package org.gecko.view.inspector.element.combobox;
 
-import org.gecko.view.inspector.element.container.InspectorContract;
+import org.gecko.actions.ActionManager;
+import org.gecko.view.inspector.element.InspectorElement;
+import org.gecko.view.inspector.element.container.InspectorContractItem;
+import org.gecko.viewmodel.EdgeViewModel;
 
-public class InspectorContractComboBox extends AbstractInspectorComboBox<InspectorContract> {
+public class InspectorContractComboBox extends AbstractInspectorComboBox<InspectorElement<?>> {
+    public InspectorContractComboBox(ActionManager actionManager, EdgeViewModel viewModel) {
+        viewModel
+                .getSource()
+                .getContracts()
+                .forEach(
+                        contract -> {
+                            getItems()
+                                    .add(
+                                            new InspectorContractItem(
+                                                    actionManager,
+                                                    viewModel.getSource(),
+                                                    contract));
+                        });
+    }
 }

@@ -5,6 +5,7 @@ import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.combobox.InspectorContractComboBox;
 import org.gecko.view.inspector.element.combobox.InspectorKindComboBox;
 import org.gecko.view.inspector.element.container.InspectorEdgeStateLabel;
+import org.gecko.view.inspector.element.textfield.InspectorPriorityField;
 import org.gecko.view.inspector.element.textfield.InspectorTextField;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.viewmodel.EdgeViewModel;
@@ -32,7 +33,7 @@ public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel
         addInspectorElement(new InspectorSeparator());
 
         // Priority
-        addInspectorElement(new InspectorTextField(viewModel.getPriority()));
+        addInspectorElement(new InspectorPriorityField(viewModel.getPriority()));
 
         addInspectorElement(new InspectorSeparator());
 

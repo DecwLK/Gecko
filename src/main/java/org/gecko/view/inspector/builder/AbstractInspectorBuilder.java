@@ -28,7 +28,7 @@ public abstract class AbstractInspectorBuilder<T extends PositionableViewModelEl
 
         // Name field if applicable
         try {
-            addInspectorElement(new InspectorTextField(((Renamable) viewModel).getNameProperty()));
+            addInspectorElement(new InspectorTextField((Renamable) viewModel));
             addInspectorElement(new InspectorSeparator());
         } catch (ClassCastException e) {
             // Do nothing

@@ -6,6 +6,4 @@ public interface Renamable {
     String getName();
 
     void setName(String name);
-
-    StringProperty getNameProperty(); // TODO: inspector needs this for name fields
 }

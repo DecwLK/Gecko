@@ -1,20 +1,19 @@
 package org.gecko.view.inspector.element.textfield;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.control.TextField;
-import javafx.util.converter.NumberStringConverter;
 import org.gecko.view.inspector.element.InspectorElement;
+import org.gecko.viewmodel.Renamable;
 
-public class InspectorTextField extends TextField
-        implements InspectorElement<TextField> {
+public class InspectorTextField extends TextField implements InspectorElement<TextField> {
 
-    public InspectorTextField(IntegerProperty targetIntegerProperty) {
-        textProperty().bindBidirectional(targetIntegerProperty, new NumberStringConverter());
-    }
+    public InspectorTextField(Renamable renamable) {
+        setText(renamable.getName());
 
-    public InspectorTextField(StringProperty targetStringProperty) {
-        textProperty().bindBidirectional(targetStringProperty);
+        textProperty()
+                .addListener(
+                        (observable, oldValue, newValue) -> {
+                            renamable.setName(newValue);
+                        });
     }
 
     @Override

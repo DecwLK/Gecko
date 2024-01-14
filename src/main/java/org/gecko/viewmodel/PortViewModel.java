@@ -10,12 +10,12 @@ import org.gecko.model.Visibility;
 @Setter
 @Getter
 public class PortViewModel extends BlockViewModelElement<Variable> {
-    private Property<Visibility> visibility;
+    private Property<Visibility> visibilityProperty;
 
     public PortViewModel(Variable target) {
         super(target);
-        super.setName(target.getName());
-        this.visibility = new SimpleObjectProperty<>(target.getVisibility());
+        this.visibilityProperty = new SimpleObjectProperty<>(target.getVisibility());
+        setName(target.getName());
     }
 
     @Override
@@ -31,13 +31,13 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
         }
 
         // Update visibility:
-        if (this.visibility == null || this.visibility.getValue() == null) {
+        if (this.visibilityProperty == null || this.visibilityProperty.getValue() == null) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.visibility.getValue().equals(super.target.getVisibility())) {
-            super.target.setVisibility(this.visibility.getValue());
+        if (!this.visibilityProperty.getValue().equals(super.target.getVisibility())) {
+            super.target.setVisibility(this.visibilityProperty.getValue());
         }
     }
 

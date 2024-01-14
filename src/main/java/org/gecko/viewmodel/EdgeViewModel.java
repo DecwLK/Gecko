@@ -9,50 +9,46 @@ import lombok.Setter;
 import org.gecko.model.Edge;
 import org.gecko.model.Kind;
 
-@Setter
-@Getter
+@Getter @Setter
 public class EdgeViewModel extends PositionableViewModelElement<Edge> {
-    private Property<Kind> kind;
 
-    private IntegerProperty priority;
-
+    private Property<Kind> kindProperty;
+    private IntegerProperty priorityProperty;
     private ContractViewModel contract;
-
     private StateViewModel source;
-
     private StateViewModel destination;
 
     public EdgeViewModel(Edge target) {
         super(target);
-        this.kind = new SimpleObjectProperty<>(target.getKind());
-        this.priority = new SimpleIntegerProperty(target.getPriority());
-        this.contract = new ContractViewModel(target.getContract());
-        this.source = new StateViewModel(target.getSource());
-        this.destination = new StateViewModel(target.getDestination());
+        this.kindProperty = new SimpleObjectProperty<>(target.getKind());
+        this.priorityProperty = new SimpleIntegerProperty(target.getPriority());
+        this.contract = null;
+        this.source = null;
+        this.destination = null;
     }
 
     @Override
     public void updateTarget() {
         // Update kind:
-        if (this.kind == null || this.kind.getValue() == null) {
+        if (this.kindProperty == null || this.kindProperty.getValue() == null) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.kind.getValue().equals(super.target.getKind())) {
-            super.target.setKind(this.kind.getValue());
+        if (!this.kindProperty.getValue().equals(super.target.getKind())) {
+            super.target.setKind(this.kindProperty.getValue());
         }
 
         // Update priority:
         // TODO: Are there any restrictions regarding what a priority can be? e.g. Are negative
         // numbers allowed?
-        if (this.priority == null || this.priority.getValue() == null) {
+        if (this.priorityProperty == null || this.priorityProperty.getValue() == null) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.priority.getValue().equals(super.target.getPriority())) {
-            super.target.setPriority(this.priority.getValue());
+        if (!this.priorityProperty.getValue().equals(super.target.getPriority())) {
+            super.target.setPriority(this.priorityProperty.getValue());
         }
 
         // Update contract:

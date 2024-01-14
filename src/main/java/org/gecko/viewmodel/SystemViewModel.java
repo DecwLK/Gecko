@@ -11,14 +11,22 @@ import org.gecko.model.System;
 @Getter
 @Setter
 public class SystemViewModel extends BlockViewModelElement<System> {
-    private StringProperty code;
-    private ObservableList<PortViewModel> ports;
+    private StringProperty codeProperty;
+    private ObservableList<PortViewModel> portsProperty; //TODO should this be called property?
 
     public SystemViewModel(System target) {
         super(target);
         super.setName(target.getName());
-        this.code = new SimpleStringProperty(target.getCode());
-        this.ports = FXCollections.observableArrayList();
+        this.codeProperty = new SimpleStringProperty(target.getCode());
+        this.portsProperty = FXCollections.observableArrayList();
+    }
+
+    public String getCode() {
+        return codeProperty.getValue();
+    }
+
+    public void setCode(String code) {
+        codeProperty.setValue(code);
     }
 
     @Override
@@ -35,19 +43,19 @@ public class SystemViewModel extends BlockViewModelElement<System> {
 
         // Update code:
         // TODO: can be empty?
-        if (this.code == null || this.code.getValue() == null || this.code.getValue().isEmpty()) {
+        if (this.codeProperty == null || this.codeProperty.getValue() == null || this.codeProperty.getValue().isEmpty()) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.code.getValue().equals(super.target.getCode())) {
-            super.target.setCode(this.code.getValue());
+        if (!this.codeProperty.getValue().equals(super.target.getCode())) {
+            super.target.setCode(this.codeProperty.getValue());
         }
     }
 
     public void addPort(PortViewModel port) {
         // TODO: prior checks
-        this.ports.add(port);
+        this.portsProperty.add(port);
         super.target.addVariable(port.target);
     }
 

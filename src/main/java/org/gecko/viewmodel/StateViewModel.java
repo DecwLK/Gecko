@@ -11,14 +11,22 @@ import org.gecko.model.State;
 @Setter
 @Getter
 public class StateViewModel extends BlockViewModelElement<State> {
-    private BooleanProperty isStartState;
-    private ObservableList<ContractViewModel> contracts;
+    private BooleanProperty isStartStateProperty;
+    private final ObservableList<ContractViewModel> contractsProperty;
 
     public StateViewModel(State target) {
         super(target);
         super.setName(target.getName());
-        isStartState = new SimpleBooleanProperty(false);
-        this.contracts = FXCollections.observableArrayList();
+        isStartStateProperty = new SimpleBooleanProperty(false);
+        this.contractsProperty = FXCollections.observableArrayList();
+    }
+
+    public boolean getIsStartState() {
+        return isStartStateProperty.getValue();
+    }
+
+    public void setStartState(boolean isStartState) {
+        isStartStateProperty.setValue(isStartState);
     }
 
     @Override
@@ -35,7 +43,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
         // Update isStartState:
         // TODO: Start state change handled beforehand. Has to be taken care of in automaton also.
-        if (this.isStartState == null || this.isStartState.getValue() == null) {
+        if (this.isStartStateProperty == null || this.isStartStateProperty.getValue() == null) {
             // TODO: Throw exception.
             return;
         }
@@ -43,7 +51,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
     public void addContract(ContractViewModel contract) {
         // TODO: prior checks
-        this.contracts.add(contract);
+        this.contractsProperty.add(contract);
         super.target.addContract(contract.target);
     }
 

@@ -16,24 +16,24 @@ import java.util.Random;
 @Setter
 @Getter
 public class RegionViewModel extends BlockViewModelElement<Region> {
-    private Property<Color> color;
+    private Property<Color> colorProperty;
+    private StringProperty invariantProperty;
+    private ObservableList<StateViewModel> statesProperty; //TODO should this be called property?
     private ContractViewModel contract;
-    private StringProperty invariant;
-    private ObservableList<StateViewModel> states;
 
     public RegionViewModel(Region target) {
         super(target);
-        super.setName(target.getName());
+        setName(target.getName());
         this.contract = new ContractViewModel(target.getPreAndPostCondition());
-        this.invariant = new SimpleStringProperty(target.getInvariant().getCondition());
-        this.states = FXCollections.observableArrayList();
+        this.invariantProperty = new SimpleStringProperty(target.getInvariant().getCondition());
+        this.statesProperty = FXCollections.observableArrayList();
 
         // TODO Alternatives: Fixed default color or random color from given palette.
         Random random = new Random(System.currentTimeMillis());
         int red = random.nextInt(255);
         int green = random.nextInt(255);
         int blue = random.nextInt(255);
-        this.color = new SimpleObjectProperty<>(Color.rgb(red, green, blue));
+        this.colorProperty = new SimpleObjectProperty<>(Color.rgb(red, green, blue));
     }
 
     @Override
@@ -59,15 +59,15 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         }
 
         // Update invariant:
-        if (this.invariant == null
-                || this.invariant.getValue() == null
-                || this.invariant.getValue().isEmpty()) {
+        if (this.invariantProperty == null
+                || this.invariantProperty.getValue() == null
+                || this.invariantProperty.getValue().isEmpty()) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.invariant.getValue().equals(super.target.getInvariant().getCondition())) {
-            super.target.setInvariant(new Condition(this.invariant.getValue()));
+        if (!this.invariantProperty.getValue().equals(super.target.getInvariant().getCondition())) {
+            super.target.setInvariant(new Condition(this.invariantProperty.getValue()));
         }
 
         // TODO: Update states.
@@ -75,7 +75,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
 
     public void addState(StateViewModel state) {
         // TODO: prior checks
-        this.states.add(state);
+        this.statesProperty.add(state);
         super.target.addState(state.target);
     }
 

@@ -41,11 +41,11 @@ public class EditorViewModel {
         initializeTools();
     }
 
-    //TODO: Not tested yet.
     public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
         List<Region> regions = currentSystem.getTarget().getAutomaton().getRegions().stream()
                 .filter(region -> region.getStates().contains(stateViewModel.getTarget())).toList();
-        return containedPositionableViewModelElementsProperty.stream().filter(element -> regions.contains(element.getTarget()))
+        return containedPositionableViewModelElementsProperty.stream()
+                .filter(element -> regions.contains(element.getTarget()))
                 .map(element -> (RegionViewModel) element).toList();
     }
 

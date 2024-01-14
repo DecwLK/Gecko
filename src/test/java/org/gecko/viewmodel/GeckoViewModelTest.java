@@ -32,6 +32,7 @@ class GeckoViewModelTest {
     void switchEditor1() {
         geckoViewModel.switchEditor(rootSystemViewModel, false);
         assertEquals(1, geckoViewModel.getOpenedEditorsProperty().size());
+        assertNotNull(geckoViewModel.getCurrentEditor());
     }
 
     @Test

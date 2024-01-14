@@ -12,9 +12,9 @@ import org.gecko.model.Element;
 @Getter
 @Setter
 public abstract class PositionableViewModelElement<T extends Element> extends AbstractViewModelElement<T> {
-    private Property<Point2D> position;
-    private Property<Point2D> size;
-    private BooleanProperty isSelected;
+    protected Property<Point2D> position;
+    protected Property<Point2D> size;
+    protected BooleanProperty isSelected;
 
     PositionableViewModelElement(T target) {
         super(target);

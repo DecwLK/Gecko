@@ -39,8 +39,8 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
             return;
         }
 
-        if (!this.kind.getValue().equals(super.getTarget().getKind())) {
-            super.getTarget().setKind(this.kind.getValue());
+        if (!this.kind.getValue().equals(super.target.getKind())) {
+            super.target.setKind(this.kind.getValue());
         }
 
         // Update priority:
@@ -51,38 +51,38 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
             return;
         }
 
-        if (!this.priority.getValue().equals(super.getTarget().getPriority())) {
-            super.getTarget().setPriority(this.priority.getValue());
+        if (!this.priority.getValue().equals(super.target.getPriority())) {
+            super.target.setPriority(this.priority.getValue());
         }
 
         // Update contract:
-        if (this.contract == null || this.contract.getTarget() == null) {
+        if (this.contract == null || this.contract.target == null) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.contract.getTarget().equals(super.getTarget().getContract())) {
-            super.getTarget().setContract(this.contract.getTarget());
+        if (!this.contract.target.equals(super.target.getContract())) {
+            super.target.setContract(this.contract.target);
         }
 
         // Update source:
-        if (this.source == null || this.source.getTarget() == null) {
+        if (this.source == null || this.source.target == null) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.source.getTarget().equals(super.getTarget().getSource())) {
-            super.getTarget().setSource(this.source.getTarget());
+        if (!this.source.target.equals(super.target.getSource())) {
+            super.target.setSource(this.source.target);
         }
 
         // Update destination:
-        if (this.destination == null || this.destination.getTarget() == null) {
+        if (this.destination == null || this.destination.target == null) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.destination.getTarget().equals(super.getTarget().getDestination())) {
-            super.getTarget().setDestination(this.destination.getTarget());
+        if (!this.destination.target.equals(super.target.getDestination())) {
+            super.target.setDestination(this.destination.target);
         }
     }
 

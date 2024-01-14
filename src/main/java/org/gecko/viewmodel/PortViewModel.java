@@ -26,8 +26,8 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
             return;
         }
 
-        if (!super.getName().equals(super.getTarget().getName())) {
-            super.getTarget().setName(super.getName());
+        if (!super.getName().equals(super.target.getName())) {
+            super.target.setName(super.getName());
         }
 
         // Update visibility:
@@ -36,8 +36,8 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
             return;
         }
 
-        if (!this.visibility.getValue().equals(super.getTarget().getVisibility())) {
-            super.getTarget().setVisibility(this.visibility.getValue());
+        if (!this.visibility.getValue().equals(super.target.getVisibility())) {
+            super.target.setVisibility(this.visibility.getValue());
         }
     }
 

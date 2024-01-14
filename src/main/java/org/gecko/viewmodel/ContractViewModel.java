@@ -29,8 +29,8 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
             return;
         }
 
-        if (!this.name.getValue().equals(super.getTarget().getName())) {
-            super.getTarget().setName(this.name.getValue());
+        if (!this.name.getValue().equals(super.target.getName())) {
+            super.target.setName(this.name.getValue());
         }
 
         // Update precondition:
@@ -39,8 +39,8 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
             return;
         }
 
-        if (!this.preCondition.getValue().equals(super.getTarget().getPreCondition().getCondition())) {
-            super.getTarget().setPreCondition(new Condition(this.preCondition.getValue()));
+        if (!this.preCondition.getValue().equals(super.target.getPreCondition().getCondition())) {
+            super.target.setPreCondition(new Condition(this.preCondition.getValue()));
         }
 
         // Update postcondition:
@@ -49,8 +49,8 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
             return;
         }
 
-        if (!this.postCondition.getValue().equals(super.getTarget().getPostCondition().getCondition())) {
-            super.getTarget().setPostCondition(new Condition(this.postCondition.getValue()));
+        if (!this.postCondition.getValue().equals(super.target.getPostCondition().getCondition())) {
+            super.target.setPostCondition(new Condition(this.postCondition.getValue()));
         }
     }
 

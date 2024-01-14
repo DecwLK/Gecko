@@ -29,25 +29,26 @@ public class SystemViewModel extends BlockViewModelElement<System> {
             return;
         }
 
-        if (!super.getName().equals(super.getTarget().getName())) {
-            super.getTarget().setName(super.getName());
+        if (!super.getName().equals(super.target.getName())) {
+            super.target.setName(super.getName());
         }
 
         // Update code:
+        // TODO: can be empty?
         if (this.code == null || this.code.getValue() == null || this.code.getValue().isEmpty()) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.code.getValue().equals(super.getTarget().getCode())) {
-            super.getTarget().setCode(this.code.getValue());
+        if (!this.code.getValue().equals(super.target.getCode())) {
+            super.target.setCode(this.code.getValue());
         }
     }
 
     public void addPort(PortViewModel port) {
         // TODO: prior checks
         this.ports.add(port);
-        super.getTarget().addVariable(port.getTarget());
+        super.target.addVariable(port.target);
     }
 
     @Override

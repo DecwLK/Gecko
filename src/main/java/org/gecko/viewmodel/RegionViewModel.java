@@ -44,18 +44,18 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
             return;
         }
 
-        if (!super.getName().equals(super.getTarget().getName())) {
-            super.getTarget().setName(super.getName());
+        if (!super.getName().equals(super.target.getName())) {
+            super.target.setName(super.getName());
         }
 
         // Update contract:
-        if (this.contract == null || this.contract.getTarget() == null) {
+        if (this.contract == null || this.contract.target == null) {
             // TODO: Throw exception.
             return;
         }
 
-        if (!this.contract.getTarget().equals(super.getTarget().getPreAndPostCondition())) {
-            super.getTarget().setPreAndPostCondition(this.contract.getTarget());
+        if (!this.contract.target.equals(super.target.getPreAndPostCondition())) {
+            super.target.setPreAndPostCondition(this.contract.target);
         }
 
         // Update invariant:
@@ -66,8 +66,8 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
             return;
         }
 
-        if (!this.invariant.getValue().equals(super.getTarget().getInvariant().getCondition())) {
-            super.getTarget().setInvariant(new Condition(this.invariant.getValue()));
+        if (!this.invariant.getValue().equals(super.target.getInvariant().getCondition())) {
+            super.target.setInvariant(new Condition(this.invariant.getValue()));
         }
 
         // TODO: Update states.
@@ -76,7 +76,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     public void addState(StateViewModel state) {
         // TODO: prior checks
         this.states.add(state);
-        super.getTarget().addState(state.getTarget());
+        super.target.addState(state.target);
     }
 
     @Override

@@ -29,8 +29,8 @@ public class StateViewModel extends BlockViewModelElement<State> {
             return;
         }
 
-        if (!super.getName().equals(super.getTarget().getName())) {
-            super.getTarget().setName(super.getName());
+        if (!super.getName().equals(super.target.getName())) {
+            super.target.setName(super.getName());
         }
 
         // Update isStartState:
@@ -44,7 +44,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
     public void addContract(ContractViewModel contract) {
         // TODO: prior checks
         this.contracts.add(contract);
-        super.getTarget().addContract(contract.getTarget());
+        super.target.addContract(contract.target);
     }
 
     @Override

@@ -4,7 +4,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
-import lombok.Getter;
 import org.gecko.model.Element;
 
 public abstract class BlockViewModelElement<T extends Element> extends PositionableViewModelElement<T> implements Renamable {
@@ -28,38 +27,38 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
 
     private void resize(Point2D delta) {
         // Moves bottom-right corner with delta.
-        Point2D currentSizeValue = super.getSize().getValue();
+        Point2D currentSizeValue = super.size.getValue();
 
         double xCoordinate = currentSizeValue.getX() + delta.getX();
         double yCoordinate = currentSizeValue.getY() + delta.getY();
         Point2D newSize = new Point2D(xCoordinate, yCoordinate);
 
-        super.setSize(new SimpleObjectProperty<>(newSize));
+        super.size = new SimpleObjectProperty<>(newSize);
     }
 
     public void move(Point2D delta) {
         // TODO: Check movement availability.
-        Point2D currentPositionValue = super.getPosition().getValue();
-        Point2D currentSizeValue = super.getSize().getValue();
+        Point2D currentPositionValue = super.position.getValue();
+        Point2D currentSizeValue = super.size.getValue();
 
         // Update top-left corner's position:
         double xCoordinate = currentPositionValue.getX() + delta.getX();
         double yCoordinate = currentPositionValue.getY() + delta.getY();
         Point2D newPosition = new Point2D(xCoordinate, yCoordinate);
 
-        super.setPosition(new SimpleObjectProperty<>(newPosition));
+        super.position = new SimpleObjectProperty<>(newPosition);
 
         // Update bottom-right corner's position:
         xCoordinate = currentSizeValue.getX() + delta.getX();
         yCoordinate = currentSizeValue.getY() + delta.getY();
         newPosition = new Point2D(xCoordinate, yCoordinate);
 
-        super.setSize(new SimpleObjectProperty<>(newPosition));
+        super.size = new SimpleObjectProperty<>(newPosition);
     }
 
     public void scale(Point2D startPoint, Point2D delta) {
-        Point2D topLeftCorner = super.getPosition().getValue();
-        Point2D bottomRightCorner = super.getSize().getValue();
+        Point2D topLeftCorner = super.position.getValue();
+        Point2D bottomRightCorner = super.size.getValue();
         Point2D topRightCorner = new Point2D(bottomRightCorner.getX(), topLeftCorner.getY());
         Point2D bottomLeftCorner = new Point2D(topLeftCorner.getX(), bottomRightCorner.getY());
 
@@ -69,8 +68,8 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
             }
             this.resize(delta);
         } else {
-            Point2D currentPositionValue = super.getPosition().getValue();
-            Point2D currentSizeValue = super.getSize().getValue();
+            Point2D currentPositionValue = super.position.getValue();
+            Point2D currentSizeValue = super.size.getValue();
 
             Point2D newPosition = currentPositionValue;
             Point2D newSize = currentSizeValue;
@@ -92,8 +91,8 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
                 newSize = new Point2D(currentSizeValue.getX(), yCoordinate);
             }
 
-            super.setPosition(new SimpleObjectProperty<>(newPosition));
-            super.setSize(new SimpleObjectProperty<>(newSize));
+            super.position = new SimpleObjectProperty<>(newPosition);
+            super.size = new SimpleObjectProperty<>(newSize);
         }
     }
 }

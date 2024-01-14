@@ -21,7 +21,6 @@ public class CreateSystemViewModelElementAction extends Action {
     void run() {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdSystemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelIn(currentParentSystem);
-        //TODO use property conventions
         createdSystemViewModel.setPosition(position);
     }
 

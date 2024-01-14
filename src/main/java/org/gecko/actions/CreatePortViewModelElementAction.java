@@ -20,7 +20,6 @@ public class CreatePortViewModelElementAction extends Action {
     void run() {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdPortViewModel = geckoViewModel.getViewModelFactory().createPortViewModelIn(currentParentSystem);
-        //TODO use property conventions
         createdPortViewModel.setPosition(position);
     }
 

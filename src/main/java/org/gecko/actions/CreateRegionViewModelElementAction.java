@@ -22,7 +22,6 @@ public class CreateRegionViewModelElementAction extends Action {
     void run() {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdRegionViewModel = geckoViewModel.getViewModelFactory().createRegionViewModelIn(currentParentSystem);
-        //TODO use property conventions
         createdRegionViewModel.setPosition(position);
     }
 

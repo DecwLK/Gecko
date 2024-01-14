@@ -11,6 +11,6 @@ public class GeckoModel {
 
     public GeckoModel() {
         this.modelFactory = new ModelFactory();
-        this.root = new System("root", "code", null); //TODO temporary. how is the root initialized?
+        this.root = new System("root", "code", new Automaton()); //TODO temporary. how is the root initialized?
     }
 }

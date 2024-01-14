@@ -4,13 +4,24 @@ import javafx.geometry.Point2D;
 import org.gecko.viewmodel.SelectionManager;
 
 public class MoveBlockViewModelElementAction extends Action {
-    MoveBlockViewModelElementAction(SelectionManager selectionManager, Point2D offset) {}
+
+    private final SelectionManager selectionManager;
+    private final Point2D offset;
+
+    MoveBlockViewModelElementAction(SelectionManager selectionManager, Point2D offset) {
+        this.selectionManager = selectionManager;
+        this.offset = offset;
+    }
 
     @Override
-    void run() {}
+    void run() {
+        selectionManager.getCurrentSelection().forEach(element -> {
+            element.getPosition().add(offset);
+        });
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return null;
+        return actionFactory.createMoveBlockViewModelElementAction(offset.multiply(-1));
     }
 }

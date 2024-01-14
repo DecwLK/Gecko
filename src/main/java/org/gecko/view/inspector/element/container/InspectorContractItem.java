@@ -11,6 +11,7 @@ import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.view.inspector.element.textfield.InspectorContractField;
 import org.gecko.view.inspector.element.textfield.InspectorTextField;
 import org.gecko.viewmodel.ContractViewModel;
+import org.gecko.viewmodel.Renamable;
 import org.gecko.viewmodel.StateViewModel;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 public class InspectorContractItem extends VBox implements InspectorElement<VBox> {
     /**
      * Constructor for the State contract item
+     *
      * @param actionManager
      * @param stateViewModel
      * @param contractViewModel
@@ -52,7 +54,7 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
                 .getChildren()
                 .addAll(
                         new InspectorCollapseContractButton(contractFields),
-                        new InspectorTextField(contractViewModel.getNameProperty()),
+                        new InspectorTextField((Renamable) contractViewModel),
                         new InspectorRemoveContractButton(
                                 actionManager, stateViewModel, contractViewModel));
 
@@ -62,6 +64,7 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
 
     /**
      * Constructor for the Region contract item
+     *
      * @param actionManager
      * @param contractViewModel
      * @param invariant
@@ -92,7 +95,7 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
         // Build the contract item
         getChildren()
                 .addAll(
-                        new InspectorTextField(contractViewModel.getNameProperty()),
+                        new InspectorTextField((Renamable) contractViewModel),
                         contractPreCondition,
                         contractPostCondition,
                         contractInvariant);

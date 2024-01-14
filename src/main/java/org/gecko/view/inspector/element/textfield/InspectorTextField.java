@@ -1,5 +1,6 @@
 package org.gecko.view.inspector.element.textfield;
 
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.TextField;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.viewmodel.Renamable;
@@ -14,6 +15,10 @@ public class InspectorTextField extends TextField implements InspectorElement<Te
                         (observable, oldValue, newValue) -> {
                             renamable.setName(newValue);
                         });
+    }
+
+    public InspectorTextField(StringProperty stringProperty) {
+        textProperty().bindBidirectional(stringProperty);
     }
 
     @Override

@@ -80,7 +80,8 @@ public class ActionFactory {
                 this, geckoViewModel, viewModelFactory, position);
     }
 
-    public CreateVariableAction createCreateVariableAction(SystemViewModel systemViewModel, Visibility visibility) {
+    public CreateVariableAction createCreateVariableAction(
+            SystemViewModel systemViewModel, Visibility visibility) {
         return new CreateVariableAction(this, systemViewModel, visibility);
     }
 
@@ -117,9 +118,10 @@ public class ActionFactory {
     public MoveSystemConnectionViewModelElementAction
             createMoveSystemConnectionViewModelElementAction(
                     SystemConnectionViewModel systemConnectionViewModel,
-                    SystemViewModel systemViewModel) {
+                    SystemViewModel systemViewModel,
+                    boolean isSource) {
         return new MoveSystemConnectionViewModelElementAction(
-                this, systemConnectionViewModel, systemViewModel);
+                this, systemConnectionViewModel, systemViewModel, isSource);
     }
 
     public PanAction createPanAction(EditorViewModel editorViewModel, Point2D pivot) {

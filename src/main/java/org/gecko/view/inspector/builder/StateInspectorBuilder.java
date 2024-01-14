@@ -1,14 +1,11 @@
 package org.gecko.view.inspector.builder;
 
-import javafx.scene.control.ListView;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.button.InspectorAddContractButton;
 import org.gecko.view.inspector.element.button.InspectorSetStartStateButton;
-import org.gecko.view.inspector.element.label.InspectorRegionLabel;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.view.inspector.element.list.InspectorContractList;
-import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -26,7 +23,7 @@ public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewMod
         List<RegionViewModel> regionViewModelList = editorViewModel.getRegionViewModels(viewModel);
 
         for (RegionViewModel regionViewModel : regionViewModelList) {
-            addInspectorElement(new InspectorRegionLabel(regionViewModel.getNameProperty()));
+            addInspectorElement(new InspectorLabel(regionViewModel.getName()));
         }
 
         addInspectorElement(new InspectorSeparator());

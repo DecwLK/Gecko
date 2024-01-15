@@ -1,9 +1,9 @@
 package org.gecko.application;
 
+import java.io.File;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.File;
 
 public class GeckoIOManager {
     @Getter

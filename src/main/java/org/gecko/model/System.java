@@ -1,19 +1,19 @@
 package org.gecko.model;
 
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+
 @Data
 public class System implements Renamable, Element {
+    private final List<System> children;
+    private final List<SystemConnection> connections;
+    private final List<Variable> variables;
     private String name;
     private System parent;
     private String code;
     private Automaton automaton;
-    private final List<System> children;
-    private final List<SystemConnection> connections;
-    private final List<Variable> variables;
 
     public System(String name, String code, Automaton automaton) {
         this.name = name;

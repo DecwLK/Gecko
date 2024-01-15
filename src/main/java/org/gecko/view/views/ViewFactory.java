@@ -1,7 +1,6 @@
 package org.gecko.view.views;
 
 import org.gecko.actions.ActionManager;
-import org.gecko.model.Automaton;
 import org.gecko.view.toolbar.ToolBarBuilder;
 import org.gecko.view.views.shortcuts.AutomatonEditorViewShortcutHandler;
 import org.gecko.view.views.shortcuts.SystemEditorViewShortcutHandler;

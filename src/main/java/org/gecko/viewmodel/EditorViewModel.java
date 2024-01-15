@@ -1,5 +1,7 @@
 package org.gecko.viewmodel;
 
+import java.util.List;
+
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,8 +19,6 @@ import org.gecko.tools.SystemCreatorTool;
 import org.gecko.tools.Tool;
 import org.gecko.tools.VariableBlockCreatorTool;
 import org.gecko.tools.ZoomTool;
-
-import java.util.List;
 
 @Data
 public class EditorViewModel {

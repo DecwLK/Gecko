@@ -1,5 +1,8 @@
 package org.gecko.view.inspector.builder;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.Inspector;
@@ -11,9 +14,6 @@ import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.Renamable;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class AbstractInspectorBuilder<T extends PositionableViewModelElement<?>> {
     @Getter

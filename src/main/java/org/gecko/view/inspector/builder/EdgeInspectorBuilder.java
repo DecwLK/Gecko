@@ -5,8 +5,8 @@ import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.combobox.InspectorContractComboBox;
 import org.gecko.view.inspector.element.combobox.InspectorKindComboBox;
 import org.gecko.view.inspector.element.container.InspectorEdgeStateLabel;
-import org.gecko.view.inspector.element.textfield.InspectorPriorityField;
 import org.gecko.view.inspector.element.label.InspectorLabel;
+import org.gecko.view.inspector.element.textfield.InspectorPriorityField;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 

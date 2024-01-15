@@ -1,10 +1,10 @@
 package org.gecko.viewmodel;
 
-import javafx.collections.ObservableList;
-import lombok.Data;
-
 import java.util.List;
 import java.util.Stack;
+
+import javafx.collections.ObservableList;
+import lombok.Data;
 
 @Data
 public class SelectionManager {

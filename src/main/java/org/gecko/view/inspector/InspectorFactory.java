@@ -13,10 +13,8 @@ import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
-import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
-import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
 public class InspectorFactory {

@@ -1,9 +1,21 @@
 package org.gecko.view.inspector;
 
+
 import org.gecko.actions.ActionManager;
-import org.gecko.view.inspector.builder.*;
+import org.gecko.view.inspector.builder.AbstractInspectorBuilder;
+import org.gecko.view.inspector.builder.EdgeInspectorBuilder;
+import org.gecko.view.inspector.builder.RegionInspectorBuilder;
+import org.gecko.view.inspector.builder.StateInspectorBuilder;
+import org.gecko.view.inspector.builder.SystemInspectorBuilder;
+import org.gecko.view.inspector.builder.VariableBlockInspectorBuilder;
 import org.gecko.view.views.EditorView;
-import org.gecko.viewmodel.*;
+import org.gecko.viewmodel.EdgeViewModel;
+import org.gecko.viewmodel.EditorViewModel;
+import org.gecko.viewmodel.PortViewModel;
+import org.gecko.viewmodel.PositionableViewModelElement;
+import org.gecko.viewmodel.RegionViewModel;
+import org.gecko.viewmodel.StateViewModel;
+import org.gecko.viewmodel.SystemViewModel;
 
 public class InspectorFactory {
 

@@ -1,9 +1,9 @@
 package org.gecko.actions;
 
+import java.util.List;
+
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
-
-import java.util.List;
 
 public class CopyPositionableViewModelElementAction extends Action {
     CopyPositionableViewModelElementAction(EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> positionableViewModelElement) {

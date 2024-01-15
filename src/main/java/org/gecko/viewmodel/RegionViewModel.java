@@ -1,5 +1,7 @@
 package org.gecko.viewmodel;
 
+import java.util.Random;
+
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,8 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Condition;
 import org.gecko.model.Region;
-
-import java.util.Random;
 
 @Setter
 @Getter

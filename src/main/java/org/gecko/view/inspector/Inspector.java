@@ -1,19 +1,18 @@
 package org.gecko.view.inspector;
 
+import java.util.List;
+
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
-
-import javafx.scene.control.ScrollPane;
 import org.gecko.view.inspector.element.button.InspectorCollapseButton;
 import org.gecko.view.inspector.element.button.InspectorSelectionBackwardButton;
 import org.gecko.view.inspector.element.button.InspectorSelectionForwardButton;
 import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
-
-import java.util.List;
 
 public class Inspector extends ScrollPane {
 

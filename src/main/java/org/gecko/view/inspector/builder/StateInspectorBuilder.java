@@ -1,5 +1,7 @@
 package org.gecko.view.inspector.builder;
 
+import java.util.List;
+
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.button.InspectorAddContractButton;
@@ -9,8 +11,6 @@ import org.gecko.view.inspector.element.list.InspectorContractList;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
-
-import java.util.List;
 
 public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewModel> {
     public StateInspectorBuilder(ActionManager actionManager, EditorViewModel editorViewModel, StateViewModel viewModel) {

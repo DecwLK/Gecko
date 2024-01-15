@@ -1,5 +1,8 @@
 package org.gecko.view.inspector.element.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,9 +16,6 @@ import org.gecko.view.inspector.element.textfield.InspectorTextField;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.Renamable;
 import org.gecko.viewmodel.StateViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InspectorContractItem extends VBox implements InspectorElement<VBox> {
     /**

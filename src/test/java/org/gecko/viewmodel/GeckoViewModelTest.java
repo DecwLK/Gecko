@@ -1,14 +1,15 @@
 package org.gecko.viewmodel;
 
+import java.util.List;
+
 import org.gecko.model.GeckoModel;
-import org.gecko.model.ModelFactory;
-import org.gecko.model.System;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GeckoViewModelTest {
     private static GeckoModel geckoModel;

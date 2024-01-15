@@ -1,5 +1,9 @@
 package org.gecko.viewmodel;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
@@ -10,12 +14,8 @@ import lombok.Data;
 import lombok.Getter;
 import org.gecko.model.Automaton;
 import org.gecko.model.Element;
-import org.gecko.model.System;
 import org.gecko.model.GeckoModel;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import org.gecko.model.System;
 
 @Data
 public class GeckoViewModel {

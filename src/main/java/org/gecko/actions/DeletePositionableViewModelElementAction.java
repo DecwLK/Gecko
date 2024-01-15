@@ -1,9 +1,9 @@
 package org.gecko.actions;
 
+import java.util.List;
+
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
-
-import java.util.List;
 
 public class DeletePositionableViewModelElementAction extends Action {
     DeletePositionableViewModelElementAction(GeckoViewModel geckoViewModel, PositionableViewModelElement<?> element) {

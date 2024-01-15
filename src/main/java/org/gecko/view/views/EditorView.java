@@ -1,5 +1,8 @@
 package org.gecko.view.views;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.ToolBar;
@@ -12,9 +15,6 @@ import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElementVisitor;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class EditorView {
     private final EditorViewModel viewModel;

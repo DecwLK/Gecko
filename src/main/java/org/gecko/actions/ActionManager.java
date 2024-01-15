@@ -1,8 +1,8 @@
 package org.gecko.actions;
 
-import lombok.Getter;
-
 import java.util.Stack;
+
+import lombok.Getter;
 
 public class ActionManager {
     @Getter

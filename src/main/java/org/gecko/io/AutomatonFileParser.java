@@ -1,8 +1,8 @@
 package org.gecko.io;
 
-import org.gecko.application.Gecko;
-
 import java.io.File;
+
+import org.gecko.application.Gecko;
 
 public class AutomatonFileParser implements FileParser {
     public Gecko parse(File file) {

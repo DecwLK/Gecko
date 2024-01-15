@@ -1,9 +1,9 @@
 package org.gecko.model;
 
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Data;
 
 @Data
 public class State implements Renamable, Element {

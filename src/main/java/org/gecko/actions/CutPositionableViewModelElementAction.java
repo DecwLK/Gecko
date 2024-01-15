@@ -1,9 +1,9 @@
 package org.gecko.actions;
 
+import java.util.List;
+
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
-
-import java.util.List;
 
 public class CutPositionableViewModelElementAction extends Action {
     CutPositionableViewModelElementAction(EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> elements) {

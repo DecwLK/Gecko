@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Condition;
 import org.gecko.model.Region;
+
 import java.util.Random;
 
 @Setter
@@ -59,9 +60,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         }
 
         // Update invariant:
-        if (this.invariantProperty == null
-                || this.invariantProperty.getValue() == null
-                || this.invariantProperty.getValue().isEmpty()) {
+        if (this.invariantProperty == null || this.invariantProperty.getValue() == null || this.invariantProperty.getValue().isEmpty()) {
             // TODO: Throw exception.
             return;
         }

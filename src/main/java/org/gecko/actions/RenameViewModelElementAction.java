@@ -4,11 +4,12 @@ import org.gecko.viewmodel.Renamable;
 
 public class RenameViewModelElementAction extends Action {
 
-    RenameViewModelElementAction(
-            Renamable renamable, String newName) {}
+    RenameViewModelElementAction(Renamable renamable, String newName) {
+    }
 
     @Override
-    void run() {}
+    void run() {
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

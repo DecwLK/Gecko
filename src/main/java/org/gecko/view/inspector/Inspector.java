@@ -19,11 +19,7 @@ public class Inspector extends ScrollPane {
 
     private boolean isCollapsed = false;
 
-    public Inspector(
-            List<InspectorElement<?>> elements,
-            ActionManager actionManager,
-            EditorView editorView,
-            EditorViewModel editorViewModel) {
+    public Inspector(List<InspectorElement<?>> elements, ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
         VBox vBox = new VBox();
 
         // Inspector decorations
@@ -31,19 +27,12 @@ public class Inspector extends ScrollPane {
 
         // Selection forward/backward buttons
         HBox selectionButtons = new HBox();
-        selectionButtons
-                .getChildren()
-                .addAll(
-                        new InspectorSelectionBackwardButton(actionManager)
-                                .getControl(),
-                        new InspectorSelectionForwardButton(actionManager)
-                                .getControl());
-        inspectorDecorations
-                .getChildren()
-                .addAll(
-                        selectionButtons,
-                        // Collapse button
-                        new InspectorCollapseButton(editorView));
+        selectionButtons.getChildren()
+                        .addAll(new InspectorSelectionBackwardButton(actionManager).getControl(),
+                            new InspectorSelectionForwardButton(actionManager).getControl());
+        inspectorDecorations.getChildren().addAll(selectionButtons,
+            // Collapse button
+            new InspectorCollapseButton(editorView));
 
         vBox.getChildren().add(inspectorDecorations);
 

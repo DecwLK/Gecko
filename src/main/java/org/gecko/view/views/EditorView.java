@@ -26,12 +26,8 @@ public class EditorView {
     private Inspector currentInspector;
     private Collection<ViewElement<?>> currentViewElements;
 
-    public EditorView(
-            ViewFactory viewFactory,
-            ActionManager actionManager,
-            EditorViewModel viewModel,
-            ToolBar toolBar,
-            ShortcutHandler shortcutHandler) {
+    public EditorView(ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel, ToolBar toolBar,
+                      ShortcutHandler shortcutHandler) {
         this.viewModel = viewModel;
         this.toolBar = toolBar;
         this.shortcutHandler = shortcutHandler;
@@ -39,25 +35,18 @@ public class EditorView {
         this.currentView = new Pane();
 
         // View element creator listener
-        viewModel
-                .getContainedPositionableViewModelElementsProperty()
-                .addListener(
-                        (ListChangeListener<PositionableViewModelElement<?>>)
-                                change -> {
-                                    onUpdateViewElements(viewFactory, change);
-                                });
+        viewModel.getContainedPositionableViewModelElementsProperty().addListener((ListChangeListener<PositionableViewModelElement<?>>) change -> {
+            onUpdateViewElements(viewFactory, change);
+        });
 
         // Inspector creator listener
-        viewModel
-                .getFocusedElementProperty()
-                .addListener(
-                        (observable, oldValue, newValue) -> {
-                            if (newValue != null) {
-                                currentInspector = inspectorFactory.createInspector(newValue);
-                            } else {
-                                currentInspector = null;
-                            }
-                        });
+        viewModel.getFocusedElementProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                currentInspector = inspectorFactory.createInspector(newValue);
+            } else {
+                currentInspector = null;
+            }
+        });
     }
 
     public void toggleInspector() {
@@ -68,12 +57,7 @@ public class EditorView {
 
     public Node drawView() {
         // Refresh view elements
-        currentView
-                .getChildren()
-                .setAll(
-                        currentViewElements.stream()
-                                .map(ViewElement::drawElement)
-                                .collect(Collectors.toList()));
+        currentView.getChildren().setAll(currentViewElements.stream().map(ViewElement::drawElement).collect(Collectors.toList()));
         currentView.getChildren().removeAll();
 
         return currentView;
@@ -87,17 +71,14 @@ public class EditorView {
         return currentInspector;
     }
 
-    private void onUpdateViewElements(
-            ViewFactory viewFactory,
-            ListChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
+    private void onUpdateViewElements(ViewFactory viewFactory, ListChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
         while (change.next()) {
             if (change.wasAdded()) {
                 // Loop through all added elements
                 for (PositionableViewModelElement<?> element : change.getAddedSubList()) {
                     // Create new view element
 
-                    PositionableViewModelElementVisitor visitor =
-                            new ViewElementCreatorVisitor(viewFactory);
+                    PositionableViewModelElementVisitor visitor = new ViewElementCreatorVisitor(viewFactory);
                     ViewElement<?> viewElement = (ViewElement<?>) element.accept(visitor);
 
                     // Add view element to current view elements

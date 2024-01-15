@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.SystemConnection;
 
-@Getter @Setter
+@Getter
+@Setter
 public class SystemConnectionViewModel extends PositionableViewModelElement<SystemConnection> {
     private PortViewModel source;
     private PortViewModel destination;

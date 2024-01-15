@@ -13,5 +13,7 @@ public class MenuBarBuilder {
         menuBar = new MenuBar();
     }
 
-    public MenuBar build() { return null; }
+    public MenuBar build() {
+        return null;
+    }
 }

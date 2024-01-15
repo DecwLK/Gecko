@@ -28,9 +28,7 @@ public class ViewFactory {
     }
 
     public EditorView createEditorView(EditorViewModel editorViewModel, boolean isAutomatonEditor) {
-        return (isAutomatonEditor)
-                ? createAutomatonEditorView(editorViewModel)
-                : createSystemEditorView(editorViewModel);
+        return (isAutomatonEditor) ? createAutomatonEditorView(editorViewModel) : createSystemEditorView(editorViewModel);
     }
 
     public StateViewElement createStateViewElementFrom(StateViewModel stateViewModel) {
@@ -41,8 +39,7 @@ public class ViewFactory {
         return new RegionViewElement();
     }
 
-    public VariableBlockViewElement createVariableBlockViewElementFrom(
-            PortViewModel portViewModel) {
+    public VariableBlockViewElement createVariableBlockViewElementFrom(PortViewModel portViewModel) {
         return new VariableBlockViewElement();
     }
 
@@ -50,8 +47,7 @@ public class ViewFactory {
         return new EdgeViewElement();
     }
 
-    public SystemConnectionViewElement createSystemConnectionViewElementFrom(
-            SystemConnectionViewModel systemConnectionViewModel) {
+    public SystemConnectionViewElement createSystemConnectionViewElementFrom(SystemConnectionViewModel systemConnectionViewModel) {
         return new SystemConnectionViewElement();
     }
 
@@ -60,20 +56,12 @@ public class ViewFactory {
     }
 
     private EditorView createAutomatonEditorView(EditorViewModel editorViewModel) {
-        return new EditorView(
-                this,
-                actionManager,
-                editorViewModel,
-                new ToolBarBuilder(actionManager, editorViewModel).build(),
-                new AutomatonEditorViewShortcutHandler());
+        return new EditorView(this, actionManager, editorViewModel, new ToolBarBuilder(actionManager, editorViewModel).build(),
+            new AutomatonEditorViewShortcutHandler());
     }
 
     private EditorView createSystemEditorView(EditorViewModel editorViewModel) {
-        return new EditorView(
-                this,
-                actionManager,
-                editorViewModel,
-                new ToolBarBuilder(actionManager, editorViewModel).build(),
-                new SystemEditorViewShortcutHandler());
+        return new EditorView(this, actionManager, editorViewModel, new ToolBarBuilder(actionManager, editorViewModel).build(),
+            new SystemEditorViewShortcutHandler());
     }
 }

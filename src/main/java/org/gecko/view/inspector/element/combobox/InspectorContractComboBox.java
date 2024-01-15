@@ -7,17 +7,8 @@ import org.gecko.viewmodel.EdgeViewModel;
 
 public class InspectorContractComboBox extends AbstractInspectorComboBox<InspectorElement<?>> {
     public InspectorContractComboBox(ActionManager actionManager, EdgeViewModel viewModel) {
-        viewModel
-                .getSource()
-                .getContractsProperty()
-                .forEach(
-                        contract -> {
-                            getItems()
-                                    .add(
-                                            new InspectorContractItem(
-                                                    actionManager,
-                                                    viewModel.getSource(),
-                                                    contract));
-                        });
+        viewModel.getSource().getContractsProperty().forEach(contract -> {
+            getItems().add(new InspectorContractItem(actionManager, viewModel.getSource(), contract));
+        });
     }
 }

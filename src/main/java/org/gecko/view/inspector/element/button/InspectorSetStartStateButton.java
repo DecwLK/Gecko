@@ -4,16 +4,9 @@ import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.StateViewModel;
 
 public class InspectorSetStartStateButton extends AbstractInspectorButton {
-    public InspectorSetStartStateButton(
-            ActionManager actionManager,
-            StateViewModel stateViewModel) {
-        setOnAction(
-                event -> {
-                    actionManager.run(
-                            actionManager
-                                    .getActionFactory()
-                                    .createSetStartStateViewModelElementAction(
-                                            stateViewModel));
-                });
+    public InspectorSetStartStateButton(ActionManager actionManager, StateViewModel stateViewModel) {
+        setOnAction(event -> {
+            actionManager.run(actionManager.getActionFactory().createSetStartStateViewModelElementAction(stateViewModel));
+        });
     }
 }

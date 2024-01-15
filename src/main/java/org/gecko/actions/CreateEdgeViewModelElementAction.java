@@ -12,10 +12,7 @@ public class CreateEdgeViewModelElementAction extends Action {
     private final StateViewModel destination;
     private EdgeViewModel createdEdgeViewModel;
 
-    CreateEdgeViewModelElementAction(
-            GeckoViewModel geckoViewModel,
-            StateViewModel source,
-            StateViewModel destination) {
+    CreateEdgeViewModelElementAction(GeckoViewModel geckoViewModel, StateViewModel source, StateViewModel destination) {
         this.geckoViewModel = geckoViewModel;
         this.source = source;
         this.destination = destination;

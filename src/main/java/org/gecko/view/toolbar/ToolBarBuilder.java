@@ -25,18 +25,13 @@ public class ToolBarBuilder {
         }
     }
 
-    private void addTools(
-            ActionManager actionManager, EditorViewModel editorViewModel, List<Tool> toolList) {
+    private void addTools(ActionManager actionManager, EditorViewModel editorViewModel, List<Tool> toolList) {
         for (Tool tool : toolList) {
             ButtonBase toolButton = new Button(tool.getName());
 
-            toolButton.setOnAction(
-                    event -> {
-                        actionManager.run(
-                                actionManager
-                                        .getActionFactory()
-                                        .createSelectToolAction(tool));
-                    });
+            toolButton.setOnAction(event -> {
+                actionManager.run(actionManager.getActionFactory().createSelectToolAction(tool));
+            });
 
             toolBar.getItems().add(toolButton);
         }

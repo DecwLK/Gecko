@@ -7,15 +7,13 @@ import org.gecko.viewmodel.StateViewModel;
 public class DeleteContractViewModelAction extends Action {
 
 
-    DeleteContractViewModelAction(
-            GeckoViewModel geckoViewModel,
-            StateViewModel parent,
-            ContractViewModel contractViewModel) {
+    DeleteContractViewModelAction(GeckoViewModel geckoViewModel, StateViewModel parent, ContractViewModel contractViewModel) {
 
     }
 
     @Override
-    void run() {}
+    void run() {
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

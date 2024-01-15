@@ -9,10 +9,7 @@ import org.gecko.viewmodel.RegionViewModel;
 public class InspectorRegionColorItem extends HBox implements InspectorElement<HBox> {
 
     public InspectorRegionColorItem(RegionViewModel regionViewModel) {
-        getChildren()
-                .addAll(
-                        new InspectorLabel("L: Color"),
-                        new InspectorColorPicker(regionViewModel.getColorProperty()));
+        getChildren().addAll(new InspectorLabel("L: Color"), new InspectorColorPicker(regionViewModel.getColorProperty()));
     }
 
     @Override

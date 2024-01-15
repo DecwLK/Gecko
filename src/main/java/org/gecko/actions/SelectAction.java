@@ -7,18 +7,15 @@ import java.util.List;
 
 public class SelectAction extends Action {
 
-    SelectAction(
-            EditorViewModel editorViewModel,
-            PositionableViewModelElement<?> element,
-            boolean newSelection) {}
+    SelectAction(EditorViewModel editorViewModel, PositionableViewModelElement<?> element, boolean newSelection) {
+    }
 
-    SelectAction(
-            EditorViewModel editorViewModel,
-            List<PositionableViewModelElement<?>> elements,
-            boolean newSelection) {}
+    SelectAction(EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> elements, boolean newSelection) {
+    }
 
     @Override
-    void run() {}
+    void run() {
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

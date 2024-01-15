@@ -21,12 +21,14 @@ import org.gecko.viewmodel.SystemViewModel;
 
 public class InspectorFactory {
 
-    @Getter private final EditorView editorView;
-    @Getter private final EditorViewModel editorViewModel;
-    @Getter private final ActionManager actionManager;
+    @Getter
+    private final EditorView editorView;
+    @Getter
+    private final EditorViewModel editorViewModel;
+    @Getter
+    private final ActionManager actionManager;
 
-    public InspectorFactory(
-            ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
+    public InspectorFactory(ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
         this.actionManager = actionManager;
         this.editorView = editorView;
         this.editorViewModel = editorViewModel;
@@ -43,8 +45,7 @@ public class InspectorFactory {
     }
 
     public Inspector createEdgeInspector(EdgeViewModel edgeViewModel) {
-        return buildInspector(
-                new EdgeInspectorBuilder(actionManager, editorViewModel, edgeViewModel));
+        return buildInspector(new EdgeInspectorBuilder(actionManager, editorViewModel, edgeViewModel));
     }
 
     public Inspector createRegionInspector(RegionViewModel regionViewModel) {

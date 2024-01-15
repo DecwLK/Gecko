@@ -13,22 +13,19 @@ public class InspectorContractList extends AbstractInspectorList<InspectorContra
         ObservableList<ContractViewModel> contractViewModels = stateViewModel.getContractsProperty();
 
         // Create a listener for contractViewModels changes and update inspector items accordingly
-        ListChangeListener<ContractViewModel> contractViewModelListener =
-                change -> {
-                    while (change.next()) {
-                        if (change.wasAdded()) {
-                            for (ContractViewModel item : change.getAddedSubList()) {
-                                items.add(
-                                        new InspectorContractItem(
-                                                actionManager, stateViewModel, item));
-                            }
-                        } else if (change.wasRemoved()) {
-                            for (ContractViewModel item : change.getRemoved()) {
-                                items.remove(item);
-                            }
-                        }
+        ListChangeListener<ContractViewModel> contractViewModelListener = change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (ContractViewModel item : change.getAddedSubList()) {
+                        items.add(new InspectorContractItem(actionManager, stateViewModel, item));
                     }
-                };
+                } else if (change.wasRemoved()) {
+                    for (ContractViewModel item : change.getRemoved()) {
+                        items.remove(item);
+                    }
+                }
+            }
+        };
 
         contractViewModels.addListener(contractViewModelListener);
     }

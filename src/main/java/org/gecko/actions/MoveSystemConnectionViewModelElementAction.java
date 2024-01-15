@@ -9,10 +9,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
     private final PortViewModel portViewModel;
     private final boolean isSource;
 
-    MoveSystemConnectionViewModelElementAction(
-            SystemConnectionViewModel systemConnectionViewModel,
-            PortViewModel portViewModel,
-            boolean isSource) {
+    MoveSystemConnectionViewModelElementAction(SystemConnectionViewModel systemConnectionViewModel, PortViewModel portViewModel, boolean isSource) {
         this.systemConnectionViewModel = systemConnectionViewModel;
         this.portViewModel = portViewModel;
         this.isSource = isSource;
@@ -30,9 +27,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createMoveSystemConnectionViewModelElementAction(
-                systemConnectionViewModel,
-                isSource ? systemConnectionViewModel.getSource() : systemConnectionViewModel.getDestination(),
-                isSource);
+        return actionFactory.createMoveSystemConnectionViewModelElementAction(systemConnectionViewModel,
+            isSource ? systemConnectionViewModel.getSource() : systemConnectionViewModel.getDestination(), isSource);
     }
 }

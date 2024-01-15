@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class GeckoManager {
-    @Getter @Setter
+    @Getter
+    @Setter
     private Gecko gecko;
 
     public void createGecko() {

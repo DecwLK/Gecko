@@ -11,28 +11,22 @@ import org.gecko.viewmodel.SystemViewModel;
 
 public class SystemInspectorBuilder extends AbstractInspectorBuilder<SystemViewModel> {
 
-    public SystemInspectorBuilder(
-            ActionManager actionManager,
-            EditorViewModel editorViewModel,
-            SystemViewModel viewModel) {
+    public SystemInspectorBuilder(ActionManager actionManager, EditorViewModel editorViewModel, SystemViewModel viewModel) {
         super(actionManager, viewModel);
 
         // Open system button
-        addInspectorElement(
-                new InspectorOpenSystemButton(actionManager, viewModel));
+        addInspectorElement(new InspectorOpenSystemButton(actionManager, viewModel));
 
         addInspectorElement(new InspectorSeparator());
 
         // Variables
         addInspectorElement(new InspectorLabel("L: Input"));
-        addInspectorElement(
-                new InspectorAddVariableButton(actionManager, viewModel));
+        addInspectorElement(new InspectorAddVariableButton(actionManager, viewModel));
         // TODO
         addInspectorElement(new InspectorVariableList());
 
         addInspectorElement(new InspectorLabel("L: Output"));
-        addInspectorElement(
-                new InspectorAddVariableButton(actionManager, viewModel));
+        addInspectorElement(new InspectorAddVariableButton(actionManager, viewModel));
         // TODO
         addInspectorElement(new InspectorVariableList());
     }

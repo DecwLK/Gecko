@@ -7,7 +7,8 @@ import lombok.Setter;
 import org.gecko.model.Condition;
 import org.gecko.model.Contract;
 
-@Getter @Setter
+@Getter
+@Setter
 public class ContractViewModel extends AbstractViewModelElement<Contract> implements Renamable {
 
     private final StringProperty nameProperty;

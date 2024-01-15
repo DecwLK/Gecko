@@ -25,38 +25,27 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
      * @param stateViewModel
      * @param contractViewModel
      */
-    public InspectorContractItem(
-            ActionManager actionManager,
-            StateViewModel stateViewModel,
-            ContractViewModel contractViewModel) {
+    public InspectorContractItem(ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
         // Contract fields:
         List<InspectorContractField> contractFields = new ArrayList<>();
 
         HBox contractPreCondition = new HBox();
 
-        InspectorContractField preConditionField =
-                new InspectorContractField(contractViewModel.getPreConditionProperty());
+        InspectorContractField preConditionField = new InspectorContractField(contractViewModel.getPreConditionProperty());
         contractFields.add(preConditionField);
         contractPreCondition.getChildren().addAll(new InspectorLabel("L:Pre:"), preConditionField);
 
         HBox contractPostCondition = new HBox();
 
-        InspectorContractField postConditionField =
-                new InspectorContractField(contractViewModel.getPostConditionProperty());
+        InspectorContractField postConditionField = new InspectorContractField(contractViewModel.getPostConditionProperty());
         contractFields.add(postConditionField);
-        contractPostCondition
-                .getChildren()
-                .addAll(new InspectorLabel("L:Post:"), postConditionField);
+        contractPostCondition.getChildren().addAll(new InspectorLabel("L:Post:"), postConditionField);
         HBox contractNameBox = new HBox();
 
         // Contract name
-        contractNameBox
-                .getChildren()
-                .addAll(
-                        new InspectorCollapseContractButton(contractFields),
-                        new InspectorTextField((Renamable) contractViewModel),
-                        new InspectorRemoveContractButton(
-                                actionManager, stateViewModel, contractViewModel));
+        contractNameBox.getChildren()
+                       .addAll(new InspectorCollapseContractButton(contractFields), new InspectorTextField((Renamable) contractViewModel),
+                           new InspectorRemoveContractButton(actionManager, stateViewModel, contractViewModel));
 
         // Build the contract item
         getChildren().addAll(contractNameBox, contractPreCondition, contractPostCondition);
@@ -69,36 +58,20 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
      * @param contractViewModel
      * @param invariant
      */
-    public InspectorContractItem(
-            ActionManager actionManager,
-            ContractViewModel contractViewModel,
-            StringProperty invariant) {
+    public InspectorContractItem(ActionManager actionManager, ContractViewModel contractViewModel, StringProperty invariant) {
         HBox contractPreCondition = new HBox();
-        contractPreCondition
-                .getChildren()
-                .addAll(
-                        new InspectorLabel("L:Pre:"),
-                        new InspectorContractField(contractViewModel.getPreConditionProperty()));
+        contractPreCondition.getChildren()
+                            .addAll(new InspectorLabel("L:Pre:"), new InspectorContractField(contractViewModel.getPreConditionProperty()));
 
         HBox contractPostCondition = new HBox();
-        contractPostCondition
-                .getChildren()
-                .addAll(
-                        new InspectorLabel("L:Post:"),
-                        new InspectorContractField(contractViewModel.getPostConditionProperty()));
+        contractPostCondition.getChildren()
+                             .addAll(new InspectorLabel("L:Post:"), new InspectorContractField(contractViewModel.getPostConditionProperty()));
 
         HBox contractInvariant = new HBox();
-        contractInvariant
-                .getChildren()
-                .addAll(new InspectorLabel("L:Inv:"), new InspectorContractField(invariant));
+        contractInvariant.getChildren().addAll(new InspectorLabel("L:Inv:"), new InspectorContractField(invariant));
 
         // Build the contract item
-        getChildren()
-                .addAll(
-                        new InspectorTextField((Renamable) contractViewModel),
-                        contractPreCondition,
-                        contractPostCondition,
-                        contractInvariant);
+        getChildren().addAll(new InspectorTextField((Renamable) contractViewModel), contractPreCondition, contractPostCondition, contractInvariant);
     }
 
     @Override

@@ -5,12 +5,12 @@ import org.gecko.viewmodel.StateViewModel;
 
 public class SetStartStateViewModelElementAction extends Action {
 
-    SetStartStateViewModelElementAction(
-            EditorViewModel editorViewModel,
-            StateViewModel stateViewModel) {}
+    SetStartStateViewModelElementAction(EditorViewModel editorViewModel, StateViewModel stateViewModel) {
+    }
 
     @Override
-    void run() {}
+    void run() {
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

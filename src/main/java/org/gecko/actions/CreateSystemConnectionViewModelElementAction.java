@@ -12,10 +12,7 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
     private final PortViewModel destination;
     private SystemConnectionViewModel createdSystemConnectionViewModel;
 
-    CreateSystemConnectionViewModelElementAction(
-            GeckoViewModel geckoViewModel,
-            PortViewModel source,
-            PortViewModel destination) {
+    CreateSystemConnectionViewModelElementAction(GeckoViewModel geckoViewModel, PortViewModel source, PortViewModel destination) {
         this.geckoViewModel = geckoViewModel;
         this.source = source;
         this.destination = destination;

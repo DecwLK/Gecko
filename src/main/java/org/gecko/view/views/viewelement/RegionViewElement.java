@@ -5,7 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import org.gecko.viewmodel.RegionViewModel;
 
-public class RegionViewElement extends Rectangle implements ViewElement<RegionViewModel>{
+public class RegionViewElement extends Rectangle implements ViewElement<RegionViewModel> {
 
     @Override
     public Node drawElement() {

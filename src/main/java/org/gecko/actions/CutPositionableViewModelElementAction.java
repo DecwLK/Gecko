@@ -6,12 +6,12 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import java.util.List;
 
 public class CutPositionableViewModelElementAction extends Action {
-    CutPositionableViewModelElementAction(
-            EditorViewModel editorViewModel,
-            List<PositionableViewModelElement<?>> elements) {}
+    CutPositionableViewModelElementAction(EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> elements) {
+    }
 
     @Override
-    void run() {}
+    void run() {
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

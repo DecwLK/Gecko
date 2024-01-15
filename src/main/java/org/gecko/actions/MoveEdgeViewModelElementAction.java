@@ -27,6 +27,7 @@ public class MoveEdgeViewModelElementAction extends Action {
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createMoveEdgeViewModelElementAction(edgeViewModel, isSource ? edgeViewModel.getSource() : edgeViewModel.getDestination(), isSource);
+        return actionFactory.createMoveEdgeViewModelElementAction(edgeViewModel,
+            isSource ? edgeViewModel.getSource() : edgeViewModel.getDestination(), isSource);
     }
 }

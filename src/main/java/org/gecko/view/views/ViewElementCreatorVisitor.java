@@ -28,8 +28,7 @@ public class ViewElementCreatorVisitor implements PositionableViewModelElementVi
     }
 
     @Override
-    public ViewElement<SystemConnectionViewModel> visit(
-            SystemConnectionViewModel systemConnectionViewModel) {
+    public ViewElement<SystemConnectionViewModel> visit(SystemConnectionViewModel systemConnectionViewModel) {
         return viewFactory.createSystemConnectionViewElementFrom(systemConnectionViewModel);
     }
 

@@ -17,26 +17,32 @@ public class SelectionManager {
         currentSelection.clear();
         currentSelection.addAll(undoSelectionStack.pop());
     }
+
     public void goForward() {
         select(redoSelectionStack.pop());
     }
+
     public void select(PositionableViewModelElement<?> element) {
         select(List.of(element));
     }
+
     public void select(List<PositionableViewModelElement<?>> elements) {
         undoSelectionStack.push(currentSelection);
         redoSelectionStack.clear();
         currentSelection.clear();
         currentSelection.addAll(elements);
     }
+
     public void deselect(PositionableViewModelElement<?> element) {
         deselect(List.of(element));
     }
+
     public void deselect(List<PositionableViewModelElement<?>> elements) {
         undoSelectionStack.push(currentSelection);
         redoSelectionStack.clear();
         currentSelection.removeAll(elements);
     }
+
     public void deselectAll() {
         deselect(currentSelection);
     }

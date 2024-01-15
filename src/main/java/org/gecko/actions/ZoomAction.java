@@ -5,13 +5,12 @@ import org.gecko.viewmodel.EditorViewModel;
 
 public class ZoomAction extends Action {
 
-    ZoomAction(
-            EditorViewModel editorViewModel,
-            Point2D pivot,
-            double factor) {}
+    ZoomAction(EditorViewModel editorViewModel, Point2D pivot, double factor) {
+    }
 
     @Override
-    void run() {}
+    void run() {
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

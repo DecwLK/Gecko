@@ -5,14 +5,9 @@ import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
 public class InspectorRemoveContractButton extends AbstractInspectorButton {
-    public InspectorRemoveContractButton(
-            ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
-        setOnAction(
-                event -> {
-                    actionManager.run(
-                            actionManager
-                                    .getActionFactory()
-                                    .createDeleteContractViewModelAction(stateViewModel, contractViewModel));
-                });
+    public InspectorRemoveContractButton(ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
+        setOnAction(event -> {
+            actionManager.run(actionManager.getActionFactory().createDeleteContractViewModelAction(stateViewModel, contractViewModel));
+        });
     }
 }

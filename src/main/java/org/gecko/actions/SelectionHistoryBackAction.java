@@ -4,11 +4,12 @@ import org.gecko.viewmodel.SelectionManager;
 
 public class SelectionHistoryBackAction extends Action {
 
-    SelectionHistoryBackAction(
-            SelectionManager selectionManager) {}
+    SelectionHistoryBackAction(SelectionManager selectionManager) {
+    }
 
     @Override
-    void run() {}
+    void run() {
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

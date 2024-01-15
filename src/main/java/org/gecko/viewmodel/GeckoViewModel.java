@@ -35,14 +35,16 @@ public class GeckoViewModel {
     }
 
     public void switchEditor(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
-        openedEditorsProperty.stream().filter(editorViewModel -> (editorViewModel.getCurrentSystem() == nextSystemViewModel
-                        && editorViewModel.isAutomatonEditor() == isAutomatonEditor)).
-                findFirst().ifPresentOrElse(currentEditorProperty::setValue, () -> {
-            EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel, isAutomatonEditor);
-            openedEditorsProperty.add(editorViewModel);
-            currentEditorProperty.setValue(editorViewModel);
-            initializeEditorWithPositionableViewModelElements(editorViewModel, nextSystemViewModel);
-        });
+        openedEditorsProperty.stream()
+                             .filter(editorViewModel -> (editorViewModel.getCurrentSystem() == nextSystemViewModel &&
+                                 editorViewModel.isAutomatonEditor() == isAutomatonEditor))
+                             .findFirst()
+                             .ifPresentOrElse(currentEditorProperty::setValue, () -> {
+                                 EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel, isAutomatonEditor);
+                                 openedEditorsProperty.add(editorViewModel);
+                                 currentEditorProperty.setValue(editorViewModel);
+                                 initializeEditorWithPositionableViewModelElements(editorViewModel, nextSystemViewModel);
+                             });
     }
 
     public PositionableViewModelElement<?> getViewModelElement(Element element) {

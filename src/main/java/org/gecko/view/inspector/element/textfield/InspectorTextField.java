@@ -10,11 +10,9 @@ public class InspectorTextField extends TextField implements InspectorElement<Te
     public InspectorTextField(Renamable renamable) {
         setText(renamable.getName());
 
-        textProperty()
-                .addListener(
-                        (observable, oldValue, newValue) -> {
-                            renamable.setName(newValue);
-                        });
+        textProperty().addListener((observable, oldValue, newValue) -> {
+            renamable.setName(newValue);
+        });
     }
 
     public InspectorTextField(StringProperty stringProperty) {

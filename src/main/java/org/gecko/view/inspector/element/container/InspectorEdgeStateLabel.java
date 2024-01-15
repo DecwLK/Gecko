@@ -8,15 +8,9 @@ import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.viewmodel.StateViewModel;
 
 public class InspectorEdgeStateLabel extends HBox implements InspectorElement<HBox> {
-    public InspectorEdgeStateLabel(
-            ActionManager actionManager,
-            StateViewModel stateViewModel,
-            String name) {
-        getChildren()
-                .addAll(
-                        new InspectorLabel(name),
-                        new InspectorLabel(stateViewModel.getName()),
-                        new InspectorFocusButton(actionManager,stateViewModel));
+    public InspectorEdgeStateLabel(ActionManager actionManager, StateViewModel stateViewModel, String name) {
+        getChildren().addAll(new InspectorLabel(name), new InspectorLabel(stateViewModel.getName()),
+            new InspectorFocusButton(actionManager, stateViewModel));
     }
 
     @Override

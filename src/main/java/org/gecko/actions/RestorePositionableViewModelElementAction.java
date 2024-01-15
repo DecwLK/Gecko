@@ -6,12 +6,12 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import java.util.List;
 
 public class RestorePositionableViewModelElementAction extends Action {
-    RestorePositionableViewModelElementAction(
-            GeckoViewModel geckoViewModel,
-            List<PositionableViewModelElement<?>> elements) {}
+    RestorePositionableViewModelElementAction(GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
+    }
 
     @Override
-    void run() {}
+    void run() {
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

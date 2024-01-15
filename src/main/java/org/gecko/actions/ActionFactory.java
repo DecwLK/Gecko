@@ -45,8 +45,8 @@ public class ActionFactory {
         return new CreateStateViewModelElementAction(geckoViewModel, position);
     }
 
-    public CreateSystemConnectionViewModelElementAction
-            createCreateSystemConnectionViewModelElementAction(PortViewModel source, PortViewModel destination) {
+    public CreateSystemConnectionViewModelElementAction createCreateSystemConnectionViewModelElementAction(PortViewModel source,
+                                                                                                           PortViewModel destination) {
         return new CreateSystemConnectionViewModelElementAction(geckoViewModel, source, destination);
     }
 
@@ -78,16 +78,13 @@ public class ActionFactory {
         return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor().getSelectionManager(), offset);
     }
 
-    public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(
-            EdgeViewModel edgeViewModel, StateViewModel stateViewModel, boolean isSource) {
+    public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(EdgeViewModel edgeViewModel, StateViewModel stateViewModel,
+                                                                               boolean isSource) {
         return new MoveEdgeViewModelElementAction(edgeViewModel, stateViewModel, isSource);
     }
 
-    public MoveSystemConnectionViewModelElementAction
-            createMoveSystemConnectionViewModelElementAction(
-                    SystemConnectionViewModel systemConnectionViewModel,
-                    PortViewModel systemViewModel,
-                    boolean isSource) {
+    public MoveSystemConnectionViewModelElementAction createMoveSystemConnectionViewModelElementAction(
+        SystemConnectionViewModel systemConnectionViewModel, PortViewModel systemViewModel, boolean isSource) {
         return new MoveSystemConnectionViewModelElementAction(systemConnectionViewModel, systemViewModel, isSource);
     }
 
@@ -99,19 +96,15 @@ public class ActionFactory {
         return new PastePositionableViewModelElementAction(geckoViewModel);
     }
 
-    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
-            List<PositionableViewModelElement<?>> elements) {
+    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {
         return new PastePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
-    public RenameViewModelElementAction createRenameViewModelElementAction(
-            Renamable renamable, String name) {
+    public RenameViewModelElementAction createRenameViewModelElementAction(Renamable renamable, String name) {
         return new RenameViewModelElementAction(renamable, name);
     }
 
-    public RestorePositionableViewModelElementAction
-            createRestorePositionableViewModelElementAction(
-                    List<PositionableViewModelElement<?>> elements) {
+    public RestorePositionableViewModelElementAction createRestorePositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {
         return new RestorePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
@@ -123,15 +116,11 @@ public class ActionFactory {
         return new FocusPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), element);
     }
 
-    public SelectAction createSelectAction(
-            PositionableViewModelElement<?> element,
-            boolean newSelection) {
+    public SelectAction createSelectAction(PositionableViewModelElement<?> element, boolean newSelection) {
         return new SelectAction(geckoViewModel.getCurrentEditor(), element, newSelection);
     }
 
-    public SelectAction createSelectAction(
-            List<PositionableViewModelElement<?>> elements,
-            boolean newSelection) {
+    public SelectAction createSelectAction(List<PositionableViewModelElement<?>> elements, boolean newSelection) {
         return new SelectAction(geckoViewModel.getCurrentEditor(), elements, newSelection);
     }
 

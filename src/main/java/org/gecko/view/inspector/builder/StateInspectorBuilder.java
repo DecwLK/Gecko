@@ -13,10 +13,7 @@ import org.gecko.viewmodel.StateViewModel;
 import java.util.List;
 
 public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewModel> {
-    public StateInspectorBuilder(
-            ActionManager actionManager,
-            EditorViewModel editorViewModel,
-            StateViewModel viewModel) {
+    public StateInspectorBuilder(ActionManager actionManager, EditorViewModel editorViewModel, StateViewModel viewModel) {
         super(actionManager, viewModel);
 
         // Region label
@@ -29,14 +26,13 @@ public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewMod
         addInspectorElement(new InspectorSeparator());
 
         // Set start state
-        addInspectorElement(
-                new InspectorSetStartStateButton(actionManager, viewModel));
+        addInspectorElement(new InspectorSetStartStateButton(actionManager, viewModel));
 
         addInspectorElement(new InspectorSeparator());
 
         // Contracts
         addInspectorElement(new InspectorLabel("L:Contracts"));
         addInspectorElement(new InspectorAddContractButton(actionManager, viewModel));
-        addInspectorElement(new InspectorContractList(actionManager,viewModel));
+        addInspectorElement(new InspectorContractList(actionManager, viewModel));
     }
 }

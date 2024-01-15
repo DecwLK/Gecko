@@ -16,8 +16,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AbstractInspectorBuilder<T extends PositionableViewModelElement<?>> {
-    @Getter private final T viewModel;
-    @Getter private final ActionManager actionManager;
+    @Getter
+    private final T viewModel;
+    @Getter
+    private final ActionManager actionManager;
     private final List<InspectorElement<?>> inspectorElements;
 
     protected AbstractInspectorBuilder(ActionManager actionManager, T viewModel) {

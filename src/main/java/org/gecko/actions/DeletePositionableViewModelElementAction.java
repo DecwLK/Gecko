@@ -6,16 +6,15 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import java.util.List;
 
 public class DeletePositionableViewModelElementAction extends Action {
-    DeletePositionableViewModelElementAction(
-            GeckoViewModel geckoViewModel,
-            PositionableViewModelElement<?> element) {}
+    DeletePositionableViewModelElementAction(GeckoViewModel geckoViewModel, PositionableViewModelElement<?> element) {
+    }
 
-    DeletePositionableViewModelElementAction(
-            GeckoViewModel geckoViewModel,
-            List<PositionableViewModelElement<?>> elements) {}
+    DeletePositionableViewModelElementAction(GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
+    }
 
     @Override
-    void run() {}
+    void run() {
+    }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

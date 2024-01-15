@@ -20,10 +20,7 @@ public class Automaton {
     }
 
     public State getStateWithContract(Contract contract) {
-        return states.stream()
-                .filter(state -> state.getContracts().contains(contract))
-                .findFirst()
-                .orElse(null);
+        return states.stream().filter(state -> state.getContracts().contains(contract)).findFirst().orElse(null);
     }
 
     public void addRegion(Region region) {

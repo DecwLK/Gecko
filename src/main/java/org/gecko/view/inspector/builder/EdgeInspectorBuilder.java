@@ -12,8 +12,7 @@ import org.gecko.viewmodel.EditorViewModel;
 
 public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel> {
 
-    public EdgeInspectorBuilder(
-            ActionManager actionManager, EditorViewModel editorViewModel, EdgeViewModel viewModel) {
+    public EdgeInspectorBuilder(ActionManager actionManager, EditorViewModel editorViewModel, EdgeViewModel viewModel) {
         super(actionManager, viewModel);
 
         // Kind
@@ -21,13 +20,9 @@ public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel
         addInspectorElement(new InspectorSeparator());
 
         // Connected states
-        addInspectorElement(
-                new InspectorEdgeStateLabel(
-                        actionManager, viewModel.getSource(), "L:Source"));
+        addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getSource(), "L:Source"));
 
-        addInspectorElement(
-                new InspectorEdgeStateLabel(
-                        actionManager, viewModel.getSource(), "L:Target"));
+        addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getSource(), "L:Target"));
 
         addInspectorElement(new InspectorSeparator());
 

@@ -1,16 +1,9 @@
 package org.gecko.actions;
 
 import javafx.geometry.Point2D;
+
 import org.gecko.tools.Tool;
-import org.gecko.viewmodel.ContractViewModel;
-import org.gecko.viewmodel.EdgeViewModel;
-import org.gecko.viewmodel.GeckoViewModel;
-import org.gecko.viewmodel.PortViewModel;
-import org.gecko.viewmodel.PositionableViewModelElement;
-import org.gecko.viewmodel.Renamable;
-import org.gecko.viewmodel.StateViewModel;
-import org.gecko.viewmodel.SystemConnectionViewModel;
-import org.gecko.viewmodel.SystemViewModel;
+import org.gecko.viewmodel.*;
 
 import java.util.List;
 
@@ -108,8 +101,8 @@ public class ActionFactory {
         return new RestorePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
-    public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(double scaleFactor) {
-        return new ScaleBlockViewModelElementAction(geckoViewModel.getCurrentEditor().getSelectionManager(), scaleFactor);
+    public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(BlockViewModelElement<?> element, double scaleFactor) {
+        return new ScaleBlockViewModelElementAction(element, scaleFactor);
     }
 
     public FocusPositionableViewModelElementAction createFocusPositionableViewModelElementAction(PositionableViewModelElement<?> element) {

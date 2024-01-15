@@ -9,6 +9,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Condition;

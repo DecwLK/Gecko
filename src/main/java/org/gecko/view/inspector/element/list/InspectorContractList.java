@@ -2,6 +2,7 @@ package org.gecko.view.inspector.element.list;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.container.InspectorContractItem;
 import org.gecko.viewmodel.ContractViewModel;
@@ -21,7 +22,7 @@ public class InspectorContractList extends AbstractInspectorList<InspectorContra
                     }
                 } else if (change.wasRemoved()) {
                     for (ContractViewModel item : change.getRemoved()) {
-                        items.remove(item);
+                        contractViewModels.remove(item);
                     }
                 }
             }

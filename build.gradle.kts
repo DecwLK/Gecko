@@ -1,6 +1,10 @@
+import net.ltgt.gradle.errorprone.errorprone
+
 plugins {
     id("java")
     id("org.openjfx.javafxplugin") version "0.1.0"
+    id("net.ltgt.errorprone") version "3.1.0"
+    id("io.freefair.lombok") version "8.4"
 }
 
 group = "org.gecko"
@@ -19,11 +23,12 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    errorprone("com.google.errorprone:error_prone_core:2.23.0")
+}
 
-    testCompileOnly("org.projectlombok:lombok:1.18.30")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+tasks.withType<JavaCompile>().configureEach {
+    options.errorprone.disable("SameNameButDifferent")
+    options.errorprone.disableWarningsInGeneratedCode.set(true)
 }
 
 tasks.test {

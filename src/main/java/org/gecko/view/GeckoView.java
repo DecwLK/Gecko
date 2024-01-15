@@ -3,6 +3,7 @@ package org.gecko.view;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+
 import org.gecko.actions.ActionManager;
 import org.gecko.view.menubar.MenuBarBuilder;
 import org.gecko.view.views.EditorView;

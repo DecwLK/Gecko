@@ -2,6 +2,7 @@ package org.gecko.view.inspector.element.combobox;
 
 import javafx.beans.property.Property;
 import javafx.scene.control.ComboBox;
+
 import org.gecko.model.Kind;
 import org.gecko.view.inspector.element.InspectorElement;
 

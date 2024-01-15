@@ -6,6 +6,7 @@ import java.util.List;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.button.InspectorCollapseContractButton;

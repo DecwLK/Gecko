@@ -7,6 +7,7 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Pane;
+
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.InspectorFactory;

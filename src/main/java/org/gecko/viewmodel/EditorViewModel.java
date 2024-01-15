@@ -6,6 +6,7 @@ import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
+
 import lombok.Data;
 import org.gecko.model.Region;
 import org.gecko.tools.CursorTool;

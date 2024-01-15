@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import javafx.geometry.Point2D;
+
 import org.gecko.viewmodel.EditorViewModel;
 
 public class PanAction extends Action {

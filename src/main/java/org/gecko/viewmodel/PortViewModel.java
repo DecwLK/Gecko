@@ -2,6 +2,7 @@ package org.gecko.viewmodel;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Variable;

@@ -13,7 +13,7 @@ public class RegionInspectorBuilder extends AbstractInspectorBuilder<RegionViewM
         super(actionManager, viewModel);
 
         // Color
-        addInspectorElement(new InspectorRegionColorItem(viewModel));
+        addInspectorElement(new InspectorRegionColorItem(actionManager, viewModel));
         addInspectorElement(new InspectorSeparator());
 
         // Contracts

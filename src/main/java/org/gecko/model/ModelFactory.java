@@ -36,7 +36,7 @@ public class ModelFactory {
     }
 
     public System createSystem(System parentSystem) {
-        System system = new System(getDefaultName(), DEFAULT_CODE, null);
+        System system = new System(getDefaultName(), DEFAULT_CODE, new Automaton());
         parentSystem.addChild(system);
         return system;
     }

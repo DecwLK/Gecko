@@ -12,7 +12,6 @@ import org.gecko.viewmodel.EditorViewModel;
 public class FloatingUIBuilder {
 
     private static final double ZOOM_SCALE_STEP = 0.1;
-    private static final String ZOOM_LABEL_FORMAT = "%.2f";
 
     private final ActionManager actionManager;
     private final EditorViewModel editorViewModel;

@@ -1,5 +1,6 @@
 package org.gecko.view.menubar;
 
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.GeckoView;
@@ -14,9 +15,18 @@ public class MenuBarBuilder {
         this.view = view;
         this.actionManager = actionManager;
         menuBar = new MenuBar();
+
+        // TODO
+        menuBar.getMenus().addAll(
+            new Menu("File"),
+            new Menu("Edit"),
+            new Menu("View"),
+            new Menu("Tools"),
+            new Menu("Help")
+        );
     }
 
     public MenuBar build() {
-        return null;
+        return menuBar;
     }
 }

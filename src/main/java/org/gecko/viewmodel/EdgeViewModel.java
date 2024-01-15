@@ -28,6 +28,14 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         this.destination = null;
     }
 
+    public void setPriority(int priority) {
+        priorityProperty.setValue(priority);
+    }
+
+    public int getPriority() {
+        return priorityProperty.getValue();
+    }
+
     @Override
     public void updateTarget() {
         // Update kind:

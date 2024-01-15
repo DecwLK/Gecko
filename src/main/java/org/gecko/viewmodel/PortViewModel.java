@@ -21,6 +21,22 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
         setName(target.getName());
     }
 
+    public Visibility getVisibility() {
+        return this.visibilityProperty.getValue();
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibilityProperty.setValue(visibility);
+    }
+
+    public String getType() {
+        return this.typeProperty.getValue();
+    }
+
+    public void setType(String type) {
+        this.typeProperty.setValue(type);
+    }
+
     @Override
     public void updateTarget() {
         // Update name:

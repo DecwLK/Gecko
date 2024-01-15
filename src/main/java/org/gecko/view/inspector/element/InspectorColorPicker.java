@@ -1,4 +1,4 @@
-package org.gecko.view.inspector;
+package org.gecko.view.inspector.element;
 
 import javafx.beans.property.Property;
 import javafx.scene.control.ColorPicker;

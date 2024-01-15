@@ -24,7 +24,7 @@ public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel
         addInspectorElement(new InspectorSeparator());
 
         // Priority
-        addInspectorElement(new InspectorPriorityField(viewModel.getPriorityProperty()));
+        addInspectorElement(new InspectorPriorityField(actionManager, viewModel));
         addInspectorElement(new InspectorSeparator());
 
         // Contracts

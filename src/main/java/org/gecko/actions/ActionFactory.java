@@ -9,6 +9,7 @@ import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
+import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.Renamable;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
@@ -19,6 +20,24 @@ public class ActionFactory {
 
     public ActionFactory(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
+    }
+
+    public ChangeInvariantViewModelElementAction createChangeInvariantViewModelElementAction(RegionViewModel regionViewModel, String newInvariant) {
+        return new ChangeInvariantViewModelElementAction(regionViewModel, newInvariant);
+    }
+
+    public ChangePreconditionViewModelElementAction createChangePreconditionViewModelElementAction(ContractViewModel contractViewModel,
+                                                                                                   String newPrecondition) {
+        return new ChangePreconditionViewModelElementAction(contractViewModel, newPrecondition);
+    }
+
+    public ChangePostconditionViewModelElementAction createChangePostconditionViewModelElementAction(ContractViewModel contractViewModel,
+                                                                                                     String newPostcondition) {
+        return new ChangePostconditionViewModelElementAction(contractViewModel, newPostcondition);
+    }
+
+    public ChangeTypePortViewModelElementAction createChangeTypePortViewModelElementAction(PortViewModel portViewModel, String newType) {
+        return new ChangeTypePortViewModelElementAction(portViewModel, newType);
     }
 
     public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {
@@ -114,6 +133,10 @@ public class ActionFactory {
 
     public FocusPositionableViewModelElementAction createFocusPositionableViewModelElementAction(PositionableViewModelElement<?> element) {
         return new FocusPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), element);
+    }
+
+    public ModifyEdgeViewModelPriorityAction createModifyEdgeViewModelPriorityAction(EdgeViewModel edgeViewModel, int priority) {
+        return new ModifyEdgeViewModelPriorityAction(edgeViewModel, priority);
     }
 
     public SelectAction createSelectAction(PositionableViewModelElement<?> element, boolean newSelection) {

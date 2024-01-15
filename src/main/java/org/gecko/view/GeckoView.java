@@ -30,6 +30,11 @@ public class GeckoView {
 
         // Menubar
         mainPane.setTop(new MenuBarBuilder(this, actionManager).build());
+
+        // Draw view
+        mainPane.setCenter(currentView.drawView());
+        mainPane.setLeft(currentView.drawToolbar());
+        mainPane.setRight(currentView.drawInspector());
     }
 
     private void onNewEditorViewModel(ObservableValue<? extends EditorViewModel> observable, EditorViewModel oldValue, EditorViewModel newValue) {
@@ -38,6 +43,5 @@ public class GeckoView {
         } else {
             currentView = null;
         }
-
     }
 }

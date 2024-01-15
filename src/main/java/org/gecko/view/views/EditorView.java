@@ -2,7 +2,7 @@ package org.gecko.view.views;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
-import javafx.collections.ListChangeListener;
+import javafx.collections.SetChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Pane;
@@ -34,7 +34,7 @@ public class EditorView {
         this.currentView = new Pane();
 
         // View element creator listener
-        viewModel.getContainedPositionableViewModelElementsProperty().addListener((ListChangeListener<PositionableViewModelElement<?>>) change -> {
+        viewModel.getContainedPositionableViewModelElementsProperty().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
             onUpdateViewElements(viewFactory, change);
         });
 
@@ -70,29 +70,19 @@ public class EditorView {
         return currentInspector;
     }
 
-    private void onUpdateViewElements(ViewFactory viewFactory, ListChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
-        while (change.next()) {
-            if (change.wasAdded()) {
-                // Loop through all added elements
-                for (PositionableViewModelElement<?> element : change.getAddedSubList()) {
-                    // Create new view element
+    private void onUpdateViewElements(ViewFactory viewFactory, SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
+        if (change.wasAdded()) {
+            // Create new view element
+            PositionableViewModelElementVisitor visitor = new ViewElementCreatorVisitor(viewFactory);
+            ViewElement<?> viewElement = (ViewElement<?>) change.getElementAdded().accept(visitor);
 
-                    PositionableViewModelElementVisitor visitor = new ViewElementCreatorVisitor(viewFactory);
-                    ViewElement<?> viewElement = (ViewElement<?>) element.accept(visitor);
-
-                    // Add view element to current view elements
-                    currentViewElements.add(viewElement);
-                }
-            } else if (change.wasRemoved()) {
-                // Loop through all removed elements
-                for (PositionableViewModelElement<?> element : change.getRemoved()) {
-                    // Find corresponding view element
-                    ViewElement<?> viewElement = findViewElement(element);
-                    if (viewElement != null) {
-                        currentViewElements.remove(viewElement);
-                    }
-                    break;
-                }
+            // Add view element to current view elements
+            currentViewElements.add(viewElement);
+        } else if (change.wasRemoved()) {
+            // Find corresponding view element and remove it
+            ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
+            if (viewElement != null) {
+                currentViewElements.remove(viewElement);
             }
         }
     }

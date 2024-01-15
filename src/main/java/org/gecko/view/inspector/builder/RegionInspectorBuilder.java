@@ -18,6 +18,6 @@ public class RegionInspectorBuilder extends AbstractInspectorBuilder<RegionViewM
 
         // Contracts
         addInspectorElement(new InspectorLabel("L:Contracts"));
-        addInspectorElement(new InspectorContractItem(actionManager, viewModel.getContract(), viewModel.getInvariantProperty()));
+        addInspectorElement(new InspectorContractItem(actionManager, viewModel));
     }
 }

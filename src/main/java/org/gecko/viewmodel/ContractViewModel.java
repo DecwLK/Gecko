@@ -22,6 +22,22 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
         this.postConditionProperty = new SimpleStringProperty(target.getPreCondition().getCondition());
     }
 
+    public void setPrecondition(String precondition) {
+        this.preConditionProperty.setValue(precondition);
+    }
+
+    public void setPostcondition(String postcondition) {
+        this.postConditionProperty.setValue(postcondition);
+    }
+
+    public String getPrecondition() {
+        return this.preConditionProperty.getValue();
+    }
+
+    public String getPostcondition() {
+        return this.postConditionProperty.getValue();
+    }
+
     @Override
     public void updateTarget() {
         // Update name:

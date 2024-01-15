@@ -1,12 +1,9 @@
 package org.gecko.view.inspector.element.textfield;
 
-import javafx.beans.property.StringProperty;
+import javafx.scene.control.TextField;
+import org.gecko.view.inspector.element.InspectorElement;
 
-public class InspectorContractField extends InspectorTextField {
-    public InspectorContractField(StringProperty targetStringProperty) {
-        super(targetStringProperty);
-    }
-
+public abstract class InspectorContractField extends TextField implements InspectorElement<TextField> {
     public void toggleExpand() {
         // TODO: expand this textfield
     }

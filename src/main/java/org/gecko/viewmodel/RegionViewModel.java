@@ -36,6 +36,14 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         this.colorProperty = new SimpleObjectProperty<>(Color.rgb(red, green, blue));
     }
 
+    public void setInvariant(String invariant) {
+        this.invariantProperty.setValue(invariant);
+    }
+
+    public String getInvariant() {
+        return this.invariantProperty.getValue();
+    }
+
     @Override
     public void updateTarget() {
         // Update name:

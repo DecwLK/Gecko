@@ -2,21 +2,18 @@ package org.gecko.view.inspector.element.textfield;
 
 import javafx.beans.property.Property;
 import javafx.scene.control.TextField;
+import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.viewmodel.Renamable;
 
 public class InspectorTextField extends TextField implements InspectorElement<TextField> {
 
-    public InspectorTextField(Renamable renamable) {
+    public InspectorTextField(ActionManager actionManager, Renamable renamable) {
         setText(renamable.getName());
 
-        textProperty().addListener((observable, oldValue, newValue) -> {
-            renamable.setName(newValue);
+        setOnAction(event -> {
+            actionManager.run(actionManager.getActionFactory().createRenameViewModelElementAction(renamable, getText()));
         });
-    }
-
-    public InspectorTextField(Property<String> stringProperty) {
-        textProperty().bindBidirectional(stringProperty);
     }
 
     @Override

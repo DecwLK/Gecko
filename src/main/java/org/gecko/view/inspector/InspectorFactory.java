@@ -1,6 +1,6 @@
 package org.gecko.view.inspector;
 
-import lombok.Getter;
+
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.builder.AbstractInspectorBuilder;
 import org.gecko.view.inspector.builder.EdgeInspectorBuilder;
@@ -19,11 +19,8 @@ import org.gecko.viewmodel.SystemViewModel;
 
 public class InspectorFactory {
 
-    @Getter
     private final EditorView editorView;
-    @Getter
     private final EditorViewModel editorViewModel;
-    @Getter
     private final ActionManager actionManager;
 
     public InspectorFactory(ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
@@ -43,7 +40,7 @@ public class InspectorFactory {
     }
 
     public Inspector createEdgeInspector(EdgeViewModel edgeViewModel) {
-        return buildInspector(new EdgeInspectorBuilder(actionManager, editorViewModel, edgeViewModel));
+        return buildInspector(new EdgeInspectorBuilder(actionManager, edgeViewModel));
     }
 
     public Inspector createRegionInspector(RegionViewModel regionViewModel) {
@@ -51,7 +48,7 @@ public class InspectorFactory {
     }
 
     public Inspector createSystemInspector(SystemViewModel systemViewModel) {
-        return buildInspector(new SystemInspectorBuilder(actionManager, editorViewModel, systemViewModel));
+        return buildInspector(new SystemInspectorBuilder(actionManager, systemViewModel));
     }
 
     public Inspector createVariableBlockInspector(PortViewModel portviewModel) {

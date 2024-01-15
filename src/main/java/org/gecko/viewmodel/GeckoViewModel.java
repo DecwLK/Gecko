@@ -11,6 +11,8 @@ import javafx.collections.FXCollections;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
+import org.gecko.model.CreateElementVisitor;
+import org.gecko.model.DeleteElementVisitor;
 import org.gecko.model.Element;
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
@@ -41,8 +43,12 @@ public class GeckoViewModel {
     }
 
     private void setupNewEditorViewModel(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
-        EditorViewModel editorViewModel =
-            viewModelFactory.createEditorViewModel(nextSystemViewModel, getCurrentEditor().getCurrentSystem(), isAutomatonEditor);
+        SystemViewModel currentSystemViewModel = null;
+        if (getCurrentEditor() != null) {
+            currentSystemViewModel = getCurrentEditor().getCurrentSystem();
+        }
+
+        EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel, currentSystemViewModel, isAutomatonEditor);
         openedEditorsProperty.add(editorViewModel);
         setCurrentEditor(editorViewModel);
     }
@@ -62,8 +68,27 @@ public class GeckoViewModel {
         updateCurrentEditor();
     }
 
+    /**
+     * In addition to adding the positionable view model element to the view model, this method also adds the positionable view model element to the model.
+     *
+     * @param element The element to add.
+     */
+    public void restoreViewModelElement(PositionableViewModelElement<?> element) {
+        // Add to model
+        CreateElementVisitor createElementVisitor = new CreateElementVisitor(getCurrentEditor().getCurrentSystem().getTarget());
+        element.getTarget().accept(createElementVisitor);
+
+        addViewModelElement(element);
+    }
+
     public void deleteViewModelElement(PositionableViewModelElement<?> element) {
+        // Remove from view model hashmap
         modelToViewModel.remove(element.getTarget());
+
+        // Remove from model
+        DeleteElementVisitor deleteElementVisitor = new DeleteElementVisitor(getCurrentEditor().getCurrentSystem().getTarget());
+        element.getTarget().accept(deleteElementVisitor);
+
         updateCurrentEditor();
     }
 

@@ -6,11 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import org.gecko.actions.ActionFactory;
+import org.gecko.actions.ActionManager;
 import org.gecko.model.GeckoModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class GeckoViewModelTest {
+    private static ActionManager actionManager;
     private static GeckoModel geckoModel;
     private static GeckoViewModel geckoViewModel;
     private static SystemViewModel rootSystemViewModel;
@@ -23,6 +26,7 @@ class GeckoViewModelTest {
         geckoModel = new GeckoModel();
         geckoViewModel = new GeckoViewModel(geckoModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
+        actionManager = new ActionManager(new ActionFactory(geckoViewModel));
         rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
         childSystemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         childSystemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
@@ -65,5 +69,28 @@ class GeckoViewModelTest {
         EditorViewModel editorViewModel = geckoViewModel.getCurrentEditor();
         assertTrue(editorViewModel.getContainedPositionableViewModelElementsProperty().contains(stateViewModel));
         assertFalse(editorViewModel.getContainedPositionableViewModelElementsProperty().contains(childSystemViewModel1));
+    }
+
+    @Test
+    void deleteElement() {
+        geckoViewModel.switchEditor(rootSystemViewModel, true);
+        actionManager.run(actionManager.getActionFactory().createDeletePositionableViewModelElementAction(List.of(stateViewModel)));
+        assertTrue(geckoViewModel.getCurrentEditor().getContainedPositionableViewModelElementsProperty().isEmpty());
+    }
+
+    @Test
+    void restoreElementCheckViewModel() {
+        geckoViewModel.switchEditor(rootSystemViewModel, true);
+        actionManager.run(actionManager.getActionFactory().createDeletePositionableViewModelElementAction(List.of(stateViewModel)));
+        actionManager.undo();
+        assertTrue(geckoViewModel.getCurrentEditor().getContainedPositionableViewModelElementsProperty().contains(stateViewModel));
+    }
+
+    @Test
+    void restoreElementCheckModel() {
+        geckoViewModel.switchEditor(rootSystemViewModel, true);
+        actionManager.run(actionManager.getActionFactory().createDeletePositionableViewModelElementAction(List.of(stateViewModel)));
+        actionManager.undo();
+        assertTrue(geckoModel.getRoot().getAutomaton().getStates().contains(stateViewModel.getTarget()));
     }
 }

@@ -81,10 +81,6 @@ public class EditorViewModel {
         return focusedElementProperty.getValue();
     }
 
-    public void setFocusedElement(PositionableViewModelElement<?> focusedElement) {
-        focusedElementProperty.setValue(focusedElement);
-    }
-
     public void addPositionableViewModelElement(PositionableViewModelElement<?> element) {
         containedPositionableViewModelElementsProperty.add(element);
     }

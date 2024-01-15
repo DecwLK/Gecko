@@ -1,6 +1,5 @@
 package org.gecko.actions;
 
-import javafx.geometry.Point2D;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
@@ -17,10 +16,7 @@ public class FocusPositionableViewModelElementAction extends Action {
     @Override
     void run() {
         editorViewModel.getSelectionManager().select(element);
-        double newX = (element.getSize().getX() - element.getPosition().getX()) / 2;
-        double newY = (element.getSize().getY() - element.getPosition().getY()) / 2;
-        editorViewModel.setPivot(new Point2D(newX, newY));
-        editorViewModel.setFocusedElement(element);
+        editorViewModel.moveToFocusedElement();
     }
 
     @Override

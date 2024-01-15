@@ -1,10 +1,10 @@
 package org.gecko.actions;
 
-import org.gecko.viewmodel.SelectionManager;
+import org.gecko.viewmodel.BlockViewModelElement;
 
 public class ScaleBlockViewModelElementAction extends Action {
     ScaleBlockViewModelElementAction(
-            SelectionManager selectionManager, double scaleFactor) {}
+            BlockViewModelElement<?> element, double scaleFactor) {}
 
     @Override
     void run() {}

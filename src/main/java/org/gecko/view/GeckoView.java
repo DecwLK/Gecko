@@ -29,7 +29,7 @@ public class GeckoView {
         viewModel.getCurrentEditorProperty().addListener(this::onNewEditorViewModel);
 
         // Menubar
-        mainPane.setTop(MenuBarBuilder)
+        mainPane.setTop(new MenuBarBuilder(this, actionManager).build());
     }
 
     private void onNewEditorViewModel(ObservableValue<? extends EditorViewModel> observable, EditorViewModel oldValue, EditorViewModel newValue) {

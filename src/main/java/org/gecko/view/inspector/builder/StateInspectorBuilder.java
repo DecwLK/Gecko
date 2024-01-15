@@ -18,16 +18,13 @@ public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewMod
 
         // Region label
         List<RegionViewModel> regionViewModelList = editorViewModel.getRegionViewModels(viewModel);
-
         for (RegionViewModel regionViewModel : regionViewModelList) {
             addInspectorElement(new InspectorLabel(regionViewModel.getName()));
         }
-
         addInspectorElement(new InspectorSeparator());
 
         // Set start state
         addInspectorElement(new InspectorSetStartStateButton(actionManager, viewModel));
-
         addInspectorElement(new InspectorSeparator());
 
         // Contracts

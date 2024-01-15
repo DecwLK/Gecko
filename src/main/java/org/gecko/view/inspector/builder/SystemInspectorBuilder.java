@@ -6,12 +6,11 @@ import org.gecko.view.inspector.element.button.InspectorAddVariableButton;
 import org.gecko.view.inspector.element.button.InspectorOpenSystemButton;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.view.inspector.element.list.InspectorVariableList;
-import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
 public class SystemInspectorBuilder extends AbstractInspectorBuilder<SystemViewModel> {
 
-    public SystemInspectorBuilder(ActionManager actionManager, EditorViewModel editorViewModel, SystemViewModel viewModel) {
+    public SystemInspectorBuilder(ActionManager actionManager, SystemViewModel viewModel) {
         super(actionManager, viewModel);
 
         // Open system button

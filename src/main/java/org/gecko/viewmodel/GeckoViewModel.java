@@ -69,7 +69,8 @@ public class GeckoViewModel {
     }
 
     /**
-     * In addition to adding the positionable view model element to the view model, this method also adds the positionable view model element to the model.
+     * In addition to adding the positionable view model element to the view model, this method also adds the positionable view model element to the
+     * model.
      *
      * @param element The element to add.
      */

@@ -41,7 +41,8 @@ public class GeckoViewModel {
     }
 
     private void setupNewEditorViewModel(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
-        EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel, isAutomatonEditor);
+        EditorViewModel editorViewModel =
+            viewModelFactory.createEditorViewModel(nextSystemViewModel, getCurrentEditor().getCurrentSystem(), isAutomatonEditor);
         openedEditorsProperty.add(editorViewModel);
         setCurrentEditor(editorViewModel);
     }

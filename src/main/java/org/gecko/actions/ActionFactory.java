@@ -2,6 +2,7 @@ package org.gecko.actions;
 
 import java.util.List;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import org.gecko.tools.Tool;
 import org.gecko.viewmodel.BlockViewModelElement;
 import org.gecko.viewmodel.ContractViewModel;
@@ -20,6 +21,10 @@ public class ActionFactory {
 
     public ActionFactory(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
+    }
+
+    public ChangeColorRegionViewModelElementAction createChangeColorRegionViewModelElementAction(RegionViewModel regionViewModel, Color color) {
+        return new ChangeColorRegionViewModelElementAction(regionViewModel, color);
     }
 
     public ChangeInvariantViewModelElementAction createChangeInvariantViewModelElementAction(RegionViewModel regionViewModel, String newInvariant) {

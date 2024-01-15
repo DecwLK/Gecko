@@ -36,14 +36,6 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         this.colorProperty = new SimpleObjectProperty<>(Color.rgb(red, green, blue));
     }
 
-    public void setInvariant(String invariant) {
-        this.invariantProperty.setValue(invariant);
-    }
-
-    public String getInvariant() {
-        return this.invariantProperty.getValue();
-    }
-
     @Override
     public void updateTarget() {
         // Update name:
@@ -88,5 +80,21 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     @Override
     public Object accept(PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
+    }
+
+    public void setInvariant(String invariant) {
+        this.invariantProperty.setValue(invariant);
+    }
+
+    public String getInvariant() {
+        return this.invariantProperty.getValue();
+    }
+
+    public void setColor(Color color) {
+        this.colorProperty.setValue(color);
+    }
+
+    public Color getColor() {
+        return this.colorProperty.getValue();
     }
 }

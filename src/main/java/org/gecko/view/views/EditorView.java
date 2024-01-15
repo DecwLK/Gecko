@@ -33,6 +33,15 @@ public class EditorView {
         this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
         this.currentView = new Pane();
 
+        // Floating UI
+        FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
+        Node zoomButtons = floatingUIBuilder.buildZoomButtons();
+        Node currentViewLabel = floatingUIBuilder.buildCurrentViewLabel();
+        Node regionsLabels = floatingUIBuilder.buildRegionsLabels();
+        Node viewSwitchButton = floatingUIBuilder.buildViewSwitchButton();
+
+        currentView.getChildren().addAll(zoomButtons, currentViewLabel, regionsLabels, viewSwitchButton);
+
         // View element creator listener
         viewModel.getContainedPositionableViewModelElementsProperty().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
             onUpdateViewElements(viewFactory, change);

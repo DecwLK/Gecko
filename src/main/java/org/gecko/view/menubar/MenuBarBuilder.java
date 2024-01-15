@@ -17,13 +17,7 @@ public class MenuBarBuilder {
         menuBar = new MenuBar();
 
         // TODO
-        menuBar.getMenus().addAll(
-            new Menu("File"),
-            new Menu("Edit"),
-            new Menu("View"),
-            new Menu("Tools"),
-            new Menu("Help")
-        );
+        menuBar.getMenus().addAll(new Menu("File"), new Menu("Edit"), new Menu("View"), new Menu("Tools"), new Menu("Help"));
     }
 
     public MenuBar build() {

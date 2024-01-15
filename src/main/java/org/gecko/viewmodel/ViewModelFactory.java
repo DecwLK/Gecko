@@ -18,8 +18,8 @@ public class ViewModelFactory {
         this.modelFactory = modelFactory;
     }
 
-    public EditorViewModel createEditorViewModel(SystemViewModel systemViewModel, boolean isAutomatonEditor) {
-        return new EditorViewModel(systemViewModel, isAutomatonEditor);
+    public EditorViewModel createEditorViewModel(SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
+        return new EditorViewModel(systemViewModel, parentSystem, isAutomatonEditor);
     }
 
     public StateViewModel createStateViewModelIn(SystemViewModel parentSystem) {

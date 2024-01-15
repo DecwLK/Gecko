@@ -22,17 +22,20 @@ import org.gecko.tools.ZoomTool;
 @Data
 public class EditorViewModel {
     private final SystemViewModel currentSystem;
-    private boolean isAutomatonEditor;
-    private Property<Point2D> pivotProperty;
-    private Property<Double> zoomScaleProperty;
-    private Property<Tool> currentToolProperty;
-    private Property<PositionableViewModelElement<?>> focusedElementProperty;
+    private final SystemViewModel parentSystem;
     private final ObservableSet<PositionableViewModelElement<?>> containedPositionableViewModelElementsProperty;
     private final List<List<Tool>> tools;
     private final SelectionManager selectionManager;
 
-    public EditorViewModel(SystemViewModel systemViewModel, boolean isAutomatonEditor) {
+    private Property<Point2D> pivotProperty;
+    private Property<Double> zoomScaleProperty;
+    private Property<Tool> currentToolProperty;
+    private Property<PositionableViewModelElement<?>> focusedElementProperty;
+    private boolean isAutomatonEditor;
+
+    public EditorViewModel(SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
         currentSystem = systemViewModel;
+        this.parentSystem = parentSystem;
         containedPositionableViewModelElementsProperty = FXCollections.observableSet();
         this.isAutomatonEditor = isAutomatonEditor;
         tools = FXCollections.observableArrayList();

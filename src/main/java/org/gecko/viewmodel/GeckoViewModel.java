@@ -8,10 +8,10 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
-import org.gecko.model.Automaton;
 import org.gecko.model.Element;
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
@@ -38,12 +38,13 @@ public class GeckoViewModel {
                              .filter(editorViewModel -> (editorViewModel.getCurrentSystem() == nextSystemViewModel
                                  && editorViewModel.isAutomatonEditor() == isAutomatonEditor))
                              .findFirst()
-                             .ifPresentOrElse(currentEditorProperty::setValue, () -> {
-                                 EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel, isAutomatonEditor);
-                                 openedEditorsProperty.add(editorViewModel);
-                                 currentEditorProperty.setValue(editorViewModel);
-                                 initializeEditorWithPositionableViewModelElements(editorViewModel, nextSystemViewModel);
-                             });
+                             .ifPresentOrElse(this::setCurrentEditor, () -> setupNewEditorViewModel(nextSystemViewModel, isAutomatonEditor));
+    }
+
+    private void setupNewEditorViewModel(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
+        EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel, isAutomatonEditor);
+        openedEditorsProperty.add(editorViewModel);
+        setCurrentEditor(editorViewModel);
     }
 
     public PositionableViewModelElement<?> getViewModelElement(Element element) {
@@ -58,27 +59,42 @@ public class GeckoViewModel {
 
     public void addViewModelElement(PositionableViewModelElement<?> element) {
         modelToViewModel.put(element.getTarget(), element);
+        updateCurrentEditor();
     }
 
     public void deleteViewModelElement(PositionableViewModelElement<?> element) {
         modelToViewModel.remove(element.getTarget());
+        updateCurrentEditor();
+    }
+
+    private void updateCurrentEditor() {
+        EditorViewModel currentEditor = getCurrentEditor();
+        if (currentEditor == null) {
+            return;
+        }
+
+        currentEditor.removePositionableViewModelElements(currentEditor.getContainedPositionableViewModelElementsProperty()
+                                                                       .stream()
+                                                                       .filter(element -> !modelToViewModel.containsKey(element.getTarget()))
+                                                                       .toList());
+        addPositionableViewModelElementsToEditor(currentEditor);
     }
 
     public EditorViewModel getCurrentEditor() {
         return currentEditorProperty.getValue();
     }
 
-    private void initializeEditorWithPositionableViewModelElements(EditorViewModel editorViewModel, SystemViewModel systemViewModel) {
+    private void setCurrentEditor(EditorViewModel editorViewModel) {
+        currentEditorProperty.setValue(editorViewModel);
+        updateCurrentEditor();
+    }
+
+    private void addPositionableViewModelElementsToEditor(EditorViewModel editorViewModel) {
+        System currentSystem = editorViewModel.getCurrentSystem().getTarget();
         if (editorViewModel.isAutomatonEditor()) {
-            Automaton automaton = systemViewModel.getTarget().getAutomaton();
-            editorViewModel.addPositionableViewModelElements(getViewModelElements(automaton.getStates()));
-            editorViewModel.addPositionableViewModelElements(getViewModelElements(automaton.getEdges()));
-            editorViewModel.addPositionableViewModelElements(getViewModelElements(automaton.getRegions()));
+            editorViewModel.addPositionableViewModelElements(getViewModelElements(currentSystem.getAutomaton().getAllElements()));
         } else {
-            System system = systemViewModel.getTarget();
-            editorViewModel.addPositionableViewModelElements(getViewModelElements(system.getChildren()));
-            editorViewModel.addPositionableViewModelElements(getViewModelElements(system.getVariables()));
-            editorViewModel.addPositionableViewModelElements(getViewModelElements(system.getConnections()));
+            editorViewModel.addPositionableViewModelElements(getViewModelElements(currentSystem.getAllElements()));
         }
     }
 

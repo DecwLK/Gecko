@@ -3,7 +3,7 @@ package org.gecko.viewmodel;
 import java.util.List;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.geometry.Point2D;
 import lombok.Data;
 import org.gecko.model.Region;
@@ -27,13 +27,13 @@ public class EditorViewModel {
     private Property<Double> zoomScaleProperty;
     private Property<Tool> currentToolProperty;
     private Property<PositionableViewModelElement<?>> focusedElementProperty;
-    private final ObservableList<PositionableViewModelElement<?>> containedPositionableViewModelElementsProperty;
+    private final ObservableSet<PositionableViewModelElement<?>> containedPositionableViewModelElementsProperty;
     private final List<List<Tool>> tools;
     private final SelectionManager selectionManager;
 
     public EditorViewModel(SystemViewModel systemViewModel, boolean isAutomatonEditor) {
         currentSystem = systemViewModel;
-        containedPositionableViewModelElementsProperty = FXCollections.observableArrayList();
+        containedPositionableViewModelElementsProperty = FXCollections.observableSet();
         this.isAutomatonEditor = isAutomatonEditor;
         tools = FXCollections.observableArrayList();
         selectionManager = new SelectionManager();
@@ -98,7 +98,7 @@ public class EditorViewModel {
     }
 
     public void removePositionableViewModelElements(List<PositionableViewModelElement<?>> elements) {
-        containedPositionableViewModelElementsProperty.removeAll(elements);
+        elements.forEach(containedPositionableViewModelElementsProperty::remove);
     }
 
     private void initializeTools() {

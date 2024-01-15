@@ -69,4 +69,12 @@ public class Automaton {
     public void removeEdges(List<Edge> edges) {
         this.edges.removeAll(edges);
     }
+
+    public List<Element> getAllElements() {
+        List<Element> allElements = new ArrayList<>();
+        allElements.addAll(regions);
+        allElements.addAll(states);
+        allElements.addAll(edges);
+        return allElements;
+    }
 }

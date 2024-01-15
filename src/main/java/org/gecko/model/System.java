@@ -75,4 +75,12 @@ public class System implements Renamable, Element {
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
     }
+
+    public List<Element> getAllElements() {
+        List<Element> allElements = new ArrayList<>();
+        allElements.addAll(children);
+        allElements.addAll(variables);
+        allElements.addAll(connections);
+        return allElements;
+    }
 }

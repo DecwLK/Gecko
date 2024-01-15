@@ -45,7 +45,7 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
             }
             this.resize(delta);
         } else {
-            Point2D newTopLeftCorner = super.positionProperty.getValue();;
+            Point2D newTopLeftCorner = super.positionProperty.getValue();
             Point2D newBottomRightCorner = newTopLeftCorner.add(super.sizeProperty.getValue());
 
             double coordinateX;

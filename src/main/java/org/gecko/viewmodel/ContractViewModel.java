@@ -2,7 +2,6 @@ package org.gecko.viewmodel;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Condition;

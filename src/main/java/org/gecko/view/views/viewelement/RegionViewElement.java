@@ -3,7 +3,6 @@ package org.gecko.view.views.viewelement;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
-
 import org.gecko.viewmodel.RegionViewModel;
 
 public class RegionViewElement extends Rectangle implements ViewElement<RegionViewModel> {

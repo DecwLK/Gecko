@@ -1,7 +1,6 @@
 package org.gecko.view.inspector.builder;
 
 import java.util.List;
-
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.button.InspectorAddContractButton;

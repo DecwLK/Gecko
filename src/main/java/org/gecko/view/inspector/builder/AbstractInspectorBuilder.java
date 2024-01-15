@@ -2,7 +2,6 @@ package org.gecko.view.inspector.builder;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.Inspector;

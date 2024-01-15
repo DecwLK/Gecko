@@ -1,12 +1,10 @@
 package org.gecko.view.toolbar;
 
 import java.util.List;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
-
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
 import org.gecko.viewmodel.EditorViewModel;

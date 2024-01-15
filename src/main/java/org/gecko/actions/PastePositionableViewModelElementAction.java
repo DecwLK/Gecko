@@ -1,7 +1,6 @@
 package org.gecko.actions;
 
 import java.util.List;
-
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 

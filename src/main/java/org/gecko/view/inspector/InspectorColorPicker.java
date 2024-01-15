@@ -3,7 +3,6 @@ package org.gecko.view.inspector;
 import javafx.beans.property.Property;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
-
 import org.gecko.view.inspector.element.InspectorElement;
 
 public class InspectorColorPicker extends ColorPicker implements InspectorElement<ColorPicker> {

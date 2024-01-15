@@ -1,7 +1,6 @@
 package org.gecko.actions;
 
 import java.util.Stack;
-
 import lombok.Getter;
 
 public class ActionManager {

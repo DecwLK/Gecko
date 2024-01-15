@@ -1,12 +1,10 @@
 package org.gecko.view.inspector;
 
 import java.util.List;
-
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.button.InspectorCollapseButton;

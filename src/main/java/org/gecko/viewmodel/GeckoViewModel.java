@@ -3,13 +3,11 @@ package org.gecko.viewmodel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;

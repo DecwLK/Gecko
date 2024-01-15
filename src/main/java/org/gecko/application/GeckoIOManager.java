@@ -1,7 +1,6 @@
 package org.gecko.application;
 
 import java.io.File;
-
 import lombok.Getter;
 import lombok.Setter;
 

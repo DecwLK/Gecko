@@ -2,7 +2,6 @@ package org.gecko.view.inspector.element.textfield;
 
 import javafx.beans.property.Property;
 import javafx.scene.control.TextField;
-
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.viewmodel.Renamable;
 

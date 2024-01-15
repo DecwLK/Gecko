@@ -2,7 +2,6 @@ package org.gecko.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.Data;
 
 @Data

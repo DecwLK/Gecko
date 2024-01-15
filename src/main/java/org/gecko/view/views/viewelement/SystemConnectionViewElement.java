@@ -2,7 +2,6 @@ package org.gecko.view.views.viewelement;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
 public class SystemConnectionViewElement extends ConnectionViewElement implements ViewElement<SystemConnectionViewModel> {

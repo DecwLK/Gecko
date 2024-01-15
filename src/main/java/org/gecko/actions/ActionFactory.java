@@ -1,9 +1,7 @@
 package org.gecko.actions;
 
 import java.util.List;
-
 import javafx.geometry.Point2D;
-
 import org.gecko.tools.Tool;
 import org.gecko.viewmodel.BlockViewModelElement;
 import org.gecko.viewmodel.ContractViewModel;

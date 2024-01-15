@@ -1,7 +1,6 @@
 package org.gecko.actions;
 
 import javafx.geometry.Point2D;
-
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;

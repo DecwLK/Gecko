@@ -1,7 +1,6 @@
 package org.gecko.viewmodel;
 
 import java.util.Random;
-
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,7 +8,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.model.Condition;

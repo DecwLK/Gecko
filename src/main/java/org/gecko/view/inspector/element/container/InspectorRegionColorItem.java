@@ -1,7 +1,6 @@
 package org.gecko.view.inspector.element.container;
 
 import javafx.scene.layout.HBox;
-
 import org.gecko.view.inspector.InspectorColorPicker;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.label.InspectorLabel;

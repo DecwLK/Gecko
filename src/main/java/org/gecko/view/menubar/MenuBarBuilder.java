@@ -1,7 +1,6 @@
 package org.gecko.view.menubar;
 
 import javafx.scene.control.MenuBar;
-
 import org.gecko.actions.ActionManager;
 import org.gecko.view.GeckoView;
 

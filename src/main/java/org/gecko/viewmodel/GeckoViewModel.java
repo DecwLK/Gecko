@@ -8,7 +8,6 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;

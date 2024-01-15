@@ -25,39 +25,17 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
     }
 
     private void resize(Point2D delta) {
-        // Moves bottom-right corner with delta.
-        Point2D currentSizeValue = super.sizeProperty.getValue();
-
-        double xCoordinate = currentSizeValue.getX() + delta.getX();
-        double yCoordinate = currentSizeValue.getY() + delta.getY();
-        Point2D newSize = new Point2D(xCoordinate, yCoordinate);
-
-        setSize(newSize);
+        super.sizeProperty.getValue().add(delta);
     }
 
     public void move(Point2D delta) {
         // TODO: Check movement availability.
-        Point2D currentPositionValue = super.positionProperty.getValue();
-        Point2D currentSizeValue = super.sizeProperty.getValue();
-
-        // Update top-left corner's position:
-        double xCoordinate = currentPositionValue.getX() + delta.getX();
-        double yCoordinate = currentPositionValue.getY() + delta.getY();
-        Point2D newPosition = new Point2D(xCoordinate, yCoordinate);
-
-        setPosition(newPosition);
-
-        // Update bottom-right corner's position:
-        xCoordinate = currentSizeValue.getX() + delta.getX();
-        yCoordinate = currentSizeValue.getY() + delta.getY();
-        newPosition = new Point2D(xCoordinate, yCoordinate);
-
-        setSize(newPosition);
+        super.positionProperty.getValue().add(delta);
     }
 
     public void scale(Point2D startPoint, Point2D delta) {
         Point2D topLeftCorner = super.positionProperty.getValue();
-        Point2D bottomRightCorner = super.sizeProperty.getValue();
+        Point2D bottomRightCorner = topLeftCorner.add(super.sizeProperty.getValue());
         Point2D topRightCorner = new Point2D(bottomRightCorner.getX(), topLeftCorner.getY());
         Point2D bottomLeftCorner = new Point2D(topLeftCorner.getX(), bottomRightCorner.getY());
 
@@ -67,31 +45,28 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
             }
             this.resize(delta);
         } else {
-            Point2D currentPositionValue = super.positionProperty.getValue();
-            Point2D currentSizeValue = super.sizeProperty.getValue();
+            Point2D newTopLeftCorner = super.positionProperty.getValue();
+            Point2D newBottomRightCorner = newTopLeftCorner.add(super.sizeProperty.getValue());
 
-            Point2D newPosition = currentPositionValue;
-            Point2D newSize = currentSizeValue;
-
-            double xCoordinate;
-            double yCoordinate;
+            double coordinateX;
+            double coordinateY;
 
             if (startPoint.equals(topRightCorner)) {
-                yCoordinate = currentPositionValue.getY() + delta.getY();
-                newPosition = new Point2D(currentPositionValue.getX(), yCoordinate);
+                coordinateX = bottomRightCorner.getX() + delta.getX();
+                coordinateY = topLeftCorner.getY() + delta.getY();
 
-                xCoordinate = currentSizeValue.getX() + delta.getX();
-                newSize = new Point2D(xCoordinate, currentSizeValue.getY());
+                newTopLeftCorner = new Point2D(topLeftCorner.getX(), coordinateY);
+                newBottomRightCorner = new Point2D(coordinateX, bottomRightCorner.getY());
             } else if (startPoint.equals(bottomLeftCorner)) {
-                xCoordinate = currentPositionValue.getX() + delta.getX();
-                newPosition = new Point2D(xCoordinate, currentPositionValue.getY());
+                coordinateX = topLeftCorner.getX() + delta.getX();
+                coordinateY = bottomRightCorner.getY() + delta.getY();
 
-                yCoordinate = currentSizeValue.getY() + delta.getY();
-                newSize = new Point2D(currentSizeValue.getX(), yCoordinate);
+                newTopLeftCorner = new Point2D(coordinateX, topLeftCorner.getY());
+                newBottomRightCorner = new Point2D(bottomRightCorner.getX(), coordinateY);
             }
 
-            setPosition(newPosition);
-            setSize(newSize);
+            setPosition(newTopLeftCorner);
+            setSize(newBottomRightCorner.subtract(newTopLeftCorner));
         }
     }
 }

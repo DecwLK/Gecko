@@ -9,7 +9,7 @@ public class ChangePreconditionViewModelElementAction extends Action {
 
     private final String oldPrecondition;
 
-    public ChangePreconditionViewModelElementAction(ContractViewModel contractViewModel, String newPrecondition) {
+    ChangePreconditionViewModelElementAction(ContractViewModel contractViewModel, String newPrecondition) {
         this.contractViewModel = contractViewModel;
         this.newPrecondition = newPrecondition;
         this.oldPrecondition = contractViewModel.getPrecondition();

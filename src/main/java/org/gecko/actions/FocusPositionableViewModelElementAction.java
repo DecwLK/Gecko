@@ -8,7 +8,7 @@ public class FocusPositionableViewModelElementAction extends Action {
     private final EditorViewModel editorViewModel;
     private final PositionableViewModelElement<?> element;
 
-    public FocusPositionableViewModelElementAction(EditorViewModel editorViewModel, PositionableViewModelElement<?> positionableViewModelElement) {
+    FocusPositionableViewModelElementAction(EditorViewModel editorViewModel, PositionableViewModelElement<?> positionableViewModelElement) {
         this.editorViewModel = editorViewModel;
         this.element = positionableViewModelElement;
     }

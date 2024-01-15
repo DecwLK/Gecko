@@ -10,7 +10,7 @@ public class ChangeColorRegionViewModelElementAction extends Action {
 
     private final Color oldColor;
 
-    public ChangeColorRegionViewModelElementAction(RegionViewModel regionViewModel, Color color) {
+    ChangeColorRegionViewModelElementAction(RegionViewModel regionViewModel, Color color) {
         this.regionViewModel = regionViewModel;
         this.newColor = color;
 

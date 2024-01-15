@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.util.converter.DoubleStringConverter;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.EditorViewModel;
 
@@ -30,9 +31,7 @@ public class FloatingUIBuilder {
         });
 
         Label zoomLabel = new Label();
-        zoomLabel.textProperty()
-                 .bind(Bindings.createStringBinding(() -> String.format(ZOOM_LABEL_FORMAT, editorViewModel.getZoomScaleProperty()),
-                     editorViewModel.getZoomScaleProperty()));
+        Bindings.bindBidirectional(zoomLabel.textProperty(), editorViewModel.getZoomScaleProperty(), new DoubleStringConverter());
 
         Button zoomOutButton = new Button();
         zoomOutButton.setOnAction(event -> {

@@ -9,7 +9,7 @@ public class ModifyEdgeViewModelPriorityAction extends Action {
 
     private final int oldPriority;
 
-    public ModifyEdgeViewModelPriorityAction(EdgeViewModel edgeViewModel, int newPriority) {
+    ModifyEdgeViewModelPriorityAction(EdgeViewModel edgeViewModel, int newPriority) {
         this.edgeViewModel = edgeViewModel;
         this.newPriority = newPriority;
         this.oldPriority = edgeViewModel.getPriority();

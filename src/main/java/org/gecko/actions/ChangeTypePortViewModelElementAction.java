@@ -9,7 +9,7 @@ public class ChangeTypePortViewModelElementAction extends Action {
 
     private final String oldType;
 
-    public ChangeTypePortViewModelElementAction(PortViewModel portViewModel, String newType) {
+    ChangeTypePortViewModelElementAction(PortViewModel portViewModel, String newType) {
         this.portViewModel = portViewModel;
         this.newType = newType;
         this.oldType = portViewModel.getType();

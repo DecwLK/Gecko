@@ -9,7 +9,7 @@ public class ChangePostconditionViewModelElementAction extends Action {
 
     private final String oldPostcondition;
 
-    public ChangePostconditionViewModelElementAction(ContractViewModel contractViewModel, String newPostcondition) {
+    ChangePostconditionViewModelElementAction(ContractViewModel contractViewModel, String newPostcondition) {
         this.contractViewModel = null;
         this.newPostcondition = newPostcondition;
         this.oldPostcondition = contractViewModel.getPostcondition();

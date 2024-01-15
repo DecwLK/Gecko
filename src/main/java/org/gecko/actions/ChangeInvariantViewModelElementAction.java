@@ -9,7 +9,7 @@ public class ChangeInvariantViewModelElementAction extends Action {
 
     private final String oldInvariant;
 
-    public ChangeInvariantViewModelElementAction(RegionViewModel regionViewModel, String newInvariant) {
+    ChangeInvariantViewModelElementAction(RegionViewModel regionViewModel, String newInvariant) {
         this.regionViewModel = regionViewModel;
         this.newInvariant = newInvariant;
         this.oldInvariant = regionViewModel.getInvariant();

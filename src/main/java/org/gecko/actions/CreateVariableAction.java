@@ -10,7 +10,7 @@ public class CreateVariableAction extends Action {
     private final SystemViewModel parentSystem;
     private PortViewModel createdPortViewModel;
 
-    public CreateVariableAction(GeckoViewModel geckoViewModel, SystemViewModel parentSystem) {
+    CreateVariableAction(GeckoViewModel geckoViewModel, SystemViewModel parentSystem) {
         this.geckoViewModel = geckoViewModel;
         this.parentSystem = parentSystem;
     }

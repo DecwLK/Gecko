@@ -18,11 +18,11 @@ import org.gecko.viewmodel.StateViewModel;
 
 public class InspectorContractItem extends VBox implements InspectorElement<VBox> {
     /**
-     * Constructor for the State contract item
+     * Constructor for the State contract item.
      *
-     * @param actionManager
-     * @param stateViewModel
-     * @param contractViewModel
+     * @param actionManager     Action manager
+     * @param stateViewModel    State view model
+     * @param contractViewModel Contract view model
      */
     public InspectorContractItem(ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
         // Contract fields:
@@ -51,11 +51,11 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
     }
 
     /**
-     * Constructor for the Region contract item
+     * Constructor for the Region contract item.
      *
-     * @param actionManager
-     * @param contractViewModel
-     * @param invariant
+     * @param actionManager     Action manager
+     * @param contractViewModel Contract view model
+     * @param invariant         Invariant
      */
     public InspectorContractItem(ActionManager actionManager, ContractViewModel contractViewModel, StringProperty invariant) {
         HBox contractPreCondition = new HBox();

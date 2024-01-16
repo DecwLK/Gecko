@@ -37,7 +37,6 @@ class DeleteElementVisitorTest {
     @Test
     void visitState() {
         State state = parentSystem.getAutomaton().getStates().stream().findFirst().get();
-        assertTrue(parentSystem.getAutomaton().getStates().contains(state));
         visitor.visit(state);
         assertFalse(parentSystem.getAutomaton().getStates().contains(state));
     }
@@ -46,7 +45,6 @@ class DeleteElementVisitorTest {
     void visitContract() {
         State state = parentSystem.getAutomaton().getStates().stream().findFirst().get();
         Contract contract = state.getContracts().stream().findFirst().get();
-        assertTrue(state.getContracts().contains(contract));
         visitor.visit(contract);
         assertFalse(state.getContracts().contains(contract));
     }
@@ -54,7 +52,6 @@ class DeleteElementVisitorTest {
     @Test
     void visitSystemConnection() {
         SystemConnection connection = parentSystem.getConnections().stream().findFirst().get();
-        assertTrue(parentSystem.getConnections().contains(connection));
         visitor.visit(connection);
         assertFalse(parentSystem.getConnections().contains(connection));
     }
@@ -62,7 +59,6 @@ class DeleteElementVisitorTest {
     @Test
     void visitVariable() {
         Variable variable = parentSystem.getVariables().stream().findFirst().get();
-        assertTrue(parentSystem.getVariables().contains(variable));
         visitor.visit(variable);
         assertFalse(parentSystem.getVariables().contains(variable));
     }
@@ -70,7 +66,6 @@ class DeleteElementVisitorTest {
     @Test
     void visitSystem() {
         System system = parentSystem.getChildren().stream().findFirst().get();
-        assertTrue(parentSystem.getChildren().contains(system));
         visitor.visit(system);
         assertFalse(parentSystem.getChildren().contains(system));
     }
@@ -78,7 +73,6 @@ class DeleteElementVisitorTest {
     @Test
     void visitRegion() {
         Region region = parentSystem.getAutomaton().getRegions().stream().findFirst().get();
-        assertTrue(parentSystem.getAutomaton().getRegions().contains(region));
         visitor.visit(region);
         assertFalse(parentSystem.getAutomaton().getRegions().contains(region));
     }
@@ -87,7 +81,6 @@ class DeleteElementVisitorTest {
     void visitEdge() {
         List<Edge> edges = new ArrayList<>(parentSystem.getAutomaton().getEdges());
         Edge edge = edges.getFirst();
-        assertTrue(parentSystem.getAutomaton().getEdges().contains(edge));
         visitor.visit(edge);
         assertFalse(parentSystem.getAutomaton().getEdges().contains(edge));
     }

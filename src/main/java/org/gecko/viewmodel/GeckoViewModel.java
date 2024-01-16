@@ -3,6 +3,7 @@ package org.gecko.viewmodel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
@@ -57,7 +58,7 @@ public class GeckoViewModel {
         return modelToViewModel.get(element);
     }
 
-    public List<PositionableViewModelElement<?>> getViewModelElements(List<? extends Element> elements) {
+    public List<PositionableViewModelElement<?>> getViewModelElements(Set<? extends Element> elements) {
         List<PositionableViewModelElement<?>> positionableViewModelElements = new ArrayList<>();
         elements.forEach(element -> positionableViewModelElements.add(getViewModelElement(element)));
         return positionableViewModelElements;

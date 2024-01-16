@@ -1,14 +1,14 @@
 package org.gecko.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 
 @Data
 public class System implements Renamable, Element {
-    private final List<System> children;
-    private final List<SystemConnection> connections;
-    private final List<Variable> variables;
+    private final Set<System> children;
+    private final Set<SystemConnection> connections;
+    private final Set<Variable> variables;
     private String name;
     private System parent;
     private String code;
@@ -18,16 +18,16 @@ public class System implements Renamable, Element {
         this.name = name;
         this.code = code;
         this.automaton = automaton;
-        this.children = new ArrayList<>();
-        this.connections = new ArrayList<>();
-        this.variables = new ArrayList<>();
+        this.children = new HashSet<>();
+        this.connections = new HashSet<>();
+        this.variables = new HashSet<>();
     }
 
     public void addChild(System child) {
         children.add(child);
     }
 
-    public void addChildren(List<System> children) {
+    public void addChildren(Set<System> children) {
         this.children.addAll(children);
     }
 
@@ -35,7 +35,7 @@ public class System implements Renamable, Element {
         children.remove(child);
     }
 
-    public void removeChildren(List<System> children) {
+    public void removeChildren(Set<System> children) {
         this.children.removeAll(children);
     }
 
@@ -43,7 +43,7 @@ public class System implements Renamable, Element {
         connections.add(connection);
     }
 
-    public void addConnections(List<SystemConnection> connections) {
+    public void addConnections(Set<SystemConnection> connections) {
         this.connections.addAll(connections);
     }
 
@@ -51,7 +51,7 @@ public class System implements Renamable, Element {
         connections.remove(connection);
     }
 
-    public void removeConnections(List<SystemConnection> connections) {
+    public void removeConnections(Set<SystemConnection> connections) {
         this.connections.removeAll(connections);
     }
 
@@ -59,7 +59,7 @@ public class System implements Renamable, Element {
         variables.add(variable);
     }
 
-    public void addVariables(List<Variable> variables) {
+    public void addVariables(Set<Variable> variables) {
         this.variables.addAll(variables);
     }
 
@@ -67,7 +67,7 @@ public class System implements Renamable, Element {
         variables.remove(variable);
     }
 
-    public void removeVariables(List<Variable> variables) {
+    public void removeVariables(Set<Variable> variables) {
         this.variables.removeAll(variables);
     }
 
@@ -76,8 +76,8 @@ public class System implements Renamable, Element {
         visitor.visit(this);
     }
 
-    public List<Element> getAllElements() {
-        List<Element> allElements = new ArrayList<>();
+    public Set<Element> getAllElements() {
+        Set<Element> allElements = new HashSet<>();
         allElements.addAll(children);
         allElements.addAll(variables);
         allElements.addAll(connections);

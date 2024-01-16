@@ -1,23 +1,24 @@
 package org.gecko.viewmodel;
 
+import java.util.stream.Collectors;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.model.State;
 
 @Setter
 @Getter
 public class StateViewModel extends BlockViewModelElement<State> {
-    private BooleanProperty isStartStateProperty;
+    private final BooleanProperty isStartStateProperty;
     private final ObservableList<ContractViewModel> contractsProperty;
 
-    public StateViewModel(State target) {
+    public StateViewModel(@NonNull State target) {
         super(target);
-        super.setName(target.getName());
-        isStartStateProperty = new SimpleBooleanProperty(false);
+        this.isStartStateProperty = new SimpleBooleanProperty();
         this.contractsProperty = FXCollections.observableArrayList();
     }
 
@@ -31,32 +32,27 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
     @Override
     public void updateTarget() {
-        // Update name:
-        if (super.getName() == null || super.getName().isEmpty()) {
-            // TODO: Throw exception.
-            return;
-        }
-
-        if (!super.getName().equals(super.target.getName())) {
-            super.target.setName(super.getName());
-        }
-
-        // Update isStartState:
-        // TODO: Start state change handled beforehand. Has to be taken care of in automaton also.
-        if (this.isStartStateProperty == null || this.isStartStateProperty.getValue() == null) {
-            // TODO: Throw exception.
-            return;
-        }
+        super.updateTarget();
+        // TODO: not possible because of missing reference to parent system
+        /*Automaton automaton = parentSystem.getAutomaton();
+        if (getIsStartState()) {
+            automaton.setStartState(target);
+        }*/
+        target.getContracts().clear();
+        target.addContracts(contractsProperty.stream().map(ContractViewModel::getTarget).collect(Collectors.toSet()));
     }
 
-    public void addContract(ContractViewModel contract) {
+    public void addContract(@NonNull ContractViewModel contract) {
         // TODO: prior checks
-        this.contractsProperty.add(contract);
-        super.target.addContract(contract.target);
+        contractsProperty.add(contract);
+    }
+
+    public void removeContract(@NonNull ContractViewModel contract) {
+        contractsProperty.remove(contract);
     }
 
     @Override
-    public Object accept(PositionableViewModelElementVisitor visitor) {
+    public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
     }
 }

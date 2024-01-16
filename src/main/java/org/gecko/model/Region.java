@@ -1,7 +1,7 @@
 package org.gecko.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 
 @Data
@@ -9,13 +9,13 @@ public class Region implements Renamable, Element {
     private String name;
     private Condition invariant;
     private Contract preAndPostCondition;
-    private final List<State> states;
+    private final Set<State> states;
 
     public Region(String name, Condition invariant, Contract preAndPostCondition) {
         this.name = name;
         this.invariant = invariant;
         this.preAndPostCondition = preAndPostCondition;
-        this.states = new ArrayList<>();
+        this.states = new HashSet<>();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class Region implements Renamable, Element {
         states.add(state);
     }
 
-    public void addStates(List<State> states) {
+    public void addStates(Set<State> states) {
         this.states.addAll(states);
     }
 
@@ -35,7 +35,7 @@ public class Region implements Renamable, Element {
         states.remove(state);
     }
 
-    public void removeStates(List<State> states) {
+    public void removeStates(Set<State> states) {
         this.states.removeAll(states);
     }
 }

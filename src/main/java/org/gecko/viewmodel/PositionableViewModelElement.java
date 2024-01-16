@@ -4,6 +4,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.model.Element;
 
@@ -13,30 +14,29 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     protected final Property<Point2D> positionProperty;
     protected final Property<Point2D> sizeProperty;
 
-    PositionableViewModelElement(T target) {
+    PositionableViewModelElement(@NonNull T target) {
         super(target);
         this.positionProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
         this.sizeProperty = new SimpleObjectProperty<>(new Point2D(-1, 1));
     }
 
     public Point2D getPosition() {
-        return this.positionProperty.getValue();
+        return positionProperty.getValue();
     }
 
-    public void setPosition(Point2D position) {
-        this.positionProperty.setValue(position);
+    public void setPosition(@NonNull Point2D position) {
+        positionProperty.setValue(position);
     }
 
     public Point2D getSize() {
-        return this.sizeProperty.getValue();
+        return sizeProperty.getValue();
     }
 
-    public void setSize(Point2D size) {
-        this.sizeProperty.setValue(size);
+    public void setSize(@NonNull Point2D size) {
+        sizeProperty.setValue(size);
     }
 
     // TODO: Is there any relevant update operation that should take place at this level?
-    public abstract void updateTarget();
 
-    public abstract Object accept(PositionableViewModelElementVisitor visitor);
+    public abstract Object accept(@NonNull PositionableViewModelElementVisitor visitor);
 }

@@ -3,8 +3,8 @@ package org.gecko.viewmodel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
-import org.gecko.model.Condition;
 import org.gecko.model.Contract;
 
 @Getter
@@ -17,67 +17,42 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
 
     public ContractViewModel(Contract target) {
         super(target);
-        this.nameProperty = new SimpleStringProperty(target.getName());
+        this.nameProperty = new SimpleStringProperty();
         this.preConditionProperty = new SimpleStringProperty(target.getPreCondition().getCondition());
         this.postConditionProperty = new SimpleStringProperty(target.getPreCondition().getCondition());
+        setName(target.getName());
     }
 
-    public void setPrecondition(String precondition) {
-        this.preConditionProperty.setValue(precondition);
+    public void setPrecondition(@NonNull String precondition) {
+        preConditionProperty.setValue(precondition);
     }
 
-    public void setPostcondition(String postcondition) {
-        this.postConditionProperty.setValue(postcondition);
+    public void setPostcondition(@NonNull String postcondition) {
+        postConditionProperty.setValue(postcondition);
     }
 
     public String getPrecondition() {
-        return this.preConditionProperty.getValue();
+        return preConditionProperty.getValue();
     }
 
     public String getPostcondition() {
-        return this.postConditionProperty.getValue();
+        return postConditionProperty.getValue();
     }
 
     @Override
     public void updateTarget() {
-        // Update name:
-        if (this.nameProperty == null || this.nameProperty.getValue() == null || this.nameProperty.getValue().isEmpty()) {
-            // TODO: Throw exception.
-            return;
-        }
-
-        if (!this.nameProperty.getValue().equals(super.target.getName())) {
-            super.target.setName(this.nameProperty.getValue());
-        }
-
-        // Update precondition:
-        if (this.preConditionProperty == null || this.preConditionProperty.getValue() == null || this.preConditionProperty.getValue().isEmpty()) {
-            // TODO: Throw exception.
-            return;
-        }
-
-        if (!this.preConditionProperty.getValue().equals(super.target.getPreCondition().getCondition())) {
-            super.target.setPreCondition(new Condition(this.preConditionProperty.getValue()));
-        }
-
-        // Update postcondition:
-        if (this.postConditionProperty == null || this.postConditionProperty.getValue() == null || this.postConditionProperty.getValue().isEmpty()) {
-            // TODO: Throw exception.
-            return;
-        }
-
-        if (!this.postConditionProperty.getValue().equals(super.target.getPostCondition().getCondition())) {
-            super.target.setPostCondition(new Condition(this.postConditionProperty.getValue()));
-        }
+        target.setName(getName());
+        target.getPreCondition().setCondition(getPrecondition());
+        target.getPostCondition().setCondition(getPostcondition());
     }
 
     @Override
     public String getName() {
-        return this.nameProperty.getValue();
+        return nameProperty.getValue();
     }
 
     @Override
     public void setName(String name) {
-        this.nameProperty.setValue(name);
+        nameProperty.setValue(name);
     }
 }

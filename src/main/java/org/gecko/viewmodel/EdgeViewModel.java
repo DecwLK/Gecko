@@ -5,6 +5,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.model.Edge;
 import org.gecko.model.Kind;
@@ -13,19 +14,19 @@ import org.gecko.model.Kind;
 @Setter
 public class EdgeViewModel extends PositionableViewModelElement<Edge> {
 
-    private Property<Kind> kindProperty;
-    private IntegerProperty priorityProperty;
-    private ContractViewModel contract;
-    private StateViewModel source;
-    private StateViewModel destination;
+    private final Property<Kind> kindProperty;
+    private final IntegerProperty priorityProperty;
+    private final Property<ContractViewModel> contractProperty;
+    private final Property<StateViewModel> sourceProperty;
+    private final Property<StateViewModel> destinationProperty;
 
-    public EdgeViewModel(Edge target) {
+    public EdgeViewModel(@NonNull Edge target) {
         super(target);
         this.kindProperty = new SimpleObjectProperty<>(target.getKind());
         this.priorityProperty = new SimpleIntegerProperty(target.getPriority());
-        this.contract = null;
-        this.source = null;
-        this.destination = null;
+        this.contractProperty = new SimpleObjectProperty<>();
+        this.sourceProperty = new SimpleObjectProperty<>();
+        this.destinationProperty = new SimpleObjectProperty<>();
     }
 
     public void setPriority(int priority) {
@@ -36,63 +37,49 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         return priorityProperty.getValue();
     }
 
-    @Override
-    public void updateTarget() {
-        // Update kind:
-        if (this.kindProperty == null || this.kindProperty.getValue() == null) {
-            // TODO: Throw exception.
-            return;
-        }
+    public void setKind(@NonNull Kind kind) {
+        kindProperty.setValue(kind);
+    }
 
-        if (!this.kindProperty.getValue().equals(super.target.getKind())) {
-            super.target.setKind(this.kindProperty.getValue());
-        }
+    public Kind getKind() {
+        return kindProperty.getValue();
+    }
 
-        // Update priority:
-        // TODO: Are there any restrictions regarding what a priority can be? e.g. Are negative
-        // numbers allowed?
-        if (this.priorityProperty == null || this.priorityProperty.getValue() == null) {
-            // TODO: Throw exception.
-            return;
-        }
+    public void setContract(@NonNull ContractViewModel contract) {
+        contractProperty.setValue(contract);
+    }
 
-        if (!this.priorityProperty.getValue().equals(super.target.getPriority())) {
-            super.target.setPriority(this.priorityProperty.getValue());
-        }
+    public ContractViewModel getContract() {
+        return contractProperty.getValue();
+    }
 
-        // Update contract:
-        if (this.contract == null || this.contract.target == null) {
-            // TODO: Throw exception.
-            return;
-        }
+    public void setSource(@NonNull StateViewModel source) {
+        sourceProperty.setValue(source);
+    }
 
-        if (!this.contract.target.equals(super.target.getContract())) {
-            super.target.setContract(this.contract.target);
-        }
+    public StateViewModel getSource() {
+        return sourceProperty.getValue();
+    }
 
-        // Update source:
-        if (this.source == null || this.source.target == null) {
-            // TODO: Throw exception.
-            return;
-        }
+    public void setDestination(@NonNull StateViewModel destination) {
+        destinationProperty.setValue(destination);
+    }
 
-        if (!this.source.target.equals(super.target.getSource())) {
-            super.target.setSource(this.source.target);
-        }
-
-        // Update destination:
-        if (this.destination == null || this.destination.target == null) {
-            // TODO: Throw exception.
-            return;
-        }
-
-        if (!this.destination.target.equals(super.target.getDestination())) {
-            super.target.setDestination(this.destination.target);
-        }
+    public StateViewModel getDestination() {
+        return destinationProperty.getValue();
     }
 
     @Override
-    public Object accept(PositionableViewModelElementVisitor visitor) {
+    public void updateTarget() {
+        target.setKind(getKind());
+        target.setPriority(getPriority());
+        target.setContract(contractProperty.getValue().getTarget());
+        target.setSource(sourceProperty.getValue().getTarget());
+        target.setDestination(destinationProperty.getValue().getTarget());
+    }
+
+    @Override
+    public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
     }
 }

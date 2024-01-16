@@ -1,46 +1,48 @@
 package org.gecko.viewmodel;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.model.SystemConnection;
 
 @Getter
 @Setter
 public class SystemConnectionViewModel extends PositionableViewModelElement<SystemConnection> {
-    private PortViewModel source;
-    private PortViewModel destination;
+    private final Property<PortViewModel> sourceProperty;
+    private final Property<PortViewModel> destinationProperty;
 
     SystemConnectionViewModel(SystemConnection target) {
         super(target);
-        this.source = new PortViewModel(target.getSource());
-        this.destination = new PortViewModel(target.getDestination());
+        this.sourceProperty = new SimpleObjectProperty<>();
+        this.destinationProperty = new SimpleObjectProperty<>();
+    }
+
+    public void setSource(@NonNull PortViewModel source) {
+        sourceProperty.setValue(source);
+    }
+
+    public PortViewModel getSource() {
+        return sourceProperty.getValue();
+    }
+
+    public void setDestination(@NonNull PortViewModel destination) {
+        destinationProperty.setValue(destination);
+    }
+
+    public PortViewModel getDestination() {
+        return destinationProperty.getValue();
     }
 
     @Override
     public void updateTarget() {
-        // Update source:
-        if (this.source == null || this.source.target == null) {
-            // TODO: Throw exception.
-            return;
-        }
-
-        if (!this.source.target.equals(super.target.getSource())) {
-            super.target.setSource(this.source.target);
-        }
-
-        // Update destination:
-        if (this.destination == null || this.destination.target == null) {
-            // TODO: Throw exception.
-            return;
-        }
-
-        if (!this.destination.target.equals(super.target.getDestination())) {
-            super.target.setDestination(this.destination.target);
-        }
+        target.setSource(getSource().getTarget());
+        target.setDestination(getDestination().getTarget());
     }
 
     @Override
-    public Object accept(PositionableViewModelElementVisitor visitor) {
+    public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
     }
 }

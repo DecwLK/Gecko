@@ -1,12 +1,13 @@
 package org.gecko.model;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class Condition {
-    private final String condition;
+    private String condition;
 
     public Condition(String condition) {
         this.condition = condition;
     }
+
 }

@@ -3,37 +3,40 @@ package org.gecko.viewmodel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
+import lombok.NonNull;
 import org.gecko.model.Element;
 
-public abstract class BlockViewModelElement<T extends Element> extends PositionableViewModelElement<T> implements Renamable {
+public abstract class BlockViewModelElement<T extends Element & org.gecko.model.Renamable> extends PositionableViewModelElement<T>
+    implements Renamable {
     private final StringProperty nameProperty;
 
-    BlockViewModelElement(T target) {
+    BlockViewModelElement(@NonNull T target) {
         super(target);
         this.nameProperty = new SimpleStringProperty();
+        setName(target.getName());
     }
 
     @Override
     public String getName() {
-        return this.nameProperty.getValue();
+        return nameProperty.getValue();
     }
 
     @Override
-    public void setName(String nameProperty) {
+    public void setName(@NonNull String name) {
         // TODO: further checks before updating?
-        this.nameProperty.setValue(nameProperty);
+        nameProperty.setValue(name);
     }
 
-    private void resize(Point2D delta) {
-        super.sizeProperty.getValue().add(delta);
+    private void resize(@NonNull Point2D delta) {
+        sizeProperty.getValue().add(delta);
     }
 
-    public void move(Point2D delta) {
+    public void move(@NonNull Point2D delta) {
         // TODO: Check movement availability.
-        super.positionProperty.getValue().add(delta);
+        positionProperty.getValue().add(delta);
     }
 
-    public void scale(Point2D startPoint, Point2D delta) {
+    public void scale(@NonNull Point2D startPoint, @NonNull Point2D delta) {
         Point2D topLeftCorner = super.positionProperty.getValue();
         Point2D bottomRightCorner = topLeftCorner.add(super.sizeProperty.getValue());
         Point2D topRightCorner = new Point2D(bottomRightCorner.getX(), topLeftCorner.getY());
@@ -68,5 +71,10 @@ public abstract class BlockViewModelElement<T extends Element> extends Positiona
             setPosition(newTopLeftCorner);
             setSize(newBottomRightCorner.subtract(newTopLeftCorner));
         }
+    }
+
+    @Override
+    public void updateTarget() {
+        target.setName(getName());
     }
 }

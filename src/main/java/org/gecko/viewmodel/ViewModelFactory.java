@@ -23,7 +23,7 @@ public class ViewModelFactory {
     }
 
     public StateViewModel createStateViewModelIn(SystemViewModel parentSystem) {
-        State state = modelFactory.createState(parentSystem.target.getAutomaton());
+        State state = modelFactory.createState(parentSystem.getTarget().getAutomaton());
         StateViewModel result = createStateViewModelFrom(state);
         geckoViewModel.addViewModelElement(result);
         return result;
@@ -37,7 +37,7 @@ public class ViewModelFactory {
     }
 
     public EdgeViewModel createEdgeViewModelIn(SystemViewModel parentSystem) {
-        Edge edge = modelFactory.createEdge(parentSystem.target.getAutomaton(), null, null);
+        Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), null, null);
         EdgeViewModel result = createEdgeViewModelFrom(edge);
         geckoViewModel.addViewModelElement(result);
         return result;
@@ -50,7 +50,7 @@ public class ViewModelFactory {
     }
 
     public SystemConnectionViewModel createSystemConnectionViewModelIn(SystemViewModel parentSystem) {
-        SystemConnection systemConnection = modelFactory.createSystemConnection(parentSystem.target, null, null);
+        SystemConnection systemConnection = modelFactory.createSystemConnection(parentSystem.getTarget(), null, null);
         SystemConnectionViewModel result = createSystemConnectionViewModelFrom(systemConnection);
         geckoViewModel.addViewModelElement(result);
         return result;
@@ -63,7 +63,7 @@ public class ViewModelFactory {
     }
 
     public SystemViewModel createSystemViewModelIn(SystemViewModel parentSystem) {
-        System system = modelFactory.createSystem(parentSystem.target);
+        System system = modelFactory.createSystem(parentSystem.getTarget());
         SystemViewModel result = createSystemViewModelFrom(system);
         geckoViewModel.addViewModelElement(result);
         return result;
@@ -77,7 +77,7 @@ public class ViewModelFactory {
     }
 
     public RegionViewModel createRegionViewModelIn(SystemViewModel parentSystem) {
-        Region region = modelFactory.createRegion(parentSystem.target.getAutomaton());
+        Region region = modelFactory.createRegion(parentSystem.getTarget().getAutomaton());
         RegionViewModel result = createRegionViewModelFrom(region);
         geckoViewModel.addViewModelElement(result);
         return result;
@@ -91,7 +91,7 @@ public class ViewModelFactory {
     }
 
     public PortViewModel createPortViewModelIn(SystemViewModel systemViewModel) {
-        Variable variable = modelFactory.createVariable(systemViewModel.target);
+        Variable variable = modelFactory.createVariable(systemViewModel.getTarget());
         PortViewModel result = createPortViewModelFrom(variable);
         geckoViewModel.addViewModelElement(result);
         return result;
@@ -104,7 +104,7 @@ public class ViewModelFactory {
     }
 
     public ContractViewModel createContractViewModelIn(StateViewModel stateViewModel) {
-        Contract contract = modelFactory.createContract(stateViewModel.target);
+        Contract contract = modelFactory.createContract(stateViewModel.getTarget());
         ContractViewModel result = new ContractViewModel(contract);
         stateViewModel.addContract(result);
         return result;

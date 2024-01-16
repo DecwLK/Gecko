@@ -1,21 +1,21 @@
 package org.gecko.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 
 @Data
 public class Automaton {
     private State startState;
-    private final List<Region> regions;
-    private final List<State> states;
-    private final List<Edge> edges;
+    private final Set<Region> regions;
+    private final Set<State> states;
+    private final Set<Edge> edges;
 
     public Automaton() {
         this.startState = null;
-        this.regions = new ArrayList<>();
-        this.states = new ArrayList<>();
-        this.edges = new ArrayList<>();
+        this.regions = new HashSet<>();
+        this.states = new HashSet<>();
+        this.edges = new HashSet<>();
     }
 
     public State getStateWithContract(Contract contract) {
@@ -26,7 +26,7 @@ public class Automaton {
         regions.add(region);
     }
 
-    public void addRegions(List<Region> regions) {
+    public void addRegions(Set<Region> regions) {
         this.regions.addAll(regions);
     }
 
@@ -34,7 +34,7 @@ public class Automaton {
         regions.remove(region);
     }
 
-    public void removeRegions(List<Region> regions) {
+    public void removeRegions(Set<Region> regions) {
         this.regions.removeAll(regions);
     }
 
@@ -42,7 +42,7 @@ public class Automaton {
         states.add(state);
     }
 
-    public void addStates(List<State> states) {
+    public void addStates(Set<State> states) {
         this.states.addAll(states);
     }
 
@@ -50,7 +50,7 @@ public class Automaton {
         states.remove(state);
     }
 
-    public void removeStates(List<State> states) {
+    public void removeStates(Set<State> states) {
         this.states.removeAll(states);
     }
 
@@ -58,7 +58,7 @@ public class Automaton {
         edges.add(edge);
     }
 
-    public void addEdges(List<Edge> edges) {
+    public void addEdges(Set<Edge> edges) {
         this.edges.addAll(edges);
     }
 
@@ -66,12 +66,12 @@ public class Automaton {
         edges.remove(edge);
     }
 
-    public void removeEdges(List<Edge> edges) {
+    public void removeEdges(Set<Edge> edges) {
         this.edges.removeAll(edges);
     }
 
-    public List<Element> getAllElements() {
-        List<Element> allElements = new ArrayList<>();
+    public Set<Element> getAllElements() {
+        Set<Element> allElements = new HashSet<>();
         allElements.addAll(regions);
         allElements.addAll(states);
         allElements.addAll(edges);

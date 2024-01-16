@@ -169,7 +169,7 @@ public class ActionFactory {
     }
 
     public ViewSwitchAction createViewSwitchAction(SystemViewModel systemViewModel, boolean isAutomaton) {
-        return new ViewSwitchAction(systemViewModel, geckoViewModel.getCurrentEditor(), isAutomaton);
+        return new ViewSwitchAction(geckoViewModel, systemViewModel, isAutomaton);
     }
 
     public ZoomAction createZoomAction(Point2D pivot, double factor) {

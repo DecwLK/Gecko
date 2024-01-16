@@ -2,6 +2,7 @@ package org.gecko.viewmodel;
 
 import java.util.List;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.geometry.Point2D;
@@ -27,11 +28,11 @@ public class EditorViewModel {
     private final List<List<Tool>> tools;
     private final SelectionManager selectionManager;
 
-    private Property<Point2D> pivotProperty;
-    private Property<Double> zoomScaleProperty;
-    private Property<Tool> currentToolProperty;
-    private Property<PositionableViewModelElement<?>> focusedElementProperty;
-    private boolean isAutomatonEditor;
+    private final Property<Point2D> pivotProperty;
+    private final Property<Double> zoomScaleProperty;
+    private final Property<Tool> currentToolProperty;
+    private final Property<PositionableViewModelElement<?>> focusedElementProperty;
+    private final boolean isAutomatonEditor;
 
     public EditorViewModel(SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
         currentSystem = systemViewModel;
@@ -40,6 +41,13 @@ public class EditorViewModel {
         this.isAutomatonEditor = isAutomatonEditor;
         tools = FXCollections.observableArrayList();
         selectionManager = new SelectionManager();
+
+        // Initialize properties
+        pivotProperty = new SimpleObjectProperty<>();
+        zoomScaleProperty = new SimpleObjectProperty<>(1.0);
+        currentToolProperty = new SimpleObjectProperty<>();
+        focusedElementProperty = new SimpleObjectProperty<>();
+
         initializeTools();
     }
 

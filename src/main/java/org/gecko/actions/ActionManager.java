@@ -2,6 +2,7 @@ package org.gecko.actions;
 
 import java.util.Stack;
 import lombok.Getter;
+import org.gecko.viewmodel.GeckoViewModel;
 
 public class ActionManager {
     @Getter
@@ -9,8 +10,8 @@ public class ActionManager {
     private final Stack<Action> undoStack;
     private final Stack<Action> redoStack;
 
-    public ActionManager(ActionFactory actionFactory) {
-        this.actionFactory = actionFactory;
+    public ActionManager(GeckoViewModel geckoViewModel) {
+        this.actionFactory = new ActionFactory(geckoViewModel);
         undoStack = new Stack<>();
         redoStack = new Stack<>();
     }

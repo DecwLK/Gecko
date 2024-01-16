@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.DoubleStringConverter;
 import org.gecko.actions.ActionManager;
@@ -55,12 +56,27 @@ public class FloatingUIBuilder {
     }
 
     public Node buildViewSwitchButton() {
+        HBox viewSwitchButtons = new HBox();
+
         Button switchViewButton = new Button();
         switchViewButton.setOnAction(event -> {
             actionManager.run(
-                actionManager.getActionFactory().createViewSwitchAction(editorViewModel.getParentSystem(), editorViewModel.isAutomatonEditor()));
+                actionManager.getActionFactory().createViewSwitchAction(editorViewModel.getCurrentSystem(), !editorViewModel.isAutomatonEditor()));
         });
 
-        return switchViewButton;
+        viewSwitchButtons.getChildren().add(switchViewButton);
+
+        if (editorViewModel.getParentSystem() != null) {
+            Button parentSystemSwitchButton = new Button();
+            parentSystemSwitchButton.setOnAction(event -> {
+                actionManager.run(
+                    actionManager.getActionFactory().createViewSwitchAction(editorViewModel.getParentSystem(), editorViewModel.isAutomatonEditor()));
+            });
+
+            viewSwitchButtons.getChildren().add(parentSystemSwitchButton);
+        }
+
+
+        return viewSwitchButtons;
     }
 }

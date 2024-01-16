@@ -26,11 +26,11 @@ public class ModelFactory {
         return state;
     }
 
-    public Edge createEdge(Automaton automaton, State source, State target) {
-        if (!automaton.getStates().contains(source) || !automaton.getStates().contains(target)) {
-            throw new IllegalArgumentException("Source and target states must be in the automaton"); //TODO better exception
+    public Edge createEdge(Automaton automaton, State source, State destination) {
+        if (!automaton.getStates().contains(source) || !automaton.getStates().contains(destination)) {
+            throw new IllegalArgumentException("Source and destination states must be in the automaton"); //TODO better exception
         }
-        Edge edge = new Edge(source, target, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
+        Edge edge = new Edge(source, destination, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
         automaton.addEdge(edge);
         return edge;
     }

@@ -14,9 +14,11 @@ import org.gecko.viewmodel.EditorViewModel;
 public class ToolBarBuilder {
 
     private final ToolBar toolBar;
+    private final EditorView editorView;
 
     public ToolBarBuilder(ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
         this.toolBar = new ToolBar();
+        this.editorView = editorView;
         toolBar.setOrientation(Orientation.VERTICAL);
 
         for (List<Tool> toolList : editorViewModel.getTools()) {
@@ -32,7 +34,7 @@ public class ToolBarBuilder {
             ButtonBase toolButton = new Button(tool.getName());
 
             toolButton.setOnAction(event -> {
-                actionManager.run(actionManager.getActionFactory().createSelectToolAction(tool));
+                actionManager.run(actionManager.getActionFactory().createSelectToolAction(editorView, tool));
             });
 
             toolBar.getItems().add(toolButton);

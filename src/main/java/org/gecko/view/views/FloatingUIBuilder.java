@@ -58,7 +58,7 @@ public class FloatingUIBuilder {
     public Node buildViewSwitchButton() {
         HBox viewSwitchButtons = new HBox();
 
-        Button switchViewButton = new Button();
+        Button switchViewButton = new Button("Switch View");
         switchViewButton.setOnAction(event -> {
             actionManager.run(
                 actionManager.getActionFactory().createViewSwitchAction(editorViewModel.getCurrentSystem(), !editorViewModel.isAutomatonEditor()));
@@ -67,7 +67,7 @@ public class FloatingUIBuilder {
         viewSwitchButtons.getChildren().add(switchViewButton);
 
         if (editorViewModel.getParentSystem() != null) {
-            Button parentSystemSwitchButton = new Button();
+            Button parentSystemSwitchButton = new Button("Switch Parent View: " + editorViewModel.getParentSystem().getName());
             parentSystemSwitchButton.setOnAction(event -> {
                 actionManager.run(
                     actionManager.getActionFactory().createViewSwitchAction(editorViewModel.getParentSystem(), editorViewModel.isAutomatonEditor()));

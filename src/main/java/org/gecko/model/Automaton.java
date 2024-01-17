@@ -5,12 +5,9 @@ import java.util.Set;
 import lombok.Data;
 
 /**
- * Represents an automaton in the domain model of a Gecko project.
- * An {@link Automaton} is described by a set of {@link State}s,
- * a set of {@link Edge}s that connect the states,
- * a set of {@link Region}s that contain multiple states
- * and a start-{@link State}.
- * Contains methods for managing the afferent data.
+ * Represents an automaton in the domain model of a Gecko project. An {@link Automaton} is described by a set of {@link State}s, a set of
+ * {@link Edge}s that connect the states, a set of {@link Region}s that contain multiple states and a start-{@link State}. Contains methods for
+ * managing the afferent data.
  */
 @Data
 public class Automaton {

@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Represents a variable in the domain model of a Gecko project.
- * A {@link Variable} has a name, a type and a {@link Visibility}.
+ * Represents a variable in the domain model of a Gecko project. A {@link Variable} has a name, a type and a {@link Visibility}.
  */
 @Getter
 @Setter

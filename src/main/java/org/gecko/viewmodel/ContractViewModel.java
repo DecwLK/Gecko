@@ -8,8 +8,7 @@ import lombok.Setter;
 import org.gecko.model.Contract;
 
 /**
- * Represents an abstraction of a {@link Contract} model element.
- * A {@link ContractViewModel} is described by a name, a pre- and a postcondition.
+ * Represents an abstraction of a {@link Contract} model element. A {@link ContractViewModel} is described by a name, a pre- and a postcondition.
  * Contains methods for managing the afferent data and updating the target-{Contract}.
  */
 @Getter

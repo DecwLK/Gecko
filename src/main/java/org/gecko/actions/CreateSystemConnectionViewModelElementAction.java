@@ -21,7 +21,8 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
     @Override
     void run() {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
-        createdSystemConnectionViewModel = geckoViewModel.getViewModelFactory().createSystemConnectionViewModelIn(currentParentSystem, source, destination);
+        createdSystemConnectionViewModel =
+            geckoViewModel.getViewModelFactory().createSystemConnectionViewModelIn(currentParentSystem, source, destination);
         createdSystemConnectionViewModel.setSource(source);
         createdSystemConnectionViewModel.setDestination(destination);
         createdSystemConnectionViewModel.updateTarget();

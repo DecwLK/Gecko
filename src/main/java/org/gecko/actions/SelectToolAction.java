@@ -2,7 +2,6 @@ package org.gecko.actions;
 
 import org.gecko.tools.Tool;
 import org.gecko.view.views.EditorView;
-import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class SelectToolAction extends Action {

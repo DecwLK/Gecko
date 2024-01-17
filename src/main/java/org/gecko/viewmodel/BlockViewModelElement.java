@@ -8,8 +8,7 @@ import lombok.NonNull;
 import org.gecko.model.Element;
 
 /**
- * Represents an abstraction of a view model element that has a rectangular shape in a Gecko project.
- * A {@link BlockViewModelElement} has a name.
+ * Represents an abstraction of a view model element that has a rectangular shape in a Gecko project. A {@link BlockViewModelElement} has a name.
  * Contains methods for moving and scaling the element.
  */
 @Getter

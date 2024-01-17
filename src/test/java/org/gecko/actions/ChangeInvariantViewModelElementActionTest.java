@@ -1,6 +1,6 @@
 package org.gecko.actions;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.gecko.model.GeckoModel;
 import org.gecko.viewmodel.GeckoViewModel;

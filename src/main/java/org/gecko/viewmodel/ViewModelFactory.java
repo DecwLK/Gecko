@@ -1,7 +1,7 @@
 package org.gecko.viewmodel;
 
-import org.gecko.exceptions.MissingViewModelElement;
 import org.gecko.actions.ActionManager;
+import org.gecko.exceptions.MissingViewModelElement;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.ModelFactory;

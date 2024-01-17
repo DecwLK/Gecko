@@ -8,6 +8,11 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.model.Element;
 
+/**
+ * Represents an abstraction of a view model element that is graphically represented in a Gecko project.
+ * A {@link PositionableViewModelElement} is described by a position- and a size-{@link Point2D}.
+ * Contains methods for managing the afferent data.
+ */
 @Getter
 @Setter
 public abstract class PositionableViewModelElement<T extends Element> extends AbstractViewModelElement<T> {

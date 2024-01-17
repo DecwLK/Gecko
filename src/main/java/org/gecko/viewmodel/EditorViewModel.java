@@ -24,6 +24,8 @@ import org.gecko.tools.ZoomTool;
 
 @Data
 public class EditorViewModel {
+    private static final int ROUND_SCALE = 10;
+
     private final ActionManager actionManager;
     private final SystemViewModel currentSystem;
     private final SystemViewModel parentSystem;
@@ -90,7 +92,7 @@ public class EditorViewModel {
     }
 
     public void setZoomScale(double zoomScale) {
-        zoomScaleProperty.setValue(zoomScale);
+        zoomScaleProperty.setValue(Math.round(zoomScale * ROUND_SCALE) / (double) ROUND_SCALE);
     }
 
     public Tool getCurrentTool() {

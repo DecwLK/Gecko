@@ -23,11 +23,6 @@ public class SelectableViewElementDecorator extends ViewElementDecorator {
     }
 
     @Override
-    public void bindTo(BlockViewModelElement<?> target) {
-
-    }
-
-    @Override
     public void accept(ViewElementVisitor visitor) {
 
     }

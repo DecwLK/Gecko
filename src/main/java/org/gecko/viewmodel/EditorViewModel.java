@@ -43,7 +43,7 @@ public class EditorViewModel {
         this.tools = FXCollections.observableArrayList();
         this.selectionManager = new SelectionManager();
         this.pivotProperty = new SimpleObjectProperty<>();
-        this.zoomScaleProperty = new SimpleObjectProperty<>();
+        this.zoomScaleProperty = new SimpleObjectProperty<>(1.0);
         this.currentToolProperty = new SimpleObjectProperty<>();
         this.focusedElementProperty = new SimpleObjectProperty<>();
         initializeTools();

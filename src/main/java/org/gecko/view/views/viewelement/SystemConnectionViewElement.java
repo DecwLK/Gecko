@@ -23,6 +23,7 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
         this.visibilityProperty = new SimpleObjectProperty<>();
         this.typeProperty = new SimpleStringProperty();
         this.systemConnectionViewModel = systemConnectionViewModel;
+        bindViewModel();
         //TODO source and destination properties
     }
 
@@ -41,7 +42,7 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
         return systemConnectionViewModel.getPosition();
     }
 
-    private void bindTo() {
+    private void bindViewModel() {
         startXProperty().bind(
             Bindings.createDoubleBinding(() -> this.systemConnectionViewModel.getSource().getPosition().getX(), this.systemConnectionViewModel.getSource().getPositionProperty()));
         startYProperty().bind(

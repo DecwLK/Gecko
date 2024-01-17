@@ -10,6 +10,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class RegionViewElement extends Rectangle implements ViewElement<RegionVi
         this.nameProperty = new SimpleStringProperty();
         this.states = new ArrayList<>();
         this.regionViewModel = regionViewModel;
+        bindViewModel();
         //TODO add more Properties once they get pushed
     }
 
@@ -71,6 +73,12 @@ public class RegionViewElement extends Rectangle implements ViewElement<RegionVi
         widthProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getX(), regionViewModel.getSizeProperty()));
         heightProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getY(), regionViewModel.getSizeProperty()));
         //TODO add more binds once they get pushed
+    }
+
+    private void constructViewElement() {
+        TextField textField = new TextField();
+        textField.textProperty().bindBidirectional(nameProperty);
+
     }
 
     @Override

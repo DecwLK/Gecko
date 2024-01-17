@@ -29,7 +29,6 @@ public class StateViewElement extends VBox implements ViewElement<StateViewModel
         this.isStartStateProperty = new SimpleBooleanProperty();
         this.contractsProperty = new SimpleListProperty<>();
         this.stateViewModel = stateViewModel;
-
         bindViewModel();
     }
 

@@ -115,6 +115,7 @@ public class EditorView {
                 currentViewElements.remove(viewElement);
             }
         }
+        drawView();
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {

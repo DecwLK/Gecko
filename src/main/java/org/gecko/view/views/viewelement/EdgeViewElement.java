@@ -30,7 +30,6 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         this.priorityProperty = new SimpleIntegerProperty();
         this.kindProperty = new SimpleObjectProperty<>();
         this.edgeViewModel = edgeViewModel;
-
         bindViewElement();
     }
 

@@ -7,7 +7,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
@@ -23,6 +27,8 @@ public class SystemViewElement extends Pane implements ViewElement<SystemViewMod
         this.codeProperty = new SimpleStringProperty();
         this.ports = new ArrayList<>();
         this.systemViewModel = systemViewModel;
+        bindViewModel();
+        constructVisualization();
     }
 
     @Override
@@ -40,7 +46,7 @@ public class SystemViewElement extends Pane implements ViewElement<SystemViewMod
         return systemViewModel.getPosition();
     }
 
-    private void bindTo() {
+    private void bindViewModel() {
         nameProperty.bind(systemViewModel.getNameProperty());
         codeProperty.bind(systemViewModel.getCodeProperty());
         layoutXProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getPosition().getX(), systemViewModel.getPositionProperty()));
@@ -53,5 +59,20 @@ public class SystemViewElement extends Pane implements ViewElement<SystemViewMod
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    private void constructVisualization() {
+        Rectangle background = new Rectangle();
+        background.widthProperty().bind(widthProperty());
+        background.heightProperty().bind(heightProperty());
+        background.setFill(Color.GRAY);
+        GridPane gridPane = new GridPane();
+        Label name = new Label("System: " + systemViewModel.getName());
+        Bindings.createStringBinding(() -> "System: " + systemViewModel.getName(), systemViewModel.getNameProperty());
+        Label ports = new Label("Ports: " + systemViewModel.getPortsProperty().size());
+        Bindings.createStringBinding(() -> "Ports: " + systemViewModel.getPortsProperty().size(), systemViewModel.getPortsProperty());
+        gridPane.add(name, 0, 0);
+        gridPane.add(ports, 0, 1);
+        getChildren().addAll(background, gridPane);
     }
 }

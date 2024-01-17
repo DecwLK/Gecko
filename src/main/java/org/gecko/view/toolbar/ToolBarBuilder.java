@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
-import javafx.scene.input.MouseEvent;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
 import org.gecko.view.views.EditorView;
@@ -34,10 +33,8 @@ public class ToolBarBuilder {
         for (Tool tool : toolList) {
             ButtonBase toolButton = new Button(tool.getName());
 
-            toolButton.setOnAction(event -> {
-                if (event.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
-                    actionManager.run(actionManager.getActionFactory().createSelectToolAction(editorView, tool));
-                }
+            toolButton.setOnMouseClicked(event -> {
+                actionManager.run(actionManager.getActionFactory().createSelectToolAction(editorView, tool));
             });
 
             toolBar.getItems().add(toolButton);

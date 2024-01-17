@@ -23,6 +23,7 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
         this.typeProperty = new SimpleStringProperty();
         this.visibilityProperty = new SimpleObjectProperty<>();
         this.portViewModel = portViewModel;
+        bindViewModel();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
         return portViewModel.getPosition();
     }
 
-    private void bindTo() {
+    private void bindViewModel() {
         nameProperty.bind(portViewModel.getNameProperty());
         typeProperty.bind(portViewModel.getTypeProperty());
         visibilityProperty.bind(portViewModel.getVisibilityProperty());

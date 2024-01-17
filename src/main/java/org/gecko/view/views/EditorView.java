@@ -14,6 +14,7 @@ import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
 import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.InspectorFactory;
+import org.gecko.view.toolbar.ToolBarBuilder;
 import org.gecko.view.views.shortcuts.ShortcutHandler;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.viewmodel.EditorViewModel;
@@ -33,10 +34,9 @@ public class EditorView {
 
     private Inspector currentInspector;
 
-    public EditorView(ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel, ToolBar toolBar,
-                      ShortcutHandler shortcutHandler) {
+    public EditorView(ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel, ShortcutHandler shortcutHandler) {
         this.viewModel = viewModel;
-        this.toolBar = toolBar;
+        this.toolBar = new ToolBarBuilder(actionManager, this, viewModel).build();
         this.shortcutHandler = shortcutHandler;
         this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
         this.currentView = new StackPane();
@@ -126,11 +126,8 @@ public class EditorView {
         return null;
     }
 
-    public void acceptTool(Tool visitor) {
-        visitor.visitView(currentView);
-
-        for (ViewElement<?> viewElement : currentViewElements) {
-            viewElement.accept(visitor);
-        }
+    public void acceptTool(Tool tool) {
+        tool.visitView(currentView);
+        currentViewElements.forEach(viewElement -> viewElement.accept(tool));
     }
 }

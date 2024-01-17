@@ -1,13 +1,16 @@
 package org.gecko.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class SystemConnection implements Element {
+@Getter
+@Setter
+public class SystemConnection extends Element {
     private Variable source;
     private Variable destination;
 
-    public SystemConnection(Variable source, Variable destination) {
+    public SystemConnection(int id, Variable source, Variable destination) {
+        super(id);
         this.source = source;
         this.destination = destination;
     }

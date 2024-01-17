@@ -1,14 +1,17 @@
 package org.gecko.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class Variable implements Renamable, Element {
+@Getter
+@Setter
+public class Variable extends Element implements Renamable {
     private String name;
     private String type;
     private Visibility visibility;
 
-    public Variable(String name, String type, Visibility visibility) {
+    public Variable(int id, String name, String type, Visibility visibility) {
+        super(id);
         this.visibility = visibility;
         this.name = name;
         this.type = type;

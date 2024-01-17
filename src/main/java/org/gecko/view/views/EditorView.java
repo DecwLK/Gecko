@@ -1,11 +1,14 @@
 package org.gecko.view.views;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 import javafx.collections.SetChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.InspectorFactory;
@@ -20,10 +23,11 @@ public class EditorView {
     private final ToolBar toolBar;
     private final ShortcutHandler shortcutHandler;
     private final InspectorFactory inspectorFactory;
-    private final Pane currentView;
+    private final StackPane currentView;
+    private final Pane viewElementsPane;
+    private final Collection<ViewElement<?>> currentViewElements;
 
     private Inspector currentInspector;
-    private Collection<ViewElement<?>> currentViewElements;
 
     public EditorView(ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel, ToolBar toolBar,
                       ShortcutHandler shortcutHandler) {
@@ -31,16 +35,29 @@ public class EditorView {
         this.toolBar = toolBar;
         this.shortcutHandler = shortcutHandler;
         this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
-        this.currentView = new Pane();
+        this.currentView = new StackPane();
+        this.viewElementsPane = new Pane();
+        currentViewElements = new HashSet<>();
 
         // Floating UI
         FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
         Node zoomButtons = floatingUIBuilder.buildZoomButtons();
-        Node currentViewLabel = floatingUIBuilder.buildCurrentViewLabel();
-        Node regionsLabels = floatingUIBuilder.buildRegionsLabels();
-        Node viewSwitchButton = floatingUIBuilder.buildViewSwitchButton();
+        AnchorPane.setBottomAnchor(zoomButtons, 10.0);
+        AnchorPane.setRightAnchor(zoomButtons, 10.0);
 
-        currentView.getChildren().addAll(zoomButtons, currentViewLabel, regionsLabels, viewSwitchButton);
+        Node currentViewLabel = floatingUIBuilder.buildCurrentViewLabel();
+        AnchorPane.setTopAnchor(currentViewLabel, 10.0);
+        AnchorPane.setLeftAnchor(currentViewLabel, 10.0);
+
+        Node viewSwitchButton = floatingUIBuilder.buildViewSwitchButton();
+        AnchorPane.setTopAnchor(viewSwitchButton, 10.0);
+        AnchorPane.setRightAnchor(viewSwitchButton, 10.0);
+
+        AnchorPane floatingUI = new AnchorPane();
+        floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton);
+
+        // Build stack pane
+        currentView.getChildren().addAll(viewElementsPane, floatingUI);
 
         // View element creator listener
         viewModel.getContainedPositionableViewModelElementsProperty().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
@@ -65,8 +82,8 @@ public class EditorView {
 
     public Node drawView() {
         // Refresh view elements
-        currentView.getChildren().setAll(currentViewElements.stream().map(ViewElement::drawElement).collect(Collectors.toList()));
-        currentView.getChildren().removeAll();
+        viewElementsPane.getChildren().removeAll();
+        viewElementsPane.getChildren().setAll(currentViewElements.stream().map(ViewElement::drawElement).collect(Collectors.toList()));
 
         return currentView;
     }

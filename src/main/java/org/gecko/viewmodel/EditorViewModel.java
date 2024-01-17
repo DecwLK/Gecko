@@ -2,7 +2,9 @@ package org.gecko.viewmodel;
 
 import java.util.List;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableSet;
 import javafx.geometry.Point2D;
 import lombok.Data;
@@ -27,20 +29,32 @@ public class EditorViewModel {
     private final List<List<Tool>> tools;
     private final SelectionManager selectionManager;
 
-    private Property<Point2D> pivotProperty;
-    private Property<Double> zoomScaleProperty;
-    private Property<Tool> currentToolProperty;
-    private Property<PositionableViewModelElement<?>> focusedElementProperty;
-    private boolean isAutomatonEditor;
+    private final Property<Point2D> pivotProperty;
+    private final Property<Double> zoomScaleProperty;
+    private final Property<Tool> currentToolProperty;
+    private final Property<PositionableViewModelElement<?>> focusedElementProperty;
+    private final boolean isAutomatonEditor;
 
     public EditorViewModel(SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
-        currentSystem = systemViewModel;
+        this.currentSystem = systemViewModel;
         this.parentSystem = parentSystem;
-        containedPositionableViewModelElementsProperty = FXCollections.observableSet();
+        this.containedPositionableViewModelElementsProperty = FXCollections.observableSet();
         this.isAutomatonEditor = isAutomatonEditor;
-        tools = FXCollections.observableArrayList();
-        selectionManager = new SelectionManager();
+        this.tools = FXCollections.observableArrayList();
+        this.selectionManager = new SelectionManager();
+        this.pivotProperty = new SimpleObjectProperty<>();
+        this.zoomScaleProperty = new SimpleObjectProperty<>();
+        this.currentToolProperty = new SimpleObjectProperty<>();
+        this.focusedElementProperty = new SimpleObjectProperty<>();
         initializeTools();
+
+        selectionManager.getCurrentSelection().addListener((ListChangeListener<PositionableViewModelElement<?>>) change -> {
+            if (change.getList().size() == 1) {
+                setFocusedElement(change.getList().getFirst());
+            } else {
+                setFocusedElement(null);
+            }
+        });
     }
 
     public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
@@ -86,6 +100,10 @@ public class EditorViewModel {
 
     public PositionableViewModelElement<?> getFocusedElement() {
         return focusedElementProperty.getValue();
+    }
+
+    private void setFocusedElement(PositionableViewModelElement<?> focusedElement) {
+        focusedElementProperty.setValue(focusedElement);
     }
 
     public void addPositionableViewModelElement(PositionableViewModelElement<?> element) {

@@ -39,7 +39,6 @@ public class Inspector extends ScrollPane {
         }
 
         setContent(vBox);
-        setFitToWidth(true);
     }
 
     public void toggleCollapse() {

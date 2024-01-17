@@ -1,6 +1,7 @@
 package org.gecko.view.toolbar;
 
 import java.util.List;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Separator;
@@ -15,16 +16,17 @@ public class ToolBarBuilder {
 
     public ToolBarBuilder(ActionManager actionManager, EditorViewModel editorViewModel) {
         this.toolBar = new ToolBar();
+        toolBar.setOrientation(Orientation.VERTICAL);
 
         for (List<Tool> toolList : editorViewModel.getTools()) {
-            addTools(actionManager, editorViewModel, toolList);
+            addTools(actionManager, toolList);
 
             // add separator
             toolBar.getItems().add(new Separator());
         }
     }
 
-    private void addTools(ActionManager actionManager, EditorViewModel editorViewModel, List<Tool> toolList) {
+    private void addTools(ActionManager actionManager, List<Tool> toolList) {
         for (Tool tool : toolList) {
             ButtonBase toolButton = new Button(tool.getName());
 

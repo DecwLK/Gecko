@@ -23,7 +23,7 @@ class GeckoViewModelTest {
         geckoModel = new GeckoModel();
         geckoViewModel = new GeckoViewModel(geckoModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
+        rootSystemViewModel = geckoViewModel.getCurrentEditor().getCurrentSystem();
         childSystemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         childSystemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
@@ -31,14 +31,12 @@ class GeckoViewModelTest {
 
     @Test
     void switchEditor1() {
-        geckoViewModel.switchEditor(rootSystemViewModel, false);
         assertEquals(1, geckoViewModel.getOpenedEditorsProperty().size());
         assertNotNull(geckoViewModel.getCurrentEditor());
     }
 
     @Test
     void switchEditor2() {
-        geckoViewModel.switchEditor(rootSystemViewModel, false);
         geckoViewModel.switchEditor(rootSystemViewModel, false);
         assertEquals(1, geckoViewModel.getOpenedEditorsProperty().size());
     }

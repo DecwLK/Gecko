@@ -21,7 +21,7 @@ class ChangePostconditionViewModelElementActionTest {
     void setUp() {
         GeckoModel geckoModel = new GeckoModel();
         GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
-        actionManager = new ActionManager(new ActionFactory(geckoViewModel));
+        actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
         SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());

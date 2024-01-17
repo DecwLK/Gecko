@@ -8,6 +8,7 @@ public class GeckoManager {
     @Setter
     private Gecko gecko;
 
-    public void createGecko() {
+    public GeckoManager() {
+        gecko = new Gecko();
     }
 }

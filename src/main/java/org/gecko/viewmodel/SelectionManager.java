@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import lombok.Data;
 
 @Data
@@ -25,7 +26,9 @@ public class SelectionManager {
     }
 
     public void goForward() {
-        select(redoSelectionStack.pop());
+        undoSelectionStack.push(currentSelection);
+        currentSelection.clear();
+        currentSelection.addAll(redoSelectionStack.pop());
     }
 
     public void select(PositionableViewModelElement<?> element) {

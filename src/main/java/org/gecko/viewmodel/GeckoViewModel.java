@@ -33,6 +33,10 @@ public class GeckoViewModel {
         viewModelFactory = new ViewModelFactory(this, geckoModel.getModelFactory());
         openedEditorsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
         currentEditorProperty = new SimpleObjectProperty<>();
+
+        // Create root system view model
+        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
+        switchEditor(rootSystemViewModel, false);
     }
 
     public void switchEditor(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
@@ -61,6 +65,10 @@ public class GeckoViewModel {
     public List<PositionableViewModelElement<?>> getViewModelElements(Set<? extends Element> elements) {
         List<PositionableViewModelElement<?>> positionableViewModelElements = new ArrayList<>();
         elements.forEach(element -> positionableViewModelElements.add(getViewModelElement(element)));
+
+        // Remove null elements TODO: THIS SHOULDN'T BE NECESSARY
+        positionableViewModelElements.removeIf(element -> element == null);
+
         return positionableViewModelElements;
     }
 
@@ -104,6 +112,7 @@ public class GeckoViewModel {
                                                                        .stream()
                                                                        .filter(element -> !modelToViewModel.containsKey(element.getTarget()))
                                                                        .toList());
+
         addPositionableViewModelElementsToEditor(currentEditor);
     }
 

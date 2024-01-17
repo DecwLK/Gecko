@@ -25,8 +25,8 @@ class DeleteRestoreActionTest {
         geckoModel = new GeckoModel();
         geckoViewModel = new GeckoViewModel(geckoModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        actionManager = new ActionManager(new ActionFactory(geckoViewModel));
-        rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
+        actionManager = new ActionManager(geckoViewModel);
+        rootSystemViewModel = geckoViewModel.getCurrentEditor().getCurrentSystem();
         childSystemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         stateViewModel2 = viewModelFactory.createStateViewModelIn(childSystemViewModel1);

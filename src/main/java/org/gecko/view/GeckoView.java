@@ -20,13 +20,14 @@ public class GeckoView {
     private final GeckoViewModel viewModel;
     private final ViewFactory viewFactory;
 
+    @Getter
     private EditorView currentView;
 
     public GeckoView(ActionManager actionManager, GeckoViewModel viewModel) {
         this.viewModel = viewModel;
         this.mainPane = new BorderPane();
         this.centerPane = new TabPane();
-        this.viewFactory = new ViewFactory(actionManager);
+        this.viewFactory = new ViewFactory(actionManager, this);
 
         // Listener for current editor
         viewModel.getCurrentEditorProperty().addListener(this::onNewEditorViewModel);

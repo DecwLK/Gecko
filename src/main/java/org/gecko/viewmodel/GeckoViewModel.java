@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
+import org.gecko.actions.ActionManager;
 import org.gecko.model.CreateElementVisitor;
 import org.gecko.model.DeleteElementVisitor;
 import org.gecko.model.Element;
@@ -26,11 +27,14 @@ public class GeckoViewModel {
     private final ViewModelFactory viewModelFactory;
     private final Property<EditorViewModel> currentEditorProperty;
     private final ListProperty<EditorViewModel> openedEditorsProperty;
+    @Getter
+    private final ActionManager actionManager;
 
     public GeckoViewModel(GeckoModel geckoModel) {
         modelToViewModel = new HashMap<>();
         this.geckoModel = geckoModel;
-        viewModelFactory = new ViewModelFactory(this, geckoModel.getModelFactory());
+        actionManager = new ActionManager(this);
+        viewModelFactory = new ViewModelFactory(actionManager, this, geckoModel.getModelFactory());
         openedEditorsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
         currentEditorProperty = new SimpleObjectProperty<>();
 

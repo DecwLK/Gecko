@@ -8,6 +8,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableSet;
 import javafx.geometry.Point2D;
 import lombok.Data;
+import org.gecko.actions.ActionManager;
 import org.gecko.model.Region;
 import org.gecko.tools.CursorTool;
 import org.gecko.tools.EdgeCreatorTool;
@@ -23,6 +24,7 @@ import org.gecko.tools.ZoomTool;
 
 @Data
 public class EditorViewModel {
+    private final ActionManager actionManager;
     private final SystemViewModel currentSystem;
     private final SystemViewModel parentSystem;
     private final ObservableSet<PositionableViewModelElement<?>> containedPositionableViewModelElementsProperty;
@@ -35,7 +37,8 @@ public class EditorViewModel {
     private final Property<PositionableViewModelElement<?>> focusedElementProperty;
     private final boolean isAutomatonEditor;
 
-    public EditorViewModel(SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
+    public EditorViewModel(ActionManager actionManager, SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
+        this.actionManager = actionManager;
         this.currentSystem = systemViewModel;
         this.parentSystem = parentSystem;
         this.containedPositionableViewModelElementsProperty = FXCollections.observableSet();
@@ -123,11 +126,12 @@ public class EditorViewModel {
     }
 
     private void initializeTools() {
-        tools.add(List.of(new CursorTool(), new MarqueeTool(), new PanTool(), new ZoomTool()));
+        tools.add(List.of(new CursorTool(actionManager), new MarqueeTool(actionManager), new PanTool(actionManager), new ZoomTool(actionManager)));
         if (isAutomatonEditor()) {
-            tools.add(List.of(new StateCreatorTool(), new EdgeCreatorTool(), new RegionCreatorTool()));
+            tools.add(List.of(new StateCreatorTool(actionManager), new EdgeCreatorTool(actionManager), new RegionCreatorTool(actionManager)));
         } else {
-            tools.add(List.of(new SystemCreatorTool(), new SystemConnectionTool(), new VariableBlockCreatorTool()));
+            tools.add(
+                List.of(new SystemCreatorTool(actionManager), new SystemConnectionTool(actionManager), new VariableBlockCreatorTool(actionManager)));
         }
     }
 }

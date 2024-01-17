@@ -15,8 +15,8 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
     private final Property<Visibility> visibilityProperty;
     private final Property<String> typeProperty;
 
-    public PortViewModel(@NonNull Variable target) {
-        super(target);
+    public PortViewModel(int id, @NonNull Variable target) {
+        super(id, target);
         this.visibilityProperty = new SimpleObjectProperty<>(target.getVisibility());
         this.typeProperty = new SimpleStringProperty(target.getType());
     }

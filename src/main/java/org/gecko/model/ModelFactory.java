@@ -1,5 +1,7 @@
 package org.gecko.model;
 
+import lombok.NonNull;
+
 public class ModelFactory {
 
     //TODO defaults are temporary and need to be changed
@@ -25,24 +27,21 @@ public class ModelFactory {
         return elementId++;
     }
 
-    public State createState(Automaton automaton) {
+    public State createState(@NonNull Automaton automaton) {
         int id = getNewElementId();
         State state = new State(id, DEFAULT_NAME.formatted(id));
         automaton.addState(state);
         return state;
     }
 
-    public Edge createEdge(Automaton automaton, State source, State destination) {
-        if (!automaton.getStates().contains(source) || !automaton.getStates().contains(destination)) {
-            throw new IllegalArgumentException("Source and destination states must be in the automaton"); //TODO better exception
-        }
+    public Edge createEdge(@NonNull Automaton automaton) {
         int id = getNewElementId();
-        Edge edge = new Edge(id, source, destination, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
+        Edge edge = new Edge(id, null, null, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
         automaton.addEdge(edge);
         return edge;
     }
 
-    public System createSystem(System parentSystem) {
+    public System createSystem(@NonNull System parentSystem) {
         int id = getNewElementId();
         System system = new System(id, getDefaultName(id), DEFAULT_CODE, new Automaton());
         parentSystem.addChild(system);
@@ -54,38 +53,35 @@ public class ModelFactory {
         return new System(id, getDefaultName(id), DEFAULT_CODE, new Automaton());
     }
 
-    public Variable createVariable(System system) {
+    public Variable createVariable(@NonNull System system) {
         int id = getNewElementId();
         Variable variable = new Variable(id, getDefaultName(id), DEFAULT_TYPE, DEFAULT_VISIBILITY);
         system.addVariable(variable);
         return variable;
     }
 
-    public SystemConnection createSystemConnection(System system, Variable source, Variable destination) {
-        if (!system.getVariables().contains(source) || !system.getVariables().contains(destination)) {
-            throw new IllegalArgumentException("Source and destination variables must be in the system"); //TODO better exception
-        }
+    public SystemConnection createSystemConnection(@NonNull System system) {
         int id = getNewElementId();
-        SystemConnection connection = new SystemConnection(id, source, destination);
+        SystemConnection connection = new SystemConnection(id, null, null);
         system.addConnection(connection);
         return connection;
     }
 
-    public Contract createContract(State state) {
+    public Contract createContract(@NonNull State state) {
         int id = getNewElementId();
         Contract contract = new Contract(id, getDefaultName(id), new Condition(DEFAULT_CONDITION), new Condition(DEFAULT_CONDITION));
         state.addContract(contract);
         return contract;
     }
 
-    public Region createRegion(Automaton automaton) {
+    public Region createRegion(@NonNull Automaton automaton) {
         int id = getNewElementId();
         Region region = new Region(id, getDefaultName(id), new Condition(DEFAULT_CONDITION), getDefaultContract());
         automaton.addRegion(region);
         return region;
     }
 
-    public Automaton createAutomaton(System system) {
+    public Automaton createAutomaton(@NonNull System system) {
         Automaton automaton = new Automaton();
         system.setAutomaton(automaton);
         return automaton;

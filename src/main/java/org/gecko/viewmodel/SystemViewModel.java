@@ -16,8 +16,8 @@ public class SystemViewModel extends BlockViewModelElement<System> {
     private final StringProperty codeProperty;
     private final ObservableList<PortViewModel> portsProperty; //TODO should this be called property?
 
-    public SystemViewModel(@NonNull System target) {
-        super(target);
+    public SystemViewModel(int id, @NonNull System target) {
+        super(id, target);
         this.codeProperty = new SimpleStringProperty(target.getCode());
         this.portsProperty = FXCollections.observableArrayList();
     }

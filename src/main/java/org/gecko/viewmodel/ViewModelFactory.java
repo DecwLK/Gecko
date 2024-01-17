@@ -10,6 +10,7 @@ import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
 
 public class ViewModelFactory {
+    private static int viewModelElementId = 0;
     private final ModelFactory modelFactory;
     private final GeckoViewModel geckoViewModel;
 
@@ -24,53 +25,53 @@ public class ViewModelFactory {
 
     public StateViewModel createStateViewModelIn(SystemViewModel parentSystem) {
         State state = modelFactory.createState(parentSystem.getTarget().getAutomaton());
-        StateViewModel result = createStateViewModelFrom(state);
+        StateViewModel result = new StateViewModel(getNewViewModelElementId(), state);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public StateViewModel createStateViewModelFrom(State state) {
-        StateViewModel result = new StateViewModel(state);
-        state.getContracts().stream().map(ContractViewModel::new).forEach(result::addContract);
+        StateViewModel result = new StateViewModel(getNewViewModelElementId(), state);
+        state.getContracts().stream().map(this::createContractViewModelFrom).forEach(result::addContract);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public EdgeViewModel createEdgeViewModelIn(SystemViewModel parentSystem) {
-        Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), null, null);
-        EdgeViewModel result = createEdgeViewModelFrom(edge);
+        Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton());
+        EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public EdgeViewModel createEdgeViewModelFrom(Edge edge) {
-        EdgeViewModel result = new EdgeViewModel(edge);
+        EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public SystemConnectionViewModel createSystemConnectionViewModelIn(SystemViewModel parentSystem) {
-        SystemConnection systemConnection = modelFactory.createSystemConnection(parentSystem.getTarget(), null, null);
-        SystemConnectionViewModel result = createSystemConnectionViewModelFrom(systemConnection);
+        SystemConnection systemConnection = modelFactory.createSystemConnection(parentSystem.getTarget());
+        SystemConnectionViewModel result = new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public SystemConnectionViewModel createSystemConnectionViewModelFrom(SystemConnection systemConnection) {
-        SystemConnectionViewModel result = new SystemConnectionViewModel(systemConnection);
+        SystemConnectionViewModel result = new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public SystemViewModel createSystemViewModelIn(SystemViewModel parentSystem) {
         System system = modelFactory.createSystem(parentSystem.getTarget());
-        SystemViewModel result = createSystemViewModelFrom(system);
+        SystemViewModel result = new SystemViewModel(getNewViewModelElementId(), system);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public SystemViewModel createSystemViewModelFrom(System system) {
-        SystemViewModel result = new SystemViewModel(system);
+        SystemViewModel result = new SystemViewModel(getNewViewModelElementId(), system);
         system.getVariables().stream().map(this::createPortViewModelFrom).forEach(result::addPort);
         geckoViewModel.addViewModelElement(result);
         return result;
@@ -78,7 +79,7 @@ public class ViewModelFactory {
 
     public RegionViewModel createRegionViewModelIn(SystemViewModel parentSystem) {
         Region region = modelFactory.createRegion(parentSystem.getTarget().getAutomaton());
-        RegionViewModel result = createRegionViewModelFrom(region);
+        RegionViewModel result = new RegionViewModel(getNewViewModelElementId(), region);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
@@ -92,21 +93,30 @@ public class ViewModelFactory {
 
     public PortViewModel createPortViewModelIn(SystemViewModel systemViewModel) {
         Variable variable = modelFactory.createVariable(systemViewModel.getTarget());
-        PortViewModel result = createPortViewModelFrom(variable);
+        PortViewModel result = new PortViewModel(getNewViewModelElementId(), variable);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public PortViewModel createPortViewModelFrom(Variable variable) {
-        PortViewModel result = new PortViewModel(variable);
+        PortViewModel result = new PortViewModel(getNewViewModelElementId(), variable);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public ContractViewModel createContractViewModelIn(StateViewModel stateViewModel) {
         Contract contract = modelFactory.createContract(stateViewModel.getTarget());
-        ContractViewModel result = new ContractViewModel(contract);
+        ContractViewModel result = new ContractViewModel(getNewViewModelElementId(), contract);
         stateViewModel.addContract(result);
         return result;
+    }
+
+    public ContractViewModel createContractViewModelFrom(Contract contract) {
+        ContractViewModel result = new ContractViewModel(getNewViewModelElementId(), contract);
+        return result;
+    }
+
+    private static int getNewViewModelElementId() {
+        return viewModelElementId++;
     }
 }

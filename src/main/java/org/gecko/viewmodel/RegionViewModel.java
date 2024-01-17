@@ -20,11 +20,11 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     private final Property<Color> colorProperty;
     private final StringProperty invariantProperty;
     private final ObservableList<StateViewModel> statesProperty; //TODO should this be called property?
-    private ContractViewModel contract;
+    private final ContractViewModel contract;
 
-    public RegionViewModel(@NonNull Region target) {
-        super(target);
-        this.contract = new ContractViewModel(target.getPreAndPostCondition());
+    public RegionViewModel(int id, @NonNull Region target, @NonNull ContractViewModel contract) {
+        super(id, target);
+        this.contract = contract;
         this.invariantProperty = new SimpleStringProperty(target.getInvariant().getCondition());
         this.statesProperty = FXCollections.observableArrayList();
 

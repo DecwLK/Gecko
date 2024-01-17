@@ -34,9 +34,9 @@ public class ModelFactory {
         return state;
     }
 
-    public Edge createEdge(@NonNull Automaton automaton) {
+    public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull State destination) {
         int id = getNewElementId();
-        Edge edge = new Edge(id, null, null, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
+        Edge edge = new Edge(id, source, destination, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
         automaton.addEdge(edge);
         return edge;
     }
@@ -60,9 +60,9 @@ public class ModelFactory {
         return variable;
     }
 
-    public SystemConnection createSystemConnection(@NonNull System system) {
+    public SystemConnection createSystemConnection(@NonNull System system, @NonNull Variable source, @NonNull Variable destination) {
         int id = getNewElementId();
-        SystemConnection connection = new SystemConnection(id, null, null);
+        SystemConnection connection = new SystemConnection(id, source, destination);
         system.addConnection(connection);
         return connection;
     }

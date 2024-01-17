@@ -13,10 +13,10 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     private final Property<PortViewModel> sourceProperty;
     private final Property<PortViewModel> destinationProperty;
 
-    SystemConnectionViewModel(int id, SystemConnection target) {
+    SystemConnectionViewModel(int id, SystemConnection target, @NonNull PortViewModel source, @NonNull PortViewModel destination) {
         super(id, target);
-        this.sourceProperty = new SimpleObjectProperty<>();
-        this.destinationProperty = new SimpleObjectProperty<>();
+        this.sourceProperty = new SimpleObjectProperty<>(source);
+        this.destinationProperty = new SimpleObjectProperty<>(destination);
     }
 
     public void setSource(@NonNull PortViewModel source) {

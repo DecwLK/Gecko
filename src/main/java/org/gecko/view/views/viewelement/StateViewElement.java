@@ -10,6 +10,7 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.gecko.viewmodel.ContractViewModel;
@@ -18,15 +19,18 @@ import org.gecko.viewmodel.StateViewModel;
 @Getter
 public class StateViewElement extends VBox implements ViewElement<StateViewModel> {
 
-    private StateViewModel stateViewModel;
+    private final StateViewModel stateViewModel;
     private final StringProperty nameProperty;
     private final BooleanProperty isStartStateProperty;
     private final ListProperty<ContractViewModel> contractsProperty;
 
-    public StateViewElement() {
+    public StateViewElement(StateViewModel stateViewModel) {
         this.nameProperty = new SimpleStringProperty();
         this.isStartStateProperty = new SimpleBooleanProperty();
         this.contractsProperty = new SimpleListProperty<>();
+        this.stateViewModel = stateViewModel;
+
+        bindViewModel();
     }
 
     @Override
@@ -44,9 +48,7 @@ public class StateViewElement extends VBox implements ViewElement<StateViewModel
         return stateViewModel.getPosition();
     }
 
-    @Override
-    public void bindTo(StateViewModel target) {
-        stateViewModel = target;
+    private void bindViewModel() {
         nameProperty.bind(stateViewModel.getNameProperty());
         isStartStateProperty.bind(stateViewModel.getIsStartStateProperty());
         contractsProperty.bind(stateViewModel.getContractsProperty());
@@ -55,7 +57,7 @@ public class StateViewElement extends VBox implements ViewElement<StateViewModel
         prefWidthProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getSize().getX(), stateViewModel.getSizeProperty()));
         //TODO temp
         prefHeightProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getSize().getY(), stateViewModel.getSizeProperty()));
-        TextField textField = new TextField();
+        TextInputControl textField = new TextField();
         textField.textProperty().bindBidirectional(nameProperty);
         getChildren().add(textField);
     }

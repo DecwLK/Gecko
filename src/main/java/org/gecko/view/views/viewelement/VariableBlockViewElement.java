@@ -13,15 +13,16 @@ import org.gecko.viewmodel.PortViewModel;
 
 public class VariableBlockViewElement extends Pane implements ViewElement<PortViewModel> {
 
-    private PortViewModel portViewModel;
+    private final PortViewModel portViewModel;
     private final StringProperty nameProperty;
     private final StringProperty typeProperty;
     private final Property<Visibility> visibilityProperty;
 
-    public VariableBlockViewElement() {
+    public VariableBlockViewElement(PortViewModel portViewModel) {
         this.nameProperty = new SimpleStringProperty();
         this.typeProperty = new SimpleStringProperty();
         this.visibilityProperty = new SimpleObjectProperty<>();
+        this.portViewModel = portViewModel;
     }
 
     @Override
@@ -39,9 +40,7 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
         return portViewModel.getPosition();
     }
 
-    @Override
-    public void bindTo(PortViewModel target) {
-        portViewModel = target;
+    private void bindTo() {
         nameProperty.bind(portViewModel.getNameProperty());
         typeProperty.bind(portViewModel.getTypeProperty());
         visibilityProperty.bind(portViewModel.getVisibilityProperty());

@@ -14,14 +14,15 @@ import org.gecko.viewmodel.SystemConnectionViewModel;
 @Getter
 public class SystemConnectionViewElement extends ConnectionViewElement implements ViewElement<SystemConnectionViewModel> {
 
-    private SystemConnectionViewModel systemConnectionViewModel;
+    private final SystemConnectionViewModel systemConnectionViewModel;
     private final Property<Visibility> visibilityProperty;
     private final StringProperty typeProperty;
     //TODO source and destination properties
 
-    public SystemConnectionViewElement() {
+    public SystemConnectionViewElement(SystemConnectionViewModel systemConnectionViewModel) {
         this.visibilityProperty = new SimpleObjectProperty<>();
         this.typeProperty = new SimpleStringProperty();
+        this.systemConnectionViewModel = systemConnectionViewModel;
         //TODO source and destination properties
     }
 
@@ -40,9 +41,7 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
         return systemConnectionViewModel.getPosition();
     }
 
-    @Override
-    public void bindTo(SystemConnectionViewModel target) {
-        systemConnectionViewModel = target;
+    private void bindTo() {
         startXProperty().bind(
             Bindings.createDoubleBinding(() -> this.systemConnectionViewModel.getSource().getPosition().getX(), this.systemConnectionViewModel.getSource().getPositionProperty()));
         startYProperty().bind(

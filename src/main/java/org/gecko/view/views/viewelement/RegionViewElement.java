@@ -19,18 +19,19 @@ import org.gecko.viewmodel.StateViewModel;
 @Getter
 public class RegionViewElement extends Rectangle implements ViewElement<RegionViewModel> {
 
-    private RegionViewModel regionViewModel;
+    private final RegionViewModel regionViewModel;
     private final StringProperty nameProperty;
     private final Property<Color> colorProperty;
     private final StringProperty invariantProperty;
     private final List<StateViewModel> states;
     //TODO add more Properties once they get pushed
 
-    public RegionViewElement() {
+    public RegionViewElement(RegionViewModel regionViewModel) {
         this.colorProperty = new SimpleObjectProperty<>();
         this.invariantProperty = new SimpleStringProperty();
         this.nameProperty = new SimpleStringProperty();
         this.states = new ArrayList<>();
+        this.regionViewModel = regionViewModel;
         //TODO add more Properties once they get pushed
     }
 
@@ -49,9 +50,7 @@ public class RegionViewElement extends Rectangle implements ViewElement<RegionVi
         return regionViewModel.getPosition();
     }
 
-    @Override
-    public void bindTo(RegionViewModel target) {
-        regionViewModel = target;
+    private void bindViewModel() {
         nameProperty.bind(regionViewModel.getNameProperty());
         colorProperty.bind(regionViewModel.getColorProperty());
         invariantProperty.bind(regionViewModel.getInvariantProperty());

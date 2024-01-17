@@ -58,8 +58,8 @@ public class ActionFactory {
         return new CreateEdgeViewModelElementAction(geckoViewModel, source, destination);
     }
 
-    public CreatePortViewModelElementAction createCreatePortViewModelElementAction(Point2D position) {
-        return new CreatePortViewModelElementAction(geckoViewModel, position);
+    public CreatePortViewModelElementAction createCreatePortViewModelElementAction(SystemViewModel parentSystem) {
+        return new CreatePortViewModelElementAction(geckoViewModel, parentSystem);
     }
 
     public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(Point2D position) {
@@ -79,8 +79,8 @@ public class ActionFactory {
         return new CreateSystemViewModelElementAction(geckoViewModel, position);
     }
 
-    public CreateVariableAction createCreateVariableAction(SystemViewModel systemViewModel) {
-        return new CreateVariableAction(geckoViewModel, systemViewModel);
+    public CreateVariableAction createCreateVariableAction(Point2D position) {
+        return new CreateVariableAction(geckoViewModel, position);
     }
 
     public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {

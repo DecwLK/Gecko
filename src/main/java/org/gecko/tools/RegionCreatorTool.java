@@ -1,15 +1,13 @@
 package org.gecko.tools;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
-import org.gecko.view.views.viewelement.EdgeViewElement;
-import org.gecko.view.views.viewelement.RegionViewElement;
-import org.gecko.view.views.viewelement.StateViewElement;
-import org.gecko.view.views.viewelement.SystemConnectionViewElement;
-import org.gecko.view.views.viewelement.SystemViewElement;
-import org.gecko.view.views.viewelement.VariableBlockViewElement;
 
 public class RegionCreatorTool extends Tool {
+
+    private static final String NAME = "Region Creator Tool";
 
     public RegionCreatorTool(ActionManager actionManager) {
         super(actionManager);
@@ -17,8 +15,7 @@ public class RegionCreatorTool extends Tool {
 
     @Override
     public String getName() {
-        //TODO stub
-        return null;
+        return NAME;
     }
 
     @Override
@@ -29,36 +26,11 @@ public class RegionCreatorTool extends Tool {
 
     @Override
     public void visitView(Node view) {
-        //TODO stub
-    }
-
-    @Override
-    public void visit(StateViewElement stateViewElement) {
-
-    }
-
-    @Override
-    public void visit(EdgeViewElement edgeViewElement) {
-
-    }
-
-    @Override
-    public void visit(RegionViewElement regionViewElement) {
-
-    }
-
-    @Override
-    public void visit(SystemViewElement systemViewElement) {
-
-    }
-
-    @Override
-    public void visit(SystemConnectionViewElement systemConnectionViewElement) {
-
-    }
-
-    @Override
-    public void visit(VariableBlockViewElement variableBlockViewElement) {
-
+        super.visitView(view);
+        view.setOnMouseClicked(event -> {
+            Point2D position = new Point2D(event.getX(), event.getY());
+            Action createRegionAction = actionManager.getActionFactory().createCreateRegionViewModelElementAction(position);
+            actionManager.run(createRegionAction);
+        });
     }
 }

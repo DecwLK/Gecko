@@ -1,23 +1,24 @@
 package org.gecko.actions;
 
+import javafx.geometry.Point2D;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
-import org.gecko.viewmodel.SystemViewModel;
 
 public class CreateVariableAction extends Action {
 
     private final GeckoViewModel geckoViewModel;
-    private final SystemViewModel parentSystem;
+    private final Point2D position;
     private PortViewModel createdPortViewModel;
 
-    CreateVariableAction(GeckoViewModel geckoViewModel, SystemViewModel parentSystem) {
+    CreateVariableAction(GeckoViewModel geckoViewModel, Point2D position) {
         this.geckoViewModel = geckoViewModel;
-        this.parentSystem = parentSystem;
+        this.position = position;
     }
 
     @Override
     void run() {
-        createdPortViewModel = geckoViewModel.getViewModelFactory().createPortViewModelIn(parentSystem);
+        createdPortViewModel = geckoViewModel.getViewModelFactory().createPortViewModelIn(geckoViewModel.getCurrentEditor().getCurrentSystem());
+        createdPortViewModel.setPosition(position);
     }
 
     @Override

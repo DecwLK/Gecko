@@ -16,7 +16,7 @@ import org.gecko.tools.MarqueeTool;
 import org.gecko.tools.PanTool;
 import org.gecko.tools.RegionCreatorTool;
 import org.gecko.tools.StateCreatorTool;
-import org.gecko.tools.SystemConnectionTool;
+import org.gecko.tools.SystemConnectionCreatorTool;
 import org.gecko.tools.SystemCreatorTool;
 import org.gecko.tools.Tool;
 import org.gecko.tools.VariableBlockCreatorTool;
@@ -131,7 +131,7 @@ public class EditorViewModel {
             tools.add(List.of(new StateCreatorTool(actionManager), new EdgeCreatorTool(actionManager), new RegionCreatorTool(actionManager)));
         } else {
             tools.add(
-                List.of(new SystemCreatorTool(actionManager), new SystemConnectionTool(actionManager), new VariableBlockCreatorTool(actionManager)));
+                List.of(new SystemCreatorTool(actionManager), new SystemConnectionCreatorTool(actionManager), new VariableBlockCreatorTool(actionManager)));
         }
     }
 }

@@ -21,9 +21,7 @@ public class CreateEdgeViewModelElementAction extends Action {
     @Override
     void run() {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
-        createdEdgeViewModel = geckoViewModel.getViewModelFactory().createEdgeViewModelIn(currentParentSystem);
-        createdEdgeViewModel.setSource(source);
-        createdEdgeViewModel.setDestination(destination);
+        createdEdgeViewModel = geckoViewModel.getViewModelFactory().createEdgeViewModelIn(currentParentSystem, source, destination);
         createdEdgeViewModel.updateTarget();
     }
 

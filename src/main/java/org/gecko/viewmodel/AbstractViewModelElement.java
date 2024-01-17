@@ -4,11 +4,13 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.gecko.model.Element;
 
+@Getter
 public abstract class AbstractViewModelElement<T extends Element> {
-    @Getter
     protected final T target;
+    protected final int id;
 
-    public AbstractViewModelElement(@NonNull T target) {
+    public AbstractViewModelElement(int id, @NonNull T target) {
+        this.id = id;
         this.target = target;
     }
 

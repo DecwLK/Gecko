@@ -13,15 +13,16 @@ import org.gecko.viewmodel.SystemViewModel;
 
 public class SystemViewElement extends Pane implements ViewElement<SystemViewModel> {
 
-    private SystemViewModel systemViewModel;
+    private final SystemViewModel systemViewModel;
     private final StringProperty nameProperty;
     private final StringProperty codeProperty;
     private final List<PortViewModel> ports;
 
-    public SystemViewElement() {
+    public SystemViewElement(SystemViewModel systemViewModel) {
         this.nameProperty = new SimpleStringProperty();
         this.codeProperty = new SimpleStringProperty();
         this.ports = new ArrayList<>();
+        this.systemViewModel = systemViewModel;
     }
 
     @Override
@@ -39,9 +40,7 @@ public class SystemViewElement extends Pane implements ViewElement<SystemViewMod
         return systemViewModel.getPosition();
     }
 
-    @Override
-    public void bindTo(SystemViewModel target) {
-        systemViewModel = target;
+    private void bindTo() {
         nameProperty.bind(systemViewModel.getNameProperty());
         codeProperty.bind(systemViewModel.getCodeProperty());
         layoutXProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getPosition().getX(), systemViewModel.getPositionProperty()));

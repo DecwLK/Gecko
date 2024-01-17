@@ -6,7 +6,7 @@ import org.gecko.viewmodel.SystemViewModel;
 public class InspectorAddVariableButton extends AbstractInspectorButton {
     public InspectorAddVariableButton(ActionManager actionManager, SystemViewModel systemViewModel) {
         setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createCreateVariableAction(systemViewModel));
+            actionManager.run(actionManager.getActionFactory().createCreatePortViewModelElementAction(systemViewModel));
         });
     }
 }

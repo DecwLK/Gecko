@@ -14,8 +14,8 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     protected final Property<Point2D> positionProperty;
     protected final Property<Point2D> sizeProperty;
 
-    PositionableViewModelElement(@NonNull T target) {
-        super(target);
+    PositionableViewModelElement(int id, @NonNull T target) {
+        super(id, target);
         this.positionProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
         this.sizeProperty = new SimpleObjectProperty<>(new Point2D(-1, 1));
     }

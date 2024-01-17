@@ -12,8 +12,8 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
     implements Renamable {
     private final StringProperty nameProperty;
 
-    BlockViewModelElement(@NonNull T target) {
-        super(target);
+    BlockViewModelElement(int id, @NonNull T target) {
+        super(id, target);
         this.nameProperty = new SimpleStringProperty();
         setName(target.getName());
     }

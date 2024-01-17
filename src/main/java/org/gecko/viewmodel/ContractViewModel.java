@@ -15,8 +15,8 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
     private final StringProperty preConditionProperty;
     private final StringProperty postConditionProperty;
 
-    public ContractViewModel(Contract target) {
-        super(target);
+    public ContractViewModel(int id, Contract target) {
+        super(id, target);
         this.nameProperty = new SimpleStringProperty();
         this.preConditionProperty = new SimpleStringProperty(target.getPreCondition().getCondition());
         this.postConditionProperty = new SimpleStringProperty(target.getPreCondition().getCondition());

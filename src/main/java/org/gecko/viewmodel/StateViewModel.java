@@ -17,8 +17,8 @@ public class StateViewModel extends BlockViewModelElement<State> {
     private final BooleanProperty isStartStateProperty;
     private final ListProperty<ContractViewModel> contractsProperty;
 
-    public StateViewModel(@NonNull State target) {
-        super(target);
+    public StateViewModel(int id, @NonNull State target) {
+        super(id, target);
         this.isStartStateProperty = new SimpleBooleanProperty();
         this.contractsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
     }

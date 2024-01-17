@@ -20,13 +20,13 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     private final Property<StateViewModel> sourceProperty;
     private final Property<StateViewModel> destinationProperty;
 
-    public EdgeViewModel(@NonNull Edge target) {
-        super(target);
+    public EdgeViewModel(int id, @NonNull Edge target, @NonNull StateViewModel source, @NonNull StateViewModel destination) {
+        super(id, target);
         this.kindProperty = new SimpleObjectProperty<>(target.getKind());
         this.priorityProperty = new SimpleIntegerProperty(target.getPriority());
         this.contractProperty = new SimpleObjectProperty<>();
-        this.sourceProperty = new SimpleObjectProperty<>();
-        this.destinationProperty = new SimpleObjectProperty<>();
+        this.sourceProperty = new SimpleObjectProperty<>(source);
+        this.destinationProperty = new SimpleObjectProperty<>(destination);
     }
 
     public void setPriority(int priority) {

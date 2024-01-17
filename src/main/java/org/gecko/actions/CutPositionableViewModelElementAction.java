@@ -10,6 +10,7 @@ public class CutPositionableViewModelElementAction extends Action {
 
     @Override
     void run() {
+        // TODO: copy + delete Actions
     }
 
     @Override

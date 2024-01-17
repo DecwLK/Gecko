@@ -2,6 +2,7 @@ package org.gecko.actions;
 
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
+import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.StateViewModel;
 
 public class DeleteContractViewModelAction extends Action {
@@ -17,6 +18,10 @@ public class DeleteContractViewModelAction extends Action {
 
     @Override
     void run() {
+        // TODO: remove contract without replacing state
+        this.geckoViewModel.deleteViewModelElement(this.parent);
+        this.parent.removeContract(this.contractViewModel);
+        this.geckoViewModel.addViewModelElement(this.parent);
     }
 
     @Override

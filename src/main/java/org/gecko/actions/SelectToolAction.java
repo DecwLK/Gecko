@@ -5,7 +5,6 @@ import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class SelectToolAction extends Action {
-
     private final EditorView editorView;
     private final EditorViewModel editorViewModel;
     private final Tool tool;

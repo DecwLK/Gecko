@@ -1,14 +1,12 @@
 package org.gecko.tools;
 
 import javafx.scene.Node;
-import org.gecko.view.views.viewelement.ViewElement;
+import org.gecko.view.views.viewelement.ViewElementVisitor;
 
-public interface Tool {
+public interface Tool extends ViewElementVisitor {
     String getName();
 
-    String getIcon();
-
-    void visit(ViewElement<?> viewElement);
+    String getIconPath();
 
     void visitView(Node view);
 }

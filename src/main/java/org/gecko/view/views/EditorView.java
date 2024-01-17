@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
+import org.gecko.tools.Tool;
 import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.InspectorFactory;
 import org.gecko.view.views.shortcuts.ShortcutHandler;
@@ -123,5 +124,13 @@ public class EditorView {
             }
         }
         return null;
+    }
+
+    public void acceptTool(Tool visitor) {
+        visitor.visitView(currentView);
+
+        for (ViewElement<?> viewElement : currentViewElements) {
+            viewElement.accept(visitor);
+        }
     }
 }

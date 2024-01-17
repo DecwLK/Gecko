@@ -28,7 +28,10 @@ class ChangePostconditionViewModelElementActionTest {
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         viewModelFactory.createContractViewModelIn(stateViewModel);
-        region1.setContract(stateViewModel.getContractsProperty().getFirst());
+        String preCondition = stateViewModel.getContractsProperty().getFirst().getPrecondition();
+        String postCondition = stateViewModel.getContractsProperty().getFirst().getPostcondition();
+        region1.getContract().setPrecondition(preCondition);
+        region1.getContract().setPostcondition(postCondition);
         geckoViewModel.switchEditor(rootSystemViewModel, true);
     }
 

@@ -3,10 +3,10 @@ package org.gecko.tools;
 import javafx.scene.Node;
 import org.gecko.view.views.viewelement.ViewElementVisitor;
 
-public interface Tool extends ViewElementVisitor {
-    String getName();
+public abstract class Tool implements ViewElementVisitor {
+    public abstract String getName();
 
-    String getIconPath();
+    public abstract String getIconPath();
 
-    void visitView(Node view);
+    public abstract void visitView(Node view);
 }

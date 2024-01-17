@@ -8,7 +8,7 @@ import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 
-public class CursorTool implements Tool {
+public class CursorTool extends Tool {
 
     @Override
     public String getName() {

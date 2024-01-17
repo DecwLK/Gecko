@@ -50,4 +50,9 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
         prefWidthProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getSize().getX(), portViewModel.getSizeProperty()));
         prefHeightProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getSize().getY(), portViewModel.getSizeProperty()));
     }
+
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+    }
 }

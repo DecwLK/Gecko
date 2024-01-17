@@ -14,7 +14,5 @@ public interface ViewElement<T extends PositionableViewModelElement<?>> {
 
     void bindTo(T target);
 
-    default void accept(ViewElementVisitor visitor) {
-        visitor.visit(this);
-    }
+    void accept(ViewElementVisitor visitor);
 }

@@ -11,7 +11,7 @@ public abstract class Element {
         this.id = id;
     }
 
-    abstract void accept(ElementVisitor visitor);
+    public abstract void accept(ElementVisitor visitor);
 
     @Override
     public int hashCode() {

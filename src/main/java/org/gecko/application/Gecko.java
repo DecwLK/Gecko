@@ -16,6 +16,6 @@ public class Gecko {
         // TODO: on import, set system root
         model = new GeckoModel();
         viewModel = new GeckoViewModel(model);
-        view = new GeckoView(new ActionManager(viewModel), viewModel);
+        view = new GeckoView(viewModel.getActionManager(), viewModel);
     }
 }

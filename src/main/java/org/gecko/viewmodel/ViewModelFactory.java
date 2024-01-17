@@ -1,5 +1,6 @@
 package org.gecko.viewmodel;
 
+import org.gecko.actions.ActionManager;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.ModelFactory;
@@ -11,16 +12,18 @@ import org.gecko.model.Variable;
 
 public class ViewModelFactory {
     private static int viewModelElementId = 0;
+    private final ActionManager actionManager;
     private final ModelFactory modelFactory;
     private final GeckoViewModel geckoViewModel;
 
-    public ViewModelFactory(GeckoViewModel geckoViewModel, ModelFactory modelFactory) {
+    public ViewModelFactory(ActionManager actionManager, GeckoViewModel geckoViewModel, ModelFactory modelFactory) {
+        this.actionManager = actionManager;
         this.geckoViewModel = geckoViewModel;
         this.modelFactory = modelFactory;
     }
 
     public EditorViewModel createEditorViewModel(SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
-        return new EditorViewModel(systemViewModel, parentSystem, isAutomatonEditor);
+        return new EditorViewModel(actionManager, systemViewModel, parentSystem, isAutomatonEditor);
     }
 
     public StateViewModel createStateViewModelIn(SystemViewModel parentSystem) {

@@ -1,6 +1,7 @@
 package org.gecko.tools;
 
 import javafx.scene.Node;
+import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
 import org.gecko.view.views.viewelement.RegionViewElement;
 import org.gecko.view.views.viewelement.StateViewElement;
@@ -8,7 +9,11 @@ import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 
-public class RegionCreatorTool implements Tool {
+public class RegionCreatorTool extends Tool {
+
+    public RegionCreatorTool(ActionManager actionManager) {
+        super(actionManager);
+    }
 
     @Override
     public String getName() {

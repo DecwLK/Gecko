@@ -1,12 +1,13 @@
 package org.gecko.view.contextmenu;
 
 import javafx.scene.control.ContextMenu;
+import org.gecko.actions.ActionManager;
 import org.gecko.view.views.EditorView;
 
 public class EdgeViewElementContextMenuBuilder extends AbstractContextMenuBuilder {
 
-    public EdgeViewElementContextMenuBuilder(EditorView editorView) {
-        super(editorView);
+    public EdgeViewElementContextMenuBuilder(ActionManager actionManager, EditorView editorView) {
+        super(actionManager, editorView);
     }
 
     @Override

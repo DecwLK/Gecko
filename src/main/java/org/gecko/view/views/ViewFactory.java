@@ -1,7 +1,9 @@
 package org.gecko.view.views;
 
 import org.gecko.actions.ActionManager;
-import org.gecko.view.toolbar.ToolBarBuilder;
+import org.gecko.view.GeckoView;
+import org.gecko.view.contextmenu.AbstractContextMenuBuilder;
+import org.gecko.view.contextmenu.StateViewElementContextMenuBuilder;
 import org.gecko.view.views.shortcuts.AutomatonEditorViewShortcutHandler;
 import org.gecko.view.views.shortcuts.SystemEditorViewShortcutHandler;
 import org.gecko.view.views.viewelement.EdgeViewElement;
@@ -21,9 +23,11 @@ import org.gecko.viewmodel.SystemViewModel;
 public class ViewFactory {
 
     private final ActionManager actionManager;
+    private final GeckoView geckoView;
 
-    public ViewFactory(ActionManager actionManager) {
+    public ViewFactory(ActionManager actionManager, GeckoView geckoView) {
         this.actionManager = actionManager;
+        this.geckoView = geckoView;
     }
 
     public EditorView createEditorView(EditorViewModel editorViewModel, boolean isAutomatonEditor) {
@@ -31,15 +35,27 @@ public class ViewFactory {
     }
 
     public StateViewElement createStateViewElementFrom(StateViewModel stateViewModel) {
-        return new StateViewElement();
+        StateViewElement newStateViewElement = new StateViewElement();
+        newStateViewElement.bindTo(stateViewModel);
+
+        AbstractContextMenuBuilder contextMenuBuilder = new StateViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView());
+        newStateViewElement.setOnContextMenuRequested(
+            event -> contextMenuBuilder.build().show(newStateViewElement, event.getScreenX(), event.getScreenY()));
+        return newStateViewElement;
     }
 
     public RegionViewElement createRegionViewElementFrom(RegionViewModel regionViewModel) {
-        return new RegionViewElement();
+        RegionViewElement newRegionViewElement = new RegionViewElement();
+        newRegionViewElement.bindTo(regionViewModel);
+
+        return newRegionViewElement;
     }
 
     public VariableBlockViewElement createVariableBlockViewElementFrom(PortViewModel portViewModel) {
-        return new VariableBlockViewElement();
+        VariableBlockViewElement newVariableBlockViewElement = new VariableBlockViewElement();
+        newVariableBlockViewElement.bindTo(portViewModel);
+
+        return newVariableBlockViewElement;
     }
 
     public EdgeViewElement createEdgeViewElementFrom(EdgeViewModel edgeViewModel) {
@@ -55,12 +71,10 @@ public class ViewFactory {
     }
 
     private EditorView createAutomatonEditorView(EditorViewModel editorViewModel) {
-        return new EditorView(this, actionManager, editorViewModel, new ToolBarBuilder(actionManager, editorViewModel).build(),
-            new AutomatonEditorViewShortcutHandler());
+        return new EditorView(this, actionManager, editorViewModel, new AutomatonEditorViewShortcutHandler());
     }
 
     private EditorView createSystemEditorView(EditorViewModel editorViewModel) {
-        return new EditorView(this, actionManager, editorViewModel, new ToolBarBuilder(actionManager, editorViewModel).build(),
-            new SystemEditorViewShortcutHandler());
+        return new EditorView(this, actionManager, editorViewModel, new SystemEditorViewShortcutHandler());
     }
 }

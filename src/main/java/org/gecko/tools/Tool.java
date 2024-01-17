@@ -1,12 +1,20 @@
 package org.gecko.tools;
 
 import javafx.scene.Node;
+import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.ViewElementVisitor;
 
-public interface Tool extends ViewElementVisitor {
-    String getName();
+public abstract class Tool implements ViewElementVisitor {
 
-    String getIconPath();
+    private final ActionManager actionManager;
 
-    void visitView(Node view);
+    public Tool(ActionManager actionManager) {
+        this.actionManager = actionManager;
+    }
+
+    public abstract String getName();
+
+    public abstract String getIconPath();
+
+    public abstract void visitView(Node view);
 }

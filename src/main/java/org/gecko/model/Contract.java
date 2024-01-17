@@ -1,14 +1,17 @@
 package org.gecko.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class Contract implements Renamable, Element {
+@Getter
+@Setter
+public class Contract extends Element implements Renamable {
     private String name;
     private Condition preCondition;
     private Condition postCondition;
 
-    public Contract(String name, Condition preCondition, Condition postCondition) {
+    public Contract(int id, String name, Condition preCondition, Condition postCondition) {
+        super(id);
         this.name = name;
         this.preCondition = preCondition;
         this.postCondition = postCondition;

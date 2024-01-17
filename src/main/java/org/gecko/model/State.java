@@ -2,14 +2,17 @@ package org.gecko.model;
 
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class State implements Renamable, Element {
+@Getter
+@Setter
+public class State extends Element implements Renamable {
     private String name;
     private final Set<Contract> contracts;
 
-    public State(String name) {
+    public State(int id, String name) {
+        super(id);
         this.name = name;
         this.contracts = new HashSet<>();
     }

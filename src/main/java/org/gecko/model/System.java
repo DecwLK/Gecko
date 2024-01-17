@@ -1,12 +1,13 @@
 package org.gecko.model;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class System implements Renamable, Element {
+@Getter
+@Setter
+public class System extends Element implements Renamable {
     private final Set<System> children;
     private final Set<SystemConnection> connections;
     private final Set<Variable> variables;
@@ -15,7 +16,8 @@ public class System implements Renamable, Element {
     private String code;
     private Automaton automaton;
 
-    public System(String name, String code, Automaton automaton) {
+    public System(int id, String name, String code, Automaton automaton) {
+        super(id);
         this.name = name;
         this.code = code;
         this.automaton = automaton;

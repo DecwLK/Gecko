@@ -1,7 +1,6 @@
 package org.gecko.model;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class GeckoModel {
@@ -10,7 +9,8 @@ public class GeckoModel {
 
     public GeckoModel() {
         this.modelFactory = new ModelFactory();
-        this.root = new System("root", "code", new Automaton());
+        this.root = modelFactory.createRoot();
+        this.root.setName("root");
     }
 
     public GeckoModel(System root) {

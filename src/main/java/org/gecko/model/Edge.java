@@ -1,16 +1,19 @@
 package org.gecko.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class Edge implements Element {
+@Getter
+@Setter
+public class Edge extends Element {
     private Contract contract;
     private Kind kind;
     private int priority;
     private State source;
     private State destination;
 
-    public Edge(State source, State destination, Contract contract, Kind kind, int priority) {
+    public Edge(int id, State source, State destination, Contract contract, Kind kind, int priority) {
+        super(id);
         this.source = source;
         this.destination = destination;
         this.contract = contract;

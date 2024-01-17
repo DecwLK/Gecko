@@ -2,7 +2,6 @@ package org.gecko.viewmodel;
 
 import java.util.ArrayDeque;
 import java.util.List;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import lombok.Data;

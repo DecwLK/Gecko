@@ -2,16 +2,19 @@ package org.gecko.model;
 
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class Region implements Renamable, Element {
+@Setter
+@Getter
+public class Region extends Element implements Renamable {
     private String name;
     private Condition invariant;
     private Contract preAndPostCondition;
     private final Set<State> states;
 
-    public Region(String name, Condition invariant, Contract preAndPostCondition) {
+    public Region(int id, String name, Condition invariant, Contract preAndPostCondition) {
+        super(id);
         this.name = name;
         this.invariant = invariant;
         this.preAndPostCondition = preAndPostCondition;

@@ -10,7 +10,9 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
@@ -18,7 +20,7 @@ import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
 @Getter
-public class RegionViewElement extends Rectangle implements ViewElement<RegionViewModel> {
+public class RegionViewElement extends Pane implements ViewElement<RegionViewModel> {
 
     private final RegionViewModel regionViewModel;
     private final StringProperty nameProperty;
@@ -34,6 +36,7 @@ public class RegionViewElement extends Rectangle implements ViewElement<RegionVi
         this.states = new ArrayList<>();
         this.regionViewModel = regionViewModel;
         bindViewModel();
+        constructViewElement();
         //TODO add more Properties once they get pushed
     }
 
@@ -67,18 +70,33 @@ public class RegionViewElement extends Rectangle implements ViewElement<RegionVi
             }
         };
         regionViewModel.getStatesProperty().addListener(listener);
-        xProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getX(), regionViewModel.getPositionProperty()));
-        yProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getY(), regionViewModel.getPositionProperty()));
+        layoutXProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getX(), regionViewModel.getPositionProperty()));
+        layoutYProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getY(), regionViewModel.getPositionProperty()));
         //TODO is size width or coords?
-        widthProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getX(), regionViewModel.getSizeProperty()));
-        heightProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getY(), regionViewModel.getSizeProperty()));
+        prefWidthProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getX(), regionViewModel.getSizeProperty()));
+        prefHeightProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getY(), regionViewModel.getSizeProperty()));
         //TODO add more binds once they get pushed
     }
 
     private void constructViewElement() {
-        TextField textField = new TextField();
-        textField.textProperty().bindBidirectional(nameProperty);
-
+        Rectangle background = new Rectangle();
+        background.widthProperty().bind(widthProperty());
+        background.heightProperty().bind(heightProperty());
+        background.setFill(new Color(0, 0, 1, 0.5));
+        GridPane gridPane = new GridPane();
+        Label name = new Label("Region: " + regionViewModel.getName());
+        Bindings.createStringBinding(() -> "Region: " + regionViewModel.getName(), regionViewModel.getNameProperty());
+        Label preCondition = new Label("PreCondition: " + regionViewModel.getContract().getPrecondition());
+        Bindings.createStringBinding(() -> "PreCondition: " + regionViewModel.getContract().getPrecondition(), regionViewModel.getContract().getPreConditionProperty());
+        Label postCondition = new Label("PostCondition: " + regionViewModel.getContract().getPostcondition());
+        Bindings.createStringBinding(() -> "PostCondition: " + regionViewModel.getContract().getPostcondition(), regionViewModel.getContract().getPostConditionProperty());
+        Label invariant = new Label("Invariant: " + regionViewModel.getInvariant());
+        Bindings.createStringBinding(() -> "Invariant: " + regionViewModel.getInvariant(), regionViewModel.getInvariantProperty());
+        gridPane.add(name, 0, 0);
+        gridPane.add(preCondition, 0, 1);
+        gridPane.add(postCondition, 0, 2);
+        gridPane.add(invariant, 0, 3);
+        getChildren().addAll(background, gridPane);
     }
 
     @Override

@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.SystemConnectionViewModel;
@@ -24,6 +25,7 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
         this.typeProperty = new SimpleStringProperty();
         this.systemConnectionViewModel = systemConnectionViewModel;
         bindViewModel();
+        constructVisualization();
         //TODO source and destination properties
     }
 
@@ -57,5 +59,9 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    private void constructVisualization() {
+        setStroke(Color.BLACK);
     }
 }

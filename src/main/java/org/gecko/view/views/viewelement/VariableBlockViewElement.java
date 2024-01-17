@@ -7,7 +7,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
 
@@ -24,6 +27,7 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
         this.visibilityProperty = new SimpleObjectProperty<>();
         this.portViewModel = portViewModel;
         bindViewModel();
+        constructVisualization();
     }
 
     @Override
@@ -54,5 +58,20 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    private void constructVisualization() {
+        Rectangle rectangle = new Rectangle();
+        rectangle.widthProperty().bind(widthProperty());
+        rectangle.heightProperty().bind(heightProperty());
+        rectangle.fillProperty().bind(Bindings.createObjectBinding(() -> switch (visibilityProperty.getValue()) {
+            case INPUT -> Color.GREEN;
+            case OUTPUT -> Color.RED;
+            case STATE -> Color.BLUE;
+        }, visibilityProperty));
+        getChildren().add(rectangle);
+        Label label = new Label();
+        label.textProperty().bind(nameProperty);
+        getChildren().add(label);
     }
 }

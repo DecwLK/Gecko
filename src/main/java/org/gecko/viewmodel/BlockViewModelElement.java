@@ -79,6 +79,10 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
         }
     }
 
+    public Point2D getCenter() {
+        return positionProperty.getValue().add(sizeProperty.getValue().multiply(0.5));
+    }
+
     @Override
     public void updateTarget() {
         target.setName(getName());

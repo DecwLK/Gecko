@@ -117,12 +117,10 @@ public class EditorView {
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
-        for (ViewElement<?> viewElement : currentViewElements) {
-            if (viewElement.getTarget().equals(element)) {
-                return viewElement;
-            }
-        }
-        return null;
+        return currentViewElements.stream()
+                                  .filter(viewElement -> viewElement.getTarget().equals(element))
+                                  .findFirst()
+                                  .orElse(null);
     }
 
     public void acceptTool(Tool tool) {

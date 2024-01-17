@@ -23,7 +23,6 @@ public class SelectToolAction extends Action {
     @Override
     void run() {
         editorViewModel.setCurrentTool(tool);
-
         editorView.acceptTool(tool);
     }
 

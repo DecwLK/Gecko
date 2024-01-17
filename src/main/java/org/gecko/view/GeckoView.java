@@ -15,6 +15,11 @@ import org.gecko.view.views.ViewFactory;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 
+/**
+ * Represents the View component of a Gecko project.
+ * Holds a {@link ViewFactory}, a current {@link EditorView} and a reference to the {@link GeckoViewModel}.
+ * Contains methods for managing the {@link EditorView} shown in the graphic editor.
+ */
 public class GeckoView {
 
     @Getter

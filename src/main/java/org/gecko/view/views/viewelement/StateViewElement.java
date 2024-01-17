@@ -59,4 +59,9 @@ public class StateViewElement extends VBox implements ViewElement<StateViewModel
         textField.textProperty().bindBidirectional(nameProperty);
         getChildren().add(textField);
     }
+
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+    }
 }

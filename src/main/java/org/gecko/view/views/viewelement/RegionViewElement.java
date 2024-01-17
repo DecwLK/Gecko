@@ -73,4 +73,9 @@ public class RegionViewElement extends Rectangle implements ViewElement<RegionVi
         heightProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getY(), regionViewModel.getSizeProperty()));
         //TODO add more binds once they get pushed
     }
+
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+    }
 }

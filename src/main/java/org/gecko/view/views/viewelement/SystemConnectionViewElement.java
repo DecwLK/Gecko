@@ -53,4 +53,9 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
             Bindings.createDoubleBinding(() -> this.systemConnectionViewModel.getDestination().getSize().getY(), this.systemConnectionViewModel.getDestination().getSizeProperty()));
         //TODO source + destination properties
     }
+
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+    }
 }

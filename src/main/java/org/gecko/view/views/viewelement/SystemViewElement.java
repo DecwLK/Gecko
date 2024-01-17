@@ -50,4 +50,9 @@ public class SystemViewElement extends Pane implements ViewElement<SystemViewMod
         prefHeightProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getSize().getY(), systemViewModel.getSizeProperty()));
         //TODO add more binds once they get pushed
     }
+
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+    }
 }

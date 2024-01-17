@@ -6,7 +6,6 @@ public class ChangeTypePortViewModelElementAction extends Action {
 
     private final PortViewModel portViewModel;
     private final String newType;
-
     private final String oldType;
 
     ChangeTypePortViewModelElementAction(PortViewModel portViewModel, String newType) {

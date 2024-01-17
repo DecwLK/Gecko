@@ -58,4 +58,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         endYProperty().bind(
             Bindings.createDoubleBinding(() -> this.edgeViewModel.getDestination().getSize().getY(), this.edgeViewModel.getDestination().getSizeProperty()));
     }
+
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+    }
 }

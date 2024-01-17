@@ -4,6 +4,7 @@ import java.util.List;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableSet;
 import javafx.geometry.Point2D;
 import lombok.Data;
@@ -35,20 +36,25 @@ public class EditorViewModel {
     private final boolean isAutomatonEditor;
 
     public EditorViewModel(SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
-        currentSystem = systemViewModel;
+        this.currentSystem = systemViewModel;
         this.parentSystem = parentSystem;
-        containedPositionableViewModelElementsProperty = FXCollections.observableSet();
+        this.containedPositionableViewModelElementsProperty = FXCollections.observableSet();
         this.isAutomatonEditor = isAutomatonEditor;
-        tools = FXCollections.observableArrayList();
-        selectionManager = new SelectionManager();
-
-        // Initialize properties
-        pivotProperty = new SimpleObjectProperty<>();
-        zoomScaleProperty = new SimpleObjectProperty<>(1.0);
-        currentToolProperty = new SimpleObjectProperty<>();
-        focusedElementProperty = new SimpleObjectProperty<>();
-
+        this.tools = FXCollections.observableArrayList();
+        this.selectionManager = new SelectionManager();
+        this.pivotProperty = new SimpleObjectProperty<>();
+        this.zoomScaleProperty = new SimpleObjectProperty<>();
+        this.currentToolProperty = new SimpleObjectProperty<>();
+        this.focusedElementProperty = new SimpleObjectProperty<>();
         initializeTools();
+
+        selectionManager.getCurrentSelection().addListener((ListChangeListener<PositionableViewModelElement<?>>) change -> {
+            if (change.getList().size() == 1) {
+                setFocusedElement(change.getList().getFirst());
+            } else {
+                setFocusedElement(null);
+            }
+        });
     }
 
     public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
@@ -94,6 +100,10 @@ public class EditorViewModel {
 
     public PositionableViewModelElement<?> getFocusedElement() {
         return focusedElementProperty.getValue();
+    }
+
+    private void setFocusedElement(PositionableViewModelElement<?> focusedElement) {
+        focusedElementProperty.setValue(focusedElement);
     }
 
     public void addPositionableViewModelElement(PositionableViewModelElement<?> element) {

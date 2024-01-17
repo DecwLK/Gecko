@@ -8,13 +8,14 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
+import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class ToolBarBuilder {
 
     private final ToolBar toolBar;
 
-    public ToolBarBuilder(ActionManager actionManager, EditorViewModel editorViewModel) {
+    public ToolBarBuilder(ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
         this.toolBar = new ToolBar();
         toolBar.setOrientation(Orientation.VERTICAL);
 

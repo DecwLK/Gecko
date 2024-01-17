@@ -9,6 +9,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.InspectorFactory;
@@ -19,13 +20,15 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 
 public class EditorView {
+    @Getter
+    private final StackPane currentView;
+    @Getter
+    private final Collection<ViewElement<?>> currentViewElements;
     private final EditorViewModel viewModel;
     private final ToolBar toolBar;
     private final ShortcutHandler shortcutHandler;
     private final InspectorFactory inspectorFactory;
-    private final StackPane currentView;
     private final Pane viewElementsPane;
-    private final Collection<ViewElement<?>> currentViewElements;
 
     private Inspector currentInspector;
 

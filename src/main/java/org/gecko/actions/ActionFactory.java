@@ -4,6 +4,7 @@ import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import org.gecko.tools.Tool;
+import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.BlockViewModelElement;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
@@ -160,8 +161,8 @@ public class ActionFactory {
         return new SelectionHistoryForwardAction(geckoViewModel.getCurrentEditor().getSelectionManager());
     }
 
-    public SelectToolAction createSelectToolAction(Tool tool) {
-        return new SelectToolAction(geckoViewModel.getCurrentEditor(), tool);
+    public SelectToolAction createSelectToolAction(EditorView editorView, Tool tool) {
+        return new SelectToolAction(editorView, geckoViewModel.getCurrentEditor(), tool);
     }
 
     public SetStartStateViewModelElementAction createSetStartStateViewModelElementAction(StateViewModel stateViewModel) {

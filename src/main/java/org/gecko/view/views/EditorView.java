@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 import javafx.collections.SetChangeListener;
 import javafx.scene.Node;
+import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -23,9 +24,11 @@ import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 
 public class EditorView {
     @Getter
-    private final StackPane currentView;
+    private final Tab currentView;
+    private final StackPane currentViewPane;
     @Getter
     private final Collection<ViewElement<?>> currentViewElements;
+    @Getter
     private final EditorViewModel viewModel;
     private final ToolBar toolBar;
     private final ShortcutHandler shortcutHandler;
@@ -39,9 +42,10 @@ public class EditorView {
         this.toolBar = new ToolBarBuilder(actionManager, this, viewModel).build();
         this.shortcutHandler = shortcutHandler;
         this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
-        this.currentView = new StackPane();
+        this.currentViewPane = new StackPane();
         this.viewElementsPane = new Pane();
         currentViewElements = new HashSet<>();
+        currentView = new Tab(viewModel.getCurrentSystem().getName(), currentViewPane);
 
         // Floating UI
         FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
@@ -61,7 +65,7 @@ public class EditorView {
         floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton);
 
         // Build stack pane
-        currentView.getChildren().addAll(viewElementsPane, floatingUI);
+        currentViewPane.getChildren().addAll(viewElementsPane, floatingUI);
 
         // View element creator listener
         viewModel.getContainedPositionableViewModelElementsProperty().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
@@ -82,14 +86,6 @@ public class EditorView {
         if (currentInspector != null) {
             currentInspector.toggleCollapse();
         }
-    }
-
-    public Node drawView() {
-        // Refresh view elements
-        viewElementsPane.getChildren().removeAll();
-        viewElementsPane.getChildren().setAll(currentViewElements.stream().map(ViewElement::drawElement).collect(Collectors.toList()));
-
-        return currentView;
     }
 
     public Node drawToolbar() {
@@ -115,7 +111,9 @@ public class EditorView {
                 currentViewElements.remove(viewElement);
             }
         }
-        drawView();
+        // Refresh view elements
+        viewElementsPane.getChildren().removeAll();
+        viewElementsPane.getChildren().setAll(currentViewElements.stream().map(ViewElement::drawElement).collect(Collectors.toList()));
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
@@ -128,7 +126,7 @@ public class EditorView {
     }
 
     public void acceptTool(Tool tool) {
-        tool.visitView(currentView);
+        tool.visitView(currentViewPane);
         currentViewElements.forEach(viewElement -> viewElement.accept(tool));
     }
 }

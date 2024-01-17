@@ -6,9 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Represents a state in the domain model of a Gecko project.
- * A {@link State} has a name and a set of {@link Contract}s.
- * Contains methods for managing the afferent data.
+ * Represents a state in the domain model of a Gecko project. A {@link State} has a name and a set of {@link Contract}s. Contains methods for managing
+ * the afferent data.
  */
 @Getter
 @Setter

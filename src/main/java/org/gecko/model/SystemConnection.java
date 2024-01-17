@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Represents a system connection in the domain model of a Gecko project.
- * A {@link SystemConnection} is described by a source- and a destination-{@link Variable}.
+ * Represents a system connection in the domain model of a Gecko project. A {@link SystemConnection} is described by a source- and a
+ * destination-{@link Variable}.
  */
 @Getter
 @Setter

@@ -6,10 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Represents a region in the domain model of a Gecko project.
- * A {@link Region} has a name and is described by a set of {@link State}s,
- * a {@link Contract} and an invariant-{@link Condition}.
- * Contains methods for managing the afferent data.
+ * Represents a region in the domain model of a Gecko project. A {@link Region} has a name and is described by a set of {@link State}s, a
+ * {@link Contract} and an invariant-{@link Condition}. Contains methods for managing the afferent data.
  */
 @Setter
 @Getter

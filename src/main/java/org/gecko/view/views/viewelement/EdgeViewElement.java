@@ -34,14 +34,14 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     private void bindViewElement() {
-        startXProperty().bind(
-            Bindings.createDoubleBinding(() -> this.edgeViewModel.getSource().getPosition().getX(), this.edgeViewModel.getSource().getPositionProperty()));
-        startYProperty().bind(
-            Bindings.createDoubleBinding(() -> this.edgeViewModel.getSource().getPosition().getY(), this.edgeViewModel.getSource().getPositionProperty()));
-        endXProperty().bind(
-            Bindings.createDoubleBinding(() -> this.edgeViewModel.getDestination().getSize().getX(), this.edgeViewModel.getDestination().getSizeProperty()));
-        endYProperty().bind(
-            Bindings.createDoubleBinding(() -> this.edgeViewModel.getDestination().getSize().getY(), this.edgeViewModel.getDestination().getSizeProperty()));
+        startXProperty().bind(Bindings.createDoubleBinding(() -> this.edgeViewModel.getSource().getPosition().getX(),
+            this.edgeViewModel.getSource().getPositionProperty()));
+        startYProperty().bind(Bindings.createDoubleBinding(() -> this.edgeViewModel.getSource().getPosition().getY(),
+            this.edgeViewModel.getSource().getPositionProperty()));
+        endXProperty().bind(Bindings.createDoubleBinding(() -> this.edgeViewModel.getDestination().getSize().getX(),
+            this.edgeViewModel.getDestination().getSizeProperty()));
+        endYProperty().bind(Bindings.createDoubleBinding(() -> this.edgeViewModel.getDestination().getSize().getY(),
+            this.edgeViewModel.getDestination().getSizeProperty()));
     }
 
     @Override

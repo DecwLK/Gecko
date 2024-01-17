@@ -132,8 +132,8 @@ public class EditorViewModel {
         if (isAutomatonEditor()) {
             tools.add(List.of(new StateCreatorTool(actionManager), new EdgeCreatorTool(actionManager), new RegionCreatorTool(actionManager)));
         } else {
-            tools.add(
-                List.of(new SystemCreatorTool(actionManager), new SystemConnectionCreatorTool(actionManager), new VariableBlockCreatorTool(actionManager)));
+            tools.add(List.of(new SystemCreatorTool(actionManager), new SystemConnectionCreatorTool(actionManager),
+                new VariableBlockCreatorTool(actionManager)));
         }
     }
 }

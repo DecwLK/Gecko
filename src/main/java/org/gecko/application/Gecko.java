@@ -1,7 +1,6 @@
 package org.gecko.application;
 
 import lombok.Getter;
-import org.gecko.actions.ActionManager;
 import org.gecko.model.GeckoModel;
 import org.gecko.view.GeckoView;
 import org.gecko.viewmodel.GeckoViewModel;

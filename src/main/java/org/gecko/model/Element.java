@@ -4,8 +4,7 @@ import java.util.Objects;
 import lombok.Getter;
 
 /**
- * Represents an abstraction of an element in the domain model of a Gecko project.
- * An {@link Element} has an id and accepts {@link ElementVisitor}s.
+ * Represents an abstraction of an element in the domain model of a Gecko project. An {@link Element} has an id and accepts {@link ElementVisitor}s.
  */
 @Getter
 public abstract class Element {
@@ -24,10 +23,12 @@ public abstract class Element {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
         Element element = (Element) o;
         return id == element.id;
     }

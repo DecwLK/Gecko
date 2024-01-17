@@ -44,13 +44,13 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
 
     private void bindViewModel() {
         startXProperty().bind(
-            Bindings.createDoubleBinding(() -> this.systemConnectionViewModel.getSource().getPosition().getX(), this.systemConnectionViewModel.getSource().getPositionProperty()));
+            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getX(), systemConnectionViewModel.getSource().getPositionProperty()));
         startYProperty().bind(
-            Bindings.createDoubleBinding(() -> this.systemConnectionViewModel.getSource().getPosition().getY(), this.systemConnectionViewModel.getSource().getPositionProperty()));
+            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getY(), systemConnectionViewModel.getSource().getPositionProperty()));
         endXProperty().bind(
-            Bindings.createDoubleBinding(() -> this.systemConnectionViewModel.getDestination().getSize().getX(), this.systemConnectionViewModel.getDestination().getSizeProperty()));
+            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getX(), systemConnectionViewModel.getDestination().getSizeProperty()));
         endYProperty().bind(
-            Bindings.createDoubleBinding(() -> this.systemConnectionViewModel.getDestination().getSize().getY(), this.systemConnectionViewModel.getDestination().getSizeProperty()));
+            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getY(), systemConnectionViewModel.getDestination().getSizeProperty()));
         //TODO source + destination properties
     }
 

@@ -1,6 +1,7 @@
 package org.gecko.tools;
 
 import javafx.scene.Node;
+import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
 import org.gecko.view.views.viewelement.RegionViewElement;
 import org.gecko.view.views.viewelement.StateViewElement;
@@ -11,6 +12,10 @@ import org.gecko.view.views.viewelement.VariableBlockViewElement;
 public class StateCreatorTool extends Tool {
 
     private static final String NAME = "State Creator";
+
+    public StateCreatorTool(ActionManager actionManager) {
+        super(actionManager);
+    }
 
     @Override
     public String getName() {

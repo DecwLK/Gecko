@@ -1,34 +1,53 @@
 package org.gecko.view.views.viewelement;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
 
 public class VariableBlockViewElement extends Pane implements ViewElement<PortViewModel> {
 
+    private PortViewModel portViewModel;
+    private final StringProperty nameProperty;
+    private final StringProperty typeProperty;
+    private final Property<Visibility> visibilityProperty;
+
+    public VariableBlockViewElement() {
+        this.nameProperty = new SimpleStringProperty();
+        this.typeProperty = new SimpleStringProperty();
+        this.visibilityProperty = new SimpleObjectProperty<>();
+    }
+
     @Override
     public Node drawElement() {
-        return null;
+        return this;
     }
 
     @Override
     public PortViewModel getTarget() {
-        return null;
+        return portViewModel;
     }
 
     @Override
     public Point2D getPosition() {
-        return null;
+        return portViewModel.getPosition();
     }
 
     @Override
     public void bindTo(PortViewModel target) {
-
-    }
-
-    @Override
-    public void accept(ViewElementVisitor visitor) {
-
+        portViewModel = target;
+        nameProperty.bind(portViewModel.getNameProperty());
+        typeProperty.bind(portViewModel.getTypeProperty());
+        visibilityProperty.bind(portViewModel.getVisibilityProperty());
+        layoutXProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getPosition().getX(), portViewModel.getPositionProperty()));
+        layoutYProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getPosition().getY(), portViewModel.getPositionProperty()));
+        prefWidthProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getSize().getX(), portViewModel.getSizeProperty()));
+        prefHeightProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getSize().getY(), portViewModel.getSizeProperty()));
     }
 }

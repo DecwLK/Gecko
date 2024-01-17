@@ -2,9 +2,10 @@ package org.gecko.viewmodel;
 
 import java.util.stream.Collectors;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -14,12 +15,12 @@ import org.gecko.model.State;
 @Getter
 public class StateViewModel extends BlockViewModelElement<State> {
     private final BooleanProperty isStartStateProperty;
-    private final ObservableList<ContractViewModel> contractsProperty;
+    private final ListProperty<ContractViewModel> contractsProperty;
 
     public StateViewModel(@NonNull State target) {
         super(target);
         this.isStartStateProperty = new SimpleBooleanProperty();
-        this.contractsProperty = FXCollections.observableArrayList();
+        this.contractsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
 
     public boolean getIsStartState() {

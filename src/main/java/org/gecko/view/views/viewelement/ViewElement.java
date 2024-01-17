@@ -6,13 +6,15 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 
 public interface ViewElement<T extends PositionableViewModelElement<?>> {
 
-    public Node drawElement(); //TODO needed?
+    Node drawElement(); //TODO needed?
 
-    public T getTarget();
+    T getTarget();
 
-    public Point2D getPosition();
+    Point2D getPosition();
 
-    public void bindTo(T target);
+    void bindTo(T target);
 
-    public void accept(ViewElementVisitor visitor);
+    default void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+    }
 }

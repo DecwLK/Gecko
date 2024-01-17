@@ -3,9 +3,11 @@ package org.gecko.viewmodel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
+import lombok.Getter;
 import lombok.NonNull;
 import org.gecko.model.Element;
 
+@Getter
 public abstract class BlockViewModelElement<T extends Element & org.gecko.model.Renamable> extends PositionableViewModelElement<T>
     implements Renamable {
     private final StringProperty nameProperty;

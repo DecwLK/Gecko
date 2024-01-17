@@ -1,15 +1,22 @@
 package org.gecko.viewmodel;
 
+import java.util.ArrayDeque;
 import java.util.List;
-import java.util.Stack;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Data;
 
 @Data
 public class SelectionManager {
-    private Stack<List<PositionableViewModelElement<?>>> undoSelectionStack;
-    private Stack<List<PositionableViewModelElement<?>>> redoSelectionStack;
+    private ArrayDeque<List<PositionableViewModelElement<?>>> undoSelectionStack;
+    private ArrayDeque<List<PositionableViewModelElement<?>>> redoSelectionStack;
     private ObservableList<PositionableViewModelElement<?>> currentSelection;
+
+    public SelectionManager() {
+        this.undoSelectionStack = new ArrayDeque<>();
+        this.redoSelectionStack = new ArrayDeque<>();
+        this.currentSelection = FXCollections.observableArrayList();
+    }
 
     public void goBack() {
         redoSelectionStack.push(currentSelection);

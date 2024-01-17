@@ -20,7 +20,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     private final Property<Color> colorProperty;
     private final StringProperty invariantProperty;
     private final ObservableList<StateViewModel> statesProperty; //TODO should this be called property?
-    private final ContractViewModel contract;
+    private ContractViewModel contract;
 
     public RegionViewModel(@NonNull Region target) {
         super(target);

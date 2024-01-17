@@ -6,7 +6,6 @@ public class ChangePreconditionViewModelElementAction extends Action {
 
     private final ContractViewModel contractViewModel;
     private final String newPrecondition;
-
     private final String oldPrecondition;
 
     ChangePreconditionViewModelElementAction(ContractViewModel contractViewModel, String newPrecondition) {

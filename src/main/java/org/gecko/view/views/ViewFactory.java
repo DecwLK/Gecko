@@ -3,7 +3,12 @@ package org.gecko.view.views;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.GeckoView;
 import org.gecko.view.contextmenu.AbstractContextMenuBuilder;
+import org.gecko.view.contextmenu.EdgeViewElementContextMenuBuilder;
+import org.gecko.view.contextmenu.RegionViewElementContextMenuBuilder;
 import org.gecko.view.contextmenu.StateViewElementContextMenuBuilder;
+import org.gecko.view.contextmenu.SystemConnectionViewElementContextMenuBuilder;
+import org.gecko.view.contextmenu.SystemViewElementContextMenuBuilder;
+import org.gecko.view.contextmenu.VariableBlockViewElementContextMenuBuilder;
 import org.gecko.view.views.shortcuts.AutomatonEditorViewShortcutHandler;
 import org.gecko.view.views.shortcuts.SystemEditorViewShortcutHandler;
 import org.gecko.view.views.viewelement.EdgeViewElement;
@@ -35,39 +40,67 @@ public class ViewFactory {
     }
 
     public StateViewElement createStateViewElementFrom(StateViewModel stateViewModel) {
-        StateViewElement newStateViewElement = new StateViewElement();
-        newStateViewElement.bindTo(stateViewModel);
+        StateViewElement newStateViewElement = new StateViewElement(stateViewModel);
 
-        AbstractContextMenuBuilder contextMenuBuilder = new StateViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView());
+        AbstractContextMenuBuilder contextMenuBuilder =
+            new StateViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), stateViewModel);
         newStateViewElement.setOnContextMenuRequested(
             event -> contextMenuBuilder.build().show(newStateViewElement, event.getScreenX(), event.getScreenY()));
         return newStateViewElement;
     }
 
     public RegionViewElement createRegionViewElementFrom(RegionViewModel regionViewModel) {
-        RegionViewElement newRegionViewElement = new RegionViewElement();
-        newRegionViewElement.bindTo(regionViewModel);
+        RegionViewElement newRegionViewElement = new RegionViewElement(regionViewModel);
 
+        AbstractContextMenuBuilder contextMenuBuilder =
+            new RegionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), regionViewModel);
+        newRegionViewElement.setOnContextMenuRequested(
+            event -> contextMenuBuilder.build().show(newRegionViewElement, event.getScreenX(), event.getScreenY()));
         return newRegionViewElement;
     }
 
     public VariableBlockViewElement createVariableBlockViewElementFrom(PortViewModel portViewModel) {
-        VariableBlockViewElement newVariableBlockViewElement = new VariableBlockViewElement();
-        newVariableBlockViewElement.bindTo(portViewModel);
+        VariableBlockViewElement newVariableBlockViewElement = new VariableBlockViewElement(portViewModel);
+
+        AbstractContextMenuBuilder contextMenuBuilder =
+            new VariableBlockViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), portViewModel);
+        newVariableBlockViewElement.setOnContextMenuRequested(
+            event -> contextMenuBuilder.build().show(newVariableBlockViewElement, event.getScreenX(), event.getScreenY()));
 
         return newVariableBlockViewElement;
     }
 
     public EdgeViewElement createEdgeViewElementFrom(EdgeViewModel edgeViewModel) {
-        return new EdgeViewElement();
+        EdgeViewElement newEdgeViewElement = new EdgeViewElement(edgeViewModel);
+
+        AbstractContextMenuBuilder contextMenuBuilder =
+            new EdgeViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), edgeViewModel);
+        newEdgeViewElement.setOnContextMenuRequested(
+            event -> contextMenuBuilder.build().show(newEdgeViewElement, event.getScreenX(), event.getScreenY()));
+
+        return newEdgeViewElement;
     }
 
     public SystemConnectionViewElement createSystemConnectionViewElementFrom(SystemConnectionViewModel systemConnectionViewModel) {
-        return new SystemConnectionViewElement();
+        SystemConnectionViewElement newSystemConnectionViewElement = new SystemConnectionViewElement(systemConnectionViewModel);
+
+        AbstractContextMenuBuilder contextMenuBuilder =
+            new SystemConnectionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), systemConnectionViewModel);
+        newSystemConnectionViewElement.setOnContextMenuRequested(
+            event -> contextMenuBuilder.build().show(newSystemConnectionViewElement, event.getScreenX(), event.getScreenY()));
+
+        return newSystemConnectionViewElement;
     }
 
     public SystemViewElement createSystemViewElementFrom(SystemViewModel systemViewModel) {
-        return new SystemViewElement();
+        SystemViewElement newSystemViewElement = new SystemViewElement(systemViewModel);
+
+        AbstractContextMenuBuilder contextMenuBuilder =
+            new SystemViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), systemViewModel);
+        newSystemViewElement.setOnContextMenuRequested(
+            event -> contextMenuBuilder.build().show(newSystemViewElement, event.getScreenX(), event.getScreenY()));
+
+        return newSystemViewElement;
     }
 
     private EditorView createAutomatonEditorView(EditorViewModel editorViewModel) {

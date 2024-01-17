@@ -12,7 +12,5 @@ public interface ViewElement<T extends PositionableViewModelElement<?>> {
 
     Point2D getPosition();
 
-    void bindTo(T target);
-
     void accept(ViewElementVisitor visitor);
 }

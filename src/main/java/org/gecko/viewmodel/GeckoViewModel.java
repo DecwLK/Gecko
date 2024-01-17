@@ -19,6 +19,13 @@ import org.gecko.model.Element;
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
 
+/**
+ * Represents the ViewModel component of a Gecko project, which connects the Model and View.
+ * Holds a {@link ViewModelFactory} and a reference to the {@link GeckoModel},
+ * as well as the current {@link EditorViewModel} and a list of all opened {@link EditorViewModel}s.
+ * Maps all {@link PositionableViewModelElement}s to their corresponding {@link Element}s from Model.
+ * Contains methods for managing the {@link EditorViewModel} and the retained {@link PositionableViewModelElement}s.
+ */
 @Data
 public class GeckoViewModel {
     @Getter(AccessLevel.NONE)

@@ -7,6 +7,11 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.model.SystemConnection;
 
+/**
+ * Represents an abstraction of a {@link SystemConnection} model element.
+ * A {@link SystemConnectionViewModel} is described by a source- and a destination-{@link PortViewModel}.
+ * Contains methods for managing the afferent data and updating the target-{@link SystemConnection}.
+ */
 @Getter
 @Setter
 public class SystemConnectionViewModel extends PositionableViewModelElement<SystemConnection> {

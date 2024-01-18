@@ -11,6 +11,9 @@ import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
 
+/**
+ * Represents a factory for the view model elements of a Gecko project. Provides a method for the creation of each element.
+ */
 public class ViewModelFactory {
     private static int viewModelElementId = 0;
     private final ActionManager actionManager;
@@ -51,10 +54,14 @@ public class ViewModelFactory {
         return result;
     }
 
-    public EdgeViewModel createEdgeViewModelFrom(Edge edge) {
-        EdgeViewModel result =
-            new EdgeViewModel(getNewViewModelElementId(), edge, (StateViewModel) geckoViewModel.getViewModelElement(edge.getSource()),
-                (StateViewModel) geckoViewModel.getViewModelElement(edge.getDestination()));
+    public EdgeViewModel createEdgeViewModelFrom(Edge edge) throws MissingViewModelElement {
+        StateViewModel source = (StateViewModel) geckoViewModel.getViewModelElement(edge.getSource());
+        StateViewModel destination = (StateViewModel) geckoViewModel.getViewModelElement(edge.getDestination());
+        if (source == null || destination == null) {
+            throw new MissingViewModelElement(
+                "Tried to create an EdgeViewModel from an Edge that contains a State that does not have a StateViewModel");
+        }
+        EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
@@ -68,10 +75,14 @@ public class ViewModelFactory {
         return result;
     }
 
-    public SystemConnectionViewModel createSystemConnectionViewModelFrom(SystemConnection systemConnection) {
-        SystemConnectionViewModel result = new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection,
-            (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getSource()),
-            (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getDestination()));
+    public SystemConnectionViewModel createSystemConnectionViewModelFrom(SystemConnection systemConnection) throws MissingViewModelElement {
+        PortViewModel source = (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getSource());
+        PortViewModel destination = (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getDestination());
+        if (source == null || destination == null) {
+            throw new MissingViewModelElement(
+                "Tried to create a SystemConnectionViewModel from a SystemConnection that contains a Variable that does not have a PortViewModel");
+        }
+        SystemConnectionViewModel result = new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
@@ -122,10 +133,14 @@ public class ViewModelFactory {
     public PortViewModel createPortViewModelIn(SystemViewModel systemViewModel) {
         Variable variable = modelFactory.createVariable(systemViewModel.getTarget());
         PortViewModel result = new PortViewModel(getNewViewModelElementId(), variable);
+        systemViewModel.addPort(result);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
+    /**
+     * New PortViewModel is not added to the SystemViewModel.
+     **/
     public PortViewModel createPortViewModelFrom(Variable variable) {
         PortViewModel result = new PortViewModel(getNewViewModelElementId(), variable);
         geckoViewModel.addViewModelElement(result);
@@ -139,6 +154,9 @@ public class ViewModelFactory {
         return result;
     }
 
+    /**
+     * New ContractViewModel is not added to the StateViewModel.
+     **/
     public ContractViewModel createContractViewModelFrom(Contract contract) {
         return new ContractViewModel(getNewViewModelElementId(), contract);
     }

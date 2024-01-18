@@ -1,5 +1,9 @@
 package org.gecko.model;
 
+/**
+ * Represents a visitor pattern for performing operations on {@link Element}s.
+ * Concrete visitors must implement this interface to define specific behavior for each {@link Element}.
+ */
 public interface ElementVisitor {
     void visit(State state);
 

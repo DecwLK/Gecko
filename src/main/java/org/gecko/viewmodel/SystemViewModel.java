@@ -10,6 +10,11 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.model.System;
 
+/**
+ * Represents an abstraction of a {@link System} model element.
+ * A {@link SystemViewModel} is described by a code snippet (?) and a set of {@link PortViewModel}s.
+ * Contains methods for managing the afferent data and updating the target-{@link System}.
+ */
 @Getter
 @Setter
 public class SystemViewModel extends BlockViewModelElement<System> {
@@ -41,7 +46,6 @@ public class SystemViewModel extends BlockViewModelElement<System> {
     public void addPort(@NonNull PortViewModel port) {
         // TODO: prior checks
         portsProperty.add(port);
-        target.addVariable(port.getTarget());
     }
 
     @Override

@@ -77,6 +77,9 @@ public class GeckoViewModel {
         List<PositionableViewModelElement<?>> positionableViewModelElements = new ArrayList<>();
         elements.forEach(element -> positionableViewModelElements.add(getViewModelElement(element)));
 
+        // Remove null elements TODO: THIS SHOULDN'T BE NECESSARY
+        positionableViewModelElements.removeIf(element -> element == null);
+
         return positionableViewModelElements;
     }
 

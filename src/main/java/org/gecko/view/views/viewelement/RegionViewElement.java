@@ -87,9 +87,11 @@ public class RegionViewElement extends Pane implements ViewElement<RegionViewMod
         Label name = new Label("Region: " + regionViewModel.getName());
         Bindings.createStringBinding(() -> "Region: " + regionViewModel.getName(), regionViewModel.getNameProperty());
         Label preCondition = new Label("PreCondition: " + regionViewModel.getContract().getPrecondition());
-        Bindings.createStringBinding(() -> "PreCondition: " + regionViewModel.getContract().getPrecondition(), regionViewModel.getContract().getPreConditionProperty());
+        Bindings.createStringBinding(() -> "PreCondition: " + regionViewModel.getContract().getPrecondition(),
+            regionViewModel.getContract().getPreConditionProperty());
         Label postCondition = new Label("PostCondition: " + regionViewModel.getContract().getPostcondition());
-        Bindings.createStringBinding(() -> "PostCondition: " + regionViewModel.getContract().getPostcondition(), regionViewModel.getContract().getPostConditionProperty());
+        Bindings.createStringBinding(() -> "PostCondition: " + regionViewModel.getContract().getPostcondition(),
+            regionViewModel.getContract().getPostConditionProperty());
         Label invariant = new Label("Invariant: " + regionViewModel.getInvariant());
         Bindings.createStringBinding(() -> "Invariant: " + regionViewModel.getInvariant(), regionViewModel.getInvariantProperty());
         gridPane.add(name, 0, 0);

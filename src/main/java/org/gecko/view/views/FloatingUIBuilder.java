@@ -1,6 +1,7 @@
 package org.gecko.view.views;
 
 import javafx.beans.binding.Bindings;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -27,7 +28,7 @@ public class FloatingUIBuilder {
 
         Button zoomInButton = new Button();
         zoomInButton.setOnAction(event -> {
-            editorViewModel.setZoomScale(editorViewModel.getZoomScale() + ZOOM_SCALE_STEP);
+            actionManager.run(actionManager.getActionFactory().createZoomAction(new Point2D(0, 0), ZOOM_SCALE_STEP));
         });
 
         Label zoomLabel = new Label();
@@ -35,7 +36,7 @@ public class FloatingUIBuilder {
 
         Button zoomOutButton = new Button();
         zoomOutButton.setOnAction(event -> {
-            editorViewModel.setZoomScale(editorViewModel.getZoomScale() - ZOOM_SCALE_STEP);
+            actionManager.run(actionManager.getActionFactory().createZoomAction(new Point2D(0, 0), -ZOOM_SCALE_STEP));
         });
 
         zoomButtons.getChildren().addAll(zoomInButton, zoomLabel, zoomOutButton);

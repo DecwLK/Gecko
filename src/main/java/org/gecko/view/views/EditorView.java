@@ -3,13 +3,19 @@ package org.gecko.view.views;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.SetChangeListener;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
@@ -23,17 +29,19 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 
 public class EditorView {
-    @Getter
-    private final Tab currentView;
-    private final StackPane currentViewPane;
+
     @Getter
     private final Collection<ViewElement<?>> currentViewElements;
     @Getter
     private final EditorViewModel viewModel;
+    @Getter
+    private final Tab currentView;
+    private final StackPane currentViewPane;
     private final ToolBar toolBar;
     private final ShortcutHandler shortcutHandler;
     private final InspectorFactory inspectorFactory;
-    private final Pane viewElementsPane;
+    private final ScrollPane viewElementsPaneContainer;
+    private final Group viewElementsGroup;
 
     private Inspector currentInspector;
 
@@ -43,9 +51,14 @@ public class EditorView {
         this.shortcutHandler = shortcutHandler;
         this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
         this.currentViewPane = new StackPane();
-        this.viewElementsPane = new Pane();
+        this.viewElementsGroup = new Group();
         currentViewElements = new HashSet<>();
         currentView = new Tab(viewModel.getCurrentSystem().getName(), currentViewPane);
+
+        // Construct view elements pane container
+        VBox viewElementsGroupContainer = new VBox(new Group(viewElementsGroup));
+        viewElementsGroupContainer.setAlignment(Pos.CENTER);
+        this.viewElementsPaneContainer = new ScrollPane(viewElementsGroupContainer);
 
         // Floating UI
         FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
@@ -63,14 +76,46 @@ public class EditorView {
 
         AnchorPane floatingUI = new AnchorPane();
         floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton);
+        floatingUI.setPickOnBounds(false);
 
         // Build stack pane
-        currentViewPane.getChildren().addAll(viewElementsPane, floatingUI);
+        currentViewPane.getChildren().addAll(viewElementsPaneContainer, floatingUI);
 
         // View element creator listener
         viewModel.getContainedPositionableViewModelElementsProperty().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
             onUpdateViewElements(viewFactory, change);
         });
+
+        // Bind view elements pane with zoom scale property
+        viewElementsGroup.scaleXProperty().bind(viewModel.getZoomScaleProperty());
+        viewElementsGroup.scaleYProperty().bind(viewModel.getZoomScaleProperty());
+
+
+        viewElementsPaneContainer.hvalueProperty().addListener((observable, oldValue, newValue) -> {
+            viewModel.getPivotXProperty().setValue(newValue.doubleValue() * viewElementsPaneContainer.getContent().getBoundsInLocal().getWidth());
+        });
+
+        viewElementsPaneContainer.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            viewModel.getPivotYProperty().setValue(newValue.doubleValue() * viewElementsPaneContainer.getContent().getLayoutBounds().getHeight());
+        });
+
+
+        viewElementsPaneContainer.setPannable(true);
+        viewElementsPaneContainer.setFitToWidth(true);
+        viewElementsPaneContainer.setFitToHeight(true);
+
+        // Debug label for pivot //////////////////
+        Label pivotLabel = new Label();
+        pivotLabel.textProperty()
+                  .bind(Bindings.createStringBinding(
+                      () -> "Pivot: " + viewModel.getPivotXProperty().getValue() + " : " + viewModel.getPivotYProperty().getValue(),
+                      viewModel.getPivotXProperty(), viewModel.getPivotYProperty()));
+
+
+        AnchorPane.setTopAnchor(pivotLabel, 30.0);
+        AnchorPane.setLeftAnchor(pivotLabel, 10.0);
+        floatingUI.getChildren().add(pivotLabel);
+        ///////////////////////////////////////////
 
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener((observable, oldValue, newValue) -> {
@@ -112,19 +157,16 @@ public class EditorView {
             }
         }
         // Refresh view elements
-        viewElementsPane.getChildren().removeAll();
-        viewElementsPane.getChildren().setAll(currentViewElements.stream().map(ViewElement::drawElement).collect(Collectors.toList()));
+        viewElementsGroup.getChildren().removeAll();
+        viewElementsGroup.getChildren().setAll(currentViewElements.stream().map(ViewElement::drawElement).collect(Collectors.toList()));
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
-        return currentViewElements.stream()
-                                  .filter(viewElement -> viewElement.getTarget().equals(element))
-                                  .findFirst()
-                                  .orElse(null);
+        return currentViewElements.stream().filter(viewElement -> viewElement.getTarget().equals(element)).findFirst().orElse(null);
     }
 
     public void acceptTool(Tool tool) {
-        tool.visitView(currentViewPane);
+        tool.visitView(viewElementsPaneContainer);
         currentViewElements.forEach(viewElement -> viewElement.accept(tool));
     }
 }

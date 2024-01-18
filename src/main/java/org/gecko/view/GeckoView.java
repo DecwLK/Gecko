@@ -43,15 +43,16 @@ public class GeckoView {
         viewModel.getCurrentEditorProperty().addListener(this::onUpdateCurrentEditorFromViewModel);
         viewModel.getOpenedEditorsProperty().addListener(this::onOpenedEditorChanged);
 
+        centerPane.setPickOnBounds(false);
+        centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
+
         // Menubar
         mainPane.setTop(new MenuBarBuilder(this, actionManager).build());
 
         // Initial view
         currentView = viewFactory.createEditorView(viewModel.getCurrentEditor(), viewModel.getCurrentEditor().isAutomatonEditor());
-        centerPane.getTabs().add(currentView.getCurrentView());
-        openedViews.add(currentView);
-
-        centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
+        constructTab(currentView, viewModel.getCurrentEditor());
+        centerPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         refreshView();
     }
@@ -79,11 +80,28 @@ public class GeckoView {
                 EditorView newEditorView = viewFactory.createEditorView(editorViewModel, editorViewModel.isAutomatonEditor());
 
                 if (!openedViews.contains(newEditorView)) {
-                    openedViews.add(newEditorView);
-                    centerPane.getTabs().add(newEditorView.getCurrentView());
+                    constructTab(newEditorView, editorViewModel);
                 }
             }
         }
+
+        System.out.println("Opened editors: " + openedViews.size());
+
+        if (openedViews.size() == 1) {
+            centerPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        } else {
+            centerPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+        }
+    }
+
+    private void constructTab(EditorView editorView, EditorViewModel editorViewModel) {
+        openedViews.add(editorView);
+        centerPane.getTabs().add(editorView.getCurrentView());
+
+        editorView.getCurrentView().setOnClosed(event -> {
+            openedViews.remove(editorView);
+            viewModel.getOpenedEditorsProperty().remove(editorViewModel);
+        });
     }
 
     private void refreshView() {

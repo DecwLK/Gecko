@@ -1,7 +1,8 @@
 package org.gecko.tools;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
+import javafx.scene.Cursor;
+import javafx.scene.control.ScrollPane;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 
@@ -25,8 +26,9 @@ public class RegionCreatorTool extends Tool {
     }
 
     @Override
-    public void visitView(Node view) {
+    public void visitView(ScrollPane view) {
         super.visitView(view);
+        view.setCursor(Cursor.CROSSHAIR);
         view.setOnMouseClicked(event -> {
             Point2D position = new Point2D(event.getX(), event.getY());
             Action createRegionAction = actionManager.getActionFactory().createCreateRegionViewModelElementAction(position);

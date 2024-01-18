@@ -1,5 +1,7 @@
 package org.gecko.tools;
 
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import org.gecko.actions.ActionManager;
 
 public class CursorTool extends Tool {
@@ -19,5 +21,12 @@ public class CursorTool extends Tool {
     public String getIconPath() {
         //TODO stub
         return null;
+    }
+
+    @Override
+    public void visitView(ScrollPane view) {
+        super.visitView(view);
+        view.setCursor(javafx.scene.Cursor.DEFAULT);
+        view.setPannable(false);
     }
 }

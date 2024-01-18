@@ -33,7 +33,8 @@ public class EditorViewModel {
     private final List<List<Tool>> tools;
     private final SelectionManager selectionManager;
 
-    private final Property<Point2D> pivotProperty;
+    private final Property<Number> pivotXProperty;
+    private final Property<Number> pivotYProperty;
     private final Property<Double> zoomScaleProperty;
     private final Property<Tool> currentToolProperty;
     private final Property<PositionableViewModelElement<?>> focusedElementProperty;
@@ -47,7 +48,8 @@ public class EditorViewModel {
         this.isAutomatonEditor = isAutomatonEditor;
         this.tools = FXCollections.observableArrayList();
         this.selectionManager = new SelectionManager();
-        this.pivotProperty = new SimpleObjectProperty<>();
+        this.pivotXProperty = new SimpleObjectProperty<>(0.0);
+        this.pivotYProperty = new SimpleObjectProperty<>(0.0);
         this.zoomScaleProperty = new SimpleObjectProperty<>(1.0);
         this.currentToolProperty = new SimpleObjectProperty<>();
         this.focusedElementProperty = new SimpleObjectProperty<>();
@@ -75,24 +77,31 @@ public class EditorViewModel {
                                                              .toList();
     }
 
+    public Point2D transformToViewCoordinates(Point2D point) {
+        return new Point2D(point.getX() + pivotXProperty.getValue().doubleValue() / 2, point.getY() + pivotYProperty.getValue().doubleValue() / 2);
+    }
+
     public void moveToFocusedElement() {
         //TODO stub
     }
 
     public Point2D getPivot() {
-        return pivotProperty.getValue();
+        return new Point2D(pivotXProperty.getValue().doubleValue(), pivotYProperty.getValue().doubleValue());
     }
 
     public void setPivot(Point2D pivot) {
-        pivotProperty.setValue(pivot);
+        pivotXProperty.setValue(pivot.getX());
+        pivotYProperty.setValue(pivot.getY());
     }
 
     public double getZoomScale() {
         return zoomScaleProperty.getValue();
     }
 
-    public void setZoomScale(double zoomScale) {
-        zoomScaleProperty.setValue(Math.round(zoomScale * ROUND_SCALE) / (double) ROUND_SCALE);
+    public void zoomIn(Point2D pivot, double zoomScaleAdditive) {
+        setPivot(pivot);
+        double newZoomScale = getZoomScale() + zoomScaleAdditive;
+        zoomScaleProperty.setValue(Math.round(newZoomScale * ROUND_SCALE) / (double) ROUND_SCALE);
     }
 
     public Tool getCurrentTool() {

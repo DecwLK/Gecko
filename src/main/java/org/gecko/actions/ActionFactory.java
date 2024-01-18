@@ -67,7 +67,7 @@ public class ActionFactory {
     }
 
     public CreateStateViewModelElementAction createCreateStateViewModelElementAction(Point2D position) {
-        return new CreateStateViewModelElementAction(geckoViewModel, position);
+        return new CreateStateViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
     }
 
     public CreateSystemConnectionViewModelElementAction createCreateSystemConnectionViewModelElementAction(PortViewModel source,
@@ -76,7 +76,7 @@ public class ActionFactory {
     }
 
     public CreateSystemViewModelElementAction createCreateSystemViewModelElementAction(Point2D position) {
-        return new CreateSystemViewModelElementAction(geckoViewModel, position);
+        return new CreateSystemViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
     }
 
     public CreateVariableAction createCreateVariableAction(Point2D position) {
@@ -111,10 +111,6 @@ public class ActionFactory {
     public MoveSystemConnectionViewModelElementAction createMoveSystemConnectionViewModelElementAction(
         SystemConnectionViewModel systemConnectionViewModel, PortViewModel systemViewModel, boolean isSource) {
         return new MoveSystemConnectionViewModelElementAction(systemConnectionViewModel, systemViewModel, isSource);
-    }
-
-    public PanAction createPanAction(Point2D pivot) {
-        return new PanAction(geckoViewModel.getCurrentEditor(), pivot);
     }
 
     public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction() {

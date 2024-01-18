@@ -1,5 +1,7 @@
 package org.gecko.tools;
 
+import javafx.scene.Cursor;
+import javafx.scene.control.ScrollPane;
 import org.gecko.actions.ActionManager;
 
 public class SystemConnectionCreatorTool extends Tool {
@@ -21,5 +23,9 @@ public class SystemConnectionCreatorTool extends Tool {
         return null;
     }
 
-
+    @Override
+    public void visitView(ScrollPane view) {
+        super.visitView(view);
+        view.setCursor(Cursor.CROSSHAIR);
+    }
 }

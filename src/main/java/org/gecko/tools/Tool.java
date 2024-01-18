@@ -1,6 +1,7 @@
 package org.gecko.tools;
 
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
 import org.gecko.view.views.viewelement.RegionViewElement;
@@ -22,7 +23,8 @@ public abstract class Tool implements ViewElementVisitor {
 
     public abstract String getIconPath();
 
-    public void visitView(Node view) {
+    public void visitView(ScrollPane view) {
+        view.setPannable(false);
         removeAllListeners(view);
     }
 

@@ -126,7 +126,7 @@ public class ActionFactory {
     }
 
     public RenameViewModelElementAction createRenameViewModelElementAction(Renamable renamable, String name) {
-        return new RenameViewModelElementAction(renamable, name);
+        return new RenameViewModelElementAction(geckoViewModel, renamable, name);
     }
 
     public RestorePositionableViewModelElementAction createRestorePositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {

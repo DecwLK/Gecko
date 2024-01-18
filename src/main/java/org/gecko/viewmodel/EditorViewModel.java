@@ -77,14 +77,21 @@ public class EditorViewModel {
                                                              .toList();
     }
 
-    public Point2D transformToViewCoordinates(Point2D point) {
-        return new Point2D(point.getX() + pivotXProperty.getValue().doubleValue() / 2, point.getY() + pivotYProperty.getValue().doubleValue() / 2);
+    public Point2D transformScreenToWorldCoordinates(Point2D screenCoordinates) {
+        System.out.println(screenCoordinates);
+        return new Point2D(screenCoordinates.getX() / getZoomScale() + getPivot().getX(),
+            screenCoordinates.getY() / getZoomScale() + getPivot().getY());
     }
 
     public void moveToFocusedElement() {
         //TODO stub
     }
 
+    /**
+     * Returns the pivot point of the editor view model. The pivot point is the point in world coorindates that the editor is centered on.
+     *
+     * @return the pivot point of the editor view model
+     */
     public Point2D getPivot() {
         return new Point2D(pivotXProperty.getValue().doubleValue(), pivotYProperty.getValue().doubleValue());
     }

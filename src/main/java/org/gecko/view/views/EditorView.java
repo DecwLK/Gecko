@@ -92,11 +92,15 @@ public class EditorView {
 
 
         viewElementsPaneContainer.hvalueProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.getPivotXProperty().setValue(newValue.doubleValue() * viewElementsPaneContainer.getContent().getBoundsInLocal().getWidth());
+            viewModel.getPivotXProperty()
+                     .setValue(newValue.doubleValue() * viewElementsPaneContainer.getContent().getBoundsInLocal().getWidth()
+                         - viewElementsPaneContainer.getContent().getBoundsInLocal().getWidth() / 2);
         });
 
         viewElementsPaneContainer.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.getPivotYProperty().setValue(newValue.doubleValue() * viewElementsPaneContainer.getContent().getLayoutBounds().getHeight());
+            viewModel.getPivotYProperty()
+                     .setValue(newValue.doubleValue() * viewElementsPaneContainer.getContent().getBoundsInLocal().getHeight()
+                         - viewElementsPaneContainer.getContent().getBoundsInLocal().getHeight() / 2);
         });
 
 

@@ -22,7 +22,7 @@ public class CreateSystemViewModelElementAction extends Action {
     void run() {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdSystemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelIn(currentParentSystem);
-        createdSystemViewModel.setPosition(editorViewModel.transformToViewCoordinates(position));
+        createdSystemViewModel.setPosition(editorViewModel.transformScreenToWorldCoordinates(position));
     }
 
     @Override

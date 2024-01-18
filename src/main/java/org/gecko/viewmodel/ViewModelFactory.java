@@ -11,6 +11,9 @@ import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
 
+/**
+ * Represents a factory for the view model elements of a Gecko project. Provides a method for the creation of each element.
+ */
 public class ViewModelFactory {
     private static int viewModelElementId = 0;
     private final ActionManager actionManager;

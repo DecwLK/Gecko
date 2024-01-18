@@ -13,8 +13,8 @@ import lombok.Setter;
 @Getter
 public class Region extends Element implements Renamable {
     private String name;
-    private Condition invariant;
-    private Contract preAndPostCondition;
+    private final Condition invariant;
+    private final Contract preAndPostCondition;
     private final Set<State> states;
 
     public Region(int id, String name, Condition invariant, Contract preAndPostCondition) {

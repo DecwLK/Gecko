@@ -9,6 +9,11 @@ import lombok.Setter;
 import org.gecko.model.Variable;
 import org.gecko.model.Visibility;
 
+/**
+ * Represents an abstraction of a {@link Variable} model element.
+ * A {@link PortViewModel} is described by a type and a {@link Visibility}.
+ * Contains methods for managing the afferent data and updating the target-{@link Variable}.
+ */
 @Setter
 @Getter
 public class PortViewModel extends BlockViewModelElement<Variable> {

@@ -1,5 +1,9 @@
 package org.gecko.model;
 
+/**
+ * Concrete implementation of an {@link ElementVisitor}.
+ * A {@link DeleteElementVisitor} focuses on removing {@link Element}s from a given parent-{@link System}.
+ */
 public class DeleteElementVisitor implements ElementVisitor {
 
     private final System parentSystem;

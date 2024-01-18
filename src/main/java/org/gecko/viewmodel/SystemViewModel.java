@@ -41,7 +41,6 @@ public class SystemViewModel extends BlockViewModelElement<System> {
     public void addPort(@NonNull PortViewModel port) {
         // TODO: prior checks
         portsProperty.add(port);
-        target.addVariable(port.getTarget());
     }
 
     @Override

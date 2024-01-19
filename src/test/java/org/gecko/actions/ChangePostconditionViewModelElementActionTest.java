@@ -2,7 +2,7 @@ package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.gecko.model.GeckoModel;
+import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -19,12 +19,11 @@ class ChangePostconditionViewModelElementActionTest {
 
     @BeforeEach
     void setUp() {
-        GeckoModel geckoModel = new GeckoModel();
-        GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
+        GeckoViewModel geckoViewModel = TestHelper.createGeckoViewModel();
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
+        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         viewModelFactory.createContractViewModelIn(stateViewModel);
@@ -40,6 +39,7 @@ class ChangePostconditionViewModelElementActionTest {
         Action changePostconditionAction = actionFactory.createChangePostconditionViewModelElementAction(region1.getContract(), "newPostcondition");
         actionManager.run(changePostconditionAction);
         assertEquals("newPostcondition", region1.getContract().getPostcondition());
+        assertEquals("newPostcondition", region1.getTarget().getPreAndPostCondition().getPostCondition().getCondition());
     }
 
     @Test
@@ -49,5 +49,6 @@ class ChangePostconditionViewModelElementActionTest {
         actionManager.run(changePostconditionAction);
         actionManager.undo();
         assertEquals(beforeChangePostcondition, region1.getContract().getPostcondition());
+        assertEquals(beforeChangePostcondition, region1.getTarget().getPreAndPostCondition().getPostCondition().getCondition());
     }
 }

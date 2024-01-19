@@ -129,6 +129,10 @@ public class ActionFactory {
         return new RestorePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
+    public RestoreContractViewModelElementAction createRestoreContractViewModelElementAction(StateViewModel parent, ContractViewModel contractViewModel) {
+        return new RestoreContractViewModelElementAction(parent, contractViewModel);
+    }
+
     public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(BlockViewModelElement<?> element, double scaleFactor) {
         return new ScaleBlockViewModelElementAction(element, scaleFactor);
     }

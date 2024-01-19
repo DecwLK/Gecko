@@ -17,6 +17,7 @@ public class ChangeTypePortViewModelElementAction extends Action {
     @Override
     void run() {
         portViewModel.setType(newType);
+        portViewModel.updateTarget();
     }
 
     @Override

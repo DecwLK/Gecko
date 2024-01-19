@@ -18,6 +18,7 @@ public class ChangeInvariantViewModelElementAction extends Action {
     @Override
     void run() {
         regionViewModel.setInvariant(newInvariant);
+        regionViewModel.updateTarget();
     }
 
     @Override

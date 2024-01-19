@@ -2,9 +2,7 @@ package org.gecko.view.views;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
 import javafx.collections.SetChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -153,16 +151,15 @@ public class EditorView {
 
             // Add view element to current view elements
             currentViewElements.add(viewElement);
+            viewElementsGroup.getChildren().add(viewElement.drawElement());
         } else if (change.wasRemoved()) {
             // Find corresponding view element and remove it
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
             if (viewElement != null) {
                 currentViewElements.remove(viewElement);
+                viewElementsGroup.getChildren().remove(viewElement.drawElement());
             }
         }
-        // Refresh view elements
-        viewElementsGroup.getChildren().removeAll();
-        viewElementsGroup.getChildren().setAll(currentViewElements.stream().map(ViewElement::drawElement).collect(Collectors.toList()));
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {

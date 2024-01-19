@@ -2,7 +2,7 @@ package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.gecko.model.GeckoModel;
+import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
@@ -18,12 +18,11 @@ class ChangeTypePortViewModelElementActionTest {
 
     @BeforeEach
     void setUp() {
-        GeckoModel geckoModel = new GeckoModel();
-        GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
+        GeckoViewModel geckoViewModel = TestHelper.createGeckoViewModel();
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
+        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         port = viewModelFactory.createPortViewModelIn(rootSystemViewModel);
     }
 
@@ -32,6 +31,7 @@ class ChangeTypePortViewModelElementActionTest {
         Action changeTypeAction = actionFactory.createChangeTypePortViewModelElementAction(port, "newType");
         actionManager.run(changeTypeAction);
         assertEquals("newType", port.getType());
+        assertEquals("newType", port.getTarget().getType());
     }
 
     @Test
@@ -41,5 +41,6 @@ class ChangeTypePortViewModelElementActionTest {
         actionManager.run(changeTypeAction);
         actionManager.undo();
         assertEquals(beforeChangeType, port.getType());
+        assertEquals(beforeChangeType, port.getTarget().getType());
     }
 }

@@ -68,5 +68,6 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
     private void constructVisualization() {
         setStroke(Color.BLACK);
+        toBack();
     }
 }

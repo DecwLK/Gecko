@@ -2,7 +2,7 @@ package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.gecko.model.GeckoModel;
+import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
@@ -18,12 +18,11 @@ class ChangeInvariantViewModelElementActionTest {
 
     @BeforeEach
     void setUp() {
-        GeckoModel geckoModel = new GeckoModel();
-        GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
+        GeckoViewModel geckoViewModel = TestHelper.createGeckoViewModel();
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
+        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         geckoViewModel.switchEditor(rootSystemViewModel, true);
     }
@@ -33,6 +32,7 @@ class ChangeInvariantViewModelElementActionTest {
         Action changeInvariantAction = actionFactory.createChangeInvariantViewModelElementAction(region1, "newInvariant");
         actionManager.run(changeInvariantAction);
         assertEquals("newInvariant", region1.getInvariant());
+        assertEquals("newInvariant", region1.getTarget().getInvariant().getCondition());
     }
 
     @Test
@@ -42,5 +42,6 @@ class ChangeInvariantViewModelElementActionTest {
         actionManager.run(changeInvariantAction);
         actionManager.undo();
         assertEquals(beforeChangeInvariant, region1.getInvariant());
+        assertEquals(beforeChangeInvariant, region1.getTarget().getInvariant().getCondition());
     }
 }

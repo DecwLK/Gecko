@@ -63,5 +63,6 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
 
     private void constructVisualization() {
         setStroke(Color.BLACK);
+        toBack();
     }
 }

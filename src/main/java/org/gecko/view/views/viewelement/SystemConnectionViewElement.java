@@ -1,5 +1,7 @@
 package org.gecko.view.views.viewelement;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -9,7 +11,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import lombok.Setter;
 import org.gecko.model.Visibility;
+import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
 @Getter
@@ -18,6 +22,10 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
     private final SystemConnectionViewModel systemConnectionViewModel;
     private final Property<Visibility> visibilityProperty;
     private final StringProperty typeProperty;
+
+    @Setter
+    private ViewElementDecorator decorator;
+
     //TODO source and destination properties
 
     public SystemConnectionViewElement(SystemConnectionViewModel systemConnectionViewModel) {

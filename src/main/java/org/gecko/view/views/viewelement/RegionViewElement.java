@@ -16,6 +16,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
+import lombok.Setter;
+import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
@@ -28,6 +30,9 @@ public class RegionViewElement extends Pane implements ViewElement<RegionViewMod
     private final StringProperty invariantProperty;
     private final List<StateViewModel> states;
     //TODO add more Properties once they get pushed
+
+    @Setter
+    private ViewElementDecorator decorator;
 
     public RegionViewElement(RegionViewModel regionViewModel) {
         this.colorProperty = new SimpleObjectProperty<>();

@@ -12,15 +12,23 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lombok.Getter;
+import lombok.Setter;
+import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
+import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+@Getter
 public class SystemViewElement extends Pane implements ViewElement<SystemViewModel> {
 
     private final SystemViewModel systemViewModel;
     private final StringProperty nameProperty;
     private final StringProperty codeProperty;
     private final List<PortViewModel> ports;
+
+    @Setter
+    private ViewElementDecorator decorator;
 
     public SystemViewElement(SystemViewModel systemViewModel) {
         this.nameProperty = new SimpleStringProperty();

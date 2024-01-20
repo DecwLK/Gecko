@@ -1,5 +1,7 @@
 package org.gecko.view.views.viewelement;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -11,15 +13,22 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lombok.Getter;
+import lombok.Setter;
 import org.gecko.model.Visibility;
+import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.PortViewModel;
 
+@Getter
 public class VariableBlockViewElement extends Pane implements ViewElement<PortViewModel> {
 
     private final PortViewModel portViewModel;
     private final StringProperty nameProperty;
     private final StringProperty typeProperty;
     private final Property<Visibility> visibilityProperty;
+
+    @Setter
+    private ViewElementDecorator decorator;
 
     public VariableBlockViewElement(PortViewModel portViewModel) {
         this.nameProperty = new SimpleStringProperty();

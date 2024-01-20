@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -24,6 +25,8 @@ import org.gecko.view.inspector.InspectorFactory;
 import org.gecko.view.toolbar.ToolBarBuilder;
 import org.gecko.view.views.shortcuts.ShortcutHandler;
 import org.gecko.view.views.viewelement.ViewElement;
+import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
+import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElementVisitor;
@@ -122,13 +125,10 @@ public class EditorView {
         ///////////////////////////////////////////
 
         // Inspector creator listener
-        viewModel.getFocusedElementProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                currentInspector = inspectorFactory.createInspector(newValue);
-            } else {
-                currentInspector = null;
-            }
-        });
+        viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
+
+        // Selection listener
+        viewModel.getSelectionManager().getCurrentSelection().addListener(this::onSelectionChanged);
     }
 
     public void toggleInspector() {
@@ -172,5 +172,39 @@ public class EditorView {
     public void acceptTool(Tool tool) {
         tool.visitView(viewElementsPaneContainer);
         currentViewElements.forEach(viewElement -> viewElement.accept(tool));
+    }
+
+    private void focusedElementChanged(ObservableValue<? extends PositionableViewModelElement<?>> observable,
+                                       PositionableViewModelElement<?> oldValue, PositionableViewModelElement<?> newValue) {
+        if (newValue != null) {
+            currentInspector = inspectorFactory.createInspector(newValue);
+        } else {
+            currentInspector = null;
+        }
+    }
+
+    private void onSelectionChanged(ListChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
+        for (PositionableViewModelElement<?> element : change.getAddedSubList()) {
+            ViewElement<?> viewElement = findViewElement(element);
+            ViewElementDecorator decoratedViewElement = new SelectableViewElementDecorator(viewElement);
+            viewElement.setDecorator(decoratedViewElement);
+
+            // replace view element with decorated view element
+            currentViewElements.remove(viewElement);
+            currentViewElements.add(decoratedViewElement);
+        }
+
+        for (PositionableViewModelElement<?> element : change.getRemoved()) {
+            ViewElement<?> viewElement = findViewElement(element);
+            ViewElement<?> baseViewElement = viewElement;
+
+            // find base view element
+            while (viewElement.getDecorator() != null) {
+                baseViewElement = viewElement.getDecorator().getDecoratorTarget();
+            }
+
+            currentViewElements.remove(viewElement);
+            currentViewElements.add(baseViewElement);
+        }
     }
 }

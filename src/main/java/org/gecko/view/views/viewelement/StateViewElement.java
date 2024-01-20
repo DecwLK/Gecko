@@ -15,6 +15,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
+import lombok.Setter;
+import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
@@ -25,6 +27,9 @@ public class StateViewElement extends Pane implements ViewElement<StateViewModel
     private final StringProperty nameProperty;
     private final BooleanProperty isStartStateProperty;
     private final ListProperty<ContractViewModel> contractsProperty;
+
+    @Setter
+    private ViewElementDecorator decorator;
 
     public StateViewElement(StateViewModel stateViewModel) {
         this.nameProperty = new SimpleStringProperty();

@@ -2,6 +2,7 @@ package org.gecko.view.views.viewelement;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
 public interface ViewElement<T extends PositionableViewModelElement<?>> {
@@ -11,6 +12,10 @@ public interface ViewElement<T extends PositionableViewModelElement<?>> {
     T getTarget();
 
     Point2D getPosition();
+
+    void setDecorator(ViewElementDecorator decorator);
+
+    ViewElementDecorator getDecorator();
 
     void accept(ViewElementVisitor visitor);
 }

@@ -9,7 +9,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import lombok.Setter;
 import org.gecko.model.Kind;
+import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -23,6 +25,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     private final Property<StateViewModel> destinationProperty;
     private final IntegerProperty priorityProperty;
     private final Property<Kind> kindProperty;
+
+    @Setter
+    private ViewElementDecorator decorator;
 
     public EdgeViewElement(EdgeViewModel edgeViewModel) {
         this.contractProperty = new SimpleObjectProperty<>();

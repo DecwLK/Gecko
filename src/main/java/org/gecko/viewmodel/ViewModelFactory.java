@@ -1,6 +1,8 @@
 package org.gecko.viewmodel;
 
+import javax.sound.sampled.Port;
 import org.gecko.actions.ActionManager;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.exceptions.InvalidConnectingPointType;
 import org.gecko.exceptions.MissingViewModelElement;
 import org.gecko.model.Contract;
@@ -56,8 +58,67 @@ public class ViewModelFactory {
         return result;
     }
 
-    public EdgeViewModel createEdgeViewModelFrom(Edge edge) throws MissingViewModelElement {
-        StateViewModel source = (StateViewModel) geckoViewModel.getViewModelElement(edge.getSource());
+    public EdgeViewModel createEdgeViewModelIn(SystemViewModel parentSystem, PortViewModel source, StateViewModel destination) throws InvalidConnectingPointType{
+        if (!source.getVisibility().equals(Visibility.INPUT)) {
+            throw new InvalidConnectingPointType("The EdgeViewModel's source must be a PortViewModel with INPUT Visibility.");
+        }
+        Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), source.getTarget(), destination.getTarget());
+        EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
+        geckoViewModel.addViewModelElement(result);
+        return result;
+    }
+
+    public EdgeViewModel createEdgeViewModelIn(SystemViewModel parentSystem, StateViewModel source, PortViewModel destination) throws InvalidConnectingPointType{
+        if (!destination.getVisibility().equals(Visibility.OUTPUT)) {
+            throw new InvalidConnectingPointType("The EdgeViewModel's destination must be a PortViewModel with OUTPUT Visibility.");
+        }
+        Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), source.getTarget(), destination.getTarget());
+        EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
+        geckoViewModel.addViewModelElement(result);
+        return result;
+    }
+
+    public EdgeViewModel createEdgeViewModelIn(SystemViewModel parentSystem, PortViewModel source, PortViewModel destination) throws InvalidConnectingPointType{
+        if (!source.getVisibility().equals(Visibility.INPUT) || !destination.getVisibility().equals(Visibility.OUTPUT)) {
+            throw new InvalidConnectingPointType("The EdgeViewModel's source and destination PortViewModels have incompatible Visibilities.");
+        }
+        Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), source.getTarget(), destination.getTarget());
+        EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
+        geckoViewModel.addViewModelElement(result);
+        return result;
+    }
+
+    public EdgeViewModel createEdgeViewModelFrom(Edge edge) throws GeckoException {
+        PositionableViewModelElement<?> source = geckoViewModel.getViewModelElement(edge.getSource());
+        PositionableViewModelElement<?> destination = geckoViewModel.getViewModelElement(edge.getDestination());
+        if (source == null || destination == null) {
+            throw new MissingViewModelElement(
+                "Tried to create an EdgeViewModel from an Edge that contains a State that does not have a StateViewModel");
+        }
+
+        // TODO: Suggested -> getEdgeViewModel() method containing the following lines.
+        EdgeViewModel result;
+        switch (source) {
+            case StateViewModel stateViewModel when destination instanceof StateViewModel ->
+                result = new EdgeViewModel(getNewViewModelElementId(), edge, stateViewModel, (StateViewModel) destination);
+            case StateViewModel stateViewModel when destination instanceof PortViewModel ->
+                result = new EdgeViewModel(getNewViewModelElementId(), edge, stateViewModel, (PortViewModel) destination);
+            case PortViewModel portViewModel when destination instanceof StateViewModel ->
+                result = new EdgeViewModel(getNewViewModelElementId(), edge, portViewModel, (StateViewModel) destination);
+            case PortViewModel portViewModel when destination instanceof PortViewModel ->
+                result = new EdgeViewModel(getNewViewModelElementId(), edge, portViewModel, (PortViewModel) destination);
+            default -> {
+                result = null;
+            }
+        }
+
+        if (result == null) {
+            throw new GeckoException("Tried to create EdgeViewModel from invalid Edge.");
+        }
+        geckoViewModel.addViewModelElement(result);
+        return result;
+
+        /*StateViewModel source = (StateViewModel) geckoViewModel.getViewModelElement(edge.getSource());
         StateViewModel destination = (StateViewModel) geckoViewModel.getViewModelElement(edge.getDestination());
         if (source == null || destination == null) {
             throw new MissingViewModelElement(
@@ -65,7 +126,7 @@ public class ViewModelFactory {
         }
         EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
         geckoViewModel.addViewModelElement(result);
-        return result;
+        return result;*/
     }
 
     public SystemConnectionViewModel createSystemConnectionViewModelIn(SystemViewModel parentSystem, PortViewModel source,

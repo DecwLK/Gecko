@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.InvalidConnectingPointType;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
@@ -21,8 +22,12 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
     @Override
     void run() {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
-        createdSystemConnectionViewModel =
-            geckoViewModel.getViewModelFactory().createSystemConnectionViewModelIn(currentParentSystem, source, destination);
+        try {
+            createdSystemConnectionViewModel =
+                geckoViewModel.getViewModelFactory().createSystemConnectionViewModelIn(currentParentSystem, source, destination);
+        } catch (InvalidConnectingPointType e) {
+            System.out.println(e.getMessage());
+        }
         createdSystemConnectionViewModel.setSource(source);
         createdSystemConnectionViewModel.setDestination(destination);
         createdSystemConnectionViewModel.updateTarget();

@@ -1,6 +1,7 @@
 package org.gecko.model;
 
 import lombok.NonNull;
+import org.gecko.exceptions.InvalidConnectingPointType;
 
 /**
  * Represents a factory for the model elements of a Gecko project. Provides a method for the creation of each element.
@@ -44,6 +45,36 @@ public class ModelFactory {
         return edge;
     }
 
+    public Edge createEdge(@NonNull Automaton automaton, @NonNull Variable source, @NonNull State destination) throws InvalidConnectingPointType {
+        int id = getNewElementId();
+        if (!source.getVisibility().equals(Visibility.INPUT)) {
+            throw new InvalidConnectingPointType("The edge's source must be a Variable with INPUT Visibility.");
+        }
+        Edge edge = new Edge(id, source, destination, DEFAULT_PRIORITY);
+        automaton.addEdge(edge);
+        return edge;
+    }
+
+    public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull Variable destination) throws InvalidConnectingPointType {
+        int id = getNewElementId();
+        if (!destination.getVisibility().equals(Visibility.OUTPUT)) {
+            throw new InvalidConnectingPointType("The edge's destination must be a Variable with OUTPUT Visibility.");
+        }
+        Edge edge = new Edge(id, source, destination, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
+        automaton.addEdge(edge);
+        return edge;
+    }
+
+    public Edge createEdge(@NonNull Automaton automaton, @NonNull Variable source, @NonNull Variable destination) throws InvalidConnectingPointType {
+        int id = getNewElementId();
+        if (!source.getVisibility().equals(Visibility.INPUT) || !destination.getVisibility().equals(Visibility.OUTPUT)) {
+            throw new InvalidConnectingPointType("Tried to connect incompatible Variables.");
+        }
+        Edge edge = new Edge(id, source, destination, DEFAULT_PRIORITY);
+        automaton.addEdge(edge);
+        return edge;
+    }
+
     public System createSystem(@NonNull System parentSystem) {
         int id = getNewElementId();
         System system = new System(id, getDefaultName(id), DEFAULT_CODE, new Automaton());
@@ -63,8 +94,12 @@ public class ModelFactory {
         return variable;
     }
 
-    public SystemConnection createSystemConnection(@NonNull System system, @NonNull Variable source, @NonNull Variable destination) {
+    public SystemConnection createSystemConnection(@NonNull System system, @NonNull Variable source,
+                                                   @NonNull Variable destination) throws InvalidConnectingPointType{
         int id = getNewElementId();
+        if (!source.getVisibility().equals(Visibility.OUTPUT) || !destination.getVisibility().equals(Visibility.INPUT)) {
+            throw new InvalidConnectingPointType("Tried to connect two incompatible Variables.");
+        }
         SystemConnection connection = new SystemConnection(id, source, destination);
         system.addConnection(connection);
         return connection;

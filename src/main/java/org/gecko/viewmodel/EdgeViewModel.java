@@ -26,6 +26,8 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     private final Property<ContractViewModel> contractProperty;
     private final Property<StateViewModel> sourceProperty;
     private final Property<StateViewModel> destinationProperty;
+    private final Property<PortViewModel> externalSourceProperty;
+    private final Property<PortViewModel> externalDestinationProperty;
 
     public EdgeViewModel(int id, @NonNull Edge target, @NonNull StateViewModel source, @NonNull StateViewModel destination) {
         super(id, target);
@@ -34,6 +36,41 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         this.contractProperty = new SimpleObjectProperty<>();
         this.sourceProperty = new SimpleObjectProperty<>(source);
         this.destinationProperty = new SimpleObjectProperty<>(destination);
+        this.externalSourceProperty = null;
+        this.externalDestinationProperty = null;
+    }
+
+    public EdgeViewModel(int id, @NonNull Edge target, @NonNull PortViewModel source, @NonNull StateViewModel destination) {
+        super(id, target);
+        this.kindProperty = new SimpleObjectProperty<>(target.getKind());
+        this.priorityProperty = new SimpleIntegerProperty(target.getPriority());
+        this.contractProperty = new SimpleObjectProperty<>();
+        this.sourceProperty = null;
+        this.destinationProperty = new SimpleObjectProperty<>(destination);
+        this.externalSourceProperty = new SimpleObjectProperty<>(source);
+        this.externalDestinationProperty = null;
+    }
+
+    public EdgeViewModel(int id, @NonNull Edge target, @NonNull StateViewModel source, @NonNull PortViewModel destination) {
+        super(id, target);
+        this.kindProperty = new SimpleObjectProperty<>(target.getKind());
+        this.priorityProperty = new SimpleIntegerProperty(target.getPriority());
+        this.contractProperty = new SimpleObjectProperty<>();
+        this.sourceProperty = new SimpleObjectProperty<>(source);
+        this.destinationProperty = null;
+        this.externalSourceProperty = null;
+        this.externalDestinationProperty = new SimpleObjectProperty<>(destination);
+    }
+
+    public EdgeViewModel(int id, @NonNull Edge target, @NonNull PortViewModel source, @NonNull PortViewModel destination) {
+        super(id, target);
+        this.kindProperty = new SimpleObjectProperty<>(target.getKind());
+        this.priorityProperty = new SimpleIntegerProperty(target.getPriority());
+        this.contractProperty = new SimpleObjectProperty<>();
+        this.sourceProperty = null;
+        this.destinationProperty = null;
+        this.externalSourceProperty = new SimpleObjectProperty<>(source);
+        this.externalDestinationProperty = new SimpleObjectProperty<>(destination);
     }
 
     public void setPriority(int priority) {

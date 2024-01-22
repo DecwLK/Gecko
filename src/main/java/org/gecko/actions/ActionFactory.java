@@ -129,7 +129,8 @@ public class ActionFactory {
         return new RestorePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
-    public RestoreContractViewModelElementAction createRestoreContractViewModelElementAction(StateViewModel parent, ContractViewModel contractViewModel) {
+    public RestoreContractViewModelElementAction createRestoreContractViewModelElementAction(StateViewModel parent,
+                                                                                             ContractViewModel contractViewModel) {
         return new RestoreContractViewModelElementAction(parent, contractViewModel);
     }
 

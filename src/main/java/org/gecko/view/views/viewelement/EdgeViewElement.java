@@ -36,10 +36,10 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     private void bindViewElement() {
-        startXProperty().bind(Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getX(),
-            edgeViewModel.getSource().getPositionProperty()));
-        startYProperty().bind(Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getY(),
-            edgeViewModel.getSource().getPositionProperty()));
+        startXProperty().bind(
+            Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getX(), edgeViewModel.getSource().getPositionProperty()));
+        startYProperty().bind(
+            Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getY(), edgeViewModel.getSource().getPositionProperty()));
         endXProperty().bind(Bindings.createDoubleBinding(() -> edgeViewModel.getDestination().getCenter().getX(),
             edgeViewModel.getDestination().getPositionProperty()));
         endYProperty().bind(Bindings.createDoubleBinding(() -> edgeViewModel.getDestination().getCenter().getY(),

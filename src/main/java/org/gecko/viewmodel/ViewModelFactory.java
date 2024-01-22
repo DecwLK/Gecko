@@ -1,7 +1,6 @@
 package org.gecko.viewmodel;
 
 import org.gecko.actions.ActionManager;
-import org.gecko.exceptions.InvalidConnectingPointType;
 import org.gecko.exceptions.MissingViewModelElement;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;

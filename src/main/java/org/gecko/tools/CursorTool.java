@@ -1,6 +1,5 @@
 package org.gecko.tools;
 
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import org.gecko.actions.ActionManager;
 

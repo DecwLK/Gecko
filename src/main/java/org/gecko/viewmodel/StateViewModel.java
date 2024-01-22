@@ -12,10 +12,8 @@ import lombok.Setter;
 import org.gecko.model.State;
 
 /**
- * Represents an abstraction of a {@link State} model element.
- * A {@link StateViewModel} is described by a set of {@link ContractViewModel}s
- * and can target either a regular or a start-{@link State}.
- * Contains methods for managing the afferent data and updating the target-{@link State}.
+ * Represents an abstraction of a {@link State} model element. A {@link StateViewModel} is described by a set of {@link ContractViewModel}s and can
+ * target either a regular or a start-{@link State}. Contains methods for managing the afferent data and updating the target-{@link State}.
  */
 @Setter
 @Getter

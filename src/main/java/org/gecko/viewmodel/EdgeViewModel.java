@@ -11,11 +11,10 @@ import org.gecko.model.Edge;
 import org.gecko.model.Kind;
 
 /**
- * Represents an abstraction of an {@link Edge} model element.
- * An {@link EdgeViewModel} is described by a source- and a destination-{@link StateViewModel}.
- * It is also associated with one of the start-{@link StateViewModel}'s {@link ContractViewModel}s,
- * has a priority and a {@link Kind}, which informs about how the associated {@link ContractViewModel} is handled.
- * Contains methods for managing the afferent data and updating the target-{@link Edge}.
+ * Represents an abstraction of an {@link Edge} model element. An {@link EdgeViewModel} is described by a source- and a
+ * destination-{@link StateViewModel}. It is also associated with one of the start-{@link StateViewModel}'s {@link ContractViewModel}s, has a priority
+ * and a {@link Kind}, which informs about how the associated {@link ContractViewModel} is handled. Contains methods for managing the afferent data
+ * and updating the target-{@link Edge}.
  */
 @Getter
 @Setter

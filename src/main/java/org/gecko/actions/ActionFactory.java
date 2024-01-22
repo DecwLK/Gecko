@@ -62,8 +62,8 @@ public class ActionFactory {
         return new CreatePortViewModelElementAction(geckoViewModel, parentSystem);
     }
 
-    public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(Point2D position) {
-        return new CreateRegionViewModelElementAction(geckoViewModel, position);
+    public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(Point2D position, Point2D size) {
+        return new CreateRegionViewModelElementAction(geckoViewModel, position, size);
     }
 
     public CreateStateViewModelElementAction createCreateStateViewModelElementAction(Point2D position) {

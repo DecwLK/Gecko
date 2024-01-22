@@ -38,7 +38,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         int red = random.nextInt(255);
         int green = random.nextInt(255);
         int blue = random.nextInt(255);
-        this.colorProperty = new SimpleObjectProperty<>(Color.rgb(red, green, blue));
+        this.colorProperty = new SimpleObjectProperty<>(Color.rgb(red, green, blue, 0.5));
     }
 
     @Override

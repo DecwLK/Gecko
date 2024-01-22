@@ -82,7 +82,7 @@ public class RegionViewElement extends Pane implements ViewElement<RegionViewMod
         Rectangle background = new Rectangle();
         background.widthProperty().bind(widthProperty());
         background.heightProperty().bind(heightProperty());
-        background.setFill(new Color(0, 0, 1, 0.5));
+        background.setFill(colorProperty.getValue());
         GridPane gridPane = new GridPane();
         Label name = new Label("Region: " + regionViewModel.getName());
         Bindings.createStringBinding(() -> "Region: " + regionViewModel.getName(), regionViewModel.getNameProperty());

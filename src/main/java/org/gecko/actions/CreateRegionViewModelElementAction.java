@@ -9,11 +9,13 @@ public class CreateRegionViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;
     private final Point2D position;
+    private final Point2D size;
     private RegionViewModel createdRegionViewModel;
 
-    CreateRegionViewModelElementAction(GeckoViewModel geckoViewModel, Point2D position) {
+    CreateRegionViewModelElementAction(GeckoViewModel geckoViewModel, Point2D position, Point2D size) {
         this.geckoViewModel = geckoViewModel;
         this.position = position;
+        this.size = size;
     }
 
     @Override
@@ -21,6 +23,7 @@ public class CreateRegionViewModelElementAction extends Action {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdRegionViewModel = geckoViewModel.getViewModelFactory().createRegionViewModelIn(currentParentSystem);
         createdRegionViewModel.setPosition(position);
+        createdRegionViewModel.setSize(size);
     }
 
     @Override

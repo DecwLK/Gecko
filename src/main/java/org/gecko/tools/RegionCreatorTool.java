@@ -1,14 +1,13 @@
 package org.gecko.tools;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
-import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 
 public class RegionCreatorTool extends Tool {
 
     private static final String NAME = "Region Creator Tool";
+    private Point2D startPosition;
 
     public RegionCreatorTool(ActionManager actionManager) {
         super(actionManager);
@@ -28,11 +27,23 @@ public class RegionCreatorTool extends Tool {
     @Override
     public void visitView(ScrollPane view) {
         super.visitView(view);
-        view.setCursor(Cursor.CROSSHAIR);
-        view.setOnMouseClicked(event -> {
-            Point2D position = new Point2D(event.getX(), event.getY());
-            Action createRegionAction = actionManager.getActionFactory().createCreateRegionViewModelElementAction(position);
-            actionManager.run(createRegionAction);
+        startPosition = null;
+        view.setOnMousePressed(event -> {
+            startPosition = new Point2D(event.getX(), event.getY());
+        });
+        view.setOnMouseReleased(event -> {
+            if (startPosition == null)
+                return;
+            Point2D topLeft = new Point2D(Math.min(startPosition.getX(), event.getX()), Math.min(startPosition.getY(), event.getY()));
+            Point2D bottomRight = new Point2D(Math.max(startPosition.getX(), event.getX()), Math.max(startPosition.getY(), event.getY()));
+            Point2D size = bottomRight.subtract(topLeft);
+            //prevent negative size and too small regions TODO properly
+            if (size.getX() < 0 || size.getY() < 0 || size.getX() * size.getY() < 100) {
+                startPosition = null;
+                return;
+            }
+            actionManager.run(actionManager.getActionFactory().createCreateRegionViewModelElementAction(topLeft, size));
+            startPosition = null;
         });
     }
 }

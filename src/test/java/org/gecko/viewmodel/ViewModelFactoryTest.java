@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Set;
-import org.gecko.exceptions.GeckoException;
 import org.gecko.exceptions.InvalidConnectingPointType;
 import org.gecko.exceptions.MissingViewModelElement;
 import org.gecko.model.Contract;
@@ -150,8 +149,6 @@ class ViewModelFactoryTest {
             assertEquals(stateViewModel2, edgeViewModel.getDestination());
         } catch (MissingViewModelElement e) {
             fail();
-        } catch (GeckoException e) {
-            java.lang.System.err.println(e.getMessage());
         }
     }
 

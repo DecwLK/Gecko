@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.gecko.exceptions.InvalidConnectingPointType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +21,7 @@ class DeleteElementVisitorTest {
         factory.createSystem(parentSystem);
         Variable var1 = factory.createVariable(parentSystem);
         Variable var2 = factory.createVariable(parentSystem);
-        try {
-            factory.createSystemConnection(parentSystem, var1, var2);
-        } catch (InvalidConnectingPointType e) {
-            java.lang.System.err.println(e.getMessage());
-        }
+        factory.createSystemConnection(parentSystem, var1, var2);
         Automaton automaton = factory.createAutomaton(parentSystem);
         factory.createRegion(automaton);
         State state1 = factory.createState(automaton);

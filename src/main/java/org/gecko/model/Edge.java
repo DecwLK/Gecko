@@ -16,8 +16,6 @@ public class Edge extends Element {
     private int priority;
     private State source;
     private State destination;
-    private Variable externalSource;
-    private Variable externalDestination;
 
     public Edge(int id, State source, State destination, Contract contract, Kind kind, int priority) {
         super(id);
@@ -26,41 +24,6 @@ public class Edge extends Element {
         this.contract = contract;
         this.kind = kind;
         this.priority = priority;
-        this.externalSource = null;
-        this.externalDestination = null;
-    }
-
-    public Edge(int id, Variable source, State destination, int priority) {
-        super(id);
-        this.source = null;
-        this.destination = destination;
-        this.contract = null;
-        this.kind = null;
-        this.priority = priority;
-        this.externalSource = source;
-        this.externalDestination = null;
-    }
-
-    public Edge(int id, State source, Variable destination, Contract contract, Kind kind, int priority) {
-        super(id);
-        this.source = source;
-        this.destination = null;
-        this.contract = contract;
-        this.kind = kind;
-        this.priority = priority;
-        this.externalSource = null;
-        this.externalDestination = destination;
-    }
-
-    public Edge(int id, Variable source, Variable destination, int priority) {
-        super(id);
-        this.source = null;
-        this.destination = null;
-        this.contract = null;
-        this.kind = null;
-        this.priority = priority;
-        this.externalSource = source;
-        this.externalDestination = destination;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.gecko.viewmodel;
 
 import org.gecko.actions.ActionManager;
-import org.gecko.exceptions.InvalidConnectingPointType;
 import org.gecko.exceptions.MissingViewModelElement;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
@@ -11,7 +10,6 @@ import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
-import org.gecko.model.Visibility;
 
 /**
  * Represents a factory for the view model elements of a Gecko project. Provides a method for the creation of each element.
@@ -69,11 +67,7 @@ public class ViewModelFactory {
     }
 
     public SystemConnectionViewModel createSystemConnectionViewModelIn(SystemViewModel parentSystem, PortViewModel source,
-                                                                       PortViewModel destination) throws InvalidConnectingPointType {
-        if (!source.getVisibility().equals(Visibility.OUTPUT) || !destination.getVisibility().equals(Visibility.INPUT)) {
-            throw new InvalidConnectingPointType("Tried to connect two incompatible PortViewModels.");
-        }
-
+                                                                       PortViewModel destination) {
         SystemConnection systemConnection =
             modelFactory.createSystemConnection(parentSystem.getTarget(), source.getTarget(), destination.getTarget());
         SystemConnectionViewModel result = new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);

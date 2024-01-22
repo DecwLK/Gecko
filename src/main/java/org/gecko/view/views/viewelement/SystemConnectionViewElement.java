@@ -23,9 +23,6 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
     private final Property<Visibility> visibilityProperty;
     private final StringProperty typeProperty;
 
-    @Setter
-    private ViewElementDecorator decorator;
-
     //TODO source and destination properties
 
     public SystemConnectionViewElement(SystemConnectionViewModel systemConnectionViewModel) {
@@ -43,6 +40,16 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
     }
 
     @Override
+    public List<Point2D> getEdgePoints() {
+        return getPathPoints().stream().map(Property::getValue).toList();
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+        setPathPoint(index, point);
+    }
+
+    @Override
     public SystemConnectionViewModel getTarget() {
         return systemConnectionViewModel;
     }
@@ -53,14 +60,18 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
     }
 
     private void bindViewModel() {
-        startXProperty().bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getX(),
-            systemConnectionViewModel.getSource().getPositionProperty()));
-        startYProperty().bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getY(),
-            systemConnectionViewModel.getSource().getPositionProperty()));
-        endXProperty().bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getX(),
-            systemConnectionViewModel.getDestination().getSizeProperty()));
-        endYProperty().bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getY(),
-            systemConnectionViewModel.getDestination().getSizeProperty()));
+        getStartElement().xProperty()
+                         .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getX(),
+                             systemConnectionViewModel.getSource().getPositionProperty()));
+        getStartElement().yProperty()
+                         .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getY(),
+                             systemConnectionViewModel.getSource().getPositionProperty()));
+        getEndElement().xProperty()
+                       .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getX(),
+                           systemConnectionViewModel.getDestination().getSizeProperty()));
+        getEndElement().yProperty()
+                       .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getY(),
+                           systemConnectionViewModel.getDestination().getSizeProperty()));
         //TODO source + destination properties
     }
 

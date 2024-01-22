@@ -9,6 +9,7 @@ import org.gecko.actions.ActionManager;
 public class RegionCreatorTool extends Tool {
 
     private static final String NAME = "Region Creator Tool";
+    private static final String ICON_STYLE_NAME = "region-creator-icon";
 
     public RegionCreatorTool(ActionManager actionManager) {
         super(actionManager);
@@ -20,9 +21,8 @@ public class RegionCreatorTool extends Tool {
     }
 
     @Override
-    public String getIconPath() {
-        //TODO stub
-        return null;
+    public String getIconStyleName() {
+        return ICON_STYLE_NAME;
     }
 
     @Override

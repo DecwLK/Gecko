@@ -9,6 +9,7 @@ import org.gecko.actions.ActionManager;
 public class StateCreatorTool extends Tool {
 
     private static final String NAME = "State Creator Tool";
+    private static final String ICON_STYLE_NAME = "state-creator-icon";
 
     public StateCreatorTool(ActionManager actionManager) {
         super(actionManager);
@@ -20,9 +21,8 @@ public class StateCreatorTool extends Tool {
     }
 
     @Override
-    public String getIconPath() {
-        //TODO stub
-        return null;
+    public String getIconStyleName() {
+        return ICON_STYLE_NAME;
     }
 
     @Override

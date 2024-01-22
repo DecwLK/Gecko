@@ -1,10 +1,11 @@
 package org.gecko.view.toolbar;
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Separator;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
@@ -21,23 +22,33 @@ public class ToolBarBuilder {
         this.editorView = editorView;
         toolBar.setOrientation(Orientation.VERTICAL);
 
-        for (List<Tool> toolList : editorViewModel.getTools()) {
-            addTools(actionManager, toolList);
+        ToggleGroup toggleGroup = new ToggleGroup();
+
+        for (int i = 0; i < editorViewModel.getTools().size(); i++) {
+            addTools(actionManager, toggleGroup, editorViewModel.getTools().get(i));
 
             // add separator
-            toolBar.getItems().add(new Separator());
+            if (i < editorViewModel.getTools().size() - 1) {
+                toolBar.getItems().add(new Separator());
+            }
         }
     }
 
-    private void addTools(ActionManager actionManager, List<Tool> toolList) {
+    private void addTools(ActionManager actionManager, ToggleGroup toggleGroup, List<Tool> toolList) {
         for (Tool tool : toolList) {
-            ButtonBase toolButton = new Button(tool.getName());
+            ToggleButton toolButton = new ToggleButton(tool.getName());
+
+            toolButton.setPrefSize(50, 50);
+            toolButton.setMaxSize(50, 50);
+            toolButton.setMinSize(50, 50);
 
             toolButton.setOnMouseClicked(event -> {
                 actionManager.run(actionManager.getActionFactory().createSelectToolAction(editorView, tool));
             });
 
+            toolButton.getStyleClass().add(tool.getIconStyleName());
             toolBar.getItems().add(toolButton);
+            toggleGroup.getToggles().add(toolButton);
         }
     }
 

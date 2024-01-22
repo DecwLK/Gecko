@@ -8,6 +8,7 @@ import org.gecko.actions.ActionManager;
 public class ZoomTool extends Tool {
 
     private static final String NAME = "Zoom Tool";
+    private static final String ICON_STYLE_NAME = "zoom-icon";
     private static final double ZOOM_SCALE_STEP = 0.1;
 
     public ZoomTool(ActionManager actionManager) {
@@ -20,9 +21,8 @@ public class ZoomTool extends Tool {
     }
 
     @Override
-    public String getIconPath() {
-        //TODO stub
-        return null;
+    public String getIconStyleName() {
+        return ICON_STYLE_NAME;
     }
 
     @Override

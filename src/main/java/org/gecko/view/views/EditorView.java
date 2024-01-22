@@ -126,9 +126,6 @@ public class EditorView {
 
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
-
-        // Selection listener
-        viewModel.getSelectionManager().getCurrentSelection().addListener(this::onSelectionChanged);
     }
 
     public void toggleInspector() {
@@ -180,31 +177,6 @@ public class EditorView {
             currentInspector = inspectorFactory.createInspector(newValue);
         } else {
             currentInspector = null;
-        }
-    }
-
-    private void onSelectionChanged(ListChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
-        for (PositionableViewModelElement<?> element : change.getAddedSubList()) {
-            ViewElement<?> viewElement = findViewElement(element);
-            ViewElementDecorator decoratedViewElement = new SelectableViewElementDecorator(viewElement);
-            viewElement.setDecorator(decoratedViewElement);
-
-            // replace view element with decorated view element
-            currentViewElements.remove(viewElement);
-            currentViewElements.add(decoratedViewElement);
-        }
-
-        for (PositionableViewModelElement<?> element : change.getRemoved()) {
-            ViewElement<?> viewElement = findViewElement(element);
-            ViewElement<?> baseViewElement = viewElement;
-
-            // find base view element
-            while (viewElement.getDecorator() != null) {
-                baseViewElement = viewElement.getDecorator().getDecoratorTarget();
-            }
-
-            currentViewElements.remove(viewElement);
-            currentViewElements.add(baseViewElement);
         }
     }
 }

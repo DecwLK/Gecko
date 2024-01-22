@@ -10,6 +10,8 @@ import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.view.views.viewelement.ViewElementVisitor;
+import org.gecko.view.views.viewelement.decorator.ElementScalerViewElementDecorator;
+import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
 
 public abstract class Tool implements ViewElementVisitor {
 
@@ -21,7 +23,7 @@ public abstract class Tool implements ViewElementVisitor {
 
     public abstract String getName();
 
-    public abstract String getIconPath();
+    public abstract String getIconStyleName();
 
     public void visitView(ScrollPane view) {
         view.setPannable(false);
@@ -56,6 +58,16 @@ public abstract class Tool implements ViewElementVisitor {
     @Override
     public void visit(VariableBlockViewElement variableBlockViewElement) {
         removeAllListeners(variableBlockViewElement);
+    }
+
+    @Override
+    public void visit(ElementScalerViewElementDecorator elementScalerViewElementDecorator) {
+        removeAllListeners(elementScalerViewElementDecorator.drawElement());
+    }
+
+    @Override
+    public void visit(SelectableViewElementDecorator selectableViewElementDecorator) {
+        removeAllListeners(selectableViewElementDecorator.drawElement());
     }
 
     private void removeAllListeners(Node view) {

@@ -27,9 +27,6 @@ public class SystemViewElement extends Pane implements ViewElement<SystemViewMod
     private final StringProperty codeProperty;
     private final List<PortViewModel> ports;
 
-    @Setter
-    private ViewElementDecorator decorator;
-
     public SystemViewElement(SystemViewModel systemViewModel) {
         this.nameProperty = new SimpleStringProperty();
         this.codeProperty = new SimpleStringProperty();
@@ -42,6 +39,16 @@ public class SystemViewElement extends Pane implements ViewElement<SystemViewMod
     @Override
     public Node drawElement() {
         return this;
+    }
+
+    @Override
+    public List<Point2D> getEdgePoints() {
+        return null;
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+
     }
 
     @Override

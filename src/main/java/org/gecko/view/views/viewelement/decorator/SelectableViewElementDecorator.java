@@ -1,5 +1,6 @@
 package org.gecko.view.views.viewelement.decorator;
 
+import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
@@ -10,9 +11,8 @@ import org.gecko.view.views.viewelement.ViewElementVisitor;
 
 public class SelectableViewElementDecorator extends ViewElementDecorator {
 
-    @Getter
     @Setter
-    private ViewElementDecorator decorator;
+    private boolean selected;
 
     public SelectableViewElementDecorator(ViewElement<?> decoratorTarget) {
         super(decoratorTarget);
@@ -22,22 +22,27 @@ public class SelectableViewElementDecorator extends ViewElementDecorator {
     public Node drawElement() {
         Node node = getDecoratorTarget().drawElement();
 
-        // draw border around decoratedNode
-        Pane decoratedNode = new Pane();
-        decoratedNode.setStyle("-fx-border-color: blue;");
-        decoratedNode.setPrefSize(node.getLayoutBounds().getWidth(), node.getLayoutBounds().getHeight());
-        decoratedNode.setLayoutX(node.getLayoutX());
-        decoratedNode.setLayoutY(node.getLayoutY());
+        if (selected) {
+            // draw border around decoratedNode
+            Pane decoratedNode = new Pane();
+            decoratedNode.setStyle("-fx-border-color: blue;");
+            decoratedNode.setPrefSize(node.getLayoutBounds().getWidth(), node.getLayoutBounds().getHeight());
+            decoratedNode.setLayoutX(node.getLayoutX());
+            decoratedNode.setLayoutY(node.getLayoutY());
 
-        decoratedNode.getChildren().add(node);
+            decoratedNode.getChildren().add(node);
 
-        return decoratedNode;
+            return decoratedNode;
+        } else {
+            return node;
+        }
     }
 
     @Override
     public Point2D getPosition() {
-        return null;
+        return getDecoratorTarget().getPosition();
     }
+
 
     @Override
     public void accept(ViewElementVisitor visitor) {

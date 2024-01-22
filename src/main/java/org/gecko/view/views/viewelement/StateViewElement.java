@@ -1,5 +1,6 @@
 package org.gecko.view.views.viewelement;
 
+import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -28,9 +29,6 @@ public class StateViewElement extends Pane implements ViewElement<StateViewModel
     private final BooleanProperty isStartStateProperty;
     private final ListProperty<ContractViewModel> contractsProperty;
 
-    @Setter
-    private ViewElementDecorator decorator;
-
     public StateViewElement(StateViewModel stateViewModel) {
         this.nameProperty = new SimpleStringProperty();
         this.isStartStateProperty = new SimpleBooleanProperty();
@@ -43,6 +41,16 @@ public class StateViewElement extends Pane implements ViewElement<StateViewModel
     @Override
     public Node drawElement() {
         return this;
+    }
+
+    @Override
+    public List<Point2D> getEdgePoints() {
+        return null;
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+
     }
 
     @Override

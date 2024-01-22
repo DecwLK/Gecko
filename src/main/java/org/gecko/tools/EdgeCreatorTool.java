@@ -7,6 +7,7 @@ import org.gecko.actions.ActionManager;
 public class EdgeCreatorTool extends Tool {
 
     private static final String NAME = "Edge Creator Tool";
+    private static final String ICON_STYLE_NAME = "edge-icon";
 
     public EdgeCreatorTool(ActionManager actionManager) {
         super(actionManager);
@@ -18,9 +19,8 @@ public class EdgeCreatorTool extends Tool {
     }
 
     @Override
-    public String getIconPath() {
-        //TODO stub
-        return null;
+    public String getIconStyleName() {
+        return ICON_STYLE_NAME;
     }
 
     @Override

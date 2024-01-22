@@ -31,9 +31,6 @@ public class RegionViewElement extends Pane implements ViewElement<RegionViewMod
     private final List<StateViewModel> states;
     //TODO add more Properties once they get pushed
 
-    @Setter
-    private ViewElementDecorator decorator;
-
     public RegionViewElement(RegionViewModel regionViewModel) {
         this.colorProperty = new SimpleObjectProperty<>();
         this.invariantProperty = new SimpleStringProperty();
@@ -48,6 +45,16 @@ public class RegionViewElement extends Pane implements ViewElement<RegionViewMod
     @Override
     public Node drawElement() {
         return this;
+    }
+
+    @Override
+    public List<Point2D> getEdgePoints() {
+        return null;
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+
     }
 
     @Override

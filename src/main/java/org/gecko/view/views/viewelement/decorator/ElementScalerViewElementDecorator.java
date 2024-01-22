@@ -2,17 +2,21 @@ package org.gecko.view.views.viewelement.decorator;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.view.views.viewelement.ViewElementVisitor;
-import org.gecko.viewmodel.BlockViewModelElement;
 
 public class ElementScalerViewElementDecorator extends ViewElementDecorator {
 
+    private static final int SCALER_SIZE = 10;
+
     @Getter
-    @Setter
-    private ViewElementDecorator decorator;
+    private ElementScalerBlock[] scalers;
 
     public ElementScalerViewElementDecorator(ViewElement<?> decoratorTarget) {
         super(decoratorTarget);
@@ -20,14 +24,37 @@ public class ElementScalerViewElementDecorator extends ViewElementDecorator {
 
     @Override
     public Node drawElement() {
-        Node decoratedNode = getDecoratorTarget().drawElement();
+        Node node = getDecoratorTarget().drawElement();
 
-        return decoratedNode;
+        if (isSelected()) {
+            StackPane decoratedNode = new StackPane();
+            Pane scalarPane = new Pane();
+            scalarPane.setPickOnBounds(false);
+
+            // Create scalars
+            scalers = new ElementScalerBlock[getEdgePoints().size()];
+            for (int i = 0; i < scalers.length; i++) {
+                scalers[i] = new ElementScalerBlock(i, this, SCALER_SIZE, SCALER_SIZE);
+                scalers[i].setFill(Color.RED);
+
+                Point2D edgePoint = getEdgePoints().get(i);
+                scalers[i].setLayoutX(node.getLayoutX() + edgePoint.getX());
+                scalers[i].setLayoutY(node.getLayoutY() + edgePoint.getY());
+
+                scalarPane.getChildren().add(scalers[i]);
+            }
+
+            decoratedNode.getChildren().addAll(node, scalarPane);
+
+            return decoratedNode;
+        } else {
+            return node;
+        }
     }
 
     @Override
     public Point2D getPosition() {
-        return null;
+        return getDecoratorTarget().getPosition();
     }
 
     @Override

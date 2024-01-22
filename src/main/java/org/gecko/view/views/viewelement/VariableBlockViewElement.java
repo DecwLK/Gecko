@@ -27,9 +27,6 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
     private final StringProperty typeProperty;
     private final Property<Visibility> visibilityProperty;
 
-    @Setter
-    private ViewElementDecorator decorator;
-
     public VariableBlockViewElement(PortViewModel portViewModel) {
         this.nameProperty = new SimpleStringProperty();
         this.typeProperty = new SimpleStringProperty();
@@ -42,6 +39,16 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
     @Override
     public Node drawElement() {
         return this;
+    }
+
+    @Override
+    public List<Point2D> getEdgePoints() {
+        return null;
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+
     }
 
     @Override

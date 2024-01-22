@@ -1,5 +1,6 @@
 package org.gecko.view.views.viewelement;
 
+import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
@@ -26,9 +27,6 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     private final IntegerProperty priorityProperty;
     private final Property<Kind> kindProperty;
 
-    @Setter
-    private ViewElementDecorator decorator;
-
     public EdgeViewElement(EdgeViewModel edgeViewModel) {
         this.contractProperty = new SimpleObjectProperty<>();
         this.sourceProperty = new SimpleObjectProperty<>();
@@ -41,19 +39,37 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     private void bindViewElement() {
-        startXProperty().bind(Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getX(),
-            edgeViewModel.getSource().getPositionProperty()));
-        startYProperty().bind(Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getY(),
-            edgeViewModel.getSource().getPositionProperty()));
-        endXProperty().bind(Bindings.createDoubleBinding(() -> edgeViewModel.getDestination().getCenter().getX(),
-            edgeViewModel.getDestination().getPositionProperty()));
-        endYProperty().bind(Bindings.createDoubleBinding(() -> edgeViewModel.getDestination().getCenter().getY(),
-            edgeViewModel.getDestination().getPositionProperty()));
+        getStartElement().xProperty()
+                         .bind(Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getX(),
+                             edgeViewModel.getSource().getPositionProperty()));
+        getStartElement().yProperty()
+                         .bind(Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getY(),
+                             edgeViewModel.getSource().getPositionProperty()));
+        getEndElement().xProperty()
+                       .bind(Bindings.createDoubleBinding(() -> edgeViewModel.getDestination().getCenter().getX(),
+                           edgeViewModel.getDestination().getPositionProperty()));
+        getEndElement().yProperty()
+                       .bind(Bindings.createDoubleBinding(() -> edgeViewModel.getDestination().getCenter().getY(),
+                           edgeViewModel.getDestination().getPositionProperty()));
+    }
+
+    public void createNewPoint(Point2D point) {
+        createPathPoint(point);
     }
 
     @Override
     public Node drawElement() {
         return this;
+    }
+
+    @Override
+    public List<Point2D> getEdgePoints() {
+        return getPathPoints().stream().map(Property::getValue).toList();
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+        setPathPoint(index, point);
     }
 
     @Override

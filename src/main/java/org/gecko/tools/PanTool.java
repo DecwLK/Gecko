@@ -6,6 +6,7 @@ import org.gecko.actions.ActionManager;
 public class PanTool extends Tool {
 
     private static final String NAME = "Pan Tool";
+    private static final String ICON_STYLE_NAME = "pan-icon";
 
     public PanTool(ActionManager actionManager) {
         super(actionManager);
@@ -17,9 +18,8 @@ public class PanTool extends Tool {
     }
 
     @Override
-    public String getIconPath() {
-        //TODO stub
-        return null;
+    public String getIconStyleName() {
+        return ICON_STYLE_NAME;
     }
 
     @Override

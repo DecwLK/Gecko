@@ -7,6 +7,7 @@ import org.gecko.actions.ActionManager;
 public class MarqueeTool extends Tool {
 
     private static final String NAME = "Marquee Tool";
+    private static final String ICON_STYLE_NAME = "marquee-icon";
 
     public MarqueeTool(ActionManager actionManager) {
         super(actionManager);
@@ -18,9 +19,8 @@ public class MarqueeTool extends Tool {
     }
 
     @Override
-    public String getIconPath() {
-        //TODO stub
-        return null;
+    public String getIconStyleName() {
+        return ICON_STYLE_NAME;
     }
 
     @Override

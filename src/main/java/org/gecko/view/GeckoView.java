@@ -2,6 +2,7 @@ package org.gecko.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
@@ -21,6 +22,8 @@ import org.gecko.viewmodel.GeckoViewModel;
  */
 public class GeckoView {
 
+    private static final String STYLE_SHEET = "/styles/gecko.css";
+
     @Getter
     private final BorderPane mainPane;
     private final TabPane centerPane;
@@ -38,6 +41,8 @@ public class GeckoView {
         this.centerPane = new TabPane();
         this.viewFactory = new ViewFactory(actionManager, this);
         this.openedViews = new ArrayList<>();
+
+        mainPane.getStylesheets().add(Objects.requireNonNull(GeckoView.class.getResource(STYLE_SHEET)).toString());
 
         // Listener for current editor
         viewModel.getCurrentEditorProperty().addListener(this::onUpdateCurrentEditorFromViewModel);

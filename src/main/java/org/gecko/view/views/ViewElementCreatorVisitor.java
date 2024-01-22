@@ -18,32 +18,32 @@ public class ViewElementCreatorVisitor implements PositionableViewModelElementVi
     }
 
     @Override
-    public ViewElement<SystemViewModel> visit(SystemViewModel systemViewModel) {
-        return viewFactory.createSystemViewElementFrom(systemViewModel);
+    public ViewElement<?> visit(SystemViewModel systemViewModel) {
+        return viewFactory.createViewElementFrom(systemViewModel);
     }
 
     @Override
-    public ViewElement<RegionViewModel> visit(RegionViewModel regionViewModel) {
-        return viewFactory.createRegionViewElementFrom(regionViewModel);
+    public ViewElement<?> visit(RegionViewModel regionViewModel) {
+        return viewFactory.createViewElementFrom(regionViewModel);
     }
 
     @Override
-    public ViewElement<SystemConnectionViewModel> visit(SystemConnectionViewModel systemConnectionViewModel) {
-        return viewFactory.createSystemConnectionViewElementFrom(systemConnectionViewModel);
+    public ViewElement<?> visit(SystemConnectionViewModel systemConnectionViewModel) {
+        return viewFactory.createViewElementFrom(systemConnectionViewModel);
     }
 
     @Override
-    public ViewElement<EdgeViewModel> visit(EdgeViewModel edgeViewModel) {
-        return viewFactory.createEdgeViewElementFrom(edgeViewModel);
+    public ViewElement<?> visit(EdgeViewModel edgeViewModel) {
+        return viewFactory.createViewElementFrom(edgeViewModel);
     }
 
     @Override
-    public ViewElement<StateViewModel> visit(StateViewModel stateViewModel) {
-        return viewFactory.createStateViewElementFrom(stateViewModel);
+    public ViewElement<?> visit(StateViewModel stateViewModel) {
+        return viewFactory.createViewElementFrom(stateViewModel);
     }
 
     @Override
-    public ViewElement<PortViewModel> visit(PortViewModel portViewModel) {
-        return viewFactory.createVariableBlockViewElementFrom(portViewModel);
+    public ViewElement<?> visit(PortViewModel portViewModel) {
+        return viewFactory.createViewElementFrom(portViewModel);
     }
 }

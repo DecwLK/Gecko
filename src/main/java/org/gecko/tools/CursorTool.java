@@ -7,6 +7,7 @@ import org.gecko.actions.ActionManager;
 public class CursorTool extends Tool {
 
     private static final String NAME = "Cursor Tool";
+    private static final String ICON_STYLE_NAME = "cursor-icon";
 
     public CursorTool(ActionManager actionManager) {
         super(actionManager);
@@ -18,9 +19,8 @@ public class CursorTool extends Tool {
     }
 
     @Override
-    public String getIconPath() {
-        //TODO stub
-        return null;
+    public String getIconStyleName() {
+        return ICON_STYLE_NAME;
     }
 
     @Override

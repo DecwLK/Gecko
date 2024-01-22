@@ -17,6 +17,9 @@ import org.gecko.view.views.viewelement.StateViewElement;
 import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
+import org.gecko.view.views.viewelement.ViewElement;
+import org.gecko.view.views.viewelement.decorator.ElementScalerViewElementDecorator;
+import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -39,27 +42,27 @@ public class ViewFactory {
         return (isAutomatonEditor) ? createAutomatonEditorView(editorViewModel) : createSystemEditorView(editorViewModel);
     }
 
-    public StateViewElement createStateViewElementFrom(StateViewModel stateViewModel) {
+    public ViewElement<?> createViewElementFrom(StateViewModel stateViewModel) {
         StateViewElement newStateViewElement = new StateViewElement(stateViewModel);
 
         AbstractContextMenuBuilder contextMenuBuilder =
             new StateViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), stateViewModel);
         newStateViewElement.setOnContextMenuRequested(
             event -> contextMenuBuilder.build().show(newStateViewElement, event.getScreenX(), event.getScreenY()));
-        return newStateViewElement;
+        return new SelectableViewElementDecorator(newStateViewElement);
     }
 
-    public RegionViewElement createRegionViewElementFrom(RegionViewModel regionViewModel) {
+    public ViewElement<?> createViewElementFrom(RegionViewModel regionViewModel) {
         RegionViewElement newRegionViewElement = new RegionViewElement(regionViewModel);
 
         AbstractContextMenuBuilder contextMenuBuilder =
             new RegionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), regionViewModel);
         newRegionViewElement.setOnContextMenuRequested(
             event -> contextMenuBuilder.build().show(newRegionViewElement, event.getScreenX(), event.getScreenY()));
-        return newRegionViewElement;
+        return new SelectableViewElementDecorator(new ElementScalerViewElementDecorator(newRegionViewElement));
     }
 
-    public VariableBlockViewElement createVariableBlockViewElementFrom(PortViewModel portViewModel) {
+    public ViewElement<?> createViewElementFrom(PortViewModel portViewModel) {
         VariableBlockViewElement newVariableBlockViewElement = new VariableBlockViewElement(portViewModel);
 
         AbstractContextMenuBuilder contextMenuBuilder =
@@ -67,10 +70,10 @@ public class ViewFactory {
         newVariableBlockViewElement.setOnContextMenuRequested(
             event -> contextMenuBuilder.build().show(newVariableBlockViewElement, event.getScreenX(), event.getScreenY()));
 
-        return newVariableBlockViewElement;
+        return new SelectableViewElementDecorator(newVariableBlockViewElement);
     }
 
-    public EdgeViewElement createEdgeViewElementFrom(EdgeViewModel edgeViewModel) {
+    public ViewElement<?> createViewElementFrom(EdgeViewModel edgeViewModel) {
         EdgeViewElement newEdgeViewElement = new EdgeViewElement(edgeViewModel);
 
         AbstractContextMenuBuilder contextMenuBuilder =
@@ -78,10 +81,10 @@ public class ViewFactory {
         newEdgeViewElement.setOnContextMenuRequested(
             event -> contextMenuBuilder.build().show(newEdgeViewElement, event.getScreenX(), event.getScreenY()));
 
-        return newEdgeViewElement;
+        return new ElementScalerViewElementDecorator(newEdgeViewElement);
     }
 
-    public SystemConnectionViewElement createSystemConnectionViewElementFrom(SystemConnectionViewModel systemConnectionViewModel) {
+    public ViewElement<?> createViewElementFrom(SystemConnectionViewModel systemConnectionViewModel) {
         SystemConnectionViewElement newSystemConnectionViewElement = new SystemConnectionViewElement(systemConnectionViewModel);
 
         AbstractContextMenuBuilder contextMenuBuilder =
@@ -89,10 +92,10 @@ public class ViewFactory {
         newSystemConnectionViewElement.setOnContextMenuRequested(
             event -> contextMenuBuilder.build().show(newSystemConnectionViewElement, event.getScreenX(), event.getScreenY()));
 
-        return newSystemConnectionViewElement;
+        return new ElementScalerViewElementDecorator(newSystemConnectionViewElement);
     }
 
-    public SystemViewElement createSystemViewElementFrom(SystemViewModel systemViewModel) {
+    public ViewElement<?> createViewElementFrom(SystemViewModel systemViewModel) {
         SystemViewElement newSystemViewElement = new SystemViewElement(systemViewModel);
 
         AbstractContextMenuBuilder contextMenuBuilder =
@@ -100,7 +103,7 @@ public class ViewFactory {
         newSystemViewElement.setOnContextMenuRequested(
             event -> contextMenuBuilder.build().show(newSystemViewElement, event.getScreenX(), event.getScreenY()));
 
-        return newSystemViewElement;
+        return new SelectableViewElementDecorator(newSystemViewElement);
     }
 
     private EditorView createAutomatonEditorView(EditorViewModel editorViewModel) {

@@ -17,6 +17,7 @@ public class ChangePreconditionViewModelElementAction extends Action {
     @Override
     void run() {
         contractViewModel.setPrecondition(newPrecondition);
+        contractViewModel.updateTarget();
     }
 
     @Override

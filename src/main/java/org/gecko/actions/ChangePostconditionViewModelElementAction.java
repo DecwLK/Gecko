@@ -17,6 +17,7 @@ public class ChangePostconditionViewModelElementAction extends Action {
     @Override
     void run() {
         contractViewModel.setPostcondition(newPostcondition);
+        contractViewModel.updateTarget();
     }
 
     @Override

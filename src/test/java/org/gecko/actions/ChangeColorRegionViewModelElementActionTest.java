@@ -3,7 +3,7 @@ package org.gecko.actions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javafx.scene.paint.Color;
-import org.gecko.model.GeckoModel;
+import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
@@ -19,12 +19,11 @@ class ChangeColorRegionViewModelElementActionTest {
 
     @BeforeEach
     void setUp() {
-        GeckoModel geckoModel = new GeckoModel();
-        GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
+        GeckoViewModel geckoViewModel = TestHelper.createGeckoViewModel();
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
+        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         geckoViewModel.switchEditor(rootSystemViewModel, true);
     }

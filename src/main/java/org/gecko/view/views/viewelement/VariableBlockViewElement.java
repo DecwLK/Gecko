@@ -1,6 +1,5 @@
 package org.gecko.view.views.viewelement;
 
-import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
@@ -14,9 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
-import lombok.Setter;
 import org.gecko.model.Visibility;
-import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.PortViewModel;
 
 @Getter

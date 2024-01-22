@@ -1,7 +1,11 @@
 package org.gecko.tools;
 
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
 import org.gecko.view.views.viewelement.RegionViewElement;
@@ -27,54 +31,57 @@ public abstract class Tool implements ViewElementVisitor {
 
     public void visitView(ScrollPane view) {
         view.setPannable(false);
-        removeAllListeners(view);
+        view.setCursor(Cursor.DEFAULT);
+        setAllHandlers(view, null);
     }
 
     @Override
     public void visit(StateViewElement stateViewElement) {
-        removeAllListeners(stateViewElement);
+        //We need to consume all events so that they don't propagate to the view
+        setAllHandlers(stateViewElement, Event::consume);
     }
 
     @Override
     public void visit(EdgeViewElement edgeViewElement) {
-        removeAllListeners(edgeViewElement);
+        setAllHandlers(edgeViewElement, Event::consume);
     }
 
     @Override
     public void visit(RegionViewElement regionViewElement) {
-        removeAllListeners(regionViewElement);
+        //Events are null here because the events need to propagate to the view. This allows elements to be placed in the region
+        setAllHandlers(regionViewElement, null);
     }
 
     @Override
     public void visit(SystemViewElement systemViewElement) {
-        removeAllListeners(systemViewElement);
+        setAllHandlers(systemViewElement, Event::consume);
     }
 
     @Override
     public void visit(SystemConnectionViewElement systemConnectionViewElement) {
-        removeAllListeners(systemConnectionViewElement);
+        setAllHandlers(systemConnectionViewElement, Event::consume);
     }
 
     @Override
     public void visit(VariableBlockViewElement variableBlockViewElement) {
-        removeAllListeners(variableBlockViewElement);
+        setAllHandlers(variableBlockViewElement, Event::consume);
     }
 
     @Override
     public void visit(ElementScalerViewElementDecorator elementScalerViewElementDecorator) {
-        removeAllListeners(elementScalerViewElementDecorator.drawElement());
+        setAllHandlers(elementScalerViewElementDecorator.drawElement(), Event::consume);
     }
 
     @Override
     public void visit(SelectableViewElementDecorator selectableViewElementDecorator) {
-        removeAllListeners(selectableViewElementDecorator.drawElement());
+        setAllHandlers(selectableViewElementDecorator.drawElement(), Event::consume);
     }
 
-    private void removeAllListeners(Node view) {
-        view.setOnMousePressed(null);
-        view.setOnMouseDragged(null);
-        view.setOnMouseReleased(null);
-        view.setOnMouseClicked(null);
-        view.setOnMouseMoved(null);
+    private void setAllHandlers(Node node, EventHandler<MouseEvent> handler) {
+        node.setOnMousePressed(handler);
+        node.setOnMouseDragged(handler);
+        node.setOnMouseReleased(handler);
+        node.setOnMouseClicked(handler);
+        node.setOnMouseMoved(handler);
     }
 }

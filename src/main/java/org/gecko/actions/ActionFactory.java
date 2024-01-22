@@ -62,8 +62,8 @@ public class ActionFactory {
         return new CreatePortViewModelElementAction(geckoViewModel, parentSystem);
     }
 
-    public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(Point2D position) {
-        return new CreateRegionViewModelElementAction(geckoViewModel, position);
+    public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(Point2D position, Point2D size) {
+        return new CreateRegionViewModelElementAction(geckoViewModel, position, size);
     }
 
     public CreateStateViewModelElementAction createCreateStateViewModelElementAction(Point2D position) {
@@ -127,6 +127,11 @@ public class ActionFactory {
 
     public RestorePositionableViewModelElementAction createRestorePositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {
         return new RestorePositionableViewModelElementAction(geckoViewModel, elements);
+    }
+
+    public RestoreContractViewModelElementAction createRestoreContractViewModelElementAction(StateViewModel parent,
+                                                                                             ContractViewModel contractViewModel) {
+        return new RestoreContractViewModelElementAction(parent, contractViewModel);
     }
 
     public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(BlockViewModelElement<?> element, double scaleFactor) {

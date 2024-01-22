@@ -5,8 +5,6 @@ import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.view.views.viewelement.ViewElement;
-import org.gecko.view.views.viewelement.ViewElementVisitor;
-import org.gecko.viewmodel.BlockViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
 public abstract class ViewElementDecorator implements ViewElement<PositionableViewModelElement<?>> {

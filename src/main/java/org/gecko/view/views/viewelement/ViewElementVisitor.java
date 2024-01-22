@@ -1,6 +1,5 @@
 package org.gecko.view.views.viewelement;
 
-import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.view.views.viewelement.decorator.ElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
 

@@ -1,6 +1,5 @@
 package org.gecko.view.toolbar;
 
-import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Separator;

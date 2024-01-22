@@ -2,10 +2,8 @@ package org.gecko.view.views;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -25,8 +23,6 @@ import org.gecko.view.inspector.InspectorFactory;
 import org.gecko.view.toolbar.ToolBarBuilder;
 import org.gecko.view.views.shortcuts.ShortcutHandler;
 import org.gecko.view.views.viewelement.ViewElement;
-import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
-import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElementVisitor;
@@ -150,16 +146,17 @@ public class EditorView {
 
             // Add view element to current view elements
             currentViewElements.add(viewElement);
+            viewElementsGroup.getChildren().add(viewElement.drawElement());
+
+            viewElement.accept(getViewModel().getCurrentTool());
         } else if (change.wasRemoved()) {
             // Find corresponding view element and remove it
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
             if (viewElement != null) {
                 currentViewElements.remove(viewElement);
+                viewElementsGroup.getChildren().remove(viewElement.drawElement());
             }
         }
-        // Refresh view elements
-        viewElementsGroup.getChildren().removeAll();
-        viewElementsGroup.getChildren().setAll(currentViewElements.stream().map(ViewElement::drawElement).collect(Collectors.toList()));
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {

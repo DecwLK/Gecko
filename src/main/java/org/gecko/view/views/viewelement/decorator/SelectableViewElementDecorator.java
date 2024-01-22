@@ -1,10 +1,8 @@
 package org.gecko.view.views.viewelement.decorator;
 
-import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import lombok.Getter;
 import lombok.Setter;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.view.views.viewelement.ViewElementVisitor;

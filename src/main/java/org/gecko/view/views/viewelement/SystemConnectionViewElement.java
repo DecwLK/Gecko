@@ -1,6 +1,5 @@
 package org.gecko.view.views.viewelement;
 
-import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
@@ -11,9 +10,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import lombok.Getter;
-import lombok.Setter;
 import org.gecko.model.Visibility;
-import org.gecko.view.views.viewelement.decorator.ViewElementDecorator;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
 @Getter
@@ -82,5 +79,6 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
 
     private void constructVisualization() {
         setStroke(Color.BLACK);
+        toBack();
     }
 }

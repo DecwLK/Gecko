@@ -15,10 +15,9 @@ import lombok.Setter;
 import org.gecko.model.Region;
 
 /**
- * Represents an abstraction of a {@link Region} model element.
- * A {@link RegionViewModel} is described by a {@link Color}, a set of {@link StateViewModel}s,
- * a {@link ContractViewModel} and an invariant.
- * Contains methods for managing the afferent data and updating the target-{@link Region}.
+ * Represents an abstraction of a {@link Region} model element. A {@link RegionViewModel} is described by a {@link Color}, a set of
+ * {@link StateViewModel}s, a {@link ContractViewModel} and an invariant. Contains methods for managing the afferent data and updating the
+ * target-{@link Region}.
  */
 @Setter
 @Getter
@@ -39,7 +38,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         int red = random.nextInt(255);
         int green = random.nextInt(255);
         int blue = random.nextInt(255);
-        this.colorProperty = new SimpleObjectProperty<>(Color.rgb(red, green, blue));
+        this.colorProperty = new SimpleObjectProperty<>(Color.rgb(red, green, blue, 0.5));
     }
 
     @Override

@@ -13,6 +13,8 @@ import org.gecko.viewmodel.EditorViewModel;
 
 public class ToolBarBuilder {
 
+    private static final int BUTTON_SIZE = 30;
+
     private final ToolBar toolBar;
     private final EditorView editorView;
 
@@ -22,6 +24,12 @@ public class ToolBarBuilder {
         toolBar.setOrientation(Orientation.VERTICAL);
 
         ToggleGroup toggleGroup = new ToggleGroup();
+
+        toggleGroup.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                toggleGroup.selectToggle(oldToggle);
+            }
+        });
 
         for (int i = 0; i < editorViewModel.getTools().size(); i++) {
             addTools(actionManager, toggleGroup, editorViewModel.getTools().get(i));
@@ -37,9 +45,9 @@ public class ToolBarBuilder {
         for (Tool tool : toolList) {
             ToggleButton toolButton = new ToggleButton(tool.getName());
 
-            toolButton.setPrefSize(50, 50);
-            toolButton.setMaxSize(50, 50);
-            toolButton.setMinSize(50, 50);
+            toolButton.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
+            toolButton.setMaxSize(BUTTON_SIZE, BUTTON_SIZE);
+            toolButton.setMinSize(BUTTON_SIZE, BUTTON_SIZE);
 
             toolButton.setOnMouseClicked(event -> {
                 actionManager.run(actionManager.getActionFactory().createSelectToolAction(editorView, tool));

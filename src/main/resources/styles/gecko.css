@@ -1,10 +1,12 @@
 .cursor-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_Cursor.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_Cursor.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .cursor-icon:hover {
@@ -22,10 +24,12 @@
 .hand-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_Hand.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_Hand.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .hand-icon:hover {
@@ -43,10 +47,12 @@
 .edge-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_Edge.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_Edge.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .edge-icon:hover {
@@ -64,10 +70,12 @@
 .zoom-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_Zoom.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_Zoom.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .zoom-icon:hover {
@@ -85,10 +93,12 @@
 .marquee-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_Marquee.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_Marquee.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .marquee-icon:hover {
@@ -106,10 +116,12 @@
 .variable-block-creator-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_Variable.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_Variable.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .variable-block-creator-icon:hover {
@@ -127,10 +139,12 @@
 .state-creator-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_State.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_State.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .state-creator-icon:hover {
@@ -148,10 +162,12 @@
 .system-creator-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_System_Component.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_System_Component.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .system-creator-icon:hover {
@@ -169,10 +185,12 @@
 .pan-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_Hand.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_Hand.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .pan-icon:hover {
@@ -190,10 +208,12 @@
 .region-creator-icon {
     -icon-paint: black;
     -fx-content-display: graphic-only;
-    -fx-graphic: url('icons/Toolbar_Region.png');
-    -fx-graphic-size: 10px;
-    -fx-background-radius: 12;
+    -fx-background-radius: 5;
     -fx-background-color: transparent;
+    -fx-background-image: url('icons/Toolbar_Region.png');
+    -fx-background-size: 36px 36px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 .region-creator-icon:hover {

@@ -63,7 +63,7 @@ public class ActionFactory {
     }
 
     public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(Point2D position, Point2D size) {
-        return new CreateRegionViewModelElementAction(geckoViewModel, position, size);
+        return new CreateRegionViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position, size);
     }
 
     public CreateStateViewModelElementAction createCreateStateViewModelElementAction(Point2D position) {
@@ -80,7 +80,7 @@ public class ActionFactory {
     }
 
     public CreateVariableAction createCreateVariableAction(Point2D position) {
-        return new CreateVariableAction(geckoViewModel, position);
+        return new CreateVariableAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
     }
 
     public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {

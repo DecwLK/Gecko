@@ -40,6 +40,15 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
         sizeProperty.setValue(size);
     }
 
+    public Point2D getCenter() {
+        return new Point2D(positionProperty.getValue().getX() + sizeProperty.getValue().getX() / 2,
+            positionProperty.getValue().getY() + sizeProperty.getValue().getY() / 2);
+    }
+
+    public void setCenter(@NonNull Point2D point) {
+        positionProperty.setValue(new Point2D(point.getX() - sizeProperty.getValue().getX() / 2, point.getY() - sizeProperty.getValue().getY() / 2));
+    }
+
     // TODO: Is there any relevant update operation that should take place at this level?
 
     public abstract Object accept(@NonNull PositionableViewModelElementVisitor visitor);

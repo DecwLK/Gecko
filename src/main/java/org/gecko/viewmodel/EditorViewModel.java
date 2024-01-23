@@ -1,12 +1,15 @@
 package org.gecko.viewmodel;
 
 import java.util.List;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableSet;
 import javafx.geometry.Point2D;
+import javafx.scene.transform.Scale;
 import lombok.Data;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Region;
@@ -25,6 +28,7 @@ import org.gecko.tools.ZoomTool;
 @Data
 public class EditorViewModel {
     private static final int ROUND_SCALE = 10;
+    private static final double ZOOM_FACTOR = 1.1;
 
     private final ActionManager actionManager;
     private final SystemViewModel currentSystem;
@@ -33,9 +37,13 @@ public class EditorViewModel {
     private final List<List<Tool>> tools;
     private final SelectionManager selectionManager;
 
-    private final Property<Number> pivotXProperty;
-    private final Property<Number> pivotYProperty;
-    private final Property<Double> zoomScaleProperty;
+    private final DoubleProperty hValueProperty;
+    private final DoubleProperty vValueProperty;
+    //private final Property<Double> zoomScaleProperty;
+    private double zoomScale = 1.0;
+    private final Property<Scale> scaleProperty;
+    private final Property<Point2D> viewSizeProperty;
+    private final Property<Point2D> worldSizeProperty;
     private final Property<Tool> currentToolProperty;
     private final Property<PositionableViewModelElement<?>> focusedElementProperty;
     private final boolean isAutomatonEditor;
@@ -48,9 +56,12 @@ public class EditorViewModel {
         this.isAutomatonEditor = isAutomatonEditor;
         this.tools = FXCollections.observableArrayList();
         this.selectionManager = new SelectionManager();
-        this.pivotXProperty = new SimpleObjectProperty<>(0.0);
-        this.pivotYProperty = new SimpleObjectProperty<>(0.0);
-        this.zoomScaleProperty = new SimpleObjectProperty<>(1.0);
+        this.hValueProperty = new SimpleDoubleProperty(0.0);
+        this.vValueProperty = new SimpleDoubleProperty(0.0);
+        this.viewSizeProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
+        this.worldSizeProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
+        this.scaleProperty = new SimpleObjectProperty<>(new Scale(zoomScale, zoomScale));
+        //this.zoomScaleProperty = new SimpleObjectProperty<>(1.0);
         this.currentToolProperty = new SimpleObjectProperty<>();
         this.focusedElementProperty = new SimpleObjectProperty<>();
         initializeTools();
@@ -78,37 +89,35 @@ public class EditorViewModel {
     }
 
     public Point2D transformScreenToWorldCoordinates(Point2D screenCoordinates) {
-        System.out.println(screenCoordinates);
-        return new Point2D(screenCoordinates.getX() / getZoomScale() + getPivot().getX(),
-            screenCoordinates.getY() / getZoomScale() + getPivot().getY());
+        return screenCoordinates.multiply(1 / zoomScale).add(getMinPoint());
     }
 
     public void moveToFocusedElement() {
-        //TODO stub
+        if (focusedElementProperty.getValue() != null) {
+            focusWorldPoint(focusedElementProperty.getValue().getCenter());
+        }
     }
 
-    /**
-     * Returns the pivot point of the editor view model. The pivot point is the point in world coorindates that the editor is centered on.
-     *
-     * @return the pivot point of the editor view model
-     */
-    public Point2D getPivot() {
-        return new Point2D(pivotXProperty.getValue().doubleValue(), pivotYProperty.getValue().doubleValue());
+    private void focusWorldPoint(Point2D point) {
+        Point2D center = new Point2D(viewSizeProperty.getValue().getX() / 2, viewSizeProperty.getValue().getY() / 2).multiply(1 / zoomScale);
+        Point2D delta = point.subtract(center);
+        Point2D scrollRange = new Point2D(worldSizeProperty.getValue().getX() - viewSizeProperty.getValue().getX(),
+            worldSizeProperty.getValue().getY() - viewSizeProperty.getValue().getY()).multiply(1 / zoomScale);
+        Point2D scrollPosition = new Point2D(delta.getX() / scrollRange.getX(), delta.getY() / scrollRange.getY()).add(hValueProperty.getValue(),
+            vValueProperty.getValue());
+        hValueProperty.setValue(scrollPosition.getX());
+        vValueProperty.setValue(scrollPosition.getY());
     }
 
-    public void setPivot(Point2D pivot) {
-        pivotXProperty.setValue(pivot.getX());
-        pivotYProperty.setValue(pivot.getY());
-    }
-
-    public double getZoomScale() {
-        return zoomScaleProperty.getValue();
+    private Point2D getMinPoint() {
+        return new Point2D((worldSizeProperty.getValue().getX() - viewSizeProperty.getValue().getX()) * hValueProperty.getValue(),
+            (worldSizeProperty.getValue().getY() - viewSizeProperty.getValue().getY()) * vValueProperty.getValue()).multiply(1 / zoomScale);
     }
 
     public void zoomIn(Point2D pivot, double zoomScaleAdditive) {
-        setPivot(pivot);
-        double newZoomScale = getZoomScale() + zoomScaleAdditive;
-        zoomScaleProperty.setValue(Math.round(newZoomScale * ROUND_SCALE) / (double) ROUND_SCALE);
+        zoomScale = Math.round(zoomScale * ZOOM_FACTOR * ROUND_SCALE) / (double) ROUND_SCALE;
+        Scale newScale = new Scale(zoomScale, zoomScale, 0, 0);
+        scaleProperty.setValue(newScale);
     }
 
     public Tool getCurrentTool() {

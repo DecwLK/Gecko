@@ -42,6 +42,7 @@ public class EditorView {
     private final Group viewElementsGroup;
 
     private Inspector currentInspector;
+    private Group inspectorPanel;
 
     public EditorView(ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel, ShortcutHandler shortcutHandler) {
         this.viewModel = viewModel;
@@ -50,6 +51,7 @@ public class EditorView {
         this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
         this.currentViewPane = new StackPane();
         this.viewElementsGroup = new Group();
+        this.inspectorPanel = new Group();
         currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
         currentView = new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
@@ -138,7 +140,7 @@ public class EditorView {
     }
 
     public Node drawInspector() {
-        return currentInspector;
+        return inspectorPanel;
     }
 
     private void onUpdateViewElements(ViewFactory viewFactory, SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
@@ -175,7 +177,9 @@ public class EditorView {
     private void focusedElementChanged(ObservableValue<? extends PositionableViewModelElement<?>> observable,
                                        PositionableViewModelElement<?> oldValue, PositionableViewModelElement<?> newValue) {
         if (newValue != null) {
+            inspectorPanel.getChildren().clear();
             currentInspector = inspectorFactory.createInspector(newValue);
+            inspectorPanel.getChildren().add(currentInspector);
         } else {
             currentInspector = null;
         }

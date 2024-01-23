@@ -34,6 +34,8 @@ public class ViewModelFactory {
         State state = modelFactory.createState(parentSystem.getTarget().getAutomaton());
         StateViewModel result = new StateViewModel(getNewViewModelElementId(), state);
         geckoViewModel.addViewModelElement(result);
+
+        actionManager.run(actionManager.getActionFactory().createSelectAction(result, true));
         return result;
     }
 

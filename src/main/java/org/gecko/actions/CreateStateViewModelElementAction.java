@@ -23,7 +23,7 @@ public class CreateStateViewModelElementAction extends Action {
     void run() {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdStateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelIn(currentParentSystem);
-        createdStateViewModel.setPosition(editorViewModel.getPivot().add(position));
+        createdStateViewModel.setPosition(editorViewModel.transformScreenToWorldCoordinates(position));
     }
 
     @Override

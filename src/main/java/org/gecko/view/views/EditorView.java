@@ -2,19 +2,17 @@ package org.gecko.view.views;
 
 import java.util.Collection;
 import java.util.HashSet;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.SetChangeListener;
-import javafx.geometry.Pos;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
@@ -39,7 +37,8 @@ public class EditorView {
     private final ToolBar toolBar;
     private final ShortcutHandler shortcutHandler;
     private final InspectorFactory inspectorFactory;
-    private final ScrollPane viewElementsPaneContainer;
+    private final ScrollPane viewElementsScrollPane;
+    private final Pane viewElementsPaneContainer;
     private final Group viewElementsGroup;
 
     private Inspector currentInspector;
@@ -55,9 +54,8 @@ public class EditorView {
         currentView = new Tab(viewModel.getCurrentSystem().getName(), currentViewPane);
 
         // Construct view elements pane container
-        VBox viewElementsGroupContainer = new VBox(new Group(viewElementsGroup));
-        viewElementsGroupContainer.setAlignment(Pos.CENTER);
-        this.viewElementsPaneContainer = new ScrollPane(viewElementsGroupContainer);
+        viewElementsPaneContainer = new Pane(new Group(viewElementsGroup));
+        this.viewElementsScrollPane = new ScrollPane(viewElementsPaneContainer);
 
         // Floating UI
         FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
@@ -78,7 +76,7 @@ public class EditorView {
         floatingUI.setPickOnBounds(false);
 
         // Build stack pane
-        currentViewPane.getChildren().addAll(viewElementsPaneContainer, floatingUI);
+        currentViewPane.getChildren().addAll(viewElementsScrollPane, floatingUI);
 
         // View element creator listener
         viewModel.getContainedPositionableViewModelElementsProperty().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
@@ -86,38 +84,39 @@ public class EditorView {
         });
 
         // Bind view elements pane with zoom scale property
-        viewElementsGroup.scaleXProperty().bind(viewModel.getZoomScaleProperty());
-        viewElementsGroup.scaleYProperty().bind(viewModel.getZoomScaleProperty());
-
-
-        viewElementsPaneContainer.hvalueProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.getPivotXProperty()
-                     .setValue(newValue.doubleValue() * viewElementsPaneContainer.getContent().getBoundsInLocal().getWidth()
-                         - viewElementsPaneContainer.getContent().getBoundsInLocal().getWidth() / 2);
+        //viewElementsGroup.scaleXProperty().bind(viewModel.getZoomScaleProperty());
+        //viewElementsGroup.scaleYProperty().bind(viewModel.getZoomScaleProperty());
+        viewModel.getScaleProperty().addListener((observable, oldValue, newValue) -> {
+            viewElementsGroup.getTransforms().setAll(newValue);
         });
 
-        viewElementsPaneContainer.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.getPivotYProperty()
-                     .setValue(newValue.doubleValue() * viewElementsPaneContainer.getContent().getBoundsInLocal().getHeight()
-                         - viewElementsPaneContainer.getContent().getBoundsInLocal().getHeight() / 2);
+        viewElementsScrollPane.hvalueProperty().bindBidirectional(viewModel.getHValueProperty());
+        viewElementsScrollPane.vvalueProperty().bindBidirectional(viewModel.getVValueProperty());
+        viewElementsPaneContainer.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
+        });
+        viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            viewModel.getViewSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
+            updatePaneContainerSize(newValue.getWidth(), newValue.getHeight());
         });
 
-
-        viewElementsPaneContainer.setPannable(true);
-        viewElementsPaneContainer.setFitToWidth(true);
-        viewElementsPaneContainer.setFitToHeight(true);
+        //viewElementsScrollPane.setFitToWidth(true);
+        //viewElementsScrollPane.setFitToHeight(true);
+        viewElementsScrollPane.setPannable(true);
+        viewElementsGroup.setAutoSizeChildren(true);
+        viewElementsGroup.setManaged(true);
 
         // Debug label for pivot //////////////////
-        Label pivotLabel = new Label();
+        /*Label pivotLabel = new Label();
         pivotLabel.textProperty()
                   .bind(Bindings.createStringBinding(
-                      () -> "Pivot: " + viewModel.getPivotXProperty().getValue() + " : " + viewModel.getPivotYProperty().getValue(),
-                      viewModel.getPivotXProperty(), viewModel.getPivotYProperty()));
+                      () -> "Pivot: " + viewModel.gethValueProperty().getValue() + " : " + viewModel.getvValueProperty().getValue(),
+                      viewModel.gethValueProperty(), viewModel.getvValueProperty()));
 
 
         AnchorPane.setTopAnchor(pivotLabel, 30.0);
         AnchorPane.setLeftAnchor(pivotLabel, 10.0);
-        floatingUI.getChildren().add(pivotLabel);
+        floatingUI.getChildren().add(pivotLabel);*/
         ///////////////////////////////////////////
 
         // Inspector creator listener
@@ -157,6 +156,7 @@ public class EditorView {
                 viewElementsGroup.getChildren().remove(viewElement.drawElement());
             }
         }
+        viewElementsScrollPane.requestLayout();
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
@@ -164,7 +164,7 @@ public class EditorView {
     }
 
     public void acceptTool(Tool tool) {
-        tool.visitView(viewElementsPaneContainer);
+        tool.visitView(viewElementsScrollPane);
         currentViewElements.forEach(viewElement -> viewElement.accept(tool));
     }
 
@@ -175,5 +175,9 @@ public class EditorView {
         } else {
             currentInspector = null;
         }
+    }
+
+    private void updatePaneContainerSize(double width, double height) {
+        viewElementsPaneContainer.setMinSize(width, height);
     }
 }

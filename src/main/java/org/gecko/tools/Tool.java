@@ -69,12 +69,12 @@ public abstract class Tool implements ViewElementVisitor {
 
     @Override
     public void visit(ElementScalerViewElementDecorator elementScalerViewElementDecorator) {
-        setAllHandlers(elementScalerViewElementDecorator.drawElement(), Event::consume);
+        setAllHandlers(elementScalerViewElementDecorator.drawElement(), null);
     }
 
     @Override
     public void visit(SelectableViewElementDecorator selectableViewElementDecorator) {
-        setAllHandlers(selectableViewElementDecorator.drawElement(), Event::consume);
+        setAllHandlers(selectableViewElementDecorator.drawElement(), null);
     }
 
     private void setAllHandlers(Node node, EventHandler<MouseEvent> handler) {

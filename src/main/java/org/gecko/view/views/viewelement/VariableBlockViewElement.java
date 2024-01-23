@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
@@ -19,6 +20,7 @@ import org.gecko.viewmodel.PortViewModel;
 @Getter
 public class VariableBlockViewElement extends Pane implements ViewElement<PortViewModel> {
 
+    @Getter(AccessLevel.NONE)
     private final PortViewModel portViewModel;
     private final StringProperty nameProperty;
     private final StringProperty typeProperty;

@@ -79,7 +79,9 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     public void updateTarget() {
         target.setKind(getKind());
         target.setPriority(getPriority());
-        target.setContract(contractProperty.getValue().getTarget());
+        if (contractProperty.getValue() != null) {
+            target.setContract(contractProperty.getValue().getTarget());
+        }
         target.setSource(sourceProperty.getValue().getTarget());
         target.setDestination(destinationProperty.getValue().getTarget());
     }

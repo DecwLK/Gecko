@@ -51,7 +51,8 @@ public class EditorView {
         this.currentViewPane = new StackPane();
         this.viewElementsGroup = new Group();
         currentViewElements = new HashSet<>();
-        currentView = new Tab(viewModel.getCurrentSystem().getName(), currentViewPane);
+        String baseName = viewModel.getCurrentSystem().getName();
+        currentView = new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
 
         // Construct view elements pane container
         viewElementsPaneContainer = new Pane(new Group(viewElementsGroup));
@@ -121,6 +122,9 @@ public class EditorView {
 
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
+
+        // Set current tool
+        viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
     }
 
     public void toggleInspector() {
@@ -163,9 +167,9 @@ public class EditorView {
         return currentViewElements.stream().filter(viewElement -> viewElement.getTarget().equals(element)).findFirst().orElse(null);
     }
 
-    public void acceptTool(Tool tool) {
-        tool.visitView(viewElementsScrollPane);
-        currentViewElements.forEach(viewElement -> viewElement.accept(tool));
+    private void onToolChanged(ObservableValue<? extends Tool> observable, Tool oldValue, Tool newValue) {
+        newValue.visitView(viewElementsScrollPane);
+        currentViewElements.forEach(viewElement -> viewElement.accept(newValue));
     }
 
     private void focusedElementChanged(ObservableValue<? extends PositionableViewModelElement<?>> observable,

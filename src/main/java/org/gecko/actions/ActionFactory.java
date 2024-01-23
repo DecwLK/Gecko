@@ -167,7 +167,7 @@ public class ActionFactory {
     }
 
     public SetStartStateViewModelElementAction createSetStartStateViewModelElementAction(StateViewModel stateViewModel) {
-        return new SetStartStateViewModelElementAction(geckoViewModel.getCurrentEditor(), stateViewModel);
+        return new SetStartStateViewModelElementAction(geckoViewModel, stateViewModel);
     }
 
     public ViewSwitchAction createViewSwitchAction(SystemViewModel systemViewModel, boolean isAutomaton) {

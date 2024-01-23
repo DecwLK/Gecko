@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -22,6 +23,7 @@ import org.gecko.viewmodel.StateViewModel;
 @Getter
 public class StateViewElement extends Pane implements ViewElement<StateViewModel> {
 
+    @Getter(AccessLevel.NONE)
     private final StateViewModel stateViewModel;
     private final StringProperty nameProperty;
     private final BooleanProperty isStartStateProperty;

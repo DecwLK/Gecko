@@ -33,7 +33,7 @@ public class GeckoView {
     @Getter
     private EditorView currentView;
 
-    private List<EditorView> openedViews;
+    private final List<EditorView> openedViews;
 
     public GeckoView(ActionManager actionManager, GeckoViewModel viewModel) {
         this.viewModel = viewModel;
@@ -89,9 +89,6 @@ public class GeckoView {
                 }
             }
         }
-
-        System.out.println("Opened editors: " + openedViews.size());
-
         if (openedViews.size() == 1) {
             centerPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         } else {
@@ -117,6 +114,7 @@ public class GeckoView {
 
         mainPane.setLeft(currentView.drawToolbar());
         mainPane.setRight(currentView.drawInspector());
+        viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(), currentView.getViewModel().isAutomatonEditor());
     }
 
     private void onUpdateCurrentEditorToViewModel(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {

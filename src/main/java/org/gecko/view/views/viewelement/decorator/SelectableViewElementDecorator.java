@@ -45,5 +45,6 @@ public class SelectableViewElementDecorator extends ViewElementDecorator {
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+        getDecoratorTarget().accept(visitor);
     }
 }

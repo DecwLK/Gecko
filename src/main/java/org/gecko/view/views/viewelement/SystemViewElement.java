@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
@@ -19,6 +20,7 @@ import org.gecko.viewmodel.SystemViewModel;
 @Getter
 public class SystemViewElement extends Pane implements ViewElement<SystemViewModel> {
 
+    @Getter(AccessLevel.NONE)
     private final SystemViewModel systemViewModel;
     private final StringProperty nameProperty;
     private final StringProperty codeProperty;

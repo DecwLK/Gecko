@@ -9,6 +9,7 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.SystemConnectionViewModel;
@@ -16,6 +17,7 @@ import org.gecko.viewmodel.SystemConnectionViewModel;
 @Getter
 public class SystemConnectionViewElement extends ConnectionViewElement implements ViewElement<SystemConnectionViewModel> {
 
+    @Getter(AccessLevel.NONE)
     private final SystemConnectionViewModel systemConnectionViewModel;
     private final Property<Visibility> visibilityProperty;
     private final StringProperty typeProperty;

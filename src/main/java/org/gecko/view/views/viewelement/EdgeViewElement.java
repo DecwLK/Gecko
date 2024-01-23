@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.model.Kind;
 import org.gecko.viewmodel.ContractViewModel;
@@ -18,6 +19,7 @@ import org.gecko.viewmodel.StateViewModel;
 @Getter
 public class EdgeViewElement extends ConnectionViewElement implements ViewElement<EdgeViewModel> {
 
+    @Getter(AccessLevel.NONE)
     private final EdgeViewModel edgeViewModel;
     private final Property<ContractViewModel> contractProperty;
     private final Property<StateViewModel> sourceProperty;
@@ -87,6 +89,5 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
     private void constructVisualization() {
         setStroke(Color.BLACK);
-        toBack();
     }
 }

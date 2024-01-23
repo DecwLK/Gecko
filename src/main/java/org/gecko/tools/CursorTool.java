@@ -1,7 +1,10 @@
 package org.gecko.tools;
 
+import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
+import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.views.viewelement.StateViewElement;
 
 public class CursorTool extends Tool {
 
@@ -25,7 +28,16 @@ public class CursorTool extends Tool {
     @Override
     public void visitView(ScrollPane view) {
         super.visitView(view);
-        view.setCursor(javafx.scene.Cursor.DEFAULT);
+        view.setCursor(Cursor.DEFAULT);
         view.setPannable(false);
+    }
+
+    @Override
+    public void visit(StateViewElement stateViewElement) {
+        super.visit(stateViewElement);
+        stateViewElement.setOnMouseClicked(event -> {
+            Action selectAction = actionManager.getActionFactory().createSelectAction(stateViewElement.getTarget(), !event.isControlDown());
+            actionManager.run(selectAction);
+        });
     }
 }

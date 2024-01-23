@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -22,6 +23,7 @@ import org.gecko.viewmodel.StateViewModel;
 @Getter
 public class RegionViewElement extends Pane implements ViewElement<RegionViewModel> {
 
+    @Getter(AccessLevel.NONE)
     private final RegionViewModel regionViewModel;
     private final StringProperty nameProperty;
     private final Property<Color> colorProperty;

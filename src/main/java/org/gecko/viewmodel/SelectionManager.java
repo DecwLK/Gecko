@@ -35,9 +35,6 @@ public class SelectionManager {
     }
 
     public void select(List<PositionableViewModelElement<?>> elements) {
-        undoSelectionStack.push(currentSelection);
-        redoSelectionStack.clear();
-        currentSelection.clear();
         currentSelection.addAll(elements);
     }
 

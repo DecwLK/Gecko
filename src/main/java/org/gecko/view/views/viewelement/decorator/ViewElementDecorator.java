@@ -1,6 +1,7 @@
 package org.gecko.view.views.viewelement.decorator;
 
 import java.util.List;
+import javafx.beans.property.Property;
 import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,7 @@ public abstract class ViewElementDecorator implements ViewElement<PositionableVi
     }
 
     @Override
-    public List<Point2D> getEdgePoints() {
+    public List<Property<Point2D>> getEdgePoints() {
         return getDecoratorTarget().getEdgePoints();
     }
 

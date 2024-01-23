@@ -3,6 +3,7 @@ package org.gecko.view.views.viewelement;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
@@ -18,7 +19,7 @@ import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
 @Getter
-public class SystemViewElement extends Pane implements ViewElement<SystemViewModel> {
+public class SystemViewElement extends BlockViewElement implements ViewElement<SystemViewModel> {
 
     @Getter(AccessLevel.NONE)
     private final SystemViewModel systemViewModel;
@@ -27,6 +28,7 @@ public class SystemViewElement extends Pane implements ViewElement<SystemViewMod
     private final List<PortViewModel> ports;
 
     public SystemViewElement(SystemViewModel systemViewModel) {
+        super(systemViewModel);
         this.nameProperty = new SimpleStringProperty();
         this.codeProperty = new SimpleStringProperty();
         this.ports = new ArrayList<>();
@@ -38,11 +40,6 @@ public class SystemViewElement extends Pane implements ViewElement<SystemViewMod
     @Override
     public Node drawElement() {
         return this;
-    }
-
-    @Override
-    public List<Point2D> getEdgePoints() {
-        return null;
     }
 
     @Override

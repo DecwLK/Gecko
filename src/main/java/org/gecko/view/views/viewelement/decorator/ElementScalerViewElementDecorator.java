@@ -35,7 +35,7 @@ public class ElementScalerViewElementDecorator extends ViewElementDecorator {
                 scalers[i] = new ElementScalerBlock(i, this, SCALER_SIZE, SCALER_SIZE);
                 scalers[i].setFill(Color.RED);
 
-                Point2D edgePoint = getEdgePoints().get(i);
+                Point2D edgePoint = getEdgePoints().get(i).getValue();
                 scalers[i].setLayoutX(node.getLayoutX() + edgePoint.getX());
                 scalers[i].setLayoutY(node.getLayoutY() + edgePoint.getY());
 
@@ -58,5 +58,6 @@ public class ElementScalerViewElementDecorator extends ViewElementDecorator {
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+        getDecoratorTarget().accept(visitor);
     }
 }

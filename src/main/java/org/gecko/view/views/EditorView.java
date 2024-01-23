@@ -3,6 +3,7 @@ package org.gecko.view.views;
 import java.util.Collection;
 import java.util.HashSet;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -125,6 +126,10 @@ public class EditorView {
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
 
+        viewModel.getSelectionManager()
+                 .getCurrentSelection()
+                 .addListener((ListChangeListener<PositionableViewModelElement<?>>) this::selectionChanged);
+
         // Set current tool
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
     }
@@ -181,11 +186,33 @@ public class EditorView {
             currentInspector = inspectorFactory.createInspector(newValue);
             inspectorPanel.getChildren().add(currentInspector);
         } else {
+            inspectorPanel.getChildren().clear();
             currentInspector = null;
         }
     }
 
     private void updatePaneContainerSize(double width, double height) {
         viewElementsPaneContainer.setMinSize(width, height);
+    }
+
+    private void selectionChanged(ListChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
+        while (change.next()) {
+            if (change.wasAdded()) {
+                change.getAddedSubList().forEach(element -> {
+                    ViewElement<?> viewElement = findViewElement(element);
+                    if (viewElement != null) {
+                        viewElement.setSelected(true);
+                    }
+                });
+            }
+            if (change.wasRemoved()) {
+                change.getRemoved().forEach(element -> {
+                    ViewElement<?> viewElement = findViewElement(element);
+                    if (viewElement != null) {
+                        viewElement.setSelected(false);
+                    }
+                });
+            }
+        }
     }
 }

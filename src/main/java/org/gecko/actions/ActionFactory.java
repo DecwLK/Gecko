@@ -147,7 +147,7 @@ public class ActionFactory {
     }
 
     public SelectAction createSelectAction(PositionableViewModelElement<?> element, boolean newSelection) {
-        return new SelectAction(geckoViewModel.getCurrentEditor(), element, newSelection);
+        return createSelectAction(List.of(element), newSelection);
     }
 
     public SelectAction createSelectAction(List<PositionableViewModelElement<?>> elements, boolean newSelection) {

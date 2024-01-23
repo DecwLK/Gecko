@@ -18,7 +18,7 @@ import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
 
 @Getter
-public class VariableBlockViewElement extends Pane implements ViewElement<PortViewModel> {
+public class VariableBlockViewElement extends BlockViewElement implements ViewElement<PortViewModel> {
 
     @Getter(AccessLevel.NONE)
     private final PortViewModel portViewModel;
@@ -27,6 +27,7 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
     private final Property<Visibility> visibilityProperty;
 
     public VariableBlockViewElement(PortViewModel portViewModel) {
+        super(portViewModel);
         this.nameProperty = new SimpleStringProperty();
         this.typeProperty = new SimpleStringProperty();
         this.visibilityProperty = new SimpleObjectProperty<>();
@@ -38,11 +39,6 @@ public class VariableBlockViewElement extends Pane implements ViewElement<PortVi
     @Override
     public Node drawElement() {
         return this;
-    }
-
-    @Override
-    public List<Point2D> getEdgePoints() {
-        return null;
     }
 
     @Override

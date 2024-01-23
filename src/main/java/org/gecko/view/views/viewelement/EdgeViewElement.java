@@ -63,8 +63,8 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     @Override
-    public List<Point2D> getEdgePoints() {
-        return getPathPoints().stream().map(Property::getValue).toList();
+    public List<Property<Point2D>> getEdgePoints() {
+        return getPathPoints();
     }
 
     @Override

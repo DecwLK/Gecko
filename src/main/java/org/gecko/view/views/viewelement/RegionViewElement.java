@@ -1,6 +1,7 @@
 package org.gecko.view.views.viewelement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
@@ -21,7 +22,7 @@ import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
 @Getter
-public class RegionViewElement extends Pane implements ViewElement<RegionViewModel> {
+public class RegionViewElement extends BlockViewElement implements ViewElement<RegionViewModel> {
 
     @Getter(AccessLevel.NONE)
     private final RegionViewModel regionViewModel;
@@ -32,6 +33,7 @@ public class RegionViewElement extends Pane implements ViewElement<RegionViewMod
     //TODO add more Properties once they get pushed
 
     public RegionViewElement(RegionViewModel regionViewModel) {
+        super(regionViewModel);
         this.colorProperty = new SimpleObjectProperty<>();
         this.invariantProperty = new SimpleStringProperty();
         this.nameProperty = new SimpleStringProperty();
@@ -45,11 +47,6 @@ public class RegionViewElement extends Pane implements ViewElement<RegionViewMod
     @Override
     public Node drawElement() {
         return this;
-    }
-
-    @Override
-    public List<Point2D> getEdgePoints() {
-        return null;
     }
 
     @Override

@@ -137,11 +137,12 @@ public class EditorViewModel {
     }
 
     public void addPositionableViewModelElement(PositionableViewModelElement<?> element) {
-        containedPositionableViewModelElementsProperty.add(element);
+        addPositionableViewModelElements(List.of(element));
     }
 
     public void addPositionableViewModelElements(List<PositionableViewModelElement<?>> elements) {
         containedPositionableViewModelElementsProperty.addAll(elements);
+        actionManager.run(actionManager.getActionFactory().createSelectAction(elements, true));
     }
 
     public void removePositionableViewModelElement(PositionableViewModelElement<?> element) {

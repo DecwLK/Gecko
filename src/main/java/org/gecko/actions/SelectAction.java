@@ -4,34 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
+import org.gecko.viewmodel.SelectionManager;
 
 public class SelectAction extends Action {
-    private final EditorViewModel editorViewModel;
-    private List<PositionableViewModelElement<?>> selectedElements;
+    private final SelectionManager selectionManager;
     private final List<PositionableViewModelElement<?>> elementsToSelect;
-
-    SelectAction(EditorViewModel editorViewModel, PositionableViewModelElement<?> element, boolean newSelection) {
-        this.editorViewModel = editorViewModel;
-        this.elementsToSelect = new ArrayList<>();
-        this.elementsToSelect.add(element);
-        if (newSelection) {
-            this.selectedElements = new ArrayList<>();
-        }
-    }
+    private final boolean newSelection;
 
     SelectAction(EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> elements, boolean newSelection) {
-        this.editorViewModel = editorViewModel;
-        this.elementsToSelect = new ArrayList<>();
-        this.elementsToSelect.addAll(elements);
-        if (newSelection) {
-            this.selectedElements = new ArrayList<>();
-        }
+        this.selectionManager = editorViewModel.getSelectionManager();
+        this.elementsToSelect = new ArrayList<>(elements);
+        this.newSelection = newSelection;
     }
 
     @Override
     void run() {
-        this.selectedElements.addAll(this.elementsToSelect);
-        this.editorViewModel.getSelectionManager().select(this.selectedElements);
+        if (newSelection) {
+            selectionManager.deselectAll();
+        }
+
+        selectionManager.select(elementsToSelect);
     }
 
     @Override

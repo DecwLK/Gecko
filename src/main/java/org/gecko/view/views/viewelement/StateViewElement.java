@@ -1,11 +1,16 @@
 package org.gecko.view.views.viewelement;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
@@ -21,7 +26,7 @@ import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
 @Getter
-public class StateViewElement extends Pane implements ViewElement<StateViewModel> {
+public class StateViewElement extends BlockViewElement implements ViewElement<StateViewModel> {
 
     @Getter(AccessLevel.NONE)
     private final StateViewModel stateViewModel;
@@ -30,6 +35,7 @@ public class StateViewElement extends Pane implements ViewElement<StateViewModel
     private final ListProperty<ContractViewModel> contractsProperty;
 
     public StateViewElement(StateViewModel stateViewModel) {
+        super(stateViewModel);
         this.nameProperty = new SimpleStringProperty();
         this.isStartStateProperty = new SimpleBooleanProperty();
         this.contractsProperty = new SimpleListProperty<>();
@@ -41,11 +47,6 @@ public class StateViewElement extends Pane implements ViewElement<StateViewModel
     @Override
     public Node drawElement() {
         return this;
-    }
-
-    @Override
-    public List<Point2D> getEdgePoints() {
-        return null;
     }
 
     @Override

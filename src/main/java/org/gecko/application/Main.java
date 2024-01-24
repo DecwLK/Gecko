@@ -15,6 +15,7 @@ public class Main extends Application {
         // Initialize Gecko
         GeckoManager geckoManager = new GeckoManager();
         GeckoIOManager.getInstance().setGeckoManager(geckoManager);
+        GeckoIOManager.getInstance().setStage(stage);
 
         stage.setTitle("Gecko");
 

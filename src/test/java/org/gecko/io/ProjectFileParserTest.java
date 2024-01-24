@@ -41,7 +41,7 @@ public class ProjectFileParserTest {
         }
         ProjectFileSerializer projectFileSerializer = new ProjectFileSerializer();
         try {
-            projectFileSerializer.createFile(setupPair.getKey(), setupPair.getValue(), "json/projectSetup.json");
+            projectFileSerializer.createFile(setupPair.getKey(), setupPair.getValue(), new File("json/projectSetup.json"));
         } catch (IOException e) {
             fail();
         }
@@ -59,7 +59,7 @@ public class ProjectFileParserTest {
 
         ProjectFileSerializer projectFileSerializer2 = new ProjectFileSerializer();
         try {
-            projectFileSerializer2.createFile(geckoPair.getKey(), geckoPair.getValue(), "json/project.json");
+            projectFileSerializer2.createFile(geckoPair.getKey(), geckoPair.getValue(), new File("json/project.json"));
         } catch (IOException e) {
             fail();
         }

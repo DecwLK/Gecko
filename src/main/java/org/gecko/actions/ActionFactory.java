@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import org.gecko.model.Kind;
+import org.gecko.model.Visibility;
 import org.gecko.tools.Tool;
 import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.BlockViewModelElement;
@@ -33,6 +35,10 @@ public class ActionFactory {
         return new ChangeInvariantViewModelElementAction(regionViewModel, newInvariant);
     }
 
+    public ChangeKindEdgeViewModelAction createChangeKindAction(EdgeViewModel edgeViewModel, Kind kind) {
+        return new ChangeKindEdgeViewModelAction(edgeViewModel, kind);
+    }
+
     public ChangePreconditionViewModelElementAction createChangePreconditionViewModelElementAction(ContractViewModel contractViewModel,
                                                                                                    String newPrecondition) {
         return new ChangePreconditionViewModelElementAction(contractViewModel, newPrecondition);
@@ -45,6 +51,10 @@ public class ActionFactory {
 
     public ChangeTypePortViewModelElementAction createChangeTypePortViewModelElementAction(PortViewModel portViewModel, String newType) {
         return new ChangeTypePortViewModelElementAction(portViewModel, newType);
+    }
+
+    public ChangeVisibilityPortViewModelAction createChangeVisibilityPortViewModelAction(PortViewModel portViewModel, Visibility visibility) {
+        return new ChangeVisibilityPortViewModelAction(portViewModel, visibility);
     }
 
     public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {

@@ -3,11 +3,14 @@ package org.gecko.view.views;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.SetChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
@@ -37,12 +40,13 @@ public class EditorView {
     private final StackPane currentViewPane;
     private final ToolBar toolBar;
     private final ShortcutHandler shortcutHandler;
+    private Button uncollapseInspectorButton;
     private final InspectorFactory inspectorFactory;
     private final ScrollPane viewElementsScrollPane;
     private final Pane viewElementsPaneContainer;
     private final Group viewElementsGroup;
 
-    private Inspector currentInspector;
+    private ObjectProperty<Inspector> currentInspector;
     private Group inspectorPanel;
 
     public EditorView(ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel, ShortcutHandler shortcutHandler) {
@@ -53,6 +57,7 @@ public class EditorView {
         this.currentViewPane = new StackPane();
         this.viewElementsGroup = new Group();
         this.inspectorPanel = new Group();
+        this.currentInspector = new SimpleObjectProperty<>(null);
         currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
         currentView = new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
@@ -71,13 +76,30 @@ public class EditorView {
         AnchorPane.setTopAnchor(currentViewLabel, 10.0);
         AnchorPane.setLeftAnchor(currentViewLabel, 10.0);
 
-        Node viewSwitchButton = floatingUIBuilder.buildViewSwitchButton();
+        Node viewSwitchButton = floatingUIBuilder.buildViewSwitchButtons();
         AnchorPane.setTopAnchor(viewSwitchButton, 10.0);
         AnchorPane.setRightAnchor(viewSwitchButton, 10.0);
 
         AnchorPane floatingUI = new AnchorPane();
         floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton);
         floatingUI.setPickOnBounds(false);
+
+        currentInspector.addListener((observable, oldValue, newValue) -> {
+            floatingUI.getChildren().remove(uncollapseInspectorButton);
+            if (newValue == null) {
+                return;
+            }
+            newValue.visibleProperty().addListener((observable1, oldValue1, newValue1) -> {
+                if (!newValue1) {
+                    uncollapseInspectorButton = floatingUIBuilder.buildUncollapseInspectorButton(currentInspector.get());
+                    AnchorPane.setTopAnchor(uncollapseInspectorButton, 10.0);
+                    AnchorPane.setRightAnchor(uncollapseInspectorButton, viewModel.getCurrentSystem().getTarget().getParent() == null ? 40.0 : 70.0);
+                    floatingUI.getChildren().add(uncollapseInspectorButton);
+                } else {
+                    floatingUI.getChildren().remove(uncollapseInspectorButton);
+                }
+            });
+        });
 
         // Build stack pane
         currentViewPane.getChildren().addAll(viewElementsScrollPane, floatingUI);
@@ -115,20 +137,16 @@ public class EditorView {
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
     }
 
-    public boolean toggleInspector() {
-        if (currentInspector != null) {
-            return currentInspector.toggleCollapse();
-        }
-
-        return false;
-    }
-
     public Node drawToolbar() {
         return toolBar;
     }
 
     public Node drawInspector() {
         return inspectorPanel;
+    }
+
+    public void toggleInspector() {
+        currentInspector.get().toggleCollapse();
     }
 
     private void onUpdateViewElements(ViewFactory viewFactory, SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
@@ -166,11 +184,11 @@ public class EditorView {
                                        PositionableViewModelElement<?> oldValue, PositionableViewModelElement<?> newValue) {
         if (newValue != null) {
             inspectorPanel.getChildren().clear();
-            currentInspector = inspectorFactory.createInspector(newValue);
-            inspectorPanel.getChildren().add(currentInspector);
+            currentInspector.set(inspectorFactory.createInspector(newValue));
+            inspectorPanel.getChildren().add(currentInspector.get());
         } else {
             inspectorPanel.getChildren().clear();
-            currentInspector = null;
+            currentInspector.set(null);
         }
     }
 

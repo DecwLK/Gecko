@@ -83,7 +83,13 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         Rectangle background = new Rectangle();
         background.widthProperty().bind(widthProperty());
         background.heightProperty().bind(heightProperty());
-        background.setFill(Color.LIGHTBLUE);
+        background.fillProperty().bind(Bindings.createObjectBinding(() -> {
+            if (isStartStateProperty.get()) {
+                return Color.GREEN;
+            } else {
+                return Color.LIGHTBLUE;
+            }
+        }, isStartStateProperty));
         GridPane gridPane = new GridPane();
         Label name = new Label("State: " + stateViewModel.getName());
         name.textProperty().bind(Bindings.createStringBinding(() -> "State: " + stateViewModel.getName(), stateViewModel.getNameProperty()));

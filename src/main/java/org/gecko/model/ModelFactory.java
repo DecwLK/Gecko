@@ -48,6 +48,7 @@ public class ModelFactory {
         int id = getNewElementId();
         System system = new System(id, getDefaultName(id), DEFAULT_CODE, new Automaton());
         parentSystem.addChild(system);
+        system.setParent(parentSystem);
         return system;
     }
 

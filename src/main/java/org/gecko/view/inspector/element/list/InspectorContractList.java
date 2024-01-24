@@ -2,7 +2,6 @@ package org.gecko.view.inspector.element.list;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Orientation;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.container.InspectorContractItem;
 import org.gecko.viewmodel.ContractViewModel;
@@ -24,7 +23,7 @@ public class InspectorContractList extends AbstractInspectorList<InspectorContra
                 if (change.wasAdded()) {
                     for (ContractViewModel item : change.getAddedSubList()) {
                         InspectorContractItem newContractItem = new InspectorContractItem(actionManager, stateViewModel, item);
-                        newContractItem.prefWidthProperty().bind(widthProperty());
+                        newContractItem.prefWidthProperty().bind(widthProperty().subtract(20));
                         items.add(newContractItem);
                     }
                 } else if (change.wasRemoved()) {

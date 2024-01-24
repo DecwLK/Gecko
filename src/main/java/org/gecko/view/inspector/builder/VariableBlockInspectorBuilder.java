@@ -2,8 +2,8 @@ package org.gecko.view.inspector.builder;
 
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorSeparator;
-import org.gecko.view.inspector.element.combobox.InspectorVisibilityComboBox;
-import org.gecko.view.inspector.element.textfield.InspectorTypeField;
+import org.gecko.view.inspector.element.container.InspectorTypeLabel;
+import org.gecko.view.inspector.element.container.InspectorVisibilityPicker;
 import org.gecko.viewmodel.PortViewModel;
 
 public class VariableBlockInspectorBuilder extends AbstractInspectorBuilder<PortViewModel> {
@@ -12,10 +12,10 @@ public class VariableBlockInspectorBuilder extends AbstractInspectorBuilder<Port
         super(actionManager, viewModel);
 
         // Visibility
-        addInspectorElement(new InspectorVisibilityComboBox(viewModel.getVisibilityProperty()));
+        addInspectorElement(new InspectorVisibilityPicker(actionManager, viewModel));
         addInspectorElement(new InspectorSeparator());
 
         // Type
-        addInspectorElement(new InspectorTypeField(actionManager, viewModel));
+        addInspectorElement(new InspectorTypeLabel(actionManager, viewModel));
     }
 }

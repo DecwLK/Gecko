@@ -19,12 +19,13 @@ import org.gecko.viewmodel.EditorViewModel;
 public class Inspector extends ScrollPane {
 
     private static final int INSPECTOR_ELEMENT_SPACING = 10;
-    private static final int INSPECTOR_WIDTH = 300;
+    private static final int INSPECTOR_WIDTH = 310;
 
     private boolean isCollapsed = false;
 
     public Inspector(List<InspectorElement<?>> elements, ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
         VBox vBox = new VBox();
+        setPrefWidth(INSPECTOR_WIDTH);
 
         // Inspector decorations
         HBox inspectorDecorations = new HBox();
@@ -46,20 +47,14 @@ public class Inspector extends ScrollPane {
         for (InspectorElement<?> element : elements) {
             vBox.getChildren().add(element.getControl());
         }
-
+        setPadding(new Insets(INSPECTOR_ELEMENT_SPACING / 2.0));
         vBox.setSpacing(INSPECTOR_ELEMENT_SPACING);
         setContent(vBox);
     }
 
     public boolean toggleCollapse() {
         isCollapsed = !isCollapsed;
-
-        if (isCollapsed) {
-            setPrefWidth(0);
-        } else {
-            setPrefWidth(INSPECTOR_WIDTH);
-        }
-
+        setVisible(!isCollapsed);
         return isCollapsed;
     }
 

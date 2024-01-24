@@ -2,6 +2,8 @@ package org.gecko.model;
 
 import java.util.HashSet;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -16,6 +18,7 @@ public class Automaton {
     private final Set<State> states;
     private final Set<Edge> edges;
 
+    @JsonCreator
     public Automaton() {
         this.startState = null;
         this.regions = new HashSet<>();
@@ -75,6 +78,7 @@ public class Automaton {
         this.edges.removeAll(edges);
     }
 
+    @JsonIgnore
     public Set<Element> getAllElements() {
         Set<Element> allElements = new HashSet<>();
         allElements.addAll(regions);

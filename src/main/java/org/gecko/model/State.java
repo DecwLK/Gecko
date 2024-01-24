@@ -2,6 +2,8 @@ package org.gecko.model;
 
 import java.util.HashSet;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +17,8 @@ public class State extends Element implements Renamable {
     private String name;
     private final Set<Contract> contracts;
 
-    public State(int id, String name) {
+    @JsonCreator
+    public State(@JsonProperty("id") int id, @JsonProperty("name") String name) {
         super(id);
         this.name = name;
         this.contracts = new HashSet<>();

@@ -2,6 +2,9 @@ package org.gecko.model;
 
 import java.util.HashSet;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +25,9 @@ public class System extends Element implements Renamable {
     private String code;
     private Automaton automaton;
 
-    public System(int id, String name, String code, Automaton automaton) {
+    @JsonCreator
+    public System(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("code") String code,
+                  @JsonProperty("automaton") Automaton automaton) {
         super(id);
         this.name = name;
         this.code = code;
@@ -85,6 +90,7 @@ public class System extends Element implements Renamable {
         visitor.visit(this);
     }
 
+    @JsonIgnore
     public Set<Element> getAllElements() {
         Set<Element> allElements = new HashSet<>();
         allElements.addAll(children);

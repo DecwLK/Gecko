@@ -1,5 +1,7 @@
 package org.gecko.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +15,9 @@ public class SystemConnection extends Element {
     private Variable source;
     private Variable destination;
 
-    public SystemConnection(int id, Variable source, Variable destination) {
+    @JsonCreator
+    public SystemConnection(@JsonProperty("id") int id, @JsonProperty("source") Variable source,
+                            @JsonProperty("destination") Variable destination) {
         super(id);
         this.source = source;
         this.destination = destination;

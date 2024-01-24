@@ -17,8 +17,8 @@ public class Contract extends Element implements Renamable {
     private Condition postCondition;
 
     @JsonCreator
-    public Contract(@JsonProperty("id") int id, @JsonProperty("name") String name,
-                    @JsonProperty("preCondition") Condition preCondition, @JsonProperty("postCondition") Condition postCondition) {
+    public Contract(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("preCondition") Condition preCondition,
+                    @JsonProperty("postCondition") Condition postCondition) {
         super(id);
         this.name = name;
         this.preCondition = preCondition;

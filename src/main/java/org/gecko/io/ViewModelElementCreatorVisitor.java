@@ -26,8 +26,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
     ViewModelFactory viewModelFactory;
     HashMap<Integer, ViewModelPropertiesContainer> viewModelProperties;
 
-    ViewModelElementCreatorVisitor(ViewModelFactory viewModelFactory,
-                                   List<ViewModelPropertiesContainer> viewModelProperties) {
+    ViewModelElementCreatorVisitor(ViewModelFactory viewModelFactory, List<ViewModelPropertiesContainer> viewModelProperties) {
         this.viewModelFactory = viewModelFactory;
         this.viewModelProperties = new HashMap<>();
         for (ViewModelPropertiesContainer container : viewModelProperties) {
@@ -86,7 +85,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         try {
             regionViewModel = this.viewModelFactory.createRegionViewModelFrom(region);
         } catch (MissingViewModelElement e) {
-                // TODO: Shouldn't actually handle here, but throwing exception causes exception-throw waterfall.
+            // TODO: Shouldn't actually handle here, but throwing exception causes exception-throw waterfall.
         }
 
         if (regionViewModel != null) {

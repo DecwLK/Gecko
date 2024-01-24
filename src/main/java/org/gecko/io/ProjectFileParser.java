@@ -1,12 +1,12 @@
 package org.gecko.io;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Pair;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gecko.exceptions.MissingViewModelElement;
 import org.gecko.model.Automaton;
 import org.gecko.model.Edge;

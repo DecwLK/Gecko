@@ -79,9 +79,11 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         background.setFill(Color.LIGHTBLUE);
         GridPane gridPane = new GridPane();
         Label name = new Label("State: " + stateViewModel.getName());
-        Bindings.createStringBinding(() -> "State: " + stateViewModel.getName(), stateViewModel.getNameProperty());
+        name.textProperty().bind(Bindings.createStringBinding(() -> "State: " + stateViewModel.getName(), stateViewModel.getNameProperty()));
         Label contracts = new Label("Contracts: " + stateViewModel.getContractsProperty().size());
-        Bindings.createStringBinding(() -> "Contracts: " + stateViewModel.getContractsProperty().size(), stateViewModel.getContractsProperty());
+        contracts.textProperty()
+                 .bind(Bindings.createStringBinding(() -> "Contracts: " + stateViewModel.getContractsProperty().size(),
+                     stateViewModel.getContractsProperty()));
         gridPane.add(name, 0, 0);
         gridPane.add(contracts, 0, 1);
         getChildren().addAll(background, gridPane);

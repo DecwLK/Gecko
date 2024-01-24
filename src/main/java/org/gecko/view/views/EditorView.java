@@ -160,7 +160,9 @@ public class EditorView {
             currentViewElements.add(viewElement);
             viewElementsGroup.getChildren().add(viewElement.drawElement());
 
-            viewElement.accept(getViewModel().getCurrentTool());
+            if (viewModel.getCurrentTool() != null) {
+                viewElement.accept(getViewModel().getCurrentTool());
+            }
         } else if (change.wasRemoved()) {
             // Find corresponding view element and remove it
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());

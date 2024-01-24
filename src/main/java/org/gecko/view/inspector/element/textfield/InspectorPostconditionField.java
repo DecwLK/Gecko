@@ -1,6 +1,6 @@
 package org.gecko.view.inspector.element.textfield;
 
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.ContractViewModel;
 
@@ -9,13 +9,13 @@ public class InspectorPostconditionField extends InspectorContractField {
     public InspectorPostconditionField(ActionManager actionManager, ContractViewModel contractViewModel) {
         setText(contractViewModel.getPostcondition());
 
-        setOnAction(event -> {
+        textProperty().addListener(event -> {
             actionManager.run(actionManager.getActionFactory().createChangePostconditionViewModelElementAction(contractViewModel, getText()));
         });
     }
 
     @Override
-    public TextField getControl() {
+    public TextArea getControl() {
         return this;
     }
 }

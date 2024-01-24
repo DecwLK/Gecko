@@ -60,9 +60,16 @@
     -fx-background-image: url('icons/Toolbar_Region.png');
 }
 
+.inspector-label {
+    -fx-text-fill: #222222;
+    -fx-font-size: 12px;
+    -fx-font-weight: bolder;
+    -fx-font: 14px "sans-serif";
+    -fx-text-alignment: center;
+}
+
 .inspector-button {
     -icon-paint: #222222;
-    -fx-content-display: graphic-only;
     -fx-border-color: #222222;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
@@ -70,6 +77,12 @@
     -fx-background-size: 24px 24px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-text-alignment: center;
+    -fx-text-fill: #222222;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
 }
 
 .inspector-button:hover {
@@ -98,4 +111,24 @@
 
 .inspector-uncollapse-button {
     -fx-background-image: url('icons/Inspector_Uncollapse.png');
+}
+
+.inspector-remove-button {
+    -fx-background-image: url('icons/Inspector_Remove.png');
+}
+
+.inspector-contract-expand-button {
+    -fx-background-image: url('icons/Inspector_Contract_Expand.png');
+    -fx-background-size: 12px 12px;
+    -icon-paint: transparent;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.inspector-contract-expanded-button {
+    -fx-background-image: url('icons/Inspector_Contract_Expanded.png');
+    -fx-background-size: 12px 12px;
+    -icon-paint: transparent;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
 }

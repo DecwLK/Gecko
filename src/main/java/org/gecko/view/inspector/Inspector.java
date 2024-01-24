@@ -1,6 +1,7 @@
 package org.gecko.view.inspector;
 
 import java.util.List;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
@@ -16,6 +17,8 @@ import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class Inspector extends ScrollPane {
+
+    private static final int INSPECTOR_ELEMENT_SPACING = 10;
 
     private boolean isCollapsed = false;
 
@@ -43,6 +46,7 @@ public class Inspector extends ScrollPane {
             vBox.getChildren().add(element.getControl());
         }
 
+        vBox.setSpacing(INSPECTOR_ELEMENT_SPACING);
         setContent(vBox);
     }
 

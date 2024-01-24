@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.button.InspectorCollapseContractButton;
@@ -19,6 +20,9 @@ import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
 public class InspectorContractItem extends VBox implements InspectorElement<VBox> {
+    @Getter
+    private ContractViewModel viewModel;
+
     /**
      * Constructor for the State contract item.
      *
@@ -27,6 +31,8 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
      * @param contractViewModel Contract view model
      */
     public InspectorContractItem(ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
+        this.viewModel = contractViewModel;
+
         // Contract fields:
         List<InspectorContractField> contractFields = new ArrayList<>();
 

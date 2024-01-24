@@ -134,10 +134,12 @@ public class EditorView {
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
     }
 
-    public void toggleInspector() {
+    public boolean toggleInspector() {
         if (currentInspector != null) {
-            currentInspector.toggleCollapse();
+            return currentInspector.toggleCollapse();
         }
+
+        return false;
     }
 
     public Node drawToolbar() {

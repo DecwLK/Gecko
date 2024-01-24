@@ -13,6 +13,7 @@ import org.gecko.viewmodel.EditorViewModel;
 
 public class ToolBarBuilder {
 
+    private static final String DEFAULT_TOOLBAR_ICON_STYLE_NAME = "toolbar-icon";
     private static final int BUTTON_SIZE = 30;
 
     private final ToolBar toolBar;
@@ -53,6 +54,7 @@ public class ToolBarBuilder {
                 actionManager.run(actionManager.getActionFactory().createSelectToolAction(editorView, tool));
             });
 
+            toolButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);
             toolButton.getStyleClass().add(tool.getIconStyleName());
             toolBar.getItems().add(toolButton);
             toggleGroup.getToggles().add(toolButton);

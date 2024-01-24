@@ -1,229 +1,101 @@
-.cursor-icon {
-    -icon-paint: black;
+.toolbar-icon {
+    -icon-paint: #222222;
     -fx-content-display: graphic-only;
     -fx-background-radius: 5;
     -fx-background-color: transparent;
-    -fx-background-image: url('icons/Toolbar_Cursor.png');
     -fx-background-size: 36px 36px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
-.cursor-icon:hover {
+.toolbar-icon:hover {
     -fx-background-color: #e0e0e0;
 }
 
-.cursor-icon:pressed {
+.toolbar-icon:pressed {
     -fx-background-color: #d0d0d0;
 }
 
-.cursor-icon:selected {
+.toolbar-icon:selected {
     -fx-background-color: lightgray;
+}
+
+.cursor-icon {
+    -fx-background-image: url('icons/Toolbar_Cursor.png');
 }
 
 .hand-icon {
-    -icon-paint: black;
-    -fx-content-display: graphic-only;
-    -fx-background-radius: 5;
-    -fx-background-color: transparent;
     -fx-background-image: url('icons/Toolbar_Hand.png');
-    -fx-background-size: 36px 36px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
-
-.hand-icon:hover {
-    -fx-background-color: #e0e0e0;
-}
-
-.hand-icon:pressed {
-    -fx-background-color: #d0d0d0;
-}
-
-.hand-icon:selected {
-    -fx-background-color: lightgray;
 }
 
 .edge-icon {
-    -icon-paint: black;
-    -fx-content-display: graphic-only;
-    -fx-background-radius: 5;
-    -fx-background-color: transparent;
     -fx-background-image: url('icons/Toolbar_Edge.png');
-    -fx-background-size: 36px 36px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
-
-.edge-icon:hover {
-    -fx-background-color: #e0e0e0;
-}
-
-.edge-icon:pressed {
-    -fx-background-color: #d0d0d0;
-}
-
-.edge-icon:selected {
-    -fx-background-color: lightgray;
 }
 
 .zoom-icon {
-    -icon-paint: black;
-    -fx-content-display: graphic-only;
-    -fx-background-radius: 5;
-    -fx-background-color: transparent;
     -fx-background-image: url('icons/Toolbar_Zoom.png');
-    -fx-background-size: 36px 36px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
-
-.zoom-icon:hover {
-    -fx-background-color: #e0e0e0;
-}
-
-.zoom-icon:pressed {
-    -fx-background-color: #d0d0d0;
-}
-
-.zoom-icon:selected {
-    -fx-background-color: lightgray;
 }
 
 .marquee-icon {
-    -icon-paint: black;
-    -fx-content-display: graphic-only;
-    -fx-background-radius: 5;
-    -fx-background-color: transparent;
     -fx-background-image: url('icons/Toolbar_Marquee.png');
-    -fx-background-size: 36px 36px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
-
-.marquee-icon:hover {
-    -fx-background-color: #e0e0e0;
-}
-
-.marquee-icon:pressed {
-    -fx-background-color: #d0d0d0;
-}
-
-.marquee-icon:selected {
-    -fx-background-color: lightgray;
 }
 
 .variable-block-creator-icon {
-    -icon-paint: black;
-    -fx-content-display: graphic-only;
-    -fx-background-radius: 5;
-    -fx-background-color: transparent;
     -fx-background-image: url('icons/Toolbar_Variable.png');
-    -fx-background-size: 36px 36px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
-
-.variable-block-creator-icon:hover {
-    -fx-background-color: #e0e0e0;
-}
-
-.variable-block-creator-icon:pressed {
-    -fx-background-color: #d0d0d0;
-}
-
-.variable-block-creator-icon:selected {
-    -fx-background-color: lightgray;
 }
 
 .state-creator-icon {
-    -icon-paint: black;
-    -fx-content-display: graphic-only;
-    -fx-background-radius: 5;
-    -fx-background-color: transparent;
     -fx-background-image: url('icons/Toolbar_State.png');
-    -fx-background-size: 36px 36px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
-
-.state-creator-icon:hover {
-    -fx-background-color: #e0e0e0;
-}
-
-.state-creator-icon:pressed {
-    -fx-background-color: #d0d0d0;
-}
-
-.state-creator-icon:selected {
-    -fx-background-color: lightgray;
 }
 
 .system-creator-icon {
-    -icon-paint: black;
-    -fx-content-display: graphic-only;
-    -fx-background-radius: 5;
-    -fx-background-color: transparent;
     -fx-background-image: url('icons/Toolbar_System_Component.png');
-    -fx-background-size: 36px 36px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
-
-.system-creator-icon:hover {
-    -fx-background-color: #e0e0e0;
-}
-
-.system-creator-icon:pressed {
-    -fx-background-color: #d0d0d0;
-}
-
-.system-creator-icon:selected {
-    -fx-background-color: lightgray;
 }
 
 .pan-icon {
-    -icon-paint: black;
-    -fx-content-display: graphic-only;
-    -fx-background-radius: 5;
-    -fx-background-color: transparent;
     -fx-background-image: url('icons/Toolbar_Hand.png');
-    -fx-background-size: 36px 36px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
-
-.pan-icon:hover {
-    -fx-background-color: #e0e0e0;
-}
-
-.pan-icon:pressed {
-    -fx-background-color: #d0d0d0;
-}
-
-.pan-icon:selected {
-    -fx-background-color: lightgray;
 }
 
 .region-creator-icon {
-    -icon-paint: black;
-    -fx-content-display: graphic-only;
-    -fx-background-radius: 5;
-    -fx-background-color: transparent;
     -fx-background-image: url('icons/Toolbar_Region.png');
-    -fx-background-size: 36px 36px;
+}
+
+.inspector-button {
+    -icon-paint: #222222;
+    -fx-content-display: graphic-only;
+    -fx-border-color: #222222;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-background-color: #e0e0e0;
+    -fx-background-size: 24px 24px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
-.region-creator-icon:hover {
+.inspector-button:hover {
     -fx-background-color: #e0e0e0;
 }
 
-.region-creator-icon:pressed {
+.inspector-button:pressed {
     -fx-background-color: #d0d0d0;
 }
 
-.region-creator-icon:selected {
+.inspector-button:selected {
     -fx-background-color: lightgray;
+}
+
+.inspector-selection-forward-button {
+    -fx-background-image: url('icons/Selection_Next.png');
+}
+
+.inspector-selection-backward-button {
+    -fx-background-image: url('icons/Selection_Previous.png');
+}
+
+.inspector-collapse-button {
+    -fx-background-image: url('icons/Inspector_Collapse.png');
+}
+
+.inspector-uncollapse-button {
+    -fx-background-image: url('icons/Inspector_Uncollapse.png');
 }

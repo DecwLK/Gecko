@@ -4,9 +4,11 @@ import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
+import org.gecko.view.inspector.element.button.AbstractInspectorButton;
 import org.gecko.view.inspector.element.button.InspectorCollapseButton;
 import org.gecko.view.inspector.element.button.InspectorSelectionBackwardButton;
 import org.gecko.view.inspector.element.button.InspectorSelectionForwardButton;
@@ -25,12 +27,15 @@ public class Inspector extends ScrollPane {
 
         // Selection forward/backward buttons
         HBox selectionButtons = new HBox();
-        selectionButtons.getChildren()
-                        .addAll(new InspectorSelectionBackwardButton(actionManager).getControl(),
-                            new InspectorSelectionForwardButton(actionManager).getControl());
-        inspectorDecorations.getChildren().addAll(selectionButtons,
-            // Collapse button
-            new InspectorCollapseButton(editorView));
+        AbstractInspectorButton selectionBackwardButton = new InspectorSelectionBackwardButton(actionManager);
+        AbstractInspectorButton selectionForwardButton = new InspectorSelectionForwardButton(actionManager);
+        selectionButtons.getChildren().addAll(selectionBackwardButton, selectionForwardButton);
+
+        AbstractInspectorButton collapseButton = new InspectorCollapseButton(editorView);
+
+        HBox.setHgrow(selectionButtons, Priority.ALWAYS);
+        HBox.setHgrow(collapseButton, Priority.ALWAYS);
+        inspectorDecorations.getChildren().addAll(selectionButtons, collapseButton);
 
         vBox.getChildren().add(inspectorDecorations);
 
@@ -41,7 +46,7 @@ public class Inspector extends ScrollPane {
         setContent(vBox);
     }
 
-    public void toggleCollapse() {
+    public boolean toggleCollapse() {
         isCollapsed = !isCollapsed;
 
         if (isCollapsed) {
@@ -49,6 +54,8 @@ public class Inspector extends ScrollPane {
         } else {
             setPrefWidth(300);
         }
+
+        return isCollapsed;
     }
 
     public Node getView() {

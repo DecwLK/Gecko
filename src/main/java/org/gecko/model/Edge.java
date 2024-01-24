@@ -20,7 +20,7 @@ public class Edge extends Element {
     private State destination;
 
     @JsonCreator
-    public Edge(@JsonProperty("id") int id,@JsonProperty("source")  State source, @JsonProperty("destination") State destination,
+    public Edge(@JsonProperty("id") int id, @JsonProperty("source") State source, @JsonProperty("destination") State destination,
                 @JsonProperty("contract") Contract contract, @JsonProperty("kind") Kind kind, @JsonProperty("priority") int priority) {
         super(id);
         this.source = source;

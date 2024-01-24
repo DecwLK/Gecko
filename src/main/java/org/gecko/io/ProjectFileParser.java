@@ -26,16 +26,14 @@ public class ProjectFileParser implements FileParser {
         GeckoJsonWrapper geckoJsonWrapper = objectMapper.readValue(file, GeckoJsonWrapper.class);
 
         System root = objectMapper.readValue(geckoJsonWrapper.getModel(), System.class);
-        TypeReference<ArrayList<ViewModelPropertiesContainer>> typeRef =
-            new TypeReference<ArrayList<ViewModelPropertiesContainer>>() {};
-        List<ViewModelPropertiesContainer> newViewModelProperties
-            = objectMapper.readValue(geckoJsonWrapper.getViewModelProperties(), typeRef);
+        TypeReference<ArrayList<ViewModelPropertiesContainer>> typeRef = new TypeReference<>() {
+        };
+        List<ViewModelPropertiesContainer> newViewModelProperties = objectMapper.readValue(geckoJsonWrapper.getViewModelProperties(), typeRef);
 
         GeckoModel model = new GeckoModel(root);
-
         GeckoViewModel viewModel = new GeckoViewModel(model);
-        ViewModelElementCreatorVisitor visitor = new ViewModelElementCreatorVisitor(viewModel.getViewModelFactory(),
-            newViewModelProperties);
+
+        ViewModelElementCreatorVisitor visitor = new ViewModelElementCreatorVisitor(viewModel.getViewModelFactory(), newViewModelProperties);
         this.visitModel(root, visitor);
 
         return new Pair<>(model, viewModel);

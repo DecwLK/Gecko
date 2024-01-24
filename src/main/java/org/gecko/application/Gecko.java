@@ -17,4 +17,6 @@ public class Gecko {
         viewModel = new GeckoViewModel(model);
         view = new GeckoView(viewModel.getActionManager(), viewModel);
     }
+
+    // TODO: Gecko from existing Model and ViewModel
 }

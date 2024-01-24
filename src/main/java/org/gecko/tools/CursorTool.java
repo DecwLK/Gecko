@@ -1,6 +1,7 @@
 package org.gecko.tools;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
@@ -18,6 +19,9 @@ public class CursorTool extends Tool {
 
     private static final String NAME = "Cursor Tool";
     private static final String ICON_STYLE_NAME = "cursor-icon";
+
+    private ScrollPane viewPane;
+    private boolean isDragging = false;
 
     public CursorTool(ActionManager actionManager) {
         super(actionManager);
@@ -38,18 +42,34 @@ public class CursorTool extends Tool {
         super.visitView(view);
         view.setCursor(Cursor.DEFAULT);
         view.setPannable(false);
+        viewPane = view;
+        view.setOnMouseReleased(moveElement());
     }
 
     @Override
     public void visit(StateViewElement stateViewElement) {
         super.visit(stateViewElement);
+        stateViewElement.setOnMousePressed(event -> {
+            isDragging = true;
+        });
         stateViewElement.setOnMouseClicked(selectElement(stateViewElement));
+        stateViewElement.setOnMouseReleased(event -> {
+            // Forward event to the main view, so that the mouse position is relative to the view and not the element
+            viewPane.fireEvent(event);
+        });
     }
 
     @Override
     public void visit(SystemViewElement systemViewElement) {
         super.visit(systemViewElement);
+        systemViewElement.setOnMousePressed(event -> {
+            isDragging = true;
+        });
         systemViewElement.setOnMouseClicked(selectElement(systemViewElement));
+        systemViewElement.setOnMouseReleased(event -> {
+            // Forward event to the main view, so that the mouse position is relative to the view and not the element
+            viewPane.fireEvent(event);
+        });
     }
 
     @Override
@@ -61,7 +81,14 @@ public class CursorTool extends Tool {
     @Override
     public void visit(VariableBlockViewElement variableBlockViewElement) {
         super.visit(variableBlockViewElement);
+        variableBlockViewElement.setOnMousePressed(event -> {
+            isDragging = true;
+        });
         variableBlockViewElement.setOnMouseClicked(selectElement(variableBlockViewElement));
+        variableBlockViewElement.setOnMouseReleased(event -> {
+            // Forward event to the main view, so that the mouse position is relative to the view and not the element
+            viewPane.fireEvent(event);
+        });
     }
 
     @Override
@@ -83,4 +110,15 @@ public class CursorTool extends Tool {
         };
     }
 
+    private EventHandler<MouseEvent> moveElement() {
+        return event -> {
+            if (!isDragging) {
+                return;
+            }
+            Point2D position = new Point2D(event.getX(), event.getY());
+            Action selectAction = actionManager.getActionFactory().createMoveBlockViewModelElementAction(position);
+            actionManager.run(selectAction);
+            isDragging = false;
+        };
+    }
 }

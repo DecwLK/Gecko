@@ -1,7 +1,6 @@
 package org.gecko.view.views.viewelement;
 
 import java.util.List;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;

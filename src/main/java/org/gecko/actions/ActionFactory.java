@@ -111,7 +111,12 @@ public class ActionFactory {
     }
 
     public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(Point2D offset) {
-        return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor().getSelectionManager(), offset);
+        return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), offset);
+    }
+
+    public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(Set<PositionableViewModelElement<?>> elementsToMove,
+                                                                                 Point2D offset) {
+        return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), elementsToMove, offset);
     }
 
     public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(EdgeViewModel edgeViewModel, StateViewModel stateViewModel,

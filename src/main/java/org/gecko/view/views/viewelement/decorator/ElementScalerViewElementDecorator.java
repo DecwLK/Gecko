@@ -5,8 +5,6 @@ import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.view.views.viewelement.ViewElementVisitor;

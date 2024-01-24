@@ -11,6 +11,7 @@ public abstract class AbstractInspectorButton extends Button implements Inspecto
         getStyleClass().add(ICON_STYLE_NAME);
         setPrefSize(DEFAULT_SIZE, DEFAULT_SIZE);
     }
+
     @Override
     public Button getControl() {
         return this;

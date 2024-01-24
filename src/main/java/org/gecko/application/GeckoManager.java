@@ -2,6 +2,8 @@ package org.gecko.application;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.model.GeckoModel;
+import org.gecko.viewmodel.GeckoViewModel;
 
 public class GeckoManager {
     @Getter
@@ -9,6 +11,10 @@ public class GeckoManager {
     private Gecko gecko;
 
     public GeckoManager() {
-        gecko = new Gecko();
+        this.gecko = new Gecko();
+    }
+
+    protected void setGecko(GeckoModel geckoModel, GeckoViewModel geckoViewModel) {
+        this.gecko = new Gecko(geckoModel, geckoViewModel);
     }
 }

@@ -35,8 +35,10 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
     }
 
     private static void setPositionAndSize(PositionableViewModelElement<?> element, ViewModelPropertiesContainer container) {
-        element.setPosition(new Point2D(container.getPositionX(), container.getPositionY()));
-        element.setSize(new Point2D(container.getSizeX(), container.getSizeY()));
+        if (container != null) {
+            element.setPosition(new Point2D(container.getPositionX(), container.getPositionY()));
+            element.setSize(new Point2D(container.getSizeX(), container.getSizeY()));
+        }
     }
 
     @Override

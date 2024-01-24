@@ -1,4 +1,5 @@
 package org.gecko.io;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -155,8 +156,8 @@ public class ProjectFileParserTest {
         return new Pair<>(model, viewModel);
     }
 
-    void getNewAutomaton(GeckoViewModel viewModel, ModelFactory factory, ViewModelFactory viewModelFactory, System parentSystem, int numberOfStates, int statesInRegion)
-        throws MissingViewModelElement{
+    void getNewAutomaton(GeckoViewModel viewModel, ModelFactory factory, ViewModelFactory viewModelFactory, System parentSystem, int numberOfStates,
+                         int statesInRegion) throws MissingViewModelElement {
         Automaton automaton = factory.createAutomaton(parentSystem);
 
         // States:
@@ -177,7 +178,7 @@ public class ProjectFileParserTest {
         // Edges:
         List<State> states = new ArrayList<>(automaton.getStates());
         for (int i = 0; i < numberOfStates - 1; i++) {
-            Edge edge = factory.createEdge(automaton, states.get(i), states.get(i+1));
+            Edge edge = factory.createEdge(automaton, states.get(i), states.get(i + 1));
             EdgeViewModel edgeVM = viewModelFactory.createEdgeViewModelFrom(edge);
             viewModel.addViewModelElement(edgeVM);
         }

@@ -114,8 +114,7 @@ class ProjectFileSerializerTest {
         }
     }
 
-    void getNewAutomaton(ModelFactory factory, System parentSystem, int numberOfStates, int statesInRegion)
-        throws MissingViewModelElement{
+    void getNewAutomaton(ModelFactory factory, System parentSystem, int numberOfStates, int statesInRegion) throws MissingViewModelElement {
         Automaton automaton = factory.createAutomaton(parentSystem);
 
         // States:
@@ -136,7 +135,7 @@ class ProjectFileSerializerTest {
         // Edges:
         List<State> states = new ArrayList<>(automaton.getStates());
         for (int i = 0; i < numberOfStates - 1; i++) {
-            Edge edge = factory.createEdge(automaton, states.get(i), states.get(i+1));
+            Edge edge = factory.createEdge(automaton, states.get(i), states.get(i + 1));
             EdgeViewModel edgeVM = viewModelFactory.createEdgeViewModelFrom(edge);
             viewModel.addViewModelElement(edgeVM);
         }

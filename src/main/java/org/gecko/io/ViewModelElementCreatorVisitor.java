@@ -136,7 +136,6 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         } else {
             setPositionAndSize(systemViewModel, container);
         }
-
     }
 
     @Override

@@ -38,14 +38,19 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
 
         HBox contractPreCondition = new HBox();
 
+        InspectorLabel preConditionLabel = new InspectorLabel("L:Pre:");
         InspectorContractField preConditionField = new InspectorPreconditionField(actionManager, contractViewModel);
         contractFields.add(preConditionField);
-        contractPreCondition.getChildren().addAll(new InspectorLabel("L:Pre:"), preConditionField);
+        preConditionField.prefWidthProperty().bind(widthProperty().subtract(50));
+        contractPreCondition.getChildren().addAll(preConditionLabel, preConditionField);
 
         HBox contractPostCondition = new HBox();
 
+        InspectorLabel postConditionLabel = new InspectorLabel("L:Post:");
         InspectorContractField postConditionField = new InspectorPostconditionField(actionManager, contractViewModel);
         contractFields.add(postConditionField);
+        System.out.println("postConditionField: " + postConditionField.getPrefWidth());
+        postConditionField.prefWidthProperty().bind(widthProperty().subtract(50));
         contractPostCondition.getChildren().addAll(new InspectorLabel("L:Post:"), postConditionField);
         HBox contractNameBox = new HBox();
 

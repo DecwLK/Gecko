@@ -19,6 +19,7 @@ import org.gecko.viewmodel.EditorViewModel;
 public class Inspector extends ScrollPane {
 
     private static final int INSPECTOR_ELEMENT_SPACING = 10;
+    private static final int INSPECTOR_WIDTH = 300;
 
     private boolean isCollapsed = false;
 
@@ -56,7 +57,7 @@ public class Inspector extends ScrollPane {
         if (isCollapsed) {
             setPrefWidth(0);
         } else {
-            setPrefWidth(300);
+            setPrefWidth(INSPECTOR_WIDTH);
         }
 
         return isCollapsed;

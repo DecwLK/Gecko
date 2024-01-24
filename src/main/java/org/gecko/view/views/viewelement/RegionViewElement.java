@@ -30,7 +30,7 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
     private final Property<Color> colorProperty;
     private final StringProperty invariantProperty;
     private final List<StateViewModel> states;
-    //TODO add more Properties once they get pushed
+    // TODO add more Properties once they get pushed
 
     public RegionViewElement(RegionViewModel regionViewModel) {
         super(regionViewModel);
@@ -41,7 +41,7 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
         this.regionViewModel = regionViewModel;
         bindViewModel();
         constructViewElement();
-        //TODO add more Properties once they get pushed
+        // TODO add more Properties once they get pushed
     }
 
     @Override
@@ -86,10 +86,10 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
         regionViewModel.getStatesProperty().addListener(listener);
         layoutXProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getX(), regionViewModel.getPositionProperty()));
         layoutYProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getY(), regionViewModel.getPositionProperty()));
-        //TODO is size width or coords?
+        // TODO is size width or coords?
         prefWidthProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getX(), regionViewModel.getSizeProperty()));
         prefHeightProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getY(), regionViewModel.getSizeProperty()));
-        //TODO add more binds once they get pushed
+        // TODO add more binds once they get pushed
     }
 
     private void constructViewElement() {

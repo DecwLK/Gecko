@@ -1,9 +1,12 @@
 package org.gecko.viewmodel;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -25,6 +28,7 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     private final Property<ContractViewModel> contractProperty;
     private final Property<StateViewModel> sourceProperty;
     private final Property<StateViewModel> destinationProperty;
+    private final List<Property<Point2D>> edgePoints;
 
     public EdgeViewModel(int id, @NonNull Edge target, @NonNull StateViewModel source, @NonNull StateViewModel destination) {
         super(id, target);
@@ -33,6 +37,21 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         this.contractProperty = new SimpleObjectProperty<>();
         this.sourceProperty = new SimpleObjectProperty<>(source);
         this.destinationProperty = new SimpleObjectProperty<>(destination);
+        this.edgePoints = new ArrayList<>();
+
+        Property<Point2D> startPoint = new SimpleObjectProperty<>(getSource().getCenter());
+        Property<Point2D> endPoint = new SimpleObjectProperty<>(getDestination().getCenter());
+
+        getSource().getPositionProperty().addListener((observable, oldValue, newValue) -> {
+            startPoint.setValue(getSource().getCenter());
+        });
+
+        getDestination().getPositionProperty().addListener((observable, oldValue, newValue) -> {
+            endPoint.setValue(getDestination().getCenter());
+        });
+
+        edgePoints.add(startPoint);
+        edgePoints.add(endPoint);
     }
 
     public void setPriority(int priority) {

@@ -1,5 +1,7 @@
 package org.gecko.view.views.viewelement;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
@@ -24,15 +26,14 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
     private final Property<Visibility> visibilityProperty;
     private final StringProperty typeProperty;
 
-    //TODO source and destination properties
-
     public SystemConnectionViewElement(SystemConnectionViewModel systemConnectionViewModel) {
+        super(systemConnectionViewModel.getEdgePoints());
         this.visibilityProperty = new SimpleObjectProperty<>();
         this.typeProperty = new SimpleStringProperty();
         this.systemConnectionViewModel = systemConnectionViewModel;
         bindViewModel();
         constructVisualization();
-        //TODO source and destination properties
+        // TODO: source and destination properties
     }
 
     @Override
@@ -42,12 +43,11 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
 
     @Override
     public List<Property<Point2D>> getEdgePoints() {
-        return getPathPoints();
+        return systemConnectionViewModel.getEdgePoints();
     }
 
     @Override
     public void setEdgePoint(int index, Point2D point) {
-        setPathPoint(index, point);
     }
 
     @Override

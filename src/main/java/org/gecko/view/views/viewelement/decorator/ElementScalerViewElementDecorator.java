@@ -1,53 +1,61 @@
 package org.gecko.view.views.viewelement.decorator;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import lombok.Getter;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.view.views.viewelement.ViewElementVisitor;
 
 public class ElementScalerViewElementDecorator extends ViewElementDecorator {
 
     private static final int SCALER_SIZE = 10;
+    private static final int IGNORE_Z_PRIORITY = 10000;
 
-    @Getter
-    private ElementScalerBlock[] scalers;
+    private final Group decoratedNode;
+    private final List<ElementScalerBlock> scalers;
 
     public ElementScalerViewElementDecorator(ViewElement<?> decoratorTarget) {
         super(decoratorTarget);
+        scalers = new ArrayList<>();
+        decoratedNode = new Group();
+
+        for (int i = 0; i < getEdgePoints().size(); i++) {
+            ElementScalerBlock scalerBlock = new ElementScalerBlock(i, this, SCALER_SIZE, SCALER_SIZE);
+            scalerBlock.setFill(Color.RED);
+
+            scalers.add(scalerBlock);
+        }
+
+        decoratedNode.getChildren().add(decoratorTarget.drawElement());
+        decoratedNode.getChildren().addAll(scalers);
     }
 
     @Override
     public Node drawElement() {
-        Node node = getDecoratorTarget().drawElement();
+        return decoratedNode;
+    }
 
-        if (isSelected()) {
-            StackPane decoratedNode = new StackPane();
-            Pane scalarPane = new Pane();
-            scalarPane.setPickOnBounds(false);
-
-            // Create scalars
-            scalers = new ElementScalerBlock[getEdgePoints().size()];
-            for (int i = 0; i < scalers.length; i++) {
-                scalers[i] = new ElementScalerBlock(i, this, SCALER_SIZE, SCALER_SIZE);
-                scalers[i].setFill(Color.RED);
-
-                Point2D edgePoint = getEdgePoints().get(i).getValue();
-                scalers[i].setLayoutX(node.getLayoutX() + edgePoint.getX());
-                scalers[i].setLayoutY(node.getLayoutY() + edgePoint.getY());
-
-                scalarPane.getChildren().add(scalers[i]);
+    @Override
+    public void setSelected(boolean selected) {
+        if (scalers != null) {
+            for (ElementScalerBlock scaler : scalers) {
+                scaler.setVisible(selected);
             }
-
-            decoratedNode.getChildren().addAll(node, scalarPane);
-
-            return decoratedNode;
-        } else {
-            return node;
         }
+        super.setSelected(selected);
+    }
+
+    @Override
+    public int getZPriority() {
+        if (isSelected()) {
+            return getDecoratorTarget().getZPriority() + IGNORE_Z_PRIORITY;
+        }
+        return getDecoratorTarget().getZPriority();
     }
 
     @Override

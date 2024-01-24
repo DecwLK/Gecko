@@ -30,6 +30,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     private final Property<Kind> kindProperty;
 
     public EdgeViewElement(EdgeViewModel edgeViewModel) {
+        super(edgeViewModel.getEdgePoints());
         this.contractProperty = new SimpleObjectProperty<>();
         this.sourceProperty = new SimpleObjectProperty<>();
         this.destinationProperty = new SimpleObjectProperty<>();
@@ -41,22 +42,6 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     private void bindViewElement() {
-        getStartElement().xProperty()
-                         .bind(Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getX(),
-                             edgeViewModel.getSource().getPositionProperty()));
-        getStartElement().yProperty()
-                         .bind(Bindings.createDoubleBinding(() -> edgeViewModel.getSource().getCenter().getY(),
-                             edgeViewModel.getSource().getPositionProperty()));
-        getEndElement().xProperty()
-                       .bind(Bindings.createDoubleBinding(() -> edgeViewModel.getDestination().getCenter().getX(),
-                           edgeViewModel.getDestination().getPositionProperty()));
-        getEndElement().yProperty()
-                       .bind(Bindings.createDoubleBinding(() -> edgeViewModel.getDestination().getCenter().getY(),
-                           edgeViewModel.getDestination().getPositionProperty()));
-    }
-
-    public void createNewPoint(Point2D point) {
-        createPathPoint(point);
     }
 
     @Override
@@ -66,12 +51,12 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
     @Override
     public List<Property<Point2D>> getEdgePoints() {
-        return getPathPoints();
+        return edgeViewModel.getEdgePoints();
     }
 
     @Override
     public void setEdgePoint(int index, Point2D point) {
-        setPathPoint(index, point);
+
     }
 
     @Override

@@ -10,6 +10,12 @@ public class ElementScalerBlock extends Rectangle {
     public ElementScalerBlock(int index, ElementScalerViewElementDecorator decoratorTarget, int width, int height) {
         this.index = index;
         this.decoratorTarget = decoratorTarget;
+
+        setWidth(width);
+        setHeight(height);
+
+        setLayoutX(decoratorTarget.getEdgePoints().get(index).getValue().getX() - (getWidth() / 2));
+        setLayoutY(decoratorTarget.getEdgePoints().get(index).getValue().getY() - (getHeight() / 2));
     }
 
     public void movePoint(Point2D point) {

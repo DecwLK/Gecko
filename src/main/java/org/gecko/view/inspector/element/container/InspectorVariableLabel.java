@@ -9,10 +9,11 @@ import org.gecko.viewmodel.SystemViewModel;
 public class InspectorVariableLabel extends LabeledInspectorElement {
 
     public InspectorVariableLabel(ActionManager actionManager, SystemViewModel viewModel, Visibility visibility) {
-        super(new InspectorLabel(switch (visibility) {
-            case INPUT -> "L:Input";
-            case OUTPUT -> "L:Output";
-            default -> "";
-        }), new InspectorAddVariableButton(actionManager, viewModel));
+        super(new InspectorLabel(
+            switch (visibility) {
+                case INPUT -> "L:Input";
+                case OUTPUT -> "L:Output";
+                default -> "";
+            }), new InspectorAddVariableButton(actionManager, viewModel));
     }
 }

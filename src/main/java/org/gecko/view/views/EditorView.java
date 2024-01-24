@@ -93,7 +93,8 @@ public class EditorView {
                 if (!newValue1) {
                     uncollapseInspectorButton = floatingUIBuilder.buildUncollapseInspectorButton(currentInspector.get());
                     AnchorPane.setTopAnchor(uncollapseInspectorButton, 10.0);
-                    AnchorPane.setRightAnchor(uncollapseInspectorButton, viewModel.getCurrentSystem().getTarget().getParent() == null ? 40.0 : 70.0);
+                    AnchorPane.setRightAnchor(uncollapseInspectorButton,
+                        (viewModel.getCurrentSystem().getTarget().getParent() == null || viewModel.isAutomatonEditor()) ? 40.0 : 70.0);
                     floatingUI.getChildren().add(uncollapseInspectorButton);
                 } else {
                     floatingUI.getChildren().remove(uncollapseInspectorButton);

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;
@@ -38,8 +39,7 @@ public class ProjectFileSerializer implements FileSerializer {
         return objectMapper.writeValueAsString(root);
     }
 
-    private String getViewModelPropertiesInJson(List<ViewModelPropertiesContainer> viewModelProperties)
-        throws JsonProcessingException {
+    private String getViewModelPropertiesInJson(List<ViewModelPropertiesContainer> viewModelProperties) throws JsonProcessingException {
         return objectMapper.writeValueAsString(viewModelProperties);
     }
 }

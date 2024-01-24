@@ -1,21 +1,21 @@
 package org.gecko.viewmodel;
 
 import java.util.ArrayDeque;
-import java.util.List;
+import java.util.Set;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import lombok.Data;
 
 @Data
 public class SelectionManager {
-    private ArrayDeque<List<PositionableViewModelElement<?>>> undoSelectionStack;
-    private ArrayDeque<List<PositionableViewModelElement<?>>> redoSelectionStack;
-    private ObservableList<PositionableViewModelElement<?>> currentSelection;
+    private ArrayDeque<Set<PositionableViewModelElement<?>>> undoSelectionStack;
+    private ArrayDeque<Set<PositionableViewModelElement<?>>> redoSelectionStack;
+    private ObservableSet<PositionableViewModelElement<?>> currentSelection;
 
     public SelectionManager() {
         this.undoSelectionStack = new ArrayDeque<>();
         this.redoSelectionStack = new ArrayDeque<>();
-        this.currentSelection = FXCollections.observableArrayList();
+        this.currentSelection = FXCollections.observableSet();
     }
 
     public void goBack() {
@@ -31,18 +31,18 @@ public class SelectionManager {
     }
 
     public void select(PositionableViewModelElement<?> element) {
-        select(List.of(element));
+        select(Set.of(element));
     }
 
-    public void select(List<PositionableViewModelElement<?>> elements) {
+    public void select(Set<PositionableViewModelElement<?>> elements) {
         currentSelection.addAll(elements);
     }
 
     public void deselect(PositionableViewModelElement<?> element) {
-        deselect(List.of(element));
+        deselect(Set.of(element));
     }
 
-    public void deselect(List<PositionableViewModelElement<?>> elements) {
+    public void deselect(Set<PositionableViewModelElement<?>> elements) {
         undoSelectionStack.push(currentSelection);
         redoSelectionStack.clear();
         currentSelection.removeAll(elements);

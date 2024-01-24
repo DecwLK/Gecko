@@ -65,4 +65,9 @@ public class Inspector extends ScrollPane {
     public Node getView() {
         return this;
     }
+
+    @Override
+    public void requestFocus() {
+
+    }
 }

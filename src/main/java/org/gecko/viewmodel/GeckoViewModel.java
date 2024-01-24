@@ -1,9 +1,9 @@
 package org.gecko.viewmodel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
@@ -73,8 +73,8 @@ public class GeckoViewModel {
         return modelToViewModel.get(element);
     }
 
-    public List<PositionableViewModelElement<?>> getViewModelElements(Set<? extends Element> elements) {
-        List<PositionableViewModelElement<?>> positionableViewModelElements = new ArrayList<>();
+    public Set<PositionableViewModelElement<?>> getViewModelElements(Set<? extends Element> elements) {
+        Set<PositionableViewModelElement<?>> positionableViewModelElements = new HashSet<>();
         elements.forEach(element -> positionableViewModelElements.add(getViewModelElement(element)));
 
         // Remove null elements TODO: THIS SHOULDN'T BE NECESSARY
@@ -122,7 +122,7 @@ public class GeckoViewModel {
         currentEditor.removePositionableViewModelElements(currentEditor.getContainedPositionableViewModelElementsProperty()
                                                                        .stream()
                                                                        .filter(element -> !modelToViewModel.containsKey(element.getTarget()))
-                                                                       .toList());
+                                                                       .collect(Collectors.toSet()));
 
         addPositionableViewModelElementsToEditor(currentEditor);
     }

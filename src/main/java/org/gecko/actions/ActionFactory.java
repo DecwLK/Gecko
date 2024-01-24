@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import java.util.List;
+import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import org.gecko.tools.Tool;
@@ -147,10 +148,10 @@ public class ActionFactory {
     }
 
     public SelectAction createSelectAction(PositionableViewModelElement<?> element, boolean newSelection) {
-        return createSelectAction(List.of(element), newSelection);
+        return createSelectAction(Set.of(element), newSelection);
     }
 
-    public SelectAction createSelectAction(List<PositionableViewModelElement<?>> elements, boolean newSelection) {
+    public SelectAction createSelectAction(Set<PositionableViewModelElement<?>> elements, boolean newSelection) {
         return new SelectAction(geckoViewModel.getCurrentEditor(), elements, newSelection);
     }
 

@@ -1,13 +1,14 @@
 package org.gecko.viewmodel;
 
 import java.util.List;
+import java.util.Set;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Scale;
 import lombok.Data;
@@ -66,9 +67,9 @@ public class EditorViewModel {
         this.focusedElementProperty = new SimpleObjectProperty<>();
         initializeTools();
 
-        selectionManager.getCurrentSelection().addListener((ListChangeListener<PositionableViewModelElement<?>>) change -> {
-            if (change.getList().size() == 1) {
-                setFocusedElement(change.getList().getFirst());
+        selectionManager.getCurrentSelection().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
+            if (selectionManager.getCurrentSelection().size() == 1) {
+                setFocusedElement(selectionManager.getCurrentSelection().iterator().next());
             } else {
                 setFocusedElement(null);
             }
@@ -137,10 +138,11 @@ public class EditorViewModel {
     }
 
     public void addPositionableViewModelElement(PositionableViewModelElement<?> element) {
-        addPositionableViewModelElements(List.of(element));
+        addPositionableViewModelElements(Set.of(element));
     }
 
-    public void addPositionableViewModelElements(List<PositionableViewModelElement<?>> elements) {
+    public void addPositionableViewModelElements(Set<PositionableViewModelElement<?>> elements) {
+        elements.removeAll(containedPositionableViewModelElementsProperty);
         containedPositionableViewModelElementsProperty.addAll(elements);
         actionManager.run(actionManager.getActionFactory().createSelectAction(elements, true));
     }
@@ -149,7 +151,7 @@ public class EditorViewModel {
         containedPositionableViewModelElementsProperty.remove(element);
     }
 
-    public void removePositionableViewModelElements(List<PositionableViewModelElement<?>> elements) {
+    public void removePositionableViewModelElements(Set<PositionableViewModelElement<?>> elements) {
         elements.forEach(containedPositionableViewModelElementsProperty::remove);
     }
 

@@ -128,7 +128,7 @@ public class EditorView {
 
         viewModel.getSelectionManager()
                  .getCurrentSelection()
-                 .addListener((ListChangeListener<PositionableViewModelElement<?>>) this::selectionChanged);
+                 .addListener((SetChangeListener<PositionableViewModelElement<?>>) this::selectionChanged);
 
         // Set current tool
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
@@ -199,23 +199,17 @@ public class EditorView {
         viewElementsPaneContainer.setMinSize(width, height);
     }
 
-    private void selectionChanged(ListChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
-        while (change.next()) {
-            if (change.wasAdded()) {
-                change.getAddedSubList().forEach(element -> {
-                    ViewElement<?> viewElement = findViewElement(element);
-                    if (viewElement != null) {
-                        viewElement.setSelected(true);
-                    }
-                });
+    private void selectionChanged(SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
+        if (change.wasAdded()) {
+            ViewElement<?> viewElement = findViewElement(change.getElementAdded());
+            if (viewElement != null) {
+                viewElement.setSelected(true);
             }
-            if (change.wasRemoved()) {
-                change.getRemoved().forEach(element -> {
-                    ViewElement<?> viewElement = findViewElement(element);
-                    if (viewElement != null) {
-                        viewElement.setSelected(false);
-                    }
-                });
+        }
+        if (change.wasRemoved()) {
+            ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
+            if (viewElement != null) {
+                viewElement.setSelected(false);
             }
         }
     }

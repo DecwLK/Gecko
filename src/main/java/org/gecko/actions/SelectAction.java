@@ -1,19 +1,19 @@
 package org.gecko.actions;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SelectionManager;
 
 public class SelectAction extends Action {
     private final SelectionManager selectionManager;
-    private final List<PositionableViewModelElement<?>> elementsToSelect;
+    private final Set<PositionableViewModelElement<?>> elementsToSelect;
     private final boolean newSelection;
 
-    SelectAction(EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> elements, boolean newSelection) {
+    SelectAction(EditorViewModel editorViewModel, Set<PositionableViewModelElement<?>> elements, boolean newSelection) {
         this.selectionManager = editorViewModel.getSelectionManager();
-        this.elementsToSelect = new ArrayList<>(elements);
+        this.elementsToSelect = new HashSet<>(elements);
         this.newSelection = newSelection;
     }
 

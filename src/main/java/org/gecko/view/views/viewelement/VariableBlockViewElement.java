@@ -18,6 +18,8 @@ import org.gecko.viewmodel.PortViewModel;
 @Getter
 public class VariableBlockViewElement extends BlockViewElement implements ViewElement<PortViewModel> {
 
+    private static final int Z_PRIORITY = 30;
+
     @Getter(AccessLevel.NONE)
     private final PortViewModel portViewModel;
     private final StringProperty nameProperty;
@@ -67,6 +69,11 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public int getZPriority() {
+        return Z_PRIORITY;
     }
 
     private void constructVisualization() {

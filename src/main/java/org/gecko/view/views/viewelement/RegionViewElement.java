@@ -22,6 +22,8 @@ import org.gecko.viewmodel.StateViewModel;
 @Getter
 public class RegionViewElement extends BlockViewElement implements ViewElement<RegionViewModel> {
 
+    private static final int Z_PRIORITY = 10;
+
     @Getter(AccessLevel.NONE)
     private final RegionViewModel regionViewModel;
     private final StringProperty nameProperty;
@@ -62,6 +64,11 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
         return regionViewModel.getPosition();
     }
 
+    @Override
+    public int getZPriority() {
+        return Z_PRIORITY;
+    }
+
     private void bindViewModel() {
         nameProperty.bind(regionViewModel.getNameProperty());
         colorProperty.bind(regionViewModel.getColorProperty());
@@ -89,7 +96,10 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
         Rectangle background = new Rectangle();
         background.widthProperty().bind(widthProperty());
         background.heightProperty().bind(heightProperty());
-        background.setFill(colorProperty.getValue());
+        background.fillProperty()
+                  .bind(Bindings.createObjectBinding(
+                      () -> new Color(colorProperty.getValue().getRed(), colorProperty.getValue().getGreen(), colorProperty.getValue().getBlue(),
+                          0.5), regionViewModel.getColorProperty()));
         GridPane gridPane = new GridPane();
         Label name = new Label("Region: " + regionViewModel.getName());
         Bindings.createStringBinding(() -> "Region: " + regionViewModel.getName(), regionViewModel.getNameProperty());

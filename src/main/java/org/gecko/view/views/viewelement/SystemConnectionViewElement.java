@@ -17,6 +17,8 @@ import org.gecko.viewmodel.SystemConnectionViewModel;
 @Getter
 public class SystemConnectionViewElement extends ConnectionViewElement implements ViewElement<SystemConnectionViewModel> {
 
+    private static final int Z_PRIORITY = 20;
+
     @Getter(AccessLevel.NONE)
     private final SystemConnectionViewModel systemConnectionViewModel;
     private final Property<Visibility> visibilityProperty;
@@ -56,6 +58,11 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
     @Override
     public Point2D getPosition() {
         return systemConnectionViewModel.getPosition();
+    }
+
+    @Override
+    public int getZPriority() {
+        return Z_PRIORITY;
     }
 
     private void bindViewModel() {

@@ -19,23 +19,24 @@ public class SelectableViewElementDecorator extends ViewElementDecorator {
     private static final double STROKE_WIDTH = 3;
 
     private final Group decoratedNode;
+    private final Path borderLine;
 
     public SelectableViewElementDecorator(ViewElement<?> decoratorTarget) {
         super(decoratorTarget);
         decoratedNode = new Group();
 
         List<Property<Point2D>> borderPoints = getDecoratorTarget().getEdgePoints();
-        Path borderLine = new Path();
+        borderLine = new Path();
 
         // Start at the first point
-        MoveTo startPoint = new MoveTo(decoratorTarget.getPosition().getX() + borderPoints.get(0).getValue().getX(),
-            decoratorTarget.getPosition().getY() + borderPoints.get(0).getValue().getY());
+        MoveTo startPoint = new MoveTo(decoratorTarget.getPosition().getX() + borderPoints.getFirst().getValue().getX(),
+            decoratorTarget.getPosition().getY() + borderPoints.getFirst().getValue().getY());
         startPoint.xProperty()
-                  .bind(Bindings.createDoubleBinding(() -> decoratorTarget.getPosition().getX() + borderPoints.get(0).getValue().getX(),
-                      borderPoints.get(0)));
+                  .bind(Bindings.createDoubleBinding(() -> decoratorTarget.getPosition().getX() + borderPoints.getFirst().getValue().getX(),
+                      borderPoints.getFirst()));
         startPoint.yProperty()
-                  .bind(Bindings.createDoubleBinding(() -> decoratorTarget.getPosition().getY() + borderPoints.get(0).getValue().getY(),
-                      borderPoints.get(0)));
+                  .bind(Bindings.createDoubleBinding(() -> decoratorTarget.getPosition().getY() + borderPoints.getFirst().getValue().getY(),
+                      borderPoints.getFirst()));
 
         borderLine.getElements().add(startPoint);
 
@@ -61,7 +62,7 @@ public class SelectableViewElementDecorator extends ViewElementDecorator {
         borderLine.setStroke(Color.BLUE);
 
         decoratedNode.getChildren().addAll(borderLine, getDecoratorTarget().drawElement());
-        decoratedNode.getChildren().get(0).setVisible(false);
+        borderLine.setVisible(false);
     }
 
     @Override
@@ -71,7 +72,8 @@ public class SelectableViewElementDecorator extends ViewElementDecorator {
 
     @Override
     public void setSelected(boolean selected) {
-        decoratedNode.getChildren().get(0).setVisible(selected);
+        borderLine.setVisible(selected);
+        super.setSelected(selected);
     }
 
     @Override

@@ -21,6 +21,8 @@ import org.gecko.viewmodel.StateViewModel;
 @Getter
 public class StateViewElement extends BlockViewElement implements ViewElement<StateViewModel> {
 
+    private static final int Z_PRIORITY = 30;
+
     @Getter(AccessLevel.NONE)
     private final StateViewModel stateViewModel;
     private final StringProperty nameProperty;
@@ -70,6 +72,11 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public int getZPriority() {
+        return Z_PRIORITY;
     }
 
     private void constructVisualization() {

@@ -19,6 +19,8 @@ import org.gecko.viewmodel.StateViewModel;
 @Getter
 public class EdgeViewElement extends ConnectionViewElement implements ViewElement<EdgeViewModel> {
 
+    private static final int Z_PRIORITY = 20;
+
     @Getter(AccessLevel.NONE)
     private final EdgeViewModel edgeViewModel;
     private final Property<ContractViewModel> contractProperty;
@@ -85,6 +87,11 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public int getZPriority() {
+        return Z_PRIORITY;
     }
 
     private void constructVisualization() {

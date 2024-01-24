@@ -19,6 +19,8 @@ import org.gecko.viewmodel.SystemViewModel;
 @Getter
 public class SystemViewElement extends BlockViewElement implements ViewElement<SystemViewModel> {
 
+    private static final int Z_PRIORITY = 30;
+
     @Getter(AccessLevel.NONE)
     private final SystemViewModel systemViewModel;
     private final StringProperty nameProperty;
@@ -68,6 +70,11 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public int getZPriority() {
+        return Z_PRIORITY;
     }
 
     private void constructVisualization() {

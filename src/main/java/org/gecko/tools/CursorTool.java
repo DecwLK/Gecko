@@ -76,9 +76,9 @@ public class CursorTool extends Tool {
         systemConnectionViewElement.setOnMouseClicked(selectElement(systemConnectionViewElement));
     }
 
-    private EventHandler<MouseEvent>  selectElement(ViewElement<?> viewElement) {
+    private EventHandler<MouseEvent> selectElement(ViewElement<?> viewElement) {
         return event -> {
-            Action selectAction = actionManager.getActionFactory().createSelectAction(viewElement.getTarget(), !event.isControlDown());
+            Action selectAction = actionManager.getActionFactory().createSelectAction(viewElement.getTarget(), !event.isShiftDown());
             actionManager.run(selectAction);
         };
     }

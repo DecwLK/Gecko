@@ -22,6 +22,14 @@ public abstract class ViewElementDecorator implements ViewElement<PositionableVi
     }
 
     @Override
+    public int getZPriority() {
+        if (selected) {
+            return decoratorTarget.getZPriority() + 1;
+        }
+        return decoratorTarget.getZPriority();
+    }
+
+    @Override
     public PositionableViewModelElement<?> getTarget() {
         return decoratorTarget.getTarget();
     }

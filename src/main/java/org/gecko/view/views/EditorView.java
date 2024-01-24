@@ -1,9 +1,9 @@
 package org.gecko.view.views;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -126,9 +126,7 @@ public class EditorView {
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
 
-        viewModel.getSelectionManager()
-                 .getCurrentSelection()
-                 .addListener((SetChangeListener<PositionableViewModelElement<?>>) this::selectionChanged);
+        viewModel.getSelectionManager().getCurrentSelection().addListener(this::selectionChanged);
 
         // Set current tool
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
@@ -158,8 +156,6 @@ public class EditorView {
 
             // Add view element to current view elements
             currentViewElements.add(viewElement);
-            viewElementsGroup.getChildren().add(viewElement.drawElement());
-
             if (viewModel.getCurrentTool() != null) {
                 viewElement.accept(getViewModel().getCurrentTool());
             }
@@ -168,9 +164,9 @@ public class EditorView {
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
             if (viewElement != null) {
                 currentViewElements.remove(viewElement);
-                viewElementsGroup.getChildren().remove(viewElement.drawElement());
             }
         }
+        orderChildren();
         viewElementsScrollPane.requestLayout();
     }
 
@@ -212,5 +208,14 @@ public class EditorView {
                 viewElement.setSelected(false);
             }
         }
+        orderChildren();
+    }
+
+    private void orderChildren() {
+        viewElementsGroup.getChildren()
+                         .setAll(currentViewElements.stream()
+                                                    .sorted(Comparator.comparingInt(ViewElement::getZPriority))
+                                                    .map(ViewElement::drawElement)
+                                                    .toList());
     }
 }

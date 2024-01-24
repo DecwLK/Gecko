@@ -24,17 +24,21 @@ public abstract class BlockViewElement extends Pane {
 
         // Auto calculate new edge points on size and position changes
         positionableViewModelElement.getSizeProperty().addListener((observable, oldValue, newValue) -> {
-            calculateEdgePoints();
+            calculateEdgePoints(positionableViewModelElement);
         });
         positionableViewModelElement.getPositionProperty().addListener((observable, oldValue, newValue) -> {
-            calculateEdgePoints();
+            calculateEdgePoints(positionableViewModelElement);
         });
+
+        calculateEdgePoints(positionableViewModelElement);
     }
 
-    protected void calculateEdgePoints() {
+    protected void calculateEdgePoints(PositionableViewModelElement<?> target) {
+        double x = target.getSize().getX();
+        double y = target.getSize().getY();
         edgePoints.get(0).setValue(new Point2D(0, 0));
-        edgePoints.get(1).setValue(new Point2D(getPrefWidth(), 0));
-        edgePoints.get(2).setValue(new Point2D(getPrefWidth(), getPrefHeight()));
-        edgePoints.get(3).setValue(new Point2D(0, getPrefHeight()));
+        edgePoints.get(1).setValue(new Point2D(x, 0));
+        edgePoints.get(2).setValue(new Point2D(x, y));
+        edgePoints.get(3).setValue(new Point2D(0, y));
     }
 }

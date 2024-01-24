@@ -2,6 +2,7 @@ package org.gecko.io;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +156,7 @@ class ProjectFileSerializerTest {
     void createFileFromGecko() {
         ProjectFileSerializer projectFileSerializer = new ProjectFileSerializer();
         try {
-            projectFileSerializer.createFile(model, viewModel, "json/project.json");
+            projectFileSerializer.createFile(model, viewModel, new File("json/project.json"));
         } catch (IOException e) {
             fail();
         }

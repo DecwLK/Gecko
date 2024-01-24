@@ -88,8 +88,6 @@ public class EditorView {
         });
 
         // Bind view elements pane with zoom scale property
-        //viewElementsGroup.scaleXProperty().bind(viewModel.getZoomScaleProperty());
-        //viewElementsGroup.scaleYProperty().bind(viewModel.getZoomScaleProperty());
         viewModel.getScaleProperty().addListener((observable, oldValue, newValue) -> {
             viewElementsGroup.getTransforms().setAll(newValue);
         });
@@ -104,24 +102,9 @@ public class EditorView {
             updatePaneContainerSize(newValue.getWidth(), newValue.getHeight());
         });
 
-        //viewElementsScrollPane.setFitToWidth(true);
-        //viewElementsScrollPane.setFitToHeight(true);
         viewElementsScrollPane.setPannable(true);
         viewElementsGroup.setAutoSizeChildren(true);
         viewElementsGroup.setManaged(true);
-
-        // Debug label for pivot //////////////////
-        /*Label pivotLabel = new Label();
-        pivotLabel.textProperty()
-                  .bind(Bindings.createStringBinding(
-                      () -> "Pivot: " + viewModel.gethValueProperty().getValue() + " : " + viewModel.getvValueProperty().getValue(),
-                      viewModel.gethValueProperty(), viewModel.getvValueProperty()));
-
-
-        AnchorPane.setTopAnchor(pivotLabel, 30.0);
-        AnchorPane.setLeftAnchor(pivotLabel, 10.0);
-        floatingUI.getChildren().add(pivotLabel);*/
-        ///////////////////////////////////////////
 
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);

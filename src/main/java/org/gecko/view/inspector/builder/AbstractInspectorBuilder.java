@@ -1,6 +1,6 @@
 package org.gecko.view.inspector.builder;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
@@ -25,7 +25,7 @@ public abstract class AbstractInspectorBuilder<T extends PositionableViewModelEl
         this.actionManager = actionManager;
         this.viewModel = viewModel;
 
-        this.inspectorElements = new LinkedList<>();
+        this.inspectorElements = new ArrayList<>();
 
         // Name field if applicable
         try {

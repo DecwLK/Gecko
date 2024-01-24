@@ -65,7 +65,7 @@ public class GeckoView {
     private void onUpdateCurrentEditorFromViewModel(ObservableValue<? extends EditorViewModel> observable, EditorViewModel oldValue,
                                                     EditorViewModel newValue) {
         for (EditorView editorView : openedViews) {
-            if (editorView.getViewModel() == newValue) {
+            if (editorView.getViewModel().equals(newValue)) {
                 currentView = editorView;
                 break;
             }
@@ -78,7 +78,7 @@ public class GeckoView {
                                        ObservableList<EditorViewModel> oldValue, ObservableList<EditorViewModel> newValue) {
         if (newValue != null) {
             for (EditorViewModel editorViewModel : newValue) {
-                if (openedViews.stream().anyMatch(editorView -> editorView.getViewModel() == editorViewModel)) {
+                if (openedViews.stream().anyMatch(editorView -> editorView.getViewModel().equals(editorViewModel))) {
                     continue;
                 }
 

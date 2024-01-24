@@ -39,7 +39,7 @@ public class ViewFactory {
     }
 
     public EditorView createEditorView(EditorViewModel editorViewModel, boolean isAutomatonEditor) {
-        return (isAutomatonEditor) ? createAutomatonEditorView(editorViewModel) : createSystemEditorView(editorViewModel);
+        return isAutomatonEditor ? createAutomatonEditorView(editorViewModel) : createSystemEditorView(editorViewModel);
     }
 
     public ViewElement<?> createViewElementFrom(StateViewModel stateViewModel) {

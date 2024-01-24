@@ -51,7 +51,7 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
         contractFields.add(postConditionField);
         System.out.println("postConditionField: " + postConditionField.getPrefWidth());
         postConditionField.prefWidthProperty().bind(widthProperty().subtract(50));
-        contractPostCondition.getChildren().addAll(new InspectorLabel("L:Post:"), postConditionField);
+        contractPostCondition.getChildren().addAll(postConditionLabel, postConditionField);
         HBox contractNameBox = new HBox();
 
         // Contract name

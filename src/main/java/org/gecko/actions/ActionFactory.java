@@ -126,15 +126,13 @@ public class ActionFactory {
         return new DeletePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
-    public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(
-        Point2D startPosition, Point2D endPosition) {
-        return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), startPosition, endPosition);
+    public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(Point2D delta) {
+        return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), delta);
     }
 
     public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(
-        Set<PositionableViewModelElement<?>> elementsToMove, Point2D startPosition, Point2D endPosition) {
-        return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), elementsToMove, startPosition,
-            endPosition);
+        Set<PositionableViewModelElement<?>> elementsToMove, Point2D delta) {
+        return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), elementsToMove, delta);
     }
 
     public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(

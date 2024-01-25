@@ -25,6 +25,7 @@ public class CursorTool extends Tool {
 
     private final SelectionManager selectionManager;
     private Point2D startDragPosition;
+    private Point2D previousDragPosition;
     private ViewElement<?> draggedElement;
 
     private ScrollPane viewPane;
@@ -91,42 +92,43 @@ public class CursorTool extends Tool {
 
     private void setDragAndSelectHandlers(ViewElement<?> element) {
         element.drawElement().setOnMousePressed(event -> {
-            selectElement(element, !event.isShiftDown());
             startDraggingElementHandler(event, element);
+            selectElement(element, !event.isShiftDown());
         });
         element.drawElement().setOnMouseDragged(this::dragElementsHandler);
         element.drawElement().setOnMouseReleased(this::stopDraggingElementHandler);
     }
 
     private void startDraggingElementHandler(MouseEvent event, ViewElement<?> element) {
-        Point2D eventPosition = new Point2D(event.getX(), event.getY());
         draggedElement = element;
         isDragging = true;
-        startDragPosition = eventPosition;
+        startDragPosition = getCoordinatesInPane(element).add(new Point2D(event.getX(), event.getY()));
+        previousDragPosition = startDragPosition;
     }
 
     private void dragElementsHandler(MouseEvent event) {
         if (!isDragging) {
             return;
         }
-        Point2D eventPosition = new Point2D(event.getX(), event.getY());
-        Point2D worldspaceDelta = eventPosition.subtract(startDragPosition); //TODO
+        Point2D eventPosition = getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
+        Point2D delta = eventPosition.subtract(previousDragPosition);
         selectionManager.getCurrentSelection().forEach(element -> {
-            element.setPosition(element.getPosition().add(worldspaceDelta));
+            element.setPosition(element.getPosition().add(delta));
         });
+        previousDragPosition = eventPosition;
     }
 
     private void stopDraggingElementHandler(MouseEvent event) {
         if (!isDragging) {
             return;
         }
-        Bounds boundsInScreen =
-            draggedElement.drawElement().localToScreen(draggedElement.drawElement().getBoundsInLocal());
-        Bounds boundsInPane = viewPane.screenToLocal(boundsInScreen);
         isDragging = false;
-        Point2D worldPos = new Point2D(boundsInPane.getMinX(), boundsInPane.getMinY());
-        Action moveAction =
-            actionManager.getActionFactory().createMoveBlockViewModelElementAction(startDragPosition, worldPos);
+        Point2D endWorldPos = getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
+        selectionManager.getCurrentSelection().forEach(element -> {
+            element.setPosition(element.getPosition().add(startDragPosition.subtract(endWorldPos)));
+        });
+        Action moveAction = actionManager.getActionFactory()
+            .createMoveBlockViewModelElementAction(endWorldPos.subtract(startDragPosition));
         actionManager.run(moveAction);
         startDragPosition = null;
         draggedElement = null;
@@ -135,5 +137,12 @@ public class CursorTool extends Tool {
     private void selectElement(ViewElement<?> viewElement, boolean newSelection) {
         Action select = actionManager.getActionFactory().createSelectAction(viewElement.getTarget(), newSelection);
         actionManager.run(select);
+    }
+
+    private Point2D getCoordinatesInPane(ViewElement<?> viewElement) {
+        Bounds localBounds = viewElement.drawElement().getBoundsInLocal();
+        Bounds boundsInScreen = viewElement.drawElement().localToScreen(localBounds);
+        Bounds boundsInPane = viewPane.screenToLocal(boundsInScreen);
+        return new Point2D(boundsInPane.getMinX(), boundsInPane.getMinY());
     }
 }

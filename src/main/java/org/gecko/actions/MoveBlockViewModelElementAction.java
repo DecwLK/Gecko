@@ -10,23 +10,19 @@ public class MoveBlockViewModelElementAction extends Action {
 
     private final EditorViewModel editorViewModel;
     private Set<PositionableViewModelElement<?>> elementsToMove;
-    private final Point2D startPosition;
-    private final Point2D endPosition;
+    private final Point2D delta;
 
-    MoveBlockViewModelElementAction(EditorViewModel editorViewModel, Point2D startPosition, Point2D endPosition) {
+    MoveBlockViewModelElementAction(EditorViewModel editorViewModel, Point2D delta) {
         this.editorViewModel = editorViewModel;
         this.elementsToMove = null;
-        this.startPosition = startPosition;
-        this.endPosition = endPosition;
+        this.delta = delta;
     }
 
     MoveBlockViewModelElementAction(
-        EditorViewModel editorViewModel, Set<PositionableViewModelElement<?>> elementsToMove, Point2D startPosition,
-        Point2D endPosition) {
+        EditorViewModel editorViewModel, Set<PositionableViewModelElement<?>> elementsToMove, Point2D delta) {
         this.editorViewModel = editorViewModel;
         this.elementsToMove = elementsToMove;
-        this.startPosition = startPosition;
-        this.endPosition = endPosition;
+        this.delta = delta;
     }
 
     @Override
@@ -35,12 +31,12 @@ public class MoveBlockViewModelElementAction extends Action {
             elementsToMove = new HashSet<>(editorViewModel.getSelectionManager().getCurrentSelection());
         }
         for (PositionableViewModelElement<?> element : elementsToMove) {
-            element.setPosition(editorViewModel.transformScreenToWorldCoordinates(endPosition));
+            element.setPosition(element.getPosition().add(delta));
         }
     }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createMoveBlockViewModelElementAction(elementsToMove, endPosition, startPosition);
+        return actionFactory.createMoveBlockViewModelElementAction(elementsToMove, delta.multiply(-1));
     }
 }

@@ -21,7 +21,8 @@ public class Region extends Element implements Renamable {
     private final Set<State> states;
 
     @JsonCreator
-    public Region(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("invariant") Condition invariant,
+    public Region(@JsonProperty("id") int id, @JsonProperty("name") String name,
+                  @JsonProperty("invariant") Condition invariant,
                   @JsonProperty("preAndPostCondition") Contract preAndPostCondition) {
         super(id);
         this.name = name;

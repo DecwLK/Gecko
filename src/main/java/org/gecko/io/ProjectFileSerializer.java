@@ -38,7 +38,8 @@ public class ProjectFileSerializer implements FileSerializer {
         return objectMapper.writeValueAsString(root);
     }
 
-    private String getViewModelPropertiesInJson(List<ViewModelPropertiesContainer> viewModelProperties) throws JsonProcessingException {
+    private String getViewModelPropertiesInJson(List<ViewModelPropertiesContainer> viewModelProperties)
+        throws JsonProcessingException {
         return objectMapper.writeValueAsString(viewModelProperties);
     }
 }

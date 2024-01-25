@@ -54,8 +54,6 @@ public class ProjectFileParserTest {
         } catch (IOException e) {
             java.lang.System.err.println(e.getMessage());
             fail();
-        } catch (MissingViewModelElement e) {
-            java.lang.System.err.println(e.getMessage());
         }
 
         ProjectFileSerializer projectFileSerializer2 = new ProjectFileSerializer();

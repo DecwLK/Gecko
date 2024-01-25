@@ -3,6 +3,7 @@ package org.gecko.view.views;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Set;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -139,7 +140,7 @@ public class EditorView {
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
 
-        viewModel.getSelectionManager().getCurrentSelection().addListener(this::selectionChanged);
+        viewModel.getSelectionManager().getCurrentSelectionProperty().addListener(this::selectionChanged);
 
         // Set current tool
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
@@ -209,19 +210,11 @@ public class EditorView {
         viewElementsPaneContainer.setMinSize(width, height);
     }
 
-    private void selectionChanged(SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
-        if (change.wasAdded()) {
-            ViewElement<?> viewElement = findViewElement(change.getElementAdded());
-            if (viewElement != null) {
-                viewElement.setSelected(true);
-            }
-        }
-        if (change.wasRemoved()) {
-            ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
-            if (viewElement != null) {
-                viewElement.setSelected(false);
-            }
-        }
+    private void selectionChanged(
+        ObservableValue<? extends Set<PositionableViewModelElement<?>>> observable,
+        Set<PositionableViewModelElement<?>> oldValue, Set<PositionableViewModelElement<?>> newValue) {
+        oldValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(false));
+        newValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(true));
         orderChildren();
     }
 

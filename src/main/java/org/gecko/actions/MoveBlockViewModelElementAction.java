@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import java.util.HashSet;
 import java.util.Set;
 import javafx.geometry.Point2D;
 import org.gecko.viewmodel.EditorViewModel;
@@ -8,48 +9,38 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 public class MoveBlockViewModelElementAction extends Action {
 
     private final EditorViewModel editorViewModel;
-    private final Set<PositionableViewModelElement<?>> elementsToMove;
-    private final PositionableViewModelElement<?> pivotElement;
-    private final Point2D newPivotPosition;
+    private Set<PositionableViewModelElement<?>> elementsToMove;
+    private final Point2D startPosition;
+    private final Point2D endPosition;
 
-    private final Point2D oldPivotPosition;
-
-    MoveBlockViewModelElementAction(EditorViewModel editorViewModel, Point2D newPivotPosition) {
+    MoveBlockViewModelElementAction(EditorViewModel editorViewModel, Point2D startPosition, Point2D endPosition) {
         this.editorViewModel = editorViewModel;
-        this.elementsToMove = editorViewModel.getSelectionManager().getCurrentSelection();
-        this.pivotElement = elementsToMove.iterator().next();
-        this.newPivotPosition = newPivotPosition;
-        this.oldPivotPosition = pivotElement.getCenter();
+        this.elementsToMove = null;
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
     }
 
     MoveBlockViewModelElementAction(
-        EditorViewModel editorViewModel, Set<PositionableViewModelElement<?>> elementsToMove,
-        Point2D newPivotPosition) {
+        EditorViewModel editorViewModel, Set<PositionableViewModelElement<?>> elementsToMove, Point2D startPosition,
+        Point2D endPosition) {
         this.editorViewModel = editorViewModel;
         this.elementsToMove = elementsToMove;
-        this.pivotElement = elementsToMove.iterator().next();
-        this.newPivotPosition = newPivotPosition;
-        this.oldPivotPosition = pivotElement.getCenter();
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
     }
 
     @Override
     void run() {
-        // Calculate position delta by moving the pivot element
-        Point2D prevPosition = pivotElement.getCenter();
-        pivotElement.setCenter(editorViewModel.transformScreenToWorldCoordinates(newPivotPosition));
-        Point2D positionDelta = pivotElement.getCenter().subtract(prevPosition);
-
-        // Move all elements by the same delta
+        if (elementsToMove == null) {
+            elementsToMove = new HashSet<>(editorViewModel.getSelectionManager().getCurrentSelection());
+        }
         for (PositionableViewModelElement<?> element : elementsToMove) {
-            if (element == pivotElement) {
-                continue;
-            }
-            element.setCenter(element.getCenter().add(positionDelta));
+            element.setPosition(editorViewModel.transformScreenToWorldCoordinates(endPosition));
         }
     }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createMoveBlockViewModelElementAction(elementsToMove, oldPivotPosition);
+        return actionFactory.createMoveBlockViewModelElementAction(elementsToMove, endPosition, startPosition);
     }
 }

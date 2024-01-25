@@ -8,7 +8,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Scale;
 import lombok.Data;
@@ -69,14 +68,13 @@ public class EditorViewModel {
         this.focusedElementProperty = new SimpleObjectProperty<>();
         initializeTools();
 
-        selectionManager.getCurrentSelection()
-            .addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
-                if (selectionManager.getCurrentSelection().size() == 1) {
-                    setFocusedElement(selectionManager.getCurrentSelection().iterator().next());
-                } else {
-                    setFocusedElement(null);
-                }
-            });
+        selectionManager.getCurrentSelectionProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.size() == 1) {
+                setFocusedElement(newValue.iterator().next());
+            } else {
+                setFocusedElement(null);
+            }
+        });
     }
 
     public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
@@ -163,8 +161,8 @@ public class EditorViewModel {
     }
 
     private void initializeTools() {
-        tools.add(List.of(new CursorTool(actionManager), new MarqueeTool(actionManager), new PanTool(actionManager),
-            new ZoomTool(actionManager)));
+        tools.add(List.of(new CursorTool(actionManager, selectionManager), new MarqueeTool(actionManager),
+            new PanTool(actionManager), new ZoomTool(actionManager)));
         if (isAutomatonEditor()) {
             tools.add(List.of(new StateCreatorTool(actionManager), new EdgeCreatorTool(actionManager),
                 new RegionCreatorTool(actionManager)));

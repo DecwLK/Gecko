@@ -8,12 +8,12 @@ import lombok.NonNull;
 import org.gecko.model.Element;
 
 /**
- * Represents an abstraction of a view model element that has a rectangular shape in a Gecko project. A {@link BlockViewModelElement} has a name.
- * Contains methods for moving and scaling the element.
+ * Represents an abstraction of a view model element that has a rectangular shape in a Gecko project. A
+ * {@link BlockViewModelElement} has a name. Contains methods for moving and scaling the element.
  */
 @Getter
-public abstract class BlockViewModelElement<T extends Element & org.gecko.model.Renamable> extends PositionableViewModelElement<T>
-    implements Renamable {
+public abstract class BlockViewModelElement<T extends Element & org.gecko.model.Renamable>
+    extends PositionableViewModelElement<T> implements Renamable {
     private final StringProperty nameProperty;
 
     BlockViewModelElement(int id, @NonNull T target) {

@@ -9,7 +9,8 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
     private final PortViewModel portViewModel;
     private final boolean isSource;
 
-    MoveSystemConnectionViewModelElementAction(SystemConnectionViewModel systemConnectionViewModel, PortViewModel portViewModel, boolean isSource) {
+    MoveSystemConnectionViewModelElementAction(
+        SystemConnectionViewModel systemConnectionViewModel, PortViewModel portViewModel, boolean isSource) {
         this.systemConnectionViewModel = systemConnectionViewModel;
         this.portViewModel = portViewModel;
         this.isSource = isSource;

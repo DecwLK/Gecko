@@ -26,7 +26,8 @@ public class RenameViewModelElementAction extends Action {
             //  TODO: Contracts should also have access to this Action.
         }
 
-        ((BlockViewModelElement<?>) this.geckoViewModel.getViewModelElement(elementToRename.getTarget())).setName(this.newName);
+        ((BlockViewModelElement<?>) this.geckoViewModel.getViewModelElement(elementToRename.getTarget())).setName(
+            this.newName);
     }
 
     @Override

@@ -14,7 +14,8 @@ public class CreateRegionViewModelElementAction extends Action {
     private final Point2D size;
     private RegionViewModel createdRegionViewModel;
 
-    CreateRegionViewModelElementAction(GeckoViewModel geckoViewModel, EditorViewModel editorViewModel, Point2D position, Point2D size) {
+    CreateRegionViewModelElementAction(
+        GeckoViewModel geckoViewModel, EditorViewModel editorViewModel, Point2D position, Point2D size) {
         this.geckoViewModel = geckoViewModel;
         this.editorViewModel = editorViewModel;
         this.position = position;

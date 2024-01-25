@@ -37,7 +37,8 @@ class ActionGroupTest {
 
     @Test
     void testUndoActionReturnsNullWithNonUndoableAction() {
-        Action changeColor1Action = actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(1, 1, 1, 0));
+        Action changeColor1Action =
+            actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(1, 1, 1, 0));
         Action focusAction = actionFactory.createFocusPositionableViewModelElementAction(region2);
         ActionGroup actionGroup = new ActionGroup(List.of(changeColor1Action, focusAction));
         actionManager.run(actionGroup);
@@ -46,7 +47,8 @@ class ActionGroupTest {
 
     @Test
     void testUndoActionNotNull() {
-        Action changeColor1Action = actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(1, 1, 1, 0));
+        Action changeColor1Action =
+            actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(1, 1, 1, 0));
         ActionGroup actionGroup = new ActionGroup(List.of(changeColor1Action));
         actionManager.run(actionGroup);
         Action undoAction = actionGroup.getUndoAction(actionFactory);
@@ -55,8 +57,10 @@ class ActionGroupTest {
 
     @Test
     void testActionGroupRunsInOrder() {
-        Action changeColor1Action = actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(1, 1, 1, 0));
-        Action changeColor2Action = actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(0, 0, 0, 0));
+        Action changeColor1Action =
+            actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(1, 1, 1, 0));
+        Action changeColor2Action =
+            actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(0, 0, 0, 0));
         ActionGroup actionGroup = new ActionGroup(List.of(changeColor1Action, changeColor2Action));
         actionManager.run(actionGroup);
         assertEquals(new Color(0, 0, 0, 0), region1.getColor());
@@ -65,8 +69,10 @@ class ActionGroupTest {
     @Test
     void testOrderOfUndoActions() {
         Color beforeChange = region1.getColor();
-        Action changeColor1Action = actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(1, 1, 1, 0));
-        Action changeColor2Action = actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(0, 0, 0, 0));
+        Action changeColor1Action =
+            actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(1, 1, 1, 0));
+        Action changeColor2Action =
+            actionFactory.createChangeColorRegionViewModelElementAction(region1, new Color(0, 0, 0, 0));
         ActionGroup actionGroup = new ActionGroup(List.of(changeColor1Action, changeColor2Action));
         actionManager.run(actionGroup);
         assertEquals(new Color(0, 0, 0, 0), region1.getColor());

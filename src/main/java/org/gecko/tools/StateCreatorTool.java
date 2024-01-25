@@ -29,7 +29,8 @@ public class StateCreatorTool extends Tool {
         super.visitView(view);
         view.setOnMouseClicked(event -> {
             Point2D position = new Point2D(event.getX(), event.getY());
-            Action createStateAction = actionManager.getActionFactory().createCreateStateViewModelElementAction(position);
+            Action createStateAction =
+                actionManager.getActionFactory().createCreateStateViewModelElementAction(position);
             actionManager.run(createStateAction);
         });
     }

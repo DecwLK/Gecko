@@ -49,7 +49,9 @@ public class EditorViewModel {
     private final Property<PositionableViewModelElement<?>> focusedElementProperty;
     private final boolean isAutomatonEditor;
 
-    public EditorViewModel(ActionManager actionManager, SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
+    public EditorViewModel(
+        ActionManager actionManager, SystemViewModel systemViewModel, SystemViewModel parentSystem,
+        boolean isAutomatonEditor) {
         this.actionManager = actionManager;
         this.currentSystem = systemViewModel;
         this.parentSystem = parentSystem;
@@ -67,26 +69,27 @@ public class EditorViewModel {
         this.focusedElementProperty = new SimpleObjectProperty<>();
         initializeTools();
 
-        selectionManager.getCurrentSelection().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
-            if (selectionManager.getCurrentSelection().size() == 1) {
-                setFocusedElement(selectionManager.getCurrentSelection().iterator().next());
-            } else {
-                setFocusedElement(null);
-            }
-        });
+        selectionManager.getCurrentSelection()
+            .addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
+                if (selectionManager.getCurrentSelection().size() == 1) {
+                    setFocusedElement(selectionManager.getCurrentSelection().iterator().next());
+                } else {
+                    setFocusedElement(null);
+                }
+            });
     }
 
     public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
         List<Region> regions = currentSystem.getTarget()
-                                            .getAutomaton()
-                                            .getRegions()
-                                            .stream()
-                                            .filter(region -> region.getStates().contains(stateViewModel.getTarget()))
-                                            .toList();
+            .getAutomaton()
+            .getRegions()
+            .stream()
+            .filter(region -> region.getStates().contains(stateViewModel.getTarget()))
+            .toList();
         return containedPositionableViewModelElementsProperty.stream()
-                                                             .filter(element -> regions.contains(element.getTarget()))
-                                                             .map(element -> (RegionViewModel) element)
-                                                             .toList();
+            .filter(element -> regions.contains(element.getTarget()))
+            .map(element -> (RegionViewModel) element)
+            .toList();
     }
 
     public Point2D transformScreenToWorldCoordinates(Point2D screenCoordinates) {
@@ -100,19 +103,23 @@ public class EditorViewModel {
     }
 
     private void focusWorldPoint(Point2D point) {
-        Point2D center = new Point2D(viewSizeProperty.getValue().getX() / 2, viewSizeProperty.getValue().getY() / 2).multiply(1 / zoomScale);
+        Point2D center =
+            new Point2D(viewSizeProperty.getValue().getX() / 2, viewSizeProperty.getValue().getY() / 2).multiply(
+                1 / zoomScale);
         Point2D delta = point.subtract(center);
         Point2D scrollRange = new Point2D(worldSizeProperty.getValue().getX() - viewSizeProperty.getValue().getX(),
             worldSizeProperty.getValue().getY() - viewSizeProperty.getValue().getY()).multiply(1 / zoomScale);
-        Point2D scrollPosition = new Point2D(delta.getX() / scrollRange.getX(), delta.getY() / scrollRange.getY()).add(hValueProperty.getValue(),
-            vValueProperty.getValue());
+        Point2D scrollPosition = new Point2D(delta.getX() / scrollRange.getX(), delta.getY() / scrollRange.getY()).add(
+            hValueProperty.getValue(), vValueProperty.getValue());
         hValueProperty.setValue(scrollPosition.getX());
         vValueProperty.setValue(scrollPosition.getY());
     }
 
     private Point2D getMinPoint() {
-        return new Point2D((worldSizeProperty.getValue().getX() - viewSizeProperty.getValue().getX()) * hValueProperty.getValue(),
-            (worldSizeProperty.getValue().getY() - viewSizeProperty.getValue().getY()) * vValueProperty.getValue()).multiply(1 / zoomScale);
+        return new Point2D(
+            (worldSizeProperty.getValue().getX() - viewSizeProperty.getValue().getX()) * hValueProperty.getValue(),
+            (worldSizeProperty.getValue().getY() - viewSizeProperty.getValue().getY())
+                * vValueProperty.getValue()).multiply(1 / zoomScale);
     }
 
     public void zoomIn(Point2D pivot, double zoomScaleAdditive) {
@@ -156,9 +163,11 @@ public class EditorViewModel {
     }
 
     private void initializeTools() {
-        tools.add(List.of(new CursorTool(actionManager), new MarqueeTool(actionManager), new PanTool(actionManager), new ZoomTool(actionManager)));
+        tools.add(List.of(new CursorTool(actionManager), new MarqueeTool(actionManager), new PanTool(actionManager),
+            new ZoomTool(actionManager)));
         if (isAutomatonEditor()) {
-            tools.add(List.of(new StateCreatorTool(actionManager), new EdgeCreatorTool(actionManager), new RegionCreatorTool(actionManager)));
+            tools.add(List.of(new StateCreatorTool(actionManager), new EdgeCreatorTool(actionManager),
+                new RegionCreatorTool(actionManager)));
         } else {
             tools.add(List.of(new SystemCreatorTool(actionManager), new SystemConnectionCreatorTool(actionManager),
                 new VariableBlockCreatorTool(actionManager)));

@@ -12,7 +12,8 @@ import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
 public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewModel> {
-    public StateInspectorBuilder(ActionManager actionManager, EditorViewModel editorViewModel, StateViewModel viewModel) {
+    public StateInspectorBuilder(
+        ActionManager actionManager, EditorViewModel editorViewModel, StateViewModel viewModel) {
         super(actionManager, viewModel);
 
         // Region label

@@ -10,6 +10,7 @@ public class InspectorOpenSystemButton extends AbstractInspectorButton {
     public InspectorOpenSystemButton(ActionManager actionManager, SystemViewModel systemViewModel) {
         setText("L:Open");
         setPrefWidth(WIDTH);
-        setOnAction(event -> actionManager.run(actionManager.getActionFactory().createViewSwitchAction(systemViewModel, false)));
+        setOnAction(event -> actionManager.run(
+            actionManager.getActionFactory().createViewSwitchAction(systemViewModel, false)));
     }
 }

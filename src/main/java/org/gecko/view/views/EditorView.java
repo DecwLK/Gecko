@@ -49,7 +49,9 @@ public class EditorView {
     private ObjectProperty<Inspector> currentInspector;
     private Group inspectorPanel;
 
-    public EditorView(ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel, ShortcutHandler shortcutHandler) {
+    public EditorView(
+        ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel,
+        ShortcutHandler shortcutHandler) {
         this.viewModel = viewModel;
         this.toolBar = new ToolBarBuilder(actionManager, this, viewModel).build();
         this.shortcutHandler = shortcutHandler;
@@ -60,7 +62,8 @@ public class EditorView {
         this.currentInspector = new SimpleObjectProperty<>(null);
         currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
-        currentView = new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
+        currentView =
+            new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
 
         // Construct view elements pane container
         viewElementsPaneContainer = new Pane(new Group(viewElementsGroup));
@@ -92,10 +95,12 @@ public class EditorView {
             }
             newValue.visibleProperty().addListener((observable1, oldValue1, newValue1) -> {
                 if (!newValue1) {
-                    uncollapseInspectorButton = floatingUIBuilder.buildUncollapseInspectorButton(currentInspector.get());
+                    uncollapseInspectorButton =
+                        floatingUIBuilder.buildUncollapseInspectorButton(currentInspector.get());
                     AnchorPane.setTopAnchor(uncollapseInspectorButton, 10.0);
                     AnchorPane.setRightAnchor(uncollapseInspectorButton,
-                        (viewModel.getCurrentSystem().getTarget().getParent() == null || viewModel.isAutomatonEditor()) ? 40.0 : 70.0);
+                        (viewModel.getCurrentSystem().getTarget().getParent() == null
+                            || viewModel.isAutomatonEditor()) ? 40.0 : 70.0);
                     floatingUI.getChildren().add(uncollapseInspectorButton);
                 } else {
                     floatingUI.getChildren().remove(uncollapseInspectorButton);
@@ -107,9 +112,10 @@ public class EditorView {
         currentViewPane.getChildren().addAll(viewElementsScrollPane, floatingUI);
 
         // View element creator listener
-        viewModel.getContainedPositionableViewModelElementsProperty().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
-            onUpdateViewElements(viewFactory, change);
-        });
+        viewModel.getContainedPositionableViewModelElementsProperty()
+            .addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
+                onUpdateViewElements(viewFactory, change);
+            });
 
         // Bind view elements pane with zoom scale property
         viewModel.getScaleProperty().addListener((observable, oldValue, newValue) -> {
@@ -151,7 +157,8 @@ public class EditorView {
         currentInspector.get().toggleCollapse();
     }
 
-    private void onUpdateViewElements(ViewFactory viewFactory, SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
+    private void onUpdateViewElements(
+        ViewFactory viewFactory, SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
         if (change.wasAdded()) {
             // Create new view element
             PositionableViewModelElementVisitor visitor = new ViewElementCreatorVisitor(viewFactory);
@@ -174,7 +181,10 @@ public class EditorView {
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
-        return currentViewElements.stream().filter(viewElement -> viewElement.getTarget().equals(element)).findFirst().orElse(null);
+        return currentViewElements.stream()
+            .filter(viewElement -> viewElement.getTarget().equals(element))
+            .findFirst()
+            .orElse(null);
     }
 
     private void onToolChanged(ObservableValue<? extends Tool> observable, Tool oldValue, Tool newValue) {
@@ -182,8 +192,9 @@ public class EditorView {
         currentViewElements.forEach(viewElement -> viewElement.accept(newValue));
     }
 
-    private void focusedElementChanged(ObservableValue<? extends PositionableViewModelElement<?>> observable,
-                                       PositionableViewModelElement<?> oldValue, PositionableViewModelElement<?> newValue) {
+    private void focusedElementChanged(
+        ObservableValue<? extends PositionableViewModelElement<?>> observable, PositionableViewModelElement<?> oldValue,
+        PositionableViewModelElement<?> newValue) {
         if (newValue != null) {
             inspectorPanel.getChildren().clear();
             currentInspector.set(inspectorFactory.createInspector(newValue));
@@ -216,9 +227,9 @@ public class EditorView {
 
     private void orderChildren() {
         viewElementsGroup.getChildren()
-                         .setAll(currentViewElements.stream()
-                                                    .sorted(Comparator.comparingInt(ViewElement::getZPriority))
-                                                    .map(ViewElement::drawElement)
-                                                    .toList());
+            .setAll(currentViewElements.stream()
+                .sorted(Comparator.comparingInt(ViewElement::getZPriority))
+                .map(ViewElement::drawElement)
+                .toList());
     }
 }

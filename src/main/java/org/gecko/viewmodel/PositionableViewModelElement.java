@@ -9,8 +9,9 @@ import lombok.Setter;
 import org.gecko.model.Element;
 
 /**
- * Represents an abstraction of a view model element that is graphically represented in a Gecko project. A {@link PositionableViewModelElement} is
- * described by a position- and a size-{@link Point2D}. Contains methods for managing the afferent data.
+ * Represents an abstraction of a view model element that is graphically represented in a Gecko project. A
+ * {@link PositionableViewModelElement} is described by a position- and a size-{@link Point2D}. Contains methods for
+ * managing the afferent data.
  */
 @Getter
 @Setter
@@ -46,7 +47,8 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     }
 
     public void setCenter(@NonNull Point2D point) {
-        positionProperty.setValue(new Point2D(point.getX() - sizeProperty.getValue().getX() / 2, point.getY() - sizeProperty.getValue().getY() / 2));
+        positionProperty.setValue(new Point2D(point.getX() - sizeProperty.getValue().getX() / 2,
+            point.getY() - sizeProperty.getValue().getY() / 2));
     }
 
     // TODO: Is there any relevant update operation that should take place at this level?

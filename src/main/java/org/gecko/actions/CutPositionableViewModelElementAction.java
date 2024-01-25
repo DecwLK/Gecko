@@ -5,7 +5,8 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
 public class CutPositionableViewModelElementAction extends Action {
-    CutPositionableViewModelElementAction(EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> elements) {
+    CutPositionableViewModelElementAction(
+        EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> elements) {
     }
 
     @Override

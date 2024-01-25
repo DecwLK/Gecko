@@ -12,7 +12,8 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
     private final PortViewModel destination;
     private SystemConnectionViewModel createdSystemConnectionViewModel;
 
-    CreateSystemConnectionViewModelElementAction(GeckoViewModel geckoViewModel, PortViewModel source, PortViewModel destination) {
+    CreateSystemConnectionViewModelElementAction(
+        GeckoViewModel geckoViewModel, PortViewModel source, PortViewModel destination) {
         this.geckoViewModel = geckoViewModel;
         this.source = source;
         this.destination = destination;
@@ -21,8 +22,8 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
     @Override
     void run() {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
-        createdSystemConnectionViewModel =
-            geckoViewModel.getViewModelFactory().createSystemConnectionViewModelIn(currentParentSystem, source, destination);
+        createdSystemConnectionViewModel = geckoViewModel.getViewModelFactory()
+            .createSystemConnectionViewModelIn(currentParentSystem, source, destination);
         createdSystemConnectionViewModel.setSource(source);
         createdSystemConnectionViewModel.setDestination(destination);
         createdSystemConnectionViewModel.updateTarget();

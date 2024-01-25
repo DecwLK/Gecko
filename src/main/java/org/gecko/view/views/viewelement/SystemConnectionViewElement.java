@@ -15,7 +15,8 @@ import org.gecko.model.Visibility;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
 @Getter
-public class SystemConnectionViewElement extends ConnectionViewElement implements ViewElement<SystemConnectionViewModel> {
+public class SystemConnectionViewElement extends ConnectionViewElement
+    implements ViewElement<SystemConnectionViewModel> {
 
     private static final int Z_PRIORITY = 20;
 
@@ -65,17 +66,17 @@ public class SystemConnectionViewElement extends ConnectionViewElement implement
 
     private void bindViewModel() {
         getStartElement().xProperty()
-                         .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getX(),
-                             systemConnectionViewModel.getSource().getPositionProperty()));
+            .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getX(),
+                systemConnectionViewModel.getSource().getPositionProperty()));
         getStartElement().yProperty()
-                         .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getY(),
-                             systemConnectionViewModel.getSource().getPositionProperty()));
+            .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getY(),
+                systemConnectionViewModel.getSource().getPositionProperty()));
         getEndElement().xProperty()
-                       .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getX(),
-                           systemConnectionViewModel.getDestination().getSizeProperty()));
+            .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getX(),
+                systemConnectionViewModel.getDestination().getSizeProperty()));
         getEndElement().yProperty()
-                       .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getY(),
-                           systemConnectionViewModel.getDestination().getSizeProperty()));
+            .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getY(),
+                systemConnectionViewModel.getDestination().getSizeProperty()));
         //TODO source + destination properties
     }
 

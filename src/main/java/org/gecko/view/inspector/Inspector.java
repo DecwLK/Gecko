@@ -23,7 +23,9 @@ public class Inspector extends ScrollPane {
 
     private boolean isCollapsed = false;
 
-    public Inspector(List<InspectorElement<?>> elements, ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
+    public Inspector(
+        List<InspectorElement<?>> elements, ActionManager actionManager, EditorView editorView,
+        EditorViewModel editorViewModel) {
         VBox vBox = new VBox();
         setPrefWidth(INSPECTOR_WIDTH);
 

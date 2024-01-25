@@ -9,7 +9,8 @@ public class StateViewElementContextMenuBuilder extends AbstractContextMenuBuild
 
     private final StateViewModel stateViewModel;
 
-    public StateViewElementContextMenuBuilder(ActionManager actionManager, EditorView editorView, StateViewModel stateViewModel) {
+    public StateViewElementContextMenuBuilder(
+        ActionManager actionManager, EditorView editorView, StateViewModel stateViewModel) {
         super(actionManager, editorView);
         this.stateViewModel = stateViewModel;
     }

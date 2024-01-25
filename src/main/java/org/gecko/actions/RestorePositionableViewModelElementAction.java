@@ -9,7 +9,8 @@ public class RestorePositionableViewModelElementAction extends Action {
     private final GeckoViewModel geckoViewModel;
     private final List<PositionableViewModelElement<?>> elementsToDelete;
 
-    RestorePositionableViewModelElementAction(GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
+    RestorePositionableViewModelElementAction(
+        GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
         this.geckoViewModel = geckoViewModel;
         this.elementsToDelete = elements;
     }

@@ -60,10 +60,14 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
         nameProperty.bind(portViewModel.getNameProperty());
         typeProperty.bind(portViewModel.getTypeProperty());
         visibilityProperty.bind(portViewModel.getVisibilityProperty());
-        layoutXProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getPosition().getX(), portViewModel.getPositionProperty()));
-        layoutYProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getPosition().getY(), portViewModel.getPositionProperty()));
-        prefWidthProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getSize().getX(), portViewModel.getSizeProperty()));
-        prefHeightProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getSize().getY(), portViewModel.getSizeProperty()));
+        layoutXProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getPosition().getX(),
+            portViewModel.getPositionProperty()));
+        layoutYProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getPosition().getY(),
+            portViewModel.getPositionProperty()));
+        prefWidthProperty().bind(
+            Bindings.createDoubleBinding(() -> portViewModel.getSize().getX(), portViewModel.getSizeProperty()));
+        prefHeightProperty().bind(
+            Bindings.createDoubleBinding(() -> portViewModel.getSize().getY(), portViewModel.getSizeProperty()));
     }
 
     @Override

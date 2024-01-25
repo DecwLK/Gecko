@@ -22,7 +22,9 @@ public class MoveBlockViewModelElementAction extends Action {
         this.oldPivotPosition = pivotElement.getCenter();
     }
 
-    MoveBlockViewModelElementAction(EditorViewModel editorViewModel, Set<PositionableViewModelElement<?>> elementsToMove, Point2D newPivotPosition) {
+    MoveBlockViewModelElementAction(
+        EditorViewModel editorViewModel, Set<PositionableViewModelElement<?>> elementsToMove,
+        Point2D newPivotPosition) {
         this.editorViewModel = editorViewModel;
         this.elementsToMove = elementsToMove;
         this.pivotElement = elementsToMove.iterator().next();

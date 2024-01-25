@@ -42,8 +42,8 @@ public class EdgeCreatorTool extends Tool {
             if (source == null || source == stateViewElement.getTarget()) {
                 source = stateViewElement.getTarget();
             } else {
-                Action createEdgeAction =
-                    actionManager.getActionFactory().createCreateEdgeViewModelElementAction(source, stateViewElement.getTarget());
+                Action createEdgeAction = actionManager.getActionFactory()
+                    .createCreateEdgeViewModelElementAction(source, stateViewElement.getTarget());
                 actionManager.run(createEdgeAction);
                 source = null;
             }

@@ -7,10 +7,12 @@ import org.gecko.viewmodel.StateViewModel;
 public class InspectorRemoveContractButton extends AbstractInspectorButton {
     private static final String ICON_STYLE_NAME = "inspector-remove-button";
 
-    public InspectorRemoveContractButton(ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
+    public InspectorRemoveContractButton(
+        ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
         getStyleClass().add(ICON_STYLE_NAME);
         setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createDeleteContractViewModelAction(stateViewModel, contractViewModel));
+            actionManager.run(actionManager.getActionFactory()
+                .createDeleteContractViewModelAction(stateViewModel, contractViewModel));
         });
     }
 }

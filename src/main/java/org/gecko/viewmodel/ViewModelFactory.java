@@ -12,7 +12,8 @@ import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
 
 /**
- * Represents a factory for the view model elements of a Gecko project. Provides a method for the creation of each element.
+ * Represents a factory for the view model elements of a Gecko project. Provides a method for the creation of each
+ * element.
  */
 public class ViewModelFactory {
     private static int viewModelElementId = 0;
@@ -26,7 +27,8 @@ public class ViewModelFactory {
         this.modelFactory = modelFactory;
     }
 
-    public EditorViewModel createEditorViewModel(SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
+    public EditorViewModel createEditorViewModel(
+        SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
         return new EditorViewModel(actionManager, systemViewModel, parentSystem, isAutomatonEditor);
     }
 
@@ -48,8 +50,10 @@ public class ViewModelFactory {
         return result;
     }
 
-    public EdgeViewModel createEdgeViewModelIn(SystemViewModel parentSystem, StateViewModel source, StateViewModel destination) {
-        Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), source.getTarget(), destination.getTarget());
+    public EdgeViewModel createEdgeViewModelIn(
+        SystemViewModel parentSystem, StateViewModel source, StateViewModel destination) {
+        Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), source.getTarget(),
+            destination.getTarget());
         EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
         geckoViewModel.addViewModelElement(result);
         return result;
@@ -59,31 +63,33 @@ public class ViewModelFactory {
         StateViewModel source = (StateViewModel) geckoViewModel.getViewModelElement(edge.getSource());
         StateViewModel destination = (StateViewModel) geckoViewModel.getViewModelElement(edge.getDestination());
         if (source == null || destination == null) {
-            throw new MissingViewModelElement(
-                "Tried to create an EdgeViewModel from an Edge that contains a State that does not have a StateViewModel");
+            throw new MissingViewModelElement("Missing source or destination for edge.");
         }
         EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
-    public SystemConnectionViewModel createSystemConnectionViewModelIn(SystemViewModel parentSystem, PortViewModel source,
-                                                                       PortViewModel destination) {
+    public SystemConnectionViewModel createSystemConnectionViewModelIn(
+        SystemViewModel parentSystem, PortViewModel source, PortViewModel destination) {
         SystemConnection systemConnection =
             modelFactory.createSystemConnection(parentSystem.getTarget(), source.getTarget(), destination.getTarget());
-        SystemConnectionViewModel result = new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
+        SystemConnectionViewModel result =
+            new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
-    public SystemConnectionViewModel createSystemConnectionViewModelFrom(SystemConnection systemConnection) throws MissingViewModelElement {
+    public SystemConnectionViewModel createSystemConnectionViewModelFrom(SystemConnection systemConnection)
+        throws MissingViewModelElement {
         PortViewModel source = (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getSource());
-        PortViewModel destination = (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getDestination());
+        PortViewModel destination =
+            (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getDestination());
         if (source == null || destination == null) {
-            throw new MissingViewModelElement(
-                "Tried to create a SystemConnectionViewModel from a SystemConnection that contains a Variable that does not have a PortViewModel");
+            throw new MissingViewModelElement("Missing source or destination for system connection.");
         }
-        SystemConnectionViewModel result = new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
+        SystemConnectionViewModel result =
+            new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
@@ -110,20 +116,19 @@ public class ViewModelFactory {
 
     public RegionViewModel createRegionViewModelIn(SystemViewModel parentSystem) {
         Region region = modelFactory.createRegion(parentSystem.getTarget().getAutomaton());
-        RegionViewModel result =
-            new RegionViewModel(getNewViewModelElementId(), region, createContractViewModelFrom(region.getPreAndPostCondition()));
+        RegionViewModel result = new RegionViewModel(getNewViewModelElementId(), region,
+            createContractViewModelFrom(region.getPreAndPostCondition()));
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public RegionViewModel createRegionViewModelFrom(Region region) throws MissingViewModelElement {
-        RegionViewModel result =
-            new RegionViewModel(getNewViewModelElementId(), region, createContractViewModelFrom(region.getPreAndPostCondition()));
+        RegionViewModel result = new RegionViewModel(getNewViewModelElementId(), region,
+            createContractViewModelFrom(region.getPreAndPostCondition()));
         for (State state : region.getStates()) {
             StateViewModel stateViewModel = (StateViewModel) geckoViewModel.getViewModelElement(state);
             if (stateViewModel == null) {
-                throw new MissingViewModelElement(
-                    "Tried to create a region view model from a region that contains a state that does not have a view model");
+                throw new MissingViewModelElement("Region contains invalid state.");
             }
             result.addState(stateViewModel);
         }

@@ -64,7 +64,8 @@ public class ModelFactory {
         return variable;
     }
 
-    public SystemConnection createSystemConnection(@NonNull System system, @NonNull Variable source, @NonNull Variable destination) {
+    public SystemConnection createSystemConnection(
+        @NonNull System system, @NonNull Variable source, @NonNull Variable destination) {
         int id = getNewElementId();
         SystemConnection connection = new SystemConnection(id, source, destination);
         system.addConnection(connection);
@@ -73,7 +74,8 @@ public class ModelFactory {
 
     public Contract createContract(@NonNull State state) {
         int id = getNewElementId();
-        Contract contract = new Contract(id, getDefaultName(id), new Condition(DEFAULT_CONDITION), new Condition(DEFAULT_CONDITION));
+        Contract contract =
+            new Contract(id, getDefaultName(id), new Condition(DEFAULT_CONDITION), new Condition(DEFAULT_CONDITION));
         state.addContract(contract);
         return contract;
     }

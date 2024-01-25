@@ -8,7 +8,8 @@ public class PastePositionableViewModelElementAction extends Action {
     PastePositionableViewModelElementAction(GeckoViewModel geckoViewModel) {
     }
 
-    PastePositionableViewModelElementAction(GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
+    PastePositionableViewModelElementAction(
+        GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
     }
 
     @Override

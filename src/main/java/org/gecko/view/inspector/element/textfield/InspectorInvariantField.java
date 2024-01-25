@@ -10,7 +10,8 @@ public class InspectorInvariantField extends InspectorContractField {
         setText(regionViewModel.getInvariant());
 
         textProperty().addListener(event -> {
-            actionManager.run(actionManager.getActionFactory().createChangeInvariantViewModelElementAction(regionViewModel, getText()));
+            actionManager.run(actionManager.getActionFactory()
+                .createChangeInvariantViewModelElementAction(regionViewModel, getText()));
         });
     }
 

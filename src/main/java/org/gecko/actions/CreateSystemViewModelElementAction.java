@@ -12,7 +12,8 @@ public class CreateSystemViewModelElementAction extends Action {
     private final Point2D position;
     private SystemViewModel createdSystemViewModel;
 
-    CreateSystemViewModelElementAction(GeckoViewModel geckoViewModel, EditorViewModel editorViewModel, Point2D position) {
+    CreateSystemViewModelElementAction(
+        GeckoViewModel geckoViewModel, EditorViewModel editorViewModel, Point2D position) {
         this.geckoViewModel = geckoViewModel;
         this.editorViewModel = editorViewModel;
         this.position = position;

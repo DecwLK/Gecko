@@ -22,7 +22,8 @@ public class InspectorContractList extends AbstractInspectorList<InspectorContra
             while (change.next()) {
                 if (change.wasAdded()) {
                     for (ContractViewModel item : change.getAddedSubList()) {
-                        InspectorContractItem newContractItem = new InspectorContractItem(actionManager, stateViewModel, item);
+                        InspectorContractItem newContractItem =
+                            new InspectorContractItem(actionManager, stateViewModel, item);
                         newContractItem.prefWidthProperty().bind(widthProperty().subtract(20));
                         items.add(newContractItem);
                     }

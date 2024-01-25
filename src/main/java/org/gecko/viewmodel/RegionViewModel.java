@@ -15,9 +15,9 @@ import lombok.Setter;
 import org.gecko.model.Region;
 
 /**
- * Represents an abstraction of a {@link Region} model element. A {@link RegionViewModel} is described by a {@link Color}, a set of
- * {@link StateViewModel}s, a {@link ContractViewModel} and an invariant. Contains methods for managing the afferent data and updating the
- * target-{@link Region}.
+ * Represents an abstraction of a {@link Region} model element. A {@link RegionViewModel} is described by a
+ * {@link Color}, a set of {@link StateViewModel}s, a {@link ContractViewModel} and an invariant. Contains methods for
+ * managing the afferent data and updating the target-{@link Region}.
  */
 @Setter
 @Getter

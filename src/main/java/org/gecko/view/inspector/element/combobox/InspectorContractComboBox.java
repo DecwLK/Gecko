@@ -17,8 +17,12 @@ public class InspectorContractComboBox extends ComboBox<String> implements Inspe
         getItems().setAll(viewModel.getSource().getContracts().stream().map(ContractViewModel::getName).toList());
         valueProperty().addListener((observable, oldValue, newValue) -> {
             //Should never not be present because we are choosing the name of a contract
-            ContractViewModel newContract =
-                viewModel.getSource().getContracts().stream().filter(contract -> contract.getName().equals(newValue)).findFirst().orElseThrow();
+            ContractViewModel newContract = viewModel.getSource()
+                .getContracts()
+                .stream()
+                .filter(contract -> contract.getName().equals(newValue))
+                .findFirst()
+                .orElseThrow();
         });
     }
 

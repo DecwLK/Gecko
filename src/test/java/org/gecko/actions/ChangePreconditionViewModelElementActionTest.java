@@ -23,7 +23,8 @@ class ChangePreconditionViewModelElementActionTest {
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
+        SystemViewModel rootSystemViewModel =
+            viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         viewModelFactory.createContractViewModelIn(stateViewModel);
@@ -36,7 +37,8 @@ class ChangePreconditionViewModelElementActionTest {
 
     @Test
     void run() {
-        Action changePreconditionAction = actionFactory.createChangePreconditionViewModelElementAction(region1.getContract(), "newPrecondition");
+        Action changePreconditionAction =
+            actionFactory.createChangePreconditionViewModelElementAction(region1.getContract(), "newPrecondition");
         actionManager.run(changePreconditionAction);
         assertEquals("newPrecondition", region1.getContract().getPrecondition());
         assertEquals("newPrecondition", region1.getTarget().getPreAndPostCondition().getPreCondition().getCondition());
@@ -44,11 +46,13 @@ class ChangePreconditionViewModelElementActionTest {
 
     @Test
     void getUndoAction() {
-        Action changePreconditionAction = actionFactory.createChangePreconditionViewModelElementAction(region1.getContract(), "newPrecondition");
+        Action changePreconditionAction =
+            actionFactory.createChangePreconditionViewModelElementAction(region1.getContract(), "newPrecondition");
         String beforeChangePrecondition = region1.getContract().getPrecondition();
         actionManager.run(changePreconditionAction);
         actionManager.undo();
         assertEquals(beforeChangePrecondition, region1.getContract().getPrecondition());
-        assertEquals(beforeChangePrecondition, region1.getTarget().getPreAndPostCondition().getPreCondition().getCondition());
+        assertEquals(beforeChangePrecondition,
+            region1.getTarget().getPreAndPostCondition().getPreCondition().getCondition());
     }
 }

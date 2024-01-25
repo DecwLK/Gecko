@@ -20,7 +20,8 @@ public class CreateVariableAction extends Action {
 
     @Override
     void run() {
-        createdPortViewModel = geckoViewModel.getViewModelFactory().createPortViewModelIn(geckoViewModel.getCurrentEditor().getCurrentSystem());
+        createdPortViewModel = geckoViewModel.getViewModelFactory()
+            .createPortViewModelIn(geckoViewModel.getCurrentEditor().getCurrentSystem());
         createdPortViewModel.setCenter(editorViewModel.transformScreenToWorldCoordinates(position));
     }
 

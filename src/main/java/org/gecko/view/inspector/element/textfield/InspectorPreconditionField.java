@@ -10,7 +10,8 @@ public class InspectorPreconditionField extends InspectorContractField {
         setText(contractViewModel.getPrecondition());
 
         textProperty().addListener(event -> {
-            actionManager.run(actionManager.getActionFactory().createChangePreconditionViewModelElementAction(contractViewModel, getText()));
+            actionManager.run(actionManager.getActionFactory()
+                .createChangePreconditionViewModelElementAction(contractViewModel, getText()));
         });
     }
 

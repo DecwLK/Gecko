@@ -23,7 +23,8 @@ class ChangePostconditionViewModelElementActionTest {
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
+        SystemViewModel rootSystemViewModel =
+            viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         viewModelFactory.createContractViewModelIn(stateViewModel);
@@ -36,19 +37,23 @@ class ChangePostconditionViewModelElementActionTest {
 
     @Test
     void run() {
-        Action changePostconditionAction = actionFactory.createChangePostconditionViewModelElementAction(region1.getContract(), "newPostcondition");
+        Action changePostconditionAction =
+            actionFactory.createChangePostconditionViewModelElementAction(region1.getContract(), "newPostcondition");
         actionManager.run(changePostconditionAction);
         assertEquals("newPostcondition", region1.getContract().getPostcondition());
-        assertEquals("newPostcondition", region1.getTarget().getPreAndPostCondition().getPostCondition().getCondition());
+        assertEquals("newPostcondition",
+            region1.getTarget().getPreAndPostCondition().getPostCondition().getCondition());
     }
 
     @Test
     void getUndoAction() {
-        Action changePostconditionAction = actionFactory.createChangePostconditionViewModelElementAction(region1.getContract(), "newPostcondition");
+        Action changePostconditionAction =
+            actionFactory.createChangePostconditionViewModelElementAction(region1.getContract(), "newPostcondition");
         String beforeChangePostcondition = region1.getContract().getPostcondition();
         actionManager.run(changePostconditionAction);
         actionManager.undo();
         assertEquals(beforeChangePostcondition, region1.getContract().getPostcondition());
-        assertEquals(beforeChangePostcondition, region1.getTarget().getPreAndPostCondition().getPostCondition().getCondition());
+        assertEquals(beforeChangePostcondition,
+            region1.getTarget().getPreAndPostCondition().getPostCondition().getCondition());
     }
 }

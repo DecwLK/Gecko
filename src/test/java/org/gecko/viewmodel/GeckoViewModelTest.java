@@ -53,8 +53,8 @@ class GeckoViewModelTest {
         geckoViewModel.switchEditor(rootSystemViewModel, false);
         EditorViewModel editorViewModel = geckoViewModel.getCurrentEditor();
         assertFalse(editorViewModel.getContainedPositionableViewModelElementsProperty().contains(rootSystemViewModel));
-        assertTrue(
-            editorViewModel.getContainedPositionableViewModelElementsProperty().containsAll(List.of(childSystemViewModel1, childSystemViewModel2)));
+        assertTrue(editorViewModel.getContainedPositionableViewModelElementsProperty()
+            .containsAll(List.of(childSystemViewModel1, childSystemViewModel2)));
     }
 
     @Test
@@ -62,6 +62,7 @@ class GeckoViewModelTest {
         geckoViewModel.switchEditor(rootSystemViewModel, true);
         EditorViewModel editorViewModel = geckoViewModel.getCurrentEditor();
         assertTrue(editorViewModel.getContainedPositionableViewModelElementsProperty().contains(stateViewModel));
-        assertFalse(editorViewModel.getContainedPositionableViewModelElementsProperty().contains(childSystemViewModel1));
+        assertFalse(
+            editorViewModel.getContainedPositionableViewModelElementsProperty().contains(childSystemViewModel1));
     }
 }

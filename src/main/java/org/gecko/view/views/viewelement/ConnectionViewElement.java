@@ -20,8 +20,10 @@ public abstract class ConnectionViewElement extends Path {
 
         // Start element
         startElement = new MoveTo(path.getFirst().getValue().getX(), path.getFirst().getValue().getY());
-        startElement.xProperty().bind(Bindings.createDoubleBinding(() -> path.getFirst().getValue().getX(), path.getFirst()));
-        startElement.yProperty().bind(Bindings.createDoubleBinding(() -> path.getFirst().getValue().getY(), path.getFirst()));
+        startElement.xProperty()
+            .bind(Bindings.createDoubleBinding(() -> path.getFirst().getValue().getX(), path.getFirst()));
+        startElement.yProperty()
+            .bind(Bindings.createDoubleBinding(() -> path.getFirst().getValue().getY(), path.getFirst()));
         getElements().add(startElement);
 
         // Elements in the middle
@@ -34,8 +36,10 @@ public abstract class ConnectionViewElement extends Path {
 
         // End element
         endElement = new LineTo();
-        endElement.xProperty().bind(Bindings.createDoubleBinding(() -> path.getLast().getValue().getX(), path.getLast()));
-        endElement.yProperty().bind(Bindings.createDoubleBinding(() -> path.getLast().getValue().getY(), path.getLast()));
+        endElement.xProperty()
+            .bind(Bindings.createDoubleBinding(() -> path.getLast().getValue().getX(), path.getLast()));
+        endElement.yProperty()
+            .bind(Bindings.createDoubleBinding(() -> path.getLast().getValue().getY(), path.getLast()));
         getElements().add(endElement);
 
         setStrokeWidth(5);

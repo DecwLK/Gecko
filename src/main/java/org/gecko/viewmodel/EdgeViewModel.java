@@ -15,9 +15,10 @@ import org.gecko.model.Kind;
 
 /**
  * Represents an abstraction of an {@link Edge} model element. An {@link EdgeViewModel} is described by a source- and a
- * destination-{@link StateViewModel}. It is also associated with one of the start-{@link StateViewModel}'s {@link ContractViewModel}s, has a priority
- * and a {@link Kind}, which informs about how the associated {@link ContractViewModel} is handled. Contains methods for managing the afferent data
- * and updating the target-{@link Edge}.
+ * destination-{@link StateViewModel}. It is also associated with one of the start-{@link StateViewModel}'s
+ * {@link ContractViewModel}s, has a priority and a {@link Kind}, which informs about how the associated
+ * {@link ContractViewModel} is handled. Contains methods for managing the afferent data and updating the
+ * target-{@link Edge}.
  */
 @Getter
 @Setter
@@ -30,7 +31,8 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     private final Property<StateViewModel> destinationProperty;
     private final List<Property<Point2D>> edgePoints;
 
-    public EdgeViewModel(int id, @NonNull Edge target, @NonNull StateViewModel source, @NonNull StateViewModel destination) {
+    public EdgeViewModel(
+        int id, @NonNull Edge target, @NonNull StateViewModel source, @NonNull StateViewModel destination) {
         super(id, target);
         this.kindProperty = new SimpleObjectProperty<>(target.getKind());
         this.priorityProperty = new SimpleIntegerProperty(target.getPriority());

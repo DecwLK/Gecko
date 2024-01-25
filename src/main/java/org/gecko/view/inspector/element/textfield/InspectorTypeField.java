@@ -11,7 +11,8 @@ public class InspectorTypeField extends TextField implements InspectorElement<Te
         setText(viewModel.getType());
 
         setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createChangeTypePortViewModelElementAction(viewModel, getText()));
+            actionManager.run(
+                actionManager.getActionFactory().createChangeTypePortViewModelElementAction(viewModel, getText()));
         });
     }
 

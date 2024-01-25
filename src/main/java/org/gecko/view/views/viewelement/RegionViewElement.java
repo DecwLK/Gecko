@@ -84,11 +84,15 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
             }
         };
         regionViewModel.getStatesProperty().addListener(listener);
-        layoutXProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getX(), regionViewModel.getPositionProperty()));
-        layoutYProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getY(), regionViewModel.getPositionProperty()));
+        layoutXProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getX(),
+            regionViewModel.getPositionProperty()));
+        layoutYProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getY(),
+            regionViewModel.getPositionProperty()));
         // TODO is size width or coords?
-        prefWidthProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getX(), regionViewModel.getSizeProperty()));
-        prefHeightProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getSize().getY(), regionViewModel.getSizeProperty()));
+        prefWidthProperty().bind(
+            Bindings.createDoubleBinding(() -> regionViewModel.getSize().getX(), regionViewModel.getSizeProperty()));
+        prefHeightProperty().bind(
+            Bindings.createDoubleBinding(() -> regionViewModel.getSize().getY(), regionViewModel.getSizeProperty()));
         // TODO add more binds once they get pushed
     }
 
@@ -97,9 +101,9 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
         background.widthProperty().bind(widthProperty());
         background.heightProperty().bind(heightProperty());
         background.fillProperty()
-                  .bind(Bindings.createObjectBinding(
-                      () -> new Color(colorProperty.getValue().getRed(), colorProperty.getValue().getGreen(), colorProperty.getValue().getBlue(),
-                          0.5), regionViewModel.getColorProperty()));
+            .bind(Bindings.createObjectBinding(
+                () -> new Color(colorProperty.getValue().getRed(), colorProperty.getValue().getGreen(),
+                    colorProperty.getValue().getBlue(), 0.5), regionViewModel.getColorProperty()));
         GridPane gridPane = new GridPane();
         Label name = new Label("Region: " + regionViewModel.getName());
         Bindings.createStringBinding(() -> "Region: " + regionViewModel.getName(), regionViewModel.getNameProperty());
@@ -110,7 +114,8 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
         Bindings.createStringBinding(() -> "PostCondition: " + regionViewModel.getContract().getPostcondition(),
             regionViewModel.getContract().getPostConditionProperty());
         Label invariant = new Label("Invariant: " + regionViewModel.getInvariant());
-        Bindings.createStringBinding(() -> "Invariant: " + regionViewModel.getInvariant(), regionViewModel.getInvariantProperty());
+        Bindings.createStringBinding(() -> "Invariant: " + regionViewModel.getInvariant(),
+            regionViewModel.getInvariantProperty());
         gridPane.add(name, 0, 0);
         gridPane.add(preCondition, 0, 1);
         gridPane.add(postCondition, 0, 2);

@@ -10,7 +10,8 @@ public class InspectorPostconditionField extends InspectorContractField {
         setText(contractViewModel.getPostcondition());
 
         textProperty().addListener(event -> {
-            actionManager.run(actionManager.getActionFactory().createChangePostconditionViewModelElementAction(contractViewModel, getText()));
+            actionManager.run(actionManager.getActionFactory()
+                .createChangePostconditionViewModelElementAction(contractViewModel, getText()));
         });
     }
 

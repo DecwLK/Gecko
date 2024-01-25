@@ -35,8 +35,10 @@ public class RegionCreatorTool extends Tool {
             if (startPosition == null) {
                 return;
             }
-            Point2D topLeft = new Point2D(Math.min(startPosition.getX(), event.getX()), Math.min(startPosition.getY(), event.getY()));
-            Point2D bottomRight = new Point2D(Math.max(startPosition.getX(), event.getX()), Math.max(startPosition.getY(), event.getY()));
+            Point2D topLeft =
+                new Point2D(Math.min(startPosition.getX(), event.getX()), Math.min(startPosition.getY(), event.getY()));
+            Point2D bottomRight =
+                new Point2D(Math.max(startPosition.getX(), event.getX()), Math.max(startPosition.getY(), event.getY()));
             Point2D size = bottomRight.subtract(topLeft);
             //prevent negative size and too small regions TODO properly
             if (size.getX() < 0 || size.getY() < 0 || size.getX() * size.getY() < 100) {

@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -63,10 +64,14 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         nameProperty.bind(stateViewModel.getNameProperty());
         isStartStateProperty.bind(stateViewModel.getIsStartStateProperty());
         contractsProperty.bind(stateViewModel.getContractsProperty());
-        layoutXProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getX(), stateViewModel.getPositionProperty()));
-        layoutYProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getY(), stateViewModel.getPositionProperty()));
-        prefWidthProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getSize().getX(), stateViewModel.getSizeProperty()));
-        prefHeightProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getSize().getY(), stateViewModel.getSizeProperty()));
+        layoutXProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getX(),
+            stateViewModel.getPositionProperty()));
+        layoutYProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getY(),
+            stateViewModel.getPositionProperty()));
+        prefWidthProperty().bind(
+            Bindings.createDoubleBinding(() -> stateViewModel.getSize().getX(), stateViewModel.getSizeProperty()));
+        prefHeightProperty().bind(
+            Bindings.createDoubleBinding(() -> stateViewModel.getSize().getY(), stateViewModel.getSizeProperty()));
     }
 
     @Override
@@ -92,11 +97,13 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         }, isStartStateProperty));
         GridPane gridPane = new GridPane();
         Label name = new Label("State: " + stateViewModel.getName());
-        name.textProperty().bind(Bindings.createStringBinding(() -> "State: " + stateViewModel.getName(), stateViewModel.getNameProperty()));
+        name.textProperty()
+            .bind(Bindings.createStringBinding(() -> "State: " + stateViewModel.getName(),
+                stateViewModel.getNameProperty()));
         Label contracts = new Label("Contracts: " + stateViewModel.getContractsProperty().size());
         contracts.textProperty()
-                 .bind(Bindings.createStringBinding(() -> "Contracts: " + stateViewModel.getContractsProperty().size(),
-                     stateViewModel.getContractsProperty()));
+            .bind(Bindings.createStringBinding(() -> "Contracts: " + stateViewModel.getContractsProperty().size(),
+                stateViewModel.getContractsProperty()));
         gridPane.add(name, 0, 0);
         gridPane.add(contracts, 0, 1);
         getChildren().addAll(background, gridPane);

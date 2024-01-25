@@ -23,7 +23,8 @@ class ChangeColorRegionViewModelElementActionTest {
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
+        SystemViewModel rootSystemViewModel =
+            viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         geckoViewModel.switchEditor(rootSystemViewModel, true);
     }
@@ -31,7 +32,8 @@ class ChangeColorRegionViewModelElementActionTest {
     @Test
     void run() {
         Color color = new Color(1, 1, 1, 0);
-        Action changeColorRegionViewModelElementAction = actionFactory.createChangeColorRegionViewModelElementAction(region1, color);
+        Action changeColorRegionViewModelElementAction =
+            actionFactory.createChangeColorRegionViewModelElementAction(region1, color);
         actionManager.run(changeColorRegionViewModelElementAction);
         assertEquals(color, region1.getColor());
     }
@@ -39,7 +41,8 @@ class ChangeColorRegionViewModelElementActionTest {
     @Test
     void getUndoAction() {
         Color color = new Color(0, 0, 0, 0);
-        Action changeColorRegionViewModelElementAction = actionFactory.createChangeColorRegionViewModelElementAction(region1, color);
+        Action changeColorRegionViewModelElementAction =
+            actionFactory.createChangeColorRegionViewModelElementAction(region1, color);
         Color beforeChangeColor = region1.getColor();
         actionManager.run(changeColorRegionViewModelElementAction);
         actionManager.undo();

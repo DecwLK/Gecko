@@ -11,7 +11,8 @@ public class DeleteContractViewModelAction extends Action {
     private final StateViewModel parent;
     private final ContractViewModel contractViewModel;
 
-    DeleteContractViewModelAction(GeckoViewModel geckoViewModel, StateViewModel parent, ContractViewModel contractViewModel) {
+    DeleteContractViewModelAction(
+        GeckoViewModel geckoViewModel, StateViewModel parent, ContractViewModel contractViewModel) {
         this.geckoViewModel = geckoViewModel;
         this.parent = parent;
         this.contractViewModel = contractViewModel;
@@ -20,7 +21,8 @@ public class DeleteContractViewModelAction extends Action {
     @Override
     void run() {
         parent.getContractsProperty().remove(contractViewModel);
-        ElementVisitor deleteElementVisitor = new DeleteElementVisitor(geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget());
+        ElementVisitor deleteElementVisitor =
+            new DeleteElementVisitor(geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget());
         contractViewModel.getTarget().accept(deleteElementVisitor);
     }
 

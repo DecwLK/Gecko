@@ -7,13 +7,14 @@ import org.gecko.model.Visibility;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.viewmodel.PortViewModel;
 
-public class InspectorVisibilityComboBox extends ComboBox<Visibility> implements InspectorElement<ComboBox<Visibility>> {
+public class InspectorVisibilityComboBox extends ComboBox<Visibility>
+    implements InspectorElement<ComboBox<Visibility>> {
     public InspectorVisibilityComboBox(ActionManager actionManager, PortViewModel viewModel) {
         getItems().setAll(Visibility.values());
         setValue(viewModel.getVisibility());
         valueProperty().addListener((observable, oldValue, newValue) -> {
-            Action changeVisibilityAction =
-                actionManager.getActionFactory().createChangeVisibilityPortViewModelAction(viewModel, valueProperty().get());
+            Action changeVisibilityAction = actionManager.getActionFactory()
+                .createChangeVisibilityPortViewModelAction(viewModel, valueProperty().get());
             actionManager.run(changeVisibilityAction);
         });
     }

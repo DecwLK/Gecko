@@ -22,7 +22,8 @@ class ChangeTypePortViewModelElementActionTest {
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
+        SystemViewModel rootSystemViewModel =
+            viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         port = viewModelFactory.createPortViewModelIn(rootSystemViewModel);
     }
 

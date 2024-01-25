@@ -11,7 +11,8 @@ public class InspectorTextField extends TextField implements InspectorElement<Te
         setText(renamable.getName());
 
         setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createRenameViewModelElementAction(renamable, getText()));
+            actionManager.run(
+                actionManager.getActionFactory().createRenameViewModelElementAction(renamable, getText()));
         });
     }
 

@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Represents a contract in the domain model of a Gecko project. A {@link Contract} has a name and is described by a pre- and a
- * post-{@link Condition}.
+ * Represents a contract in the domain model of a Gecko project. A {@link Contract} has a name and is described by a
+ * pre- and a post-{@link Condition}.
  */
 @Getter
 @Setter

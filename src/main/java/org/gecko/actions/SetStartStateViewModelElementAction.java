@@ -17,7 +17,11 @@ public class SetStartStateViewModelElementAction extends Action {
     void run() {
         previousStartState = (StateViewModel) geckoViewModel.getViewModelElement(
             geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().getStartState());
-        geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().setStartState(stateViewModel.getTarget());
+        geckoViewModel.getCurrentEditor()
+            .getCurrentSystem()
+            .getTarget()
+            .getAutomaton()
+            .setStartState(stateViewModel.getTarget());
     }
 
     @Override

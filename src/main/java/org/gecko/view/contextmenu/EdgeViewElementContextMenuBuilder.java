@@ -9,7 +9,8 @@ public class EdgeViewElementContextMenuBuilder extends AbstractContextMenuBuilde
 
     private final EdgeViewModel edgeViewModel;
 
-    public EdgeViewElementContextMenuBuilder(ActionManager actionManager, EditorView editorView, EdgeViewModel edgeViewModel) {
+    public EdgeViewElementContextMenuBuilder(
+        ActionManager actionManager, EditorView editorView, EdgeViewModel edgeViewModel) {
         super(actionManager, editorView);
 
         this.edgeViewModel = edgeViewModel;

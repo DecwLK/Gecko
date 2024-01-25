@@ -105,7 +105,8 @@ public class CursorTool extends Tool {
 
     private EventHandler<MouseEvent> selectElement(ViewElement<?> viewElement) {
         return event -> {
-            Action selectAction = actionManager.getActionFactory().createSelectAction(viewElement.getTarget(), !event.isShiftDown());
+            Action selectAction =
+                actionManager.getActionFactory().createSelectAction(viewElement.getTarget(), !event.isShiftDown());
             actionManager.run(selectAction);
         };
     }

@@ -5,7 +5,8 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
 public class CopyPositionableViewModelElementAction extends Action {
-    CopyPositionableViewModelElementAction(EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> positionableViewModelElement) {
+    CopyPositionableViewModelElementAction(
+        EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> positionableViewModelElement) {
     }
 
     @Override

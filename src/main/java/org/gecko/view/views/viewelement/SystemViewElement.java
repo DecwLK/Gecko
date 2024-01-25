@@ -60,10 +60,14 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     private void bindViewModel() {
         nameProperty.bind(systemViewModel.getNameProperty());
         codeProperty.bind(systemViewModel.getCodeProperty());
-        layoutXProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getPosition().getX(), systemViewModel.getPositionProperty()));
-        layoutYProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getPosition().getY(), systemViewModel.getPositionProperty()));
-        prefWidthProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getSize().getX(), systemViewModel.getSizeProperty()));
-        prefHeightProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getSize().getY(), systemViewModel.getSizeProperty()));
+        layoutXProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getPosition().getX(),
+            systemViewModel.getPositionProperty()));
+        layoutYProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getPosition().getY(),
+            systemViewModel.getPositionProperty()));
+        prefWidthProperty().bind(
+            Bindings.createDoubleBinding(() -> systemViewModel.getSize().getX(), systemViewModel.getSizeProperty()));
+        prefHeightProperty().bind(
+            Bindings.createDoubleBinding(() -> systemViewModel.getSize().getY(), systemViewModel.getSizeProperty()));
         //TODO add more binds once they get pushed
     }
 
@@ -86,7 +90,8 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         Label name = new Label("System: " + systemViewModel.getName());
         Bindings.createStringBinding(() -> "System: " + systemViewModel.getName(), systemViewModel.getNameProperty());
         Label ports = new Label("Ports: " + systemViewModel.getPortsProperty().size());
-        Bindings.createStringBinding(() -> "Ports: " + systemViewModel.getPortsProperty().size(), systemViewModel.getPortsProperty());
+        Bindings.createStringBinding(() -> "Ports: " + systemViewModel.getPortsProperty().size(),
+            systemViewModel.getPortsProperty());
         gridPane.add(name, 0, 0);
         gridPane.add(ports, 0, 1);
         getChildren().addAll(background, gridPane);

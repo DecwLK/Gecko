@@ -32,7 +32,8 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
      * @param stateViewModel    State view model
      * @param contractViewModel Contract view model
      */
-    public InspectorContractItem(ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
+    public InspectorContractItem(
+        ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
         this.viewModel = contractViewModel;
 
         // Contract fields:
@@ -60,8 +61,9 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
 
         // Contract name
         contractNameBox.getChildren()
-                       .addAll(new InspectorCollapseContractButton(contractFields), new InspectorTextField(actionManager, contractViewModel),
-                           deleteButtonSpacer, new InspectorRemoveContractButton(actionManager, stateViewModel, contractViewModel));
+            .addAll(new InspectorCollapseContractButton(contractFields),
+                new InspectorTextField(actionManager, contractViewModel), deleteButtonSpacer,
+                new InspectorRemoveContractButton(actionManager, stateViewModel, contractViewModel));
 
         // Build the contract item
         getChildren().addAll(contractNameBox, contractConditions);
@@ -76,8 +78,10 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
     public InspectorContractItem(ActionManager actionManager, RegionViewModel regionViewModel) {
 
         GridPane regionConditions = new GridPane();
-        addContractItem("L:Pre:", new InspectorPreconditionField(actionManager, regionViewModel.getContract()), 0, regionConditions);
-        addContractItem("L:Post:", new InspectorPostconditionField(actionManager, regionViewModel.getContract()), 1, regionConditions);
+        addContractItem("L:Pre:", new InspectorPreconditionField(actionManager, regionViewModel.getContract()), 0,
+            regionConditions);
+        addContractItem("L:Post:", new InspectorPostconditionField(actionManager, regionViewModel.getContract()), 1,
+            regionConditions);
         addContractItem("L:Inv:", new InspectorInvariantField(actionManager, regionViewModel), 2, regionConditions);
 
         // Build the contract item

@@ -1,8 +1,8 @@
 package org.gecko.model;
 
 /**
- * Concrete implementation of an {@link ElementVisitor}. A {@link CreateElementVisitor} focuses on creating new {@link Element}s in a given
- * parent-{@link System}.
+ * Concrete implementation of an {@link ElementVisitor}. A {@link CreateElementVisitor} focuses on creating new
+ * {@link Element}s in a given parent-{@link System}.
  */
 public class CreateElementVisitor implements ElementVisitor {
 

@@ -38,7 +38,6 @@ public class FloatingUIBuilder {
         });
 
         Label zoomLabel = new Label();
-        //Bindings.bindBidirectional(zoomLabel.textProperty(), editorViewModel.getZoomScaleProperty(), new DoubleStringConverter());
         zoomLabel.textProperty().addListener((observable, oldValue, newValue) -> {
             editorViewModel.zoomIn(new Point2D(0, 0), ZOOM_SCALE_STEP);
         });
@@ -56,7 +55,8 @@ public class FloatingUIBuilder {
     public Node buildCurrentViewLabel() {
         Label currentViewLabel = new Label();
         currentViewLabel.textProperty()
-                        .bind(Bindings.createStringBinding(() -> editorViewModel.getCurrentSystem().getName(), currentViewLabel.textProperty()));
+            .bind(Bindings.createStringBinding(() -> editorViewModel.getCurrentSystem().getName(),
+                currentViewLabel.textProperty()));
         return currentViewLabel;
     }
 
@@ -70,12 +70,16 @@ public class FloatingUIBuilder {
         final String switchToAutomatonStyleClass = "floating-switch-to-automaton-button";
 
         Button switchViewButton = createStyledButton();
-        switchViewButton.getStyleClass().add(editorViewModel.isAutomatonEditor() ? switchToSystemStyleClass : switchToAutomatonStyleClass);
+        switchViewButton.getStyleClass()
+            .add(editorViewModel.isAutomatonEditor() ? switchToSystemStyleClass : switchToAutomatonStyleClass);
         switchViewButton.setOnAction(event -> {
             boolean automatonEditor = editorViewModel.isAutomatonEditor();
-            actionManager.run(actionManager.getActionFactory().createViewSwitchAction(editorViewModel.getCurrentSystem(), !automatonEditor));
-            switchViewButton.getStyleClass().remove(automatonEditor ? switchToAutomatonStyleClass : switchToSystemStyleClass);
-            switchViewButton.getStyleClass().add(automatonEditor ? switchToSystemStyleClass : switchToAutomatonStyleClass);
+            actionManager.run(actionManager.getActionFactory()
+                .createViewSwitchAction(editorViewModel.getCurrentSystem(), !automatonEditor));
+            switchViewButton.getStyleClass()
+                .remove(automatonEditor ? switchToAutomatonStyleClass : switchToSystemStyleClass);
+            switchViewButton.getStyleClass()
+                .add(automatonEditor ? switchToSystemStyleClass : switchToAutomatonStyleClass);
         });
 
         viewSwitchButtons.getChildren().add(switchViewButton);
@@ -83,8 +87,8 @@ public class FloatingUIBuilder {
         if (editorViewModel.getParentSystem() != null) {
             Button parentSystemSwitchButton = createStyledButton();
             parentSystemSwitchButton.getStyleClass().add("floating-parent-system-switch-button");
-            parentSystemSwitchButton.setOnAction(event -> actionManager.run(
-                actionManager.getActionFactory().createViewSwitchAction(editorViewModel.getParentSystem(), editorViewModel.isAutomatonEditor())));
+            parentSystemSwitchButton.setOnAction(event -> actionManager.run(actionManager.getActionFactory()
+                .createViewSwitchAction(editorViewModel.getParentSystem(), editorViewModel.isAutomatonEditor())));
 
             viewSwitchButtons.getChildren().add(parentSystemSwitchButton);
         }

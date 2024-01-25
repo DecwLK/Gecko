@@ -27,7 +27,8 @@ public class ActionFactory {
         this.geckoViewModel = geckoViewModel;
     }
 
-    public ChangeColorRegionViewModelElementAction createChangeColorRegionViewModelElementAction(RegionViewModel regionViewModel, Color color) {
+    public ChangeColorRegionViewModelElementAction createChangeColorRegionViewModelElementAction(
+        RegionViewModel regionViewModel, Color color) {
         return new ChangeColorRegionViewModelElementAction(regionViewModel, color);
     }
 
@@ -35,7 +36,8 @@ public class ActionFactory {
         return new ChangeContractEdgeViewModelAction(viewModel, contract);
     }
 
-    public ChangeInvariantViewModelElementAction createChangeInvariantViewModelElementAction(RegionViewModel regionViewModel, String newInvariant) {
+    public ChangeInvariantViewModelElementAction createChangeInvariantViewModelElementAction(
+        RegionViewModel regionViewModel, String newInvariant) {
         return new ChangeInvariantViewModelElementAction(regionViewModel, newInvariant);
     }
 
@@ -43,33 +45,38 @@ public class ActionFactory {
         return new ChangeKindEdgeViewModelAction(edgeViewModel, kind);
     }
 
-    public ChangePreconditionViewModelElementAction createChangePreconditionViewModelElementAction(ContractViewModel contractViewModel,
-                                                                                                   String newPrecondition) {
+    public ChangePreconditionViewModelElementAction createChangePreconditionViewModelElementAction(
+        ContractViewModel contractViewModel, String newPrecondition) {
         return new ChangePreconditionViewModelElementAction(contractViewModel, newPrecondition);
     }
 
-    public ChangePostconditionViewModelElementAction createChangePostconditionViewModelElementAction(ContractViewModel contractViewModel,
-                                                                                                     String newPostcondition) {
+    public ChangePostconditionViewModelElementAction createChangePostconditionViewModelElementAction(
+        ContractViewModel contractViewModel, String newPostcondition) {
         return new ChangePostconditionViewModelElementAction(contractViewModel, newPostcondition);
     }
 
-    public ChangeTypePortViewModelElementAction createChangeTypePortViewModelElementAction(PortViewModel portViewModel, String newType) {
+    public ChangeTypePortViewModelElementAction createChangeTypePortViewModelElementAction(
+        PortViewModel portViewModel, String newType) {
         return new ChangeTypePortViewModelElementAction(portViewModel, newType);
     }
 
-    public ChangeVisibilityPortViewModelAction createChangeVisibilityPortViewModelAction(PortViewModel portViewModel, Visibility visibility) {
+    public ChangeVisibilityPortViewModelAction createChangeVisibilityPortViewModelAction(
+        PortViewModel portViewModel, Visibility visibility) {
         return new ChangeVisibilityPortViewModelAction(portViewModel, visibility);
     }
 
-    public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {
+    public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(
+        List<PositionableViewModelElement<?>> elements) {
         return new CopyPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), elements);
     }
 
-    public CreateContractViewModelElementAction createCreateContractViewModelElementAction(StateViewModel stateViewModel) {
+    public CreateContractViewModelElementAction createCreateContractViewModelElementAction(
+        StateViewModel stateViewModel) {
         return new CreateContractViewModelElementAction(geckoViewModel.getViewModelFactory(), stateViewModel);
     }
 
-    public CreateEdgeViewModelElementAction createCreateEdgeViewModelElementAction(StateViewModel source, StateViewModel destination) {
+    public CreateEdgeViewModelElementAction createCreateEdgeViewModelElementAction(
+        StateViewModel source, StateViewModel destination) {
         return new CreateEdgeViewModelElementAction(geckoViewModel, source, destination);
     }
 
@@ -78,15 +85,16 @@ public class ActionFactory {
     }
 
     public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(Point2D position, Point2D size) {
-        return new CreateRegionViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position, size);
+        return new CreateRegionViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position,
+            size);
     }
 
     public CreateStateViewModelElementAction createCreateStateViewModelElementAction(Point2D position) {
         return new CreateStateViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
     }
 
-    public CreateSystemConnectionViewModelElementAction createCreateSystemConnectionViewModelElementAction(PortViewModel source,
-                                                                                                           PortViewModel destination) {
+    public CreateSystemConnectionViewModelElementAction createCreateSystemConnectionViewModelElementAction(
+        PortViewModel source, PortViewModel destination) {
         return new CreateSystemConnectionViewModelElementAction(geckoViewModel, source, destination);
     }
 
@@ -98,19 +106,23 @@ public class ActionFactory {
         return new CreateVariableAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
     }
 
-    public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {
+    public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction(
+        List<PositionableViewModelElement<?>> elements) {
         return new CutPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), elements);
     }
 
-    public DeleteContractViewModelAction createDeleteContractViewModelAction(StateViewModel parent, ContractViewModel contractViewModel) {
+    public DeleteContractViewModelAction createDeleteContractViewModelAction(
+        StateViewModel parent, ContractViewModel contractViewModel) {
         return new DeleteContractViewModelAction(geckoViewModel, parent, contractViewModel);
     }
 
-    public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction(PositionableViewModelElement<?> element) {
+    public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction(
+        PositionableViewModelElement<?> element) {
         return new DeletePositionableViewModelElementAction(geckoViewModel, element);
     }
 
-    public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {
+    public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction(
+        List<PositionableViewModelElement<?>> elements) {
         return new DeletePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
@@ -118,13 +130,13 @@ public class ActionFactory {
         return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), offset);
     }
 
-    public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(Set<PositionableViewModelElement<?>> elementsToMove,
-                                                                                 Point2D offset) {
+    public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(
+        Set<PositionableViewModelElement<?>> elementsToMove, Point2D offset) {
         return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), elementsToMove, offset);
     }
 
-    public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(EdgeViewModel edgeViewModel, StateViewModel stateViewModel,
-                                                                               boolean isSource) {
+    public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(
+        EdgeViewModel edgeViewModel, StateViewModel stateViewModel, boolean isSource) {
         return new MoveEdgeViewModelElementAction(edgeViewModel, stateViewModel, isSource);
     }
 
@@ -137,7 +149,8 @@ public class ActionFactory {
         return new PastePositionableViewModelElementAction(geckoViewModel);
     }
 
-    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {
+    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
+        List<PositionableViewModelElement<?>> elements) {
         return new PastePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
@@ -145,24 +158,28 @@ public class ActionFactory {
         return new RenameViewModelElementAction(geckoViewModel, renamable, name);
     }
 
-    public RestorePositionableViewModelElementAction createRestorePositionableViewModelElementAction(List<PositionableViewModelElement<?>> elements) {
+    public RestorePositionableViewModelElementAction createRestorePositionableViewModelElementAction(
+        List<PositionableViewModelElement<?>> elements) {
         return new RestorePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
-    public RestoreContractViewModelElementAction createRestoreContractViewModelElementAction(StateViewModel parent,
-                                                                                             ContractViewModel contractViewModel) {
+    public RestoreContractViewModelElementAction createRestoreContractViewModelElementAction(
+        StateViewModel parent, ContractViewModel contractViewModel) {
         return new RestoreContractViewModelElementAction(parent, contractViewModel);
     }
 
-    public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(BlockViewModelElement<?> element, double scaleFactor) {
+    public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(
+        BlockViewModelElement<?> element, double scaleFactor) {
         return new ScaleBlockViewModelElementAction(element, scaleFactor);
     }
 
-    public FocusPositionableViewModelElementAction createFocusPositionableViewModelElementAction(PositionableViewModelElement<?> element) {
+    public FocusPositionableViewModelElementAction createFocusPositionableViewModelElementAction(
+        PositionableViewModelElement<?> element) {
         return new FocusPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), element);
     }
 
-    public ModifyEdgeViewModelPriorityAction createModifyEdgeViewModelPriorityAction(EdgeViewModel edgeViewModel, int priority) {
+    public ModifyEdgeViewModelPriorityAction createModifyEdgeViewModelPriorityAction(
+        EdgeViewModel edgeViewModel, int priority) {
         return new ModifyEdgeViewModelPriorityAction(edgeViewModel, priority);
     }
 
@@ -186,7 +203,8 @@ public class ActionFactory {
         return new SelectToolAction(editorView, geckoViewModel.getCurrentEditor(), tool);
     }
 
-    public SetStartStateViewModelElementAction createSetStartStateViewModelElementAction(StateViewModel stateViewModel) {
+    public SetStartStateViewModelElementAction createSetStartStateViewModelElementAction(
+        StateViewModel stateViewModel) {
         return new SetStartStateViewModelElementAction(geckoViewModel, stateViewModel);
     }
 

@@ -4,7 +4,8 @@ import java.util.Objects;
 import lombok.Getter;
 
 /**
- * Represents an abstraction of an element in the domain model of a Gecko project. An {@link Element} has an id and accepts {@link ElementVisitor}s.
+ * Represents an abstraction of an element in the domain model of a Gecko project. An {@link Element} has an id and
+ * accepts {@link ElementVisitor}s.
  */
 @Getter
 public abstract class Element {

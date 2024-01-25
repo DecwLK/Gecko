@@ -8,7 +8,8 @@ public class InspectorAddVariableButton extends AbstractInspectorButton {
 
     private static final int WIDTH = 70;
 
-    public InspectorAddVariableButton(ActionManager actionManager, SystemViewModel systemViewModel, Visibility visibility) {
+    public InspectorAddVariableButton(
+        ActionManager actionManager, SystemViewModel systemViewModel, Visibility visibility) {
         setText("L:Add");
         setPrefWidth(WIDTH);
         setOnAction(event -> {

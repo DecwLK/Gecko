@@ -11,7 +11,8 @@ public class InspectorDeleteButton extends AbstractInspectorButton {
 
     public InspectorDeleteButton(ActionManager actionManager, PositionableViewModelElement<?> elementToRemove) {
         setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createDeletePositionableViewModelElementAction(elementToRemove));
+            actionManager.run(
+                actionManager.getActionFactory().createDeletePositionableViewModelElementAction(elementToRemove));
         });
         setText("L:Delete");
         setPrefWidth(WIDTH);

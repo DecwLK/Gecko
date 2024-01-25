@@ -13,7 +13,8 @@ public class InspectorKindComboBox extends ComboBox<Kind> implements InspectorEl
         getItems().setAll(Kind.values());
         setValue(viewModel.getKind());
         valueProperty().addListener((observable, oldValue, newValue) -> {
-            Action changeKindAction = actionManager.getActionFactory().createChangeKindAction(viewModel, valueProperty().get());
+            Action changeKindAction =
+                actionManager.getActionFactory().createChangeKindAction(viewModel, valueProperty().get());
             actionManager.run(changeKindAction);
         });
     }

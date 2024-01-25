@@ -22,14 +22,16 @@ class ChangeInvariantViewModelElementActionTest {
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
+        SystemViewModel rootSystemViewModel =
+            viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         geckoViewModel.switchEditor(rootSystemViewModel, true);
     }
 
     @Test
     void run() {
-        Action changeInvariantAction = actionFactory.createChangeInvariantViewModelElementAction(region1, "newInvariant");
+        Action changeInvariantAction =
+            actionFactory.createChangeInvariantViewModelElementAction(region1, "newInvariant");
         actionManager.run(changeInvariantAction);
         assertEquals("newInvariant", region1.getInvariant());
         assertEquals("newInvariant", region1.getTarget().getInvariant().getCondition());
@@ -37,7 +39,8 @@ class ChangeInvariantViewModelElementActionTest {
 
     @Test
     void getUndoAction() {
-        Action changeInvariantAction = actionFactory.createChangeInvariantViewModelElementAction(region1, "newInvariant");
+        Action changeInvariantAction =
+            actionFactory.createChangeInvariantViewModelElementAction(region1, "newInvariant");
         String beforeChangeInvariant = region1.getInvariant();
         actionManager.run(changeInvariantAction);
         actionManager.undo();

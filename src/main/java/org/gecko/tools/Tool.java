@@ -48,7 +48,8 @@ public abstract class Tool implements ViewElementVisitor {
 
     @Override
     public void visit(RegionViewElement regionViewElement) {
-        //Events are null here because the events need to propagate to the view. This allows elements to be placed in the region
+        //Events are null here because the events need to propagate to the view.
+        // This allows elements to be placed in the region
         setAllHandlers(regionViewElement, null);
     }
 

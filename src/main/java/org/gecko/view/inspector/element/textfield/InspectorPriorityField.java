@@ -11,7 +11,8 @@ public class InspectorPriorityField extends TextField implements InspectorElemen
         setText(String.valueOf(edgeViewModel.getPriority()));
 
         setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createModifyEdgeViewModelPriorityAction(edgeViewModel, Integer.parseInt(getText())));
+            actionManager.run(actionManager.getActionFactory()
+                .createModifyEdgeViewModelPriorityAction(edgeViewModel, Integer.parseInt(getText())));
         });
     }
 

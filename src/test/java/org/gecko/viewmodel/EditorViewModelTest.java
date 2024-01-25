@@ -25,6 +25,7 @@ class EditorViewModelTest {
         assertEquals(editorViewModel.getRegionViewModels(stateViewModel), List.of(regionViewModel1));
 
         regionViewModel2.getTarget().addState(stateViewModel.getTarget());
-        assertTrue(editorViewModel.getRegionViewModels(stateViewModel).containsAll(List.of(regionViewModel1, regionViewModel2)));
+        assertTrue(editorViewModel.getRegionViewModels(stateViewModel)
+            .containsAll(List.of(regionViewModel1, regionViewModel2)));
     }
 }

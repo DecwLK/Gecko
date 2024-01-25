@@ -9,8 +9,8 @@ public class SystemConnectionViewElementContextMenuBuilder extends AbstractConte
 
     private final SystemConnectionViewModel systemConnectionViewModel;
 
-    public SystemConnectionViewElementContextMenuBuilder(ActionManager actionManager, EditorView editorView,
-                                                         SystemConnectionViewModel systemConnectionViewModel) {
+    public SystemConnectionViewElementContextMenuBuilder(
+        ActionManager actionManager, EditorView editorView, SystemConnectionViewModel systemConnectionViewModel) {
         super(actionManager, editorView);
 
         this.systemConnectionViewModel = systemConnectionViewModel;

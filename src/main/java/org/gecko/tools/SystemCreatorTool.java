@@ -31,8 +31,8 @@ public class SystemCreatorTool extends Tool {
             if (event.isConsumed()) {
                 return;
             }
-            Action createSystemAction =
-                actionManager.getActionFactory().createCreateSystemViewModelElementAction(new Point2D(event.getX(), event.getY()));
+            Action createSystemAction = actionManager.getActionFactory()
+                .createCreateSystemViewModelElementAction(new Point2D(event.getX(), event.getY()));
             actionManager.run(createSystemAction);
         });
     }

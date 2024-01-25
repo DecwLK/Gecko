@@ -11,8 +11,9 @@ import lombok.Setter;
 import org.gecko.model.SystemConnection;
 
 /**
- * Represents an abstraction of a {@link SystemConnection} model element. A {@link SystemConnectionViewModel} is described by a source- and a
- * destination-{@link PortViewModel}. Contains methods for managing the afferent data and updating the target-{@link SystemConnection}.
+ * Represents an abstraction of a {@link SystemConnection} model element. A {@link SystemConnectionViewModel} is
+ * described by a source- and a destination-{@link PortViewModel}. Contains methods for managing the afferent data and
+ * updating the target-{@link SystemConnection}.
  */
 @Getter
 @Setter
@@ -21,7 +22,8 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     private final Property<PortViewModel> destinationProperty;
     private final List<Property<Point2D>> edgePoints;
 
-    SystemConnectionViewModel(int id, SystemConnection target, @NonNull PortViewModel source, @NonNull PortViewModel destination) {
+    SystemConnectionViewModel(
+        int id, SystemConnection target, @NonNull PortViewModel source, @NonNull PortViewModel destination) {
         super(id, target);
         this.sourceProperty = new SimpleObjectProperty<>(source);
         this.destinationProperty = new SimpleObjectProperty<>(destination);

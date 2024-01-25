@@ -10,7 +10,8 @@ public class InspectorAddContractButton extends AbstractInspectorButton {
         setText("L:Add");
         setPrefWidth(WIDTH);
         setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createCreateContractViewModelElementAction(stateViewModel));
+            actionManager.run(
+                actionManager.getActionFactory().createCreateContractViewModelElementAction(stateViewModel));
         });
     }
 }

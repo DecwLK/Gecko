@@ -134,7 +134,8 @@ class ViewModelFactoryTest {
 
     @Test
     void testCreateEdgeFromModel() {
-        Edge edge = modelFactory.createEdge(systemViewModel1.getTarget().getAutomaton(), stateViewModel1.getTarget(), stateViewModel2.getTarget());
+        Edge edge = modelFactory.createEdge(systemViewModel1.getTarget().getAutomaton(), stateViewModel1.getTarget(),
+            stateViewModel2.getTarget());
         try {
             EdgeViewModel edgeViewModel = viewModelFactory.createEdgeViewModelFrom(edge);
             assertEquals(edge, edgeViewModel.getTarget());

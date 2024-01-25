@@ -14,7 +14,8 @@ public class DeletePositionableViewModelElementAction extends Action {
         this.elementsToDelete = List.of(element);
     }
 
-    DeletePositionableViewModelElementAction(GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
+    DeletePositionableViewModelElementAction(
+        GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
         this.geckoViewModel = geckoViewModel;
         this.elementsToDelete = elements;
     }

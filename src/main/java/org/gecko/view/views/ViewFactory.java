@@ -67,8 +67,8 @@ public class ViewFactory {
 
         AbstractContextMenuBuilder contextMenuBuilder =
             new VariableBlockViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), portViewModel);
-        newVariableBlockViewElement.setOnContextMenuRequested(
-            event -> contextMenuBuilder.build().show(newVariableBlockViewElement, event.getScreenX(), event.getScreenY()));
+        newVariableBlockViewElement.setOnContextMenuRequested(event -> contextMenuBuilder.build()
+            .show(newVariableBlockViewElement, event.getScreenX(), event.getScreenY()));
 
         return new SelectableViewElementDecorator(newVariableBlockViewElement);
     }
@@ -85,12 +85,14 @@ public class ViewFactory {
     }
 
     public ViewElement<?> createViewElementFrom(SystemConnectionViewModel systemConnectionViewModel) {
-        SystemConnectionViewElement newSystemConnectionViewElement = new SystemConnectionViewElement(systemConnectionViewModel);
+        SystemConnectionViewElement newSystemConnectionViewElement =
+            new SystemConnectionViewElement(systemConnectionViewModel);
 
         AbstractContextMenuBuilder contextMenuBuilder =
-            new SystemConnectionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), systemConnectionViewModel);
-        newSystemConnectionViewElement.setOnContextMenuRequested(
-            event -> contextMenuBuilder.build().show(newSystemConnectionViewElement, event.getScreenX(), event.getScreenY()));
+            new SystemConnectionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(),
+                systemConnectionViewModel);
+        newSystemConnectionViewElement.setOnContextMenuRequested(event -> contextMenuBuilder.build()
+            .show(newSystemConnectionViewElement, event.getScreenX(), event.getScreenY()));
 
         return new ElementScalerViewElementDecorator(newSystemConnectionViewElement);
     }

@@ -13,7 +13,8 @@ public class CreateStateViewModelElementAction extends Action {
     private final Point2D position;
     private StateViewModel createdStateViewModel;
 
-    CreateStateViewModelElementAction(GeckoViewModel geckoViewModel, EditorViewModel editorViewModel, Point2D position) {
+    CreateStateViewModelElementAction(
+        GeckoViewModel geckoViewModel, EditorViewModel editorViewModel, Point2D position) {
         this.geckoViewModel = geckoViewModel;
         this.editorViewModel = editorViewModel;
         this.position = position;

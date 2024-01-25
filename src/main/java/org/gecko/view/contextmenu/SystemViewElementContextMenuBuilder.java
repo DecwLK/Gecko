@@ -9,7 +9,8 @@ public class SystemViewElementContextMenuBuilder extends AbstractContextMenuBuil
 
     private final SystemViewModel systemViewModel;
 
-    public SystemViewElementContextMenuBuilder(ActionManager actionManager, EditorView editorView, SystemViewModel systemViewModel) {
+    public SystemViewElementContextMenuBuilder(
+        ActionManager actionManager, EditorView editorView, SystemViewModel systemViewModel) {
         super(actionManager, editorView);
 
         this.systemViewModel = systemViewModel;

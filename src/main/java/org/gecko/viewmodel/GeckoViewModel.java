@@ -20,10 +20,11 @@ import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
 
 /**
- * Represents the ViewModel component of a Gecko project, which connects the Model and View. Holds a {@link ViewModelFactory} and a reference to the
- * {@link GeckoModel}, as well as the current {@link EditorViewModel} and a list of all opened {@link EditorViewModel}s. Maps all
- * {@link PositionableViewModelElement}s to their corresponding {@link Element}s from Model. Contains methods for managing the {@link EditorViewModel}
- * and the retained {@link PositionableViewModelElement}s.
+ * Represents the ViewModel component of a Gecko project, which connects the Model and View. Holds a
+ * {@link ViewModelFactory} and a reference to the {@link GeckoModel}, as well as the current {@link EditorViewModel}
+ * and a list of all opened {@link EditorViewModel}s. Maps all {@link PositionableViewModelElement}s to their
+ * corresponding {@link Element}s from Model. Contains methods for managing the {@link EditorViewModel} and the retained
+ * {@link PositionableViewModelElement}s.
  */
 @Data
 public class GeckoViewModel {
@@ -51,10 +52,11 @@ public class GeckoViewModel {
 
     public void switchEditor(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
         openedEditorsProperty.stream()
-                             .filter(editorViewModel -> (editorViewModel.getCurrentSystem() == nextSystemViewModel
-                                 && editorViewModel.isAutomatonEditor() == isAutomatonEditor))
-                             .findFirst()
-                             .ifPresentOrElse(this::setCurrentEditor, () -> setupNewEditorViewModel(nextSystemViewModel, isAutomatonEditor));
+            .filter(editorViewModel -> (editorViewModel.getCurrentSystem() == nextSystemViewModel
+                && editorViewModel.isAutomatonEditor() == isAutomatonEditor))
+            .findFirst()
+            .ifPresentOrElse(this::setCurrentEditor,
+                () -> setupNewEditorViewModel(nextSystemViewModel, isAutomatonEditor));
     }
 
     private void setupNewEditorViewModel(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
@@ -89,14 +91,15 @@ public class GeckoViewModel {
     }
 
     /**
-     * In addition to adding the positionable view model element to the view model, this method also adds the positionable view model element to the
-     * model.
+     * In addition to adding the positionable view model element to the view model, this method also adds the
+     * positionable view model element to the model.
      *
      * @param element The element to add.
      */
     public void restoreViewModelElement(PositionableViewModelElement<?> element) {
         // Add to model
-        CreateElementVisitor createElementVisitor = new CreateElementVisitor(getCurrentEditor().getCurrentSystem().getTarget());
+        CreateElementVisitor createElementVisitor =
+            new CreateElementVisitor(getCurrentEditor().getCurrentSystem().getTarget());
         element.getTarget().accept(createElementVisitor);
 
         addViewModelElement(element);
@@ -107,7 +110,8 @@ public class GeckoViewModel {
         modelToViewModel.remove(element.getTarget());
 
         // Remove from model
-        DeleteElementVisitor deleteElementVisitor = new DeleteElementVisitor(getCurrentEditor().getCurrentSystem().getTarget());
+        DeleteElementVisitor deleteElementVisitor =
+            new DeleteElementVisitor(getCurrentEditor().getCurrentSystem().getTarget());
         element.getTarget().accept(deleteElementVisitor);
 
         updateCurrentEditor();
@@ -119,10 +123,11 @@ public class GeckoViewModel {
             return;
         }
 
-        currentEditor.removePositionableViewModelElements(currentEditor.getContainedPositionableViewModelElementsProperty()
-                                                                       .stream()
-                                                                       .filter(element -> !modelToViewModel.containsKey(element.getTarget()))
-                                                                       .collect(Collectors.toSet()));
+        currentEditor.removePositionableViewModelElements(
+            currentEditor.getContainedPositionableViewModelElementsProperty()
+                .stream()
+                .filter(element -> !modelToViewModel.containsKey(element.getTarget()))
+                .collect(Collectors.toSet()));
 
         addPositionableViewModelElementsToEditor(currentEditor);
     }
@@ -139,7 +144,8 @@ public class GeckoViewModel {
     private void addPositionableViewModelElementsToEditor(EditorViewModel editorViewModel) {
         System currentSystem = editorViewModel.getCurrentSystem().getTarget();
         if (editorViewModel.isAutomatonEditor()) {
-            editorViewModel.addPositionableViewModelElements(getViewModelElements(currentSystem.getAutomaton().getAllElements()));
+            editorViewModel.addPositionableViewModelElements(
+                getViewModelElements(currentSystem.getAutomaton().getAllElements()));
         } else {
             editorViewModel.addPositionableViewModelElements(getViewModelElements(currentSystem.getAllElements()));
         }

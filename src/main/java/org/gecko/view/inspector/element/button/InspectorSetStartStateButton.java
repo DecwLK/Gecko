@@ -9,7 +9,8 @@ public class InspectorSetStartStateButton extends AbstractInspectorButton {
         setText("L:Set as start state");
 
         setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createSetStartStateViewModelElementAction(stateViewModel));
+            actionManager.run(
+                actionManager.getActionFactory().createSetStartStateViewModelElementAction(stateViewModel));
         });
     }
 }

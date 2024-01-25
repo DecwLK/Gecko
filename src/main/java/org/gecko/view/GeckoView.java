@@ -17,8 +17,9 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 
 /**
- * Represents the View component of a Gecko project. Holds a {@link ViewFactory}, a current {@link EditorView} and a reference to the
- * {@link GeckoViewModel}. Contains methods for managing the {@link EditorView} shown in the graphic editor.
+ * Represents the View component of a Gecko project. Holds a {@link ViewFactory}, a current {@link EditorView} and a
+ * reference to the {@link GeckoViewModel}. Contains methods for managing the {@link EditorView} shown in the graphic
+ * editor.
  */
 public class GeckoView {
 
@@ -55,15 +56,16 @@ public class GeckoView {
         mainPane.setTop(new MenuBarBuilder(this, actionManager).build());
 
         // Initial view
-        currentView = viewFactory.createEditorView(viewModel.getCurrentEditor(), viewModel.getCurrentEditor().isAutomatonEditor());
+        currentView = viewFactory.createEditorView(viewModel.getCurrentEditor(),
+            viewModel.getCurrentEditor().isAutomatonEditor());
         constructTab(currentView, viewModel.getCurrentEditor());
         centerPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         refreshView();
     }
 
-    private void onUpdateCurrentEditorFromViewModel(ObservableValue<? extends EditorViewModel> observable, EditorViewModel oldValue,
-                                                    EditorViewModel newValue) {
+    private void onUpdateCurrentEditorFromViewModel(
+        ObservableValue<? extends EditorViewModel> observable, EditorViewModel oldValue, EditorViewModel newValue) {
         for (EditorView editorView : openedViews) {
             if (editorView.getViewModel().equals(newValue)) {
                 currentView = editorView;
@@ -74,15 +76,17 @@ public class GeckoView {
         refreshView();
     }
 
-    private void onOpenedEditorChanged(ObservableValue<? extends ObservableList<EditorViewModel>> observable,
-                                       ObservableList<EditorViewModel> oldValue, ObservableList<EditorViewModel> newValue) {
+    private void onOpenedEditorChanged(
+        ObservableValue<? extends ObservableList<EditorViewModel>> observable, ObservableList<EditorViewModel> oldValue,
+        ObservableList<EditorViewModel> newValue) {
         if (newValue != null) {
             for (EditorViewModel editorViewModel : newValue) {
                 if (openedViews.stream().anyMatch(editorView -> editorView.getViewModel().equals(editorViewModel))) {
                     continue;
                 }
 
-                EditorView newEditorView = viewFactory.createEditorView(editorViewModel, editorViewModel.isAutomatonEditor());
+                EditorView newEditorView =
+                    viewFactory.createEditorView(editorViewModel, editorViewModel.isAutomatonEditor());
 
                 if (!openedViews.contains(newEditorView)) {
                     constructTab(newEditorView, editorViewModel);
@@ -114,12 +118,17 @@ public class GeckoView {
 
         mainPane.setLeft(currentView.drawToolbar());
         mainPane.setRight(currentView.drawInspector());
-        viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(), currentView.getViewModel().isAutomatonEditor());
+        viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(),
+            currentView.getViewModel().isAutomatonEditor());
     }
 
-    private void onUpdateCurrentEditorToViewModel(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+    private void onUpdateCurrentEditorToViewModel(
+        ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
         if (newValue != null) {
-            currentView = openedViews.stream().filter(editorView -> editorView.getCurrentView() == newValue).findFirst().orElse(null);
+            currentView = openedViews.stream()
+                .filter(editorView -> editorView.getCurrentView() == newValue)
+                .findFirst()
+                .orElse(null);
             refreshView();
         }
     }

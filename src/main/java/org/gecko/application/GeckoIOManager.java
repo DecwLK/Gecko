@@ -67,7 +67,8 @@ public class GeckoIOManager {
             projectFileParser.getGeneratedViewModelElements();
         if (generatedViewModelElements != null && !generatedViewModelElements.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "Loaded file contains elements with missing attributes. Do you want to keep those elements with default attributes?",
+                "Loaded file contains elements with missing attributes. "
+                    + "Do you want to keep those elements with default attributes?",
                 ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
             if (alert.getResult().equals(ButtonType.NO)) {

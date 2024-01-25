@@ -38,10 +38,12 @@ public class MenuBarBuilder {
         openFileItem.setOnAction(e -> GeckoIOManager.getInstance().loadGeckoProject());
 
         MenuItem saveFileItem = new MenuItem("Save");
-        saveFileItem.setOnAction(e -> GeckoIOManager.getInstance().saveGeckoProject(GeckoIOManager.getInstance().getFile()));
+        saveFileItem.setOnAction(e -> GeckoIOManager.getInstance().saveGeckoProject(GeckoIOManager.getInstance()
+            .getFile()));
 
         MenuItem saveAsFileItem = new MenuItem("Save As");
-        saveAsFileItem.setOnAction(e -> GeckoIOManager.getInstance().saveGeckoProject(GeckoIOManager.getInstance().saveFileChooser(FileTypes.JSON)));
+        saveAsFileItem.setOnAction(e -> GeckoIOManager.getInstance().saveGeckoProject(GeckoIOManager.getInstance()
+            .saveFileChooser(FileTypes.JSON)));
 
         MenuItem importFileItem = new MenuItem("Import");
 

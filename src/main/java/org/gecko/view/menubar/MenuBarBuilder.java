@@ -43,16 +43,13 @@ public class MenuBarBuilder {
             File file = GeckoIOManager.getFile();
             if (file != null) {
                 GeckoIOManager.getInstance().saveGeckoProject(file);
+            } else {
+                saveToFile();
             }
         });
 
         MenuItem saveAsFileItem = new MenuItem("Save As");
-        saveAsFileItem.setOnAction(e -> {
-            File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.JSON);
-            if (fileToSaveTo != null) {
-                GeckoIOManager.getInstance().saveGeckoProject(fileToSaveTo);
-            }
-        });
+        saveAsFileItem.setOnAction(e -> saveToFile());
 
         MenuItem importFileItem = new MenuItem("Import");
 
@@ -61,5 +58,12 @@ public class MenuBarBuilder {
         fileMenu.getItems()
             .addAll(newFileItem, openFileItem, saveFileItem, saveAsFileItem, importFileItem, exportFileItem);
         return fileMenu;
+    }
+
+    private void saveToFile() {
+        File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.JSON);
+        if (fileToSaveTo != null) {
+            GeckoIOManager.getInstance().saveGeckoProject(fileToSaveTo);
+        }
     }
 }

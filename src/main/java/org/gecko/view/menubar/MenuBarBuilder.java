@@ -1,6 +1,5 @@
 package org.gecko.view.menubar;
 
-import java.io.File;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;

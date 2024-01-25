@@ -28,52 +28,57 @@ public class GeckoIOManager {
 
     @Getter
     @Setter
-    private File file;
+    private static File file;
 
     public static GeckoIOManager getInstance() {
         if (instance == null) {
             instance = new GeckoIOManager();
+            file = new File("json/untitled_gecko_project.json");
         }
         return instance;
     }
 
     public void createNewProject() {
-        file = openFileChooser(FileTypes.JSON);
-        GeckoModel geckoModel = new GeckoModel();
-        GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
-        geckoManager.setGecko(geckoModel, geckoViewModel);
-        saveGeckoProject(file);
+        File newFile = openFileChooser(FileTypes.JSON);
+        if (newFile != null) {
+            file = newFile;
+            GeckoModel geckoModel = new GeckoModel();
+            GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
+            geckoManager.setGecko(geckoModel, geckoViewModel);
+            saveGeckoProject(file);
+        }
     }
 
     public void loadGeckoProject() {
-        File file = openFileChooser(FileTypes.JSON);
-        ProjectFileParser projectFileParser = new ProjectFileParser();
-        Pair<GeckoModel, GeckoViewModel> geckoPair = null;
-        try {
-            geckoPair = projectFileParser.parse(file);
-        } catch (IOException e) {
-            Alert alert =
-                new Alert(Alert.AlertType.ERROR, "Corrupted file. Could not read project from " + file.getPath() + ".",
-                    ButtonType.OK);
-            alert.showAndWait();
-        }
+        File fileToLoad = openFileChooser(FileTypes.JSON);
 
-        if (geckoPair != null) {
-            geckoManager.setGecko(geckoPair.getKey(), geckoPair.getValue());
-        }
-        this.file = file;
+        if (fileToLoad != null) {
+            ProjectFileParser projectFileParser = new ProjectFileParser();
+            Pair<GeckoModel, GeckoViewModel> geckoPair = null;
+            try {
+                geckoPair = projectFileParser.parse(fileToLoad);
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                    "Corrupted file. Could not read project from " + fileToLoad.getPath() + ".", ButtonType.OK);
+                alert.showAndWait();
+            }
 
-        List<PositionableViewModelElement<?>> generatedViewModelElements =
-            projectFileParser.getGeneratedViewModelElements();
-        if (generatedViewModelElements != null && !generatedViewModelElements.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "Loaded file contains elements with missing attributes. "
-                    + "Do you want to keep those elements with default attributes?",
-                ButtonType.YES, ButtonType.NO);
-            alert.showAndWait();
-            if (alert.getResult().equals(ButtonType.NO)) {
-                for (PositionableViewModelElement<?> viewModelElement : generatedViewModelElements) {
-                    geckoManager.getGecko().getViewModel().deleteViewModelElement(viewModelElement);
+            if (geckoPair != null) {
+                geckoManager.setGecko(geckoPair.getKey(), geckoPair.getValue());
+            }
+            file = fileToLoad;
+
+            List<PositionableViewModelElement<?>> generatedViewModelElements =
+                projectFileParser.getGeneratedViewModelElements();
+            if (generatedViewModelElements != null && !generatedViewModelElements.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Loaded file contains elements with missing attributes. "
+                        + "Do you want to keep those elements with default attributes?", ButtonType.YES, ButtonType.NO);
+                alert.showAndWait();
+                if (alert.getResult().equals(ButtonType.NO)) {
+                    for (PositionableViewModelElement<?> viewModelElement : generatedViewModelElements) {
+                        geckoManager.getGecko().getViewModel().deleteViewModelElement(viewModelElement);
+                    }
                 }
             }
         }

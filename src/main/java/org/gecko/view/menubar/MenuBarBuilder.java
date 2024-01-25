@@ -1,5 +1,6 @@
 package org.gecko.view.menubar;
 
+import java.io.File;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -38,12 +39,20 @@ public class MenuBarBuilder {
         openFileItem.setOnAction(e -> GeckoIOManager.getInstance().loadGeckoProject());
 
         MenuItem saveFileItem = new MenuItem("Save");
-        saveFileItem.setOnAction(e -> GeckoIOManager.getInstance().saveGeckoProject(GeckoIOManager.getInstance()
-            .getFile()));
+        saveFileItem.setOnAction(e -> {
+            File file = GeckoIOManager.getFile();
+            if (file != null) {
+                GeckoIOManager.getInstance().saveGeckoProject(file);
+            }
+        });
 
         MenuItem saveAsFileItem = new MenuItem("Save As");
-        saveAsFileItem.setOnAction(e -> GeckoIOManager.getInstance().saveGeckoProject(GeckoIOManager.getInstance()
-            .saveFileChooser(FileTypes.JSON)));
+        saveAsFileItem.setOnAction(e -> {
+            File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.JSON);
+            if (fileToSaveTo != null) {
+                GeckoIOManager.getInstance().saveGeckoProject(fileToSaveTo);
+            }
+        });
 
         MenuItem importFileItem = new MenuItem("Import");
 

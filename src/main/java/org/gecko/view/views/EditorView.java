@@ -84,6 +84,7 @@ public class EditorView {
         floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton);
         floatingUI.setPickOnBounds(false);
 
+        // Inspector Uncollapse Button
         currentInspector.addListener((observable, oldValue, newValue) -> {
             floatingUI.getChildren().remove(uncollapseInspectorButton);
             if (newValue == null) {

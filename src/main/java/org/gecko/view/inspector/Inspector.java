@@ -52,10 +52,9 @@ public class Inspector extends ScrollPane {
         setContent(vBox);
     }
 
-    public boolean toggleCollapse() {
+    public void toggleCollapse() {
         isCollapsed = !isCollapsed;
         setVisible(!isCollapsed);
-        return isCollapsed;
     }
 
     public Node getView() {

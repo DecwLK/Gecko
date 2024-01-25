@@ -86,7 +86,7 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
 
     private void addContractItem(String label, InspectorContractField field, int row, GridPane gridPane) {
         gridPane.add(new InspectorLabel(label), 0, row);
-        field.prefWidthProperty().bind(widthProperty().subtract(50));
+        field.prefWidthProperty().bind(widthProperty().subtract(60));
         gridPane.add(field, 1, row);
     }
 

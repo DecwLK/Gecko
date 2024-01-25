@@ -66,7 +66,6 @@ public class GeckoIOManager {
                 Gecko newGecko = new Gecko(geckoPair.getKey(), geckoPair.getValue());
                 geckoManager.setGecko(newGecko);
                 stage.setScene(new Scene(geckoManager.getGecko().getView().getMainPane()));
-
                 file = fileToLoad;
 
                 List<PositionableViewModelElement<?>> generatedViewModelElements =

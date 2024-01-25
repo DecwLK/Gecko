@@ -31,6 +31,10 @@ public class ActionFactory {
         return new ChangeColorRegionViewModelElementAction(regionViewModel, color);
     }
 
+    public Action createChangeContractEdgeViewModelAction(EdgeViewModel viewModel, ContractViewModel contract) {
+        return new ChangeContractEdgeViewModelAction(viewModel, contract);
+    }
+
     public ChangeInvariantViewModelElementAction createChangeInvariantViewModelElementAction(RegionViewModel regionViewModel, String newInvariant) {
         return new ChangeInvariantViewModelElementAction(regionViewModel, newInvariant);
     }

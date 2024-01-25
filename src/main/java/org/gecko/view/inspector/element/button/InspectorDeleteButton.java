@@ -15,7 +15,6 @@ public class InspectorDeleteButton extends AbstractInspectorButton {
         });
         setText("L:Delete");
         setPrefWidth(WIDTH);
-        setTextFill(COLOR);
         setStyle("-fx-background-color: " + COLOR.toString().replace("0x", "#")); //TODO correct?
     }
 }

@@ -1,11 +1,13 @@
 package org.gecko.viewmodel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -19,7 +21,7 @@ import org.gecko.model.State;
 @Getter
 public class StateViewModel extends BlockViewModelElement<State> {
     private final BooleanProperty isStartStateProperty;
-    private final ListProperty<ContractViewModel> contractsProperty;
+    private final ObservableList<ContractViewModel> contractsProperty;
 
     public StateViewModel(int id, @NonNull State target) {
         super(id, target);
@@ -54,6 +56,10 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
     public void removeContract(@NonNull ContractViewModel contract) {
         contractsProperty.remove(contract);
+    }
+
+    public List<ContractViewModel> getContracts() {
+        return new ArrayList<>(contractsProperty);
     }
 
     @Override

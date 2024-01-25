@@ -14,6 +14,6 @@ public class InspectorVariableLabel extends LabeledInspectorElement {
                 case INPUT -> "L:Input";
                 case OUTPUT -> "L:Output";
                 default -> "";
-            }), new InspectorAddVariableButton(actionManager, viewModel));
+            }), new InspectorAddVariableButton(actionManager, viewModel, visibility));
     }
 }

@@ -34,7 +34,6 @@ public class GeckoIOManager {
     public static GeckoIOManager getInstance() {
         if (instance == null) {
             instance = new GeckoIOManager();
-            file = new File("json/untitled_gecko_project.json");
         }
         return instance;
     }

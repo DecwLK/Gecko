@@ -149,7 +149,10 @@ public class EditorViewModel {
     public void addPositionableViewModelElements(Set<PositionableViewModelElement<?>> elements) {
         elements.removeAll(containedPositionableViewModelElementsProperty);
         containedPositionableViewModelElementsProperty.addAll(elements);
-        actionManager.run(actionManager.getActionFactory().createSelectAction(elements, true));
+        //don't select elements if no elements are added to the current view
+        if (!elements.isEmpty()) {
+            actionManager.run(actionManager.getActionFactory().createSelectAction(elements, true));
+        }
     }
 
     public void removePositionableViewModelElement(PositionableViewModelElement<?> element) {

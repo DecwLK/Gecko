@@ -1,10 +1,11 @@
 package org.gecko.view.views.viewelement;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -25,13 +26,13 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     private final SystemViewModel systemViewModel;
     private final StringProperty nameProperty;
     private final StringProperty codeProperty;
-    private final List<PortViewModel> ports;
+    private final ListProperty<PortViewModel> portsProperty;
 
     public SystemViewElement(SystemViewModel systemViewModel) {
         super(systemViewModel);
         this.nameProperty = new SimpleStringProperty();
         this.codeProperty = new SimpleStringProperty();
-        this.ports = new ArrayList<>();
+        this.portsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
         this.systemViewModel = systemViewModel;
         bindViewModel();
         constructVisualization();
@@ -68,7 +69,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
             Bindings.createDoubleBinding(() -> systemViewModel.getSize().getX(), systemViewModel.getSizeProperty()));
         prefHeightProperty().bind(
             Bindings.createDoubleBinding(() -> systemViewModel.getSize().getY(), systemViewModel.getSizeProperty()));
-        //TODO add more binds once they get pushed
+        portsProperty.bind(systemViewModel.getPortsProperty());
     }
 
     @Override
@@ -90,8 +91,9 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         Label name = new Label("System: " + systemViewModel.getName());
         Bindings.createStringBinding(() -> "System: " + systemViewModel.getName(), systemViewModel.getNameProperty());
         Label ports = new Label("Ports: " + systemViewModel.getPortsProperty().size());
-        Bindings.createStringBinding(() -> "Ports: " + systemViewModel.getPortsProperty().size(),
-            systemViewModel.getPortsProperty());
+        ports.textProperty()
+            .bind(Bindings.createStringBinding(() -> "Ports: " + systemViewModel.getPortsProperty().size(),
+                systemViewModel.getPortsProperty()));
         gridPane.add(name, 0, 0);
         gridPane.add(ports, 0, 1);
         getChildren().addAll(background, gridPane);

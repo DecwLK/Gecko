@@ -59,7 +59,12 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
     private void bindViewModel() {
         nameProperty.bind(portViewModel.getNameProperty());
         typeProperty.bind(portViewModel.getTypeProperty());
-        visibilityProperty.bind(portViewModel.getVisibilityProperty());
+        visibilityProperty.bind(Bindings.createObjectBinding(() -> switch (portViewModel.getVisibility()) {
+            //Swap output and input because we are inside the system
+            case INPUT -> Visibility.OUTPUT;
+            case OUTPUT -> Visibility.INPUT;
+            case STATE -> Visibility.STATE;
+        }, portViewModel.getVisibilityProperty()));
         layoutXProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getPosition().getX(),
             portViewModel.getPositionProperty()));
         layoutYProperty().bind(Bindings.createDoubleBinding(() -> portViewModel.getPosition().getY(),

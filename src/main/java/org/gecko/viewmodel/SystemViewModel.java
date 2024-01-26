@@ -1,10 +1,13 @@
 package org.gecko.viewmodel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -19,12 +22,16 @@ import org.gecko.model.System;
 @Setter
 public class SystemViewModel extends BlockViewModelElement<System> {
     private final StringProperty codeProperty;
-    private final ObservableList<PortViewModel> portsProperty; //TODO should this be called property?
+    private final ListProperty<PortViewModel> portsProperty;
 
     public SystemViewModel(int id, @NonNull System target) {
         super(id, target);
         this.codeProperty = new SimpleStringProperty(target.getCode());
-        this.portsProperty = FXCollections.observableArrayList();
+        this.portsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
+    }
+
+    public List<PortViewModel> getPorts() {
+        return new ArrayList<>(portsProperty);
     }
 
     public String getCode() {
@@ -46,6 +53,10 @@ public class SystemViewModel extends BlockViewModelElement<System> {
     public void addPort(@NonNull PortViewModel port) {
         // TODO: prior checks
         portsProperty.add(port);
+    }
+
+    public void removePort(@NonNull PortViewModel port) {
+        portsProperty.remove(port);
     }
 
     @Override

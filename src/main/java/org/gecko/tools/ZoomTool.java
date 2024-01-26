@@ -34,7 +34,7 @@ public class ZoomTool extends Tool {
             Point2D position = new Point2D(event.getX(), event.getY());
 
             if (event.isShiftDown()) {
-                actionManager.run(actionManager.getActionFactory().createZoomAction(position, 1/ZOOM_SCALE));
+                actionManager.run(actionManager.getActionFactory().createZoomAction(position, 1 / ZOOM_SCALE));
             } else {
                 actionManager.run(actionManager.getActionFactory().createZoomAction(position, ZOOM_SCALE));
             }

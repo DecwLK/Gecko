@@ -1,6 +1,5 @@
 package org.gecko.tools;
 
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
@@ -14,6 +13,7 @@ import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.view.views.viewelement.ViewElement;
+import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.SelectionManager;
 
 public class CursorTool extends Tool {
@@ -24,15 +24,17 @@ public class CursorTool extends Tool {
     private boolean isDragging = false;
 
     private final SelectionManager selectionManager;
+    private final EditorViewModel editorViewModel;
     private Point2D startDragPosition;
     private Point2D previousDragPosition;
     private ViewElement<?> draggedElement;
 
     private ScrollPane viewPane;
 
-    public CursorTool(ActionManager actionManager, SelectionManager selectionManager) {
+    public CursorTool(ActionManager actionManager, SelectionManager selectionManager, EditorViewModel editorViewModel) {
         super(actionManager);
         this.selectionManager = selectionManager;
+        this.editorViewModel = editorViewModel;
     }
 
     @Override
@@ -140,9 +142,8 @@ public class CursorTool extends Tool {
     }
 
     private Point2D getCoordinatesInPane(ViewElement<?> viewElement) {
-        Bounds localBounds = viewElement.drawElement().getBoundsInLocal();
-        Bounds boundsInScreen = viewElement.drawElement().localToScreen(localBounds);
-        Bounds boundsInPane = viewPane.screenToLocal(boundsInScreen);
-        return new Point2D(boundsInPane.getMinX(), boundsInPane.getMinY());
+        return editorViewModel.transformScreenToWorldCoordinates(
+            new Point2D(viewElement.drawElement().getBoundsInParent().getMinX(),
+                viewElement.drawElement().getBoundsInParent().getMinY()).multiply(editorViewModel.getZoomScale()));
     }
 }

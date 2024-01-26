@@ -215,4 +215,8 @@ public class ActionFactory {
     public ZoomAction createZoomAction(Point2D pivot, double factor) {
         return new ZoomAction(geckoViewModel.getCurrentEditor(), pivot, factor);
     }
+
+    public ZoomCenterAction createZoomCenterAction(double factor) {
+        return new ZoomCenterAction(geckoViewModel.getCurrentEditor(), factor);
+    }
 }

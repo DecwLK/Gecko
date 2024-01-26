@@ -4,11 +4,16 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.SetChangeListener;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -16,8 +21,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
@@ -44,31 +55,53 @@ public class EditorView {
     private Button uncollapseInspectorButton;
     private final InspectorFactory inspectorFactory;
     private final ScrollPane viewElementsScrollPane;
-    private final Pane viewElementsPaneContainer;
+    private final VBox viewElementsVBoxContainer;
+    private final Group viewElementsGroupContainer;
     private final Group viewElementsGroup;
+    private final Pane placeholder;
+    private final Property<Point2D> viewPortPositionViewProperty;
+    private final ChangeListener<Point2D> worldSizeUpdateListener;
+
 
     private ObjectProperty<Inspector> currentInspector;
     private Group inspectorPanel;
 
-    public EditorView(
-        ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel,
-        ShortcutHandler shortcutHandler) {
+    public EditorView(ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel, ShortcutHandler shortcutHandler) {
         this.viewModel = viewModel;
         this.toolBar = new ToolBarBuilder(actionManager, this, viewModel).build();
         this.shortcutHandler = shortcutHandler;
         this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
-        this.currentViewPane = new StackPane();
+
         this.viewElementsGroup = new Group();
+        this.viewElementsGroupContainer = new Group(viewElementsGroup);
+        this.viewElementsVBoxContainer = new VBox(viewElementsGroupContainer);
+        this.viewElementsScrollPane = new ScrollPane(viewElementsVBoxContainer);
+        this.placeholder = new Pane();
+        this.currentViewPane = new StackPane();
+        this.viewPortPositionViewProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
+
+        this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
+            updateWorldSize(newValue);
+        };
+
         this.inspectorPanel = new Group();
         this.currentInspector = new SimpleObjectProperty<>(null);
         currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
-        currentView =
-            new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
+        currentView = new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
 
         // Construct view elements pane container
-        viewElementsPaneContainer = new Pane(new Group(viewElementsGroup));
-        this.viewElementsScrollPane = new ScrollPane(viewElementsPaneContainer);
+        viewElementsVBoxContainer.setAlignment(Pos.CENTER);
+        viewElementsGroup.getChildren().add(placeholder);
+
+        viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            placeholder.setMinSize(viewElementsScrollPane.getViewportBounds().getWidth(), viewElementsScrollPane.getViewportBounds().getHeight());
+        });
+        //Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, null, null));
+        //placeholder.setBorder(border);
+        placeholder.setMouseTransparent(true);
+        viewElementsScrollPane.layout();
+
 
         // Floating UI
         FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
@@ -96,12 +129,10 @@ public class EditorView {
             }
             newValue.visibleProperty().addListener((observable1, oldValue1, newValue1) -> {
                 if (!newValue1) {
-                    uncollapseInspectorButton =
-                        floatingUIBuilder.buildUncollapseInspectorButton(currentInspector.get());
+                    uncollapseInspectorButton = floatingUIBuilder.buildUncollapseInspectorButton(currentInspector.get());
                     AnchorPane.setTopAnchor(uncollapseInspectorButton, 10.0);
                     AnchorPane.setRightAnchor(uncollapseInspectorButton,
-                        (viewModel.getCurrentSystem().getTarget().getParent() == null
-                            || viewModel.isAutomatonEditor()) ? 40.0 : 70.0);
+                        (viewModel.getCurrentSystem().getTarget().getParent() == null || viewModel.isAutomatonEditor()) ? 40.0 : 70.0);
                     floatingUI.getChildren().add(uncollapseInspectorButton);
                 } else {
                     floatingUI.getChildren().remove(uncollapseInspectorButton);
@@ -113,37 +144,76 @@ public class EditorView {
         currentViewPane.getChildren().addAll(viewElementsScrollPane, floatingUI);
 
         // View element creator listener
-        viewModel.getContainedPositionableViewModelElementsProperty()
-            .addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
-                onUpdateViewElements(viewFactory, change);
-            });
-
-        // Bind view elements pane with zoom scale property
-        viewModel.getScaleProperty().addListener((observable, oldValue, newValue) -> {
-            viewElementsGroup.getTransforms().setAll(newValue);
+        viewModel.getContainedPositionableViewModelElementsProperty().addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
+            onUpdateViewElements(viewFactory, change);
         });
 
-        viewElementsScrollPane.hvalueProperty().bindBidirectional(viewModel.getHValueProperty());
-        viewElementsScrollPane.vvalueProperty().bindBidirectional(viewModel.getVValueProperty());
-        viewElementsPaneContainer.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
-        });
-        viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.getViewSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
-            updatePaneContainerSize(newValue.getWidth(), newValue.getHeight());
-        });
-
-        viewElementsScrollPane.setPannable(true);
-        viewElementsGroup.setAutoSizeChildren(true);
-        viewElementsGroup.setManaged(true);
 
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
-
         viewModel.getSelectionManager().getCurrentSelectionProperty().addListener(this::selectionChanged);
-
         // Set current tool
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
+
+
+        // Viewport position listener
+        viewModel.getRequestedViewPortPositionProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            setViewPortPosition(newValue);
+            viewPortPositionViewProperty.setValue(newValue);
+            viewModel.getRequestedViewPortPositionProperty().setValue(null);
+        });
+        viewElementsScrollPane.hvalueProperty().addListener((observable, oldValue, newValue) -> {
+            calculateViewPortPosition();
+        });
+        viewElementsScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            calculateViewPortPosition();
+        });
+        viewModel.getViewPortPositionProperty().bindBidirectional(viewPortPositionViewProperty);
+
+        viewModel.getZoomScaleProperty().addListener((observable, oldValue, newValue) -> {
+            Scale scale = new Scale(newValue.doubleValue(), newValue.doubleValue(), 0, 0);
+            viewElementsGroup.getTransforms().setAll(scale);
+            viewElementsScrollPane.layout();
+        });
+
+        viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            viewModel.getViewPortSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
+        });
+
+        viewElementsGroup.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
+        });
+    }
+
+    private void setViewPortPosition(Point2D point) {
+        Point2D viewPortSize = convertParentToLocal(
+            new Point2D(viewElementsScrollPane.getViewportBounds().getWidth(), viewElementsScrollPane.getViewportBounds().getHeight()));
+        Point2D worldSize = new Point2D(viewElementsGroup.getLayoutBounds().getWidth(), viewElementsGroup.getLayoutBounds().getHeight());
+        Point2D worldOffset = getWorldOffset();
+        point = point.subtract(worldOffset);
+        double hValue = point.getX() / (worldSize.getX() + worldOffset.getX() - viewPortSize.getX());
+        double vValue = point.getY() / (worldSize.getY() + worldOffset.getY() - viewPortSize.getY());
+        viewElementsScrollPane.setHvalue(hValue);
+        viewElementsScrollPane.setVvalue(vValue);
+        viewElementsScrollPane.layout();
+    }
+
+    private void calculateViewPortPosition() {
+        Point2D viewPortSize = convertParentToLocal(
+            new Point2D(viewElementsScrollPane.getViewportBounds().getWidth(), viewElementsScrollPane.getViewportBounds().getHeight()));
+        Point2D worldSize = new Point2D(viewElementsGroup.getLayoutBounds().getWidth(), viewElementsGroup.getLayoutBounds().getHeight());
+        Point2D worldOffset = getWorldOffset();
+        double hValue = viewElementsScrollPane.getHvalue();
+        double vValue = viewElementsScrollPane.getVvalue();
+        viewPortPositionViewProperty.setValue(new Point2D(hValue * (worldSize.getX() + worldOffset.getX() - viewPortSize.getX()),
+            vValue * (worldSize.getY() + worldOffset.getY() - viewPortSize.getY())).add(worldOffset));
+    }
+
+    private Point2D getWorldOffset() {
+        return viewElementsGroup.parentToLocal(viewElementsGroupContainer.parentToLocal(new Point2D(0, 0)));
     }
 
     public Node drawToolbar() {
@@ -158,8 +228,7 @@ public class EditorView {
         currentInspector.get().toggleCollapse();
     }
 
-    private void onUpdateViewElements(
-        ViewFactory viewFactory, SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
+    private void onUpdateViewElements(ViewFactory viewFactory, SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
         if (change.wasAdded()) {
             // Create new view element
             PositionableViewModelElementVisitor visitor = new ViewElementCreatorVisitor(viewFactory);
@@ -170,6 +239,7 @@ public class EditorView {
             if (viewModel.getCurrentTool() != null) {
                 viewElement.accept(getViewModel().getCurrentTool());
             }
+            viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener);
         } else if (change.wasRemoved()) {
             // Find corresponding view element and remove it
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
@@ -178,14 +248,12 @@ public class EditorView {
             }
         }
         orderChildren();
-        viewElementsScrollPane.requestLayout();
+        viewElementsScrollPane.layout();
+        calculateViewPortPosition();
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
-        return currentViewElements.stream()
-            .filter(viewElement -> viewElement.getTarget().equals(element))
-            .findFirst()
-            .orElse(null);
+        return currentViewElements.stream().filter(viewElement -> viewElement.getTarget().equals(element)).findFirst().orElse(null);
     }
 
     private void onToolChanged(ObservableValue<? extends Tool> observable, Tool oldValue, Tool newValue) {
@@ -193,9 +261,8 @@ public class EditorView {
         currentViewElements.forEach(viewElement -> viewElement.accept(newValue));
     }
 
-    private void focusedElementChanged(
-        ObservableValue<? extends PositionableViewModelElement<?>> observable, PositionableViewModelElement<?> oldValue,
-        PositionableViewModelElement<?> newValue) {
+    private void focusedElementChanged(ObservableValue<? extends PositionableViewModelElement<?>> observable,
+                                       PositionableViewModelElement<?> oldValue, PositionableViewModelElement<?> newValue) {
         if (newValue != null) {
             inspectorPanel.getChildren().clear();
             currentInspector.set(inspectorFactory.createInspector(newValue));
@@ -206,23 +273,51 @@ public class EditorView {
         }
     }
 
-    private void updatePaneContainerSize(double width, double height) {
-        viewElementsPaneContainer.setMinSize(width, height);
-    }
-
-    private void selectionChanged(
-        ObservableValue<? extends Set<PositionableViewModelElement<?>>> observable,
-        Set<PositionableViewModelElement<?>> oldValue, Set<PositionableViewModelElement<?>> newValue) {
+    private void selectionChanged(ObservableValue<? extends Set<PositionableViewModelElement<?>>> observable,
+                                  Set<PositionableViewModelElement<?>> oldValue, Set<PositionableViewModelElement<?>> newValue) {
         oldValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(false));
         newValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(true));
         orderChildren();
     }
 
     private void orderChildren() {
-        viewElementsGroup.getChildren()
-            .setAll(currentViewElements.stream()
-                .sorted(Comparator.comparingInt(ViewElement::getZPriority))
-                .map(ViewElement::drawElement)
-                .toList());
+        Set<Node> currentElements = currentViewElements.stream()
+                                                       .sorted(Comparator.comparingInt(ViewElement::getZPriority))
+                                                       .map(ViewElement::drawElement)
+                                                       .collect(Collectors.toSet());
+        currentElements.add(placeholder);
+        viewElementsGroup.getChildren().setAll(currentElements);
+        viewElementsScrollPane.layout();
+    }
+
+    private Point2D convertParentToLocal(Point2D point) {
+        return viewElementsGroup.parentToLocal(viewElementsGroupContainer.parentToLocal(viewElementsVBoxContainer.parentToLocal(point)));
+    }
+
+    private void updateWorldSize(Point2D newElementPosition) {
+        Bounds bound = viewElementsGroup.getLayoutBounds();
+        double widthBorder = viewElementsScrollPane.getViewportBounds().getWidth() / 4;
+        double heightBorder = viewElementsScrollPane.getViewportBounds().getHeight() / 4;
+        if (newElementPosition.getX() < bound.getMinX() + widthBorder || newElementPosition.getX() > bound.getMaxX() - widthBorder
+            || newElementPosition.getY() < bound.getMinY() + heightBorder || newElementPosition.getY() > bound.getMaxY() - heightBorder) {
+            double increment =
+                Math.max(viewElementsScrollPane.getViewportBounds().getHeight(), viewElementsScrollPane.getViewportBounds().getWidth());
+            placeholder.setPrefSize(viewElementsGroup.getLayoutBounds().getWidth() + increment,
+                viewElementsGroup.getLayoutBounds().getHeight() + increment);
+            viewElementsScrollPane.layout();
+            currentViewElements.forEach(viewElement -> {
+                viewElement.getTarget().getPositionProperty().removeListener(worldSizeUpdateListener);
+            });
+            currentViewElements.forEach(viewElement -> {
+                Point2D position = viewElement.getPosition();
+                viewElement.getTarget().getPositionProperty().setValue(new Point2D(position.getX() + increment / 2, position.getY() + increment / 2));
+            });
+            currentViewElements.forEach(viewElement -> {
+                viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener);
+            });
+            setViewPortPosition(new Point2D(viewPortPositionViewProperty.getValue().getX() + increment / 2,
+                viewPortPositionViewProperty.getValue().getY() + increment / 2));
+            viewElementsScrollPane.layout();
+        }
     }
 }

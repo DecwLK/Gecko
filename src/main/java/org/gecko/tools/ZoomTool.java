@@ -9,7 +9,7 @@ public class ZoomTool extends Tool {
 
     private static final String NAME = "Zoom Tool";
     private static final String ICON_STYLE_NAME = "zoom-icon";
-    private static final double ZOOM_SCALE_STEP = 0.1;
+    private static final double ZOOM_SCALE = 1.1;
 
     public ZoomTool(ActionManager actionManager) {
         super(actionManager);
@@ -34,9 +34,9 @@ public class ZoomTool extends Tool {
             Point2D position = new Point2D(event.getX(), event.getY());
 
             if (event.isShiftDown()) {
-                actionManager.run(actionManager.getActionFactory().createZoomAction(position, -ZOOM_SCALE_STEP));
+                actionManager.run(actionManager.getActionFactory().createZoomAction(position, 1/ZOOM_SCALE));
             } else {
-                actionManager.run(actionManager.getActionFactory().createZoomAction(position, ZOOM_SCALE_STEP));
+                actionManager.run(actionManager.getActionFactory().createZoomAction(position, ZOOM_SCALE));
             }
         });
     }

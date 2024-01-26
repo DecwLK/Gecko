@@ -13,7 +13,7 @@ import org.gecko.viewmodel.EditorViewModel;
 
 public class FloatingUIBuilder {
 
-    private static final double ZOOM_SCALE_STEP = 0.1;
+    private static final double ZOOM_SCALE = 1.1;
 
     private static final int DEFAULT_BUTTON_SIZE = 30;
     private static final String FLOATING_BUTTON_STYLE_CLASS = "floating-ui-button";
@@ -34,18 +34,19 @@ public class FloatingUIBuilder {
         Button zoomInButton = createStyledButton();
         zoomInButton.getStyleClass().add(ZOOM_IN_STYLE_CLASS);
         zoomInButton.setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createZoomAction(new Point2D(0, 0), ZOOM_SCALE_STEP));
+            actionManager.run(actionManager.getActionFactory().createZoomCenterAction(ZOOM_SCALE));
         });
 
         Label zoomLabel = new Label();
-        zoomLabel.textProperty().addListener((observable, oldValue, newValue) -> {
-            editorViewModel.zoomIn(new Point2D(0, 0), ZOOM_SCALE_STEP);
-        });
+        zoomLabel.textProperty().bind(Bindings.createStringBinding(() -> {
+            double zoom = editorViewModel.getZoomScale();
+            return String.format("%.0f%%", zoom * 100);
+        }, editorViewModel.getZoomScaleProperty()));
 
         Button zoomOutButton = createStyledButton();
         zoomOutButton.getStyleClass().add(ZOOM_OUT_STYLE_CLASS);
         zoomOutButton.setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createZoomAction(new Point2D(0, 0), -ZOOM_SCALE_STEP));
+            actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1/ZOOM_SCALE));
         });
 
         zoomButtons.getChildren().addAll(zoomInButton, zoomLabel, zoomOutButton);

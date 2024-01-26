@@ -1,5 +1,7 @@
 package org.gecko.viewmodel;
 
+import java.util.HashSet;
+import java.util.Set;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
@@ -19,10 +21,13 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     protected final Property<Point2D> positionProperty;
     protected final Property<Point2D> sizeProperty;
 
+    private final Set<PositionableViewModelElement<?>> observers;
+
     PositionableViewModelElement(int id, @NonNull T target) {
         super(id, target);
         this.positionProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
         this.sizeProperty = new SimpleObjectProperty<>(new Point2D(100, 100));
+        this.observers = new HashSet<>();
     }
 
     public Point2D getPosition() {
@@ -50,8 +55,6 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
         positionProperty.setValue(new Point2D(point.getX() - sizeProperty.getValue().getX() / 2,
             point.getY() - sizeProperty.getValue().getY() / 2));
     }
-
-    // TODO: Is there any relevant update operation that should take place at this level?
 
     public abstract Object accept(@NonNull PositionableViewModelElementVisitor visitor);
 }

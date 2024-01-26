@@ -18,6 +18,7 @@ public class ModifyEdgeViewModelPriorityAction extends Action {
     @Override
     void run() {
         edgeViewModel.setPriority(newPriority);
+        edgeViewModel.updateTarget();
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.gecko.tools;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import org.gecko.actions.Action;
@@ -13,6 +14,8 @@ import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.view.views.viewelement.ViewElement;
+import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
+import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.SelectionManager;
 
@@ -27,7 +30,7 @@ public class CursorTool extends Tool {
     private final EditorViewModel editorViewModel;
     private Point2D startDragPosition;
     private Point2D previousDragPosition;
-    private ViewElement<?> draggedElement;
+    private Node draggedElement;
 
     private ScrollPane viewPane;
 
@@ -92,16 +95,71 @@ public class CursorTool extends Tool {
             event -> selectElement(systemConnectionViewElement, !event.isShiftDown()));
     }
 
+    @Override
+    public void visit(ConnectionElementScalerViewElementDecorator connectionElementScalerViewElementDecorator) {
+        super.visit(connectionElementScalerViewElementDecorator);
+
+        connectionElementScalerViewElementDecorator.drawElement().setOnMouseClicked(event -> {
+            if (!connectionElementScalerViewElementDecorator.isSelected()) {
+                return;
+            }
+            if (isDragging) {
+                isDragging = false;
+                return;
+            }
+            Point2D newScalerBlockPosition =
+                getCoordinatesInPane(connectionElementScalerViewElementDecorator.drawElement()).add(event.getX(),
+                    event.getY());
+            Action createScalerBlockAction = actionManager.getActionFactory()
+                .createCreateEdgeScalerBlockViewElementAction(connectionElementScalerViewElementDecorator,
+                    newScalerBlockPosition);
+            actionManager.run(createScalerBlockAction);
+
+            // Add handlers to the new scaler block
+            connectionElementScalerViewElementDecorator.accept(this);
+        });
+
+        for (ElementScalerBlock scaler : connectionElementScalerViewElementDecorator.getScalers()) {
+            scaler.setOnMousePressed(event -> {
+                startDraggingElementHandler(event, scaler);
+                scaler.setDragging(true);
+            });
+            scaler.setOnMouseDragged(event -> {
+                if (!isDragging) {
+                    return;
+                }
+                Point2D eventPosition =
+                    getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
+                Point2D delta = eventPosition.subtract(previousDragPosition);
+                scaler.setPoint(scaler.getPoint().add(delta));
+                previousDragPosition = eventPosition;
+            });
+            scaler.setOnMouseReleased(event -> {
+                if (!isDragging) {
+                    return;
+                }
+                Point2D endWorldPos = getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
+                scaler.setPoint(scaler.getPoint().add(startDragPosition.subtract(endWorldPos)));
+                Action moveAction = actionManager.getActionFactory()
+                    .createMoveEdgeScalerBlockViewElementAction(scaler, endWorldPos.subtract(startDragPosition));
+                actionManager.run(moveAction);
+                startDragPosition = null;
+                draggedElement = null;
+                scaler.setDragging(false);
+            });
+        }
+    }
+
     private void setDragAndSelectHandlers(ViewElement<?> element) {
         element.drawElement().setOnMousePressed(event -> {
-            startDraggingElementHandler(event, element);
+            startDraggingElementHandler(event, element.drawElement());
             selectElement(element, !event.isShiftDown());
         });
         element.drawElement().setOnMouseDragged(this::dragElementsHandler);
         element.drawElement().setOnMouseReleased(this::stopDraggingElementHandler);
     }
 
-    private void startDraggingElementHandler(MouseEvent event, ViewElement<?> element) {
+    private void startDraggingElementHandler(MouseEvent event, Node element) {
         draggedElement = element;
         isDragging = true;
         startDragPosition = getCoordinatesInPane(element).add(new Point2D(event.getX(), event.getY()));
@@ -114,9 +172,8 @@ public class CursorTool extends Tool {
         }
         Point2D eventPosition = getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
         Point2D delta = eventPosition.subtract(previousDragPosition);
-        selectionManager.getCurrentSelection().forEach(element -> {
-            element.setPosition(element.getPosition().add(delta));
-        });
+        selectionManager.getCurrentSelection()
+            .forEach(element -> element.setPosition(element.getPosition().add(delta)));
         previousDragPosition = eventPosition;
     }
 
@@ -141,9 +198,9 @@ public class CursorTool extends Tool {
         actionManager.run(select);
     }
 
-    private Point2D getCoordinatesInPane(ViewElement<?> viewElement) {
+    private Point2D getCoordinatesInPane(Node viewElement) {
         return editorViewModel.transformScreenToWorldCoordinates(
-            new Point2D(viewElement.drawElement().getBoundsInParent().getMinX(),
-                viewElement.drawElement().getBoundsInParent().getMinY()).multiply(editorViewModel.getZoomScale()));
+            new Point2D(viewElement.getBoundsInParent().getMinX(),
+                viewElement.getBoundsInParent().getMinY()).multiply(editorViewModel.getZoomScale()));
     }
 }

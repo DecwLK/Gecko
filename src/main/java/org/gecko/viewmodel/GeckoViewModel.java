@@ -2,6 +2,7 @@ package org.gecko.viewmodel;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javafx.beans.property.ListProperty;
@@ -80,7 +81,7 @@ public class GeckoViewModel {
         elements.forEach(element -> positionableViewModelElements.add(getViewModelElement(element)));
 
         // Remove null elements TODO: THIS SHOULDN'T BE NECESSARY
-        positionableViewModelElements.removeIf(element -> element == null);
+        positionableViewModelElements.removeIf(Objects::isNull);
 
         return positionableViewModelElements;
     }

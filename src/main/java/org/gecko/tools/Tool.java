@@ -14,6 +14,7 @@ import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.view.views.viewelement.ViewElementVisitor;
+import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
 
@@ -71,6 +72,11 @@ public abstract class Tool implements ViewElementVisitor {
     @Override
     public void visit(ElementScalerViewElementDecorator elementScalerViewElementDecorator) {
         setAllHandlers(elementScalerViewElementDecorator.drawElement(), null);
+    }
+
+    @Override
+    public void visit(ConnectionElementScalerViewElementDecorator connectionElementScalerViewElementDecorator) {
+        setAllHandlers(connectionElementScalerViewElementDecorator.drawElement(), null);
     }
 
     @Override

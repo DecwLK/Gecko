@@ -1,18 +1,19 @@
 package org.gecko.actions;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
 public class RestorePositionableViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;
-    private final List<PositionableViewModelElement<?>> elementsToDelete;
+    private final Set<PositionableViewModelElement<?>> elementsToDelete;
 
     RestorePositionableViewModelElementAction(
-        GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
+        GeckoViewModel geckoViewModel, Set<PositionableViewModelElement<?>> elements) {
         this.geckoViewModel = geckoViewModel;
-        this.elementsToDelete = elements;
+        this.elementsToDelete = new HashSet<>(elements);
     }
 
     @Override

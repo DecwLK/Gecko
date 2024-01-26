@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
@@ -59,7 +60,7 @@ public class GeckoView {
         currentView = viewFactory.createEditorView(viewModel.getCurrentEditor(),
             viewModel.getCurrentEditor().isAutomatonEditor());
         constructTab(currentView, viewModel.getCurrentEditor());
-        centerPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        centerPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
         refreshView();
     }
@@ -94,9 +95,9 @@ public class GeckoView {
             }
         }
         if (openedViews.size() == 1) {
-            centerPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+            centerPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         } else {
-            centerPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+            centerPane.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
         }
     }
 

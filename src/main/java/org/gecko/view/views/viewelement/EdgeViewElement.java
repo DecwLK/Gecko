@@ -1,10 +1,10 @@
 package org.gecko.view.views.viewelement;
 
-import java.util.List;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -49,13 +49,13 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     @Override
-    public List<Property<Point2D>> getEdgePoints() {
+    public ObservableList<Property<Point2D>> getEdgePoints() {
         return edgeViewModel.getEdgePoints();
     }
 
     @Override
     public void setEdgePoint(int index, Point2D point) {
-
+        edgeViewModel.setEdgePoint(index, point);
     }
 
     @Override
@@ -80,5 +80,6 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
     private void constructVisualization() {
         setStroke(Color.BLACK);
+        setSmooth(true);
     }
 }

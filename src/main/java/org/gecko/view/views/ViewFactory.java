@@ -18,6 +18,7 @@ import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.view.views.viewelement.ViewElement;
+import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
 import org.gecko.viewmodel.EdgeViewModel;
@@ -81,7 +82,7 @@ public class ViewFactory {
         newEdgeViewElement.setOnContextMenuRequested(
             event -> contextMenuBuilder.build().show(newEdgeViewElement, event.getScreenX(), event.getScreenY()));
 
-        return new ElementScalerViewElementDecorator(newEdgeViewElement);
+        return new ConnectionElementScalerViewElementDecorator(newEdgeViewElement);
     }
 
     public ViewElement<?> createViewElementFrom(SystemConnectionViewModel systemConnectionViewModel) {
@@ -94,7 +95,7 @@ public class ViewFactory {
         newSystemConnectionViewElement.setOnContextMenuRequested(event -> contextMenuBuilder.build()
             .show(newSystemConnectionViewElement, event.getScreenX(), event.getScreenY()));
 
-        return new ElementScalerViewElementDecorator(newSystemConnectionViewElement);
+        return new ConnectionElementScalerViewElementDecorator(newSystemConnectionViewElement);
     }
 
     public ViewElement<?> createViewElementFrom(SystemViewModel systemViewModel) {

@@ -1,11 +1,11 @@
 package org.gecko.view.views.viewelement;
 
-import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -41,7 +41,7 @@ public class SystemConnectionViewElement extends ConnectionViewElement
     }
 
     @Override
-    public List<Property<Point2D>> getEdgePoints() {
+    public ObservableList<Property<Point2D>> getEdgePoints() {
         return systemConnectionViewModel.getEdgePoints();
     }
 

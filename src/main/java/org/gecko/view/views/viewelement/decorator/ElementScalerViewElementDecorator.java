@@ -6,6 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.view.views.viewelement.ViewElementVisitor;
 
@@ -14,23 +15,22 @@ public class ElementScalerViewElementDecorator extends ViewElementDecorator {
     private static final int SCALER_SIZE = 10;
     private static final int IGNORE_Z_PRIORITY = 10000;
 
-    private final Group decoratedNode;
-    private final List<ElementScalerBlock> scalers;
+    protected final Group decoratedNode;
+    @Getter
+    protected final List<ElementScalerBlock> scalers;
 
     public ElementScalerViewElementDecorator(ViewElement<?> decoratorTarget) {
         super(decoratorTarget);
         scalers = new ArrayList<>();
-        decoratedNode = new Group();
+        decoratedNode = new Group(decoratorTarget.drawElement());
 
-        for (int i = 0; i < getEdgePoints().size(); i++) {
+        for (int i = 0; i < decoratorTarget.getEdgePoints().size(); i++) {
             ElementScalerBlock scalerBlock = new ElementScalerBlock(i, this, SCALER_SIZE, SCALER_SIZE);
             scalerBlock.setFill(Color.RED);
 
             scalers.add(scalerBlock);
+            decoratedNode.getChildren().add(scalerBlock);
         }
-
-        decoratedNode.getChildren().add(decoratorTarget.drawElement());
-        decoratedNode.getChildren().addAll(scalers);
     }
 
     @Override

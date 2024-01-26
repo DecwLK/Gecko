@@ -1,19 +1,18 @@
 package org.gecko.view.views.viewelement.decorator;
 
-import java.util.List;
 import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+@Getter
 public abstract class ViewElementDecorator implements ViewElement<PositionableViewModelElement<?>> {
 
-    @Getter
     private final ViewElement<?> decoratorTarget;
 
-    @Getter
     @Setter
     private boolean selected;
 
@@ -35,7 +34,7 @@ public abstract class ViewElementDecorator implements ViewElement<PositionableVi
     }
 
     @Override
-    public List<Property<Point2D>> getEdgePoints() {
+    public ObservableList<Property<Point2D>> getEdgePoints() {
         return getDecoratorTarget().getEdgePoints();
     }
 

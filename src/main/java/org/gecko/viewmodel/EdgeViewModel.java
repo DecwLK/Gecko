@@ -1,11 +1,11 @@
 package org.gecko.viewmodel;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.NonNull;
@@ -29,7 +29,7 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     private final Property<ContractViewModel> contractProperty;
     private final Property<StateViewModel> sourceProperty;
     private final Property<StateViewModel> destinationProperty;
-    private final List<Property<Point2D>> edgePoints;
+    private final ObservableList<Property<Point2D>> edgePoints;
 
     public EdgeViewModel(
         int id, @NonNull Edge target, @NonNull StateViewModel source, @NonNull StateViewModel destination) {
@@ -39,7 +39,7 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         this.contractProperty = new SimpleObjectProperty<>();
         this.sourceProperty = new SimpleObjectProperty<>(source);
         this.destinationProperty = new SimpleObjectProperty<>(destination);
-        this.edgePoints = new ArrayList<>();
+        this.edgePoints = FXCollections.observableArrayList();
 
         Property<Point2D> startPoint = new SimpleObjectProperty<>(getSource().getCenter());
         Property<Point2D> endPoint = new SimpleObjectProperty<>(getDestination().getCenter());
@@ -94,6 +94,10 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
 
     public StateViewModel getDestination() {
         return destinationProperty.getValue();
+    }
+
+    public void setEdgePoint(int index, Point2D point) {
+        edgePoints.get(index).setValue(point);
     }
 
     @Override

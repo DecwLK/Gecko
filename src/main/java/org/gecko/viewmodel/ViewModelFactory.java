@@ -55,6 +55,7 @@ public class ViewModelFactory {
         Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), source.getTarget(),
             destination.getTarget());
         EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
+        actionManager.getActionFactory().createDeletePositionableViewModelElementAction(result);
         geckoViewModel.addViewModelElement(result);
         return result;
     }

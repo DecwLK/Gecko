@@ -257,6 +257,14 @@ public class EditorView {
         orderChildren();
         viewElementsScrollPane.layout();
         calculateViewPortPosition();
+
+        if (viewModel.getCurrentTool() != null) {
+            for (ViewElement<?> viewElement : currentViewElements) {
+                viewElement.accept(getViewModel().getCurrentTool());
+            }
+        }
+
+        viewElementsScrollPane.requestLayout();
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
@@ -287,6 +295,14 @@ public class EditorView {
     private void selectionChanged(
         ObservableValue<? extends Set<PositionableViewModelElement<?>>> observable,
         Set<PositionableViewModelElement<?>> oldValue, Set<PositionableViewModelElement<?>> newValue) {
+
+        for (PositionableViewModelElement<?> element : oldValue) {
+            ViewElement<?> viewElement = findViewElement(element);
+            if (viewElement == null) {
+                oldValue.remove(element);
+            }
+        }
+
         oldValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(false));
         newValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(true));
         orderChildren();

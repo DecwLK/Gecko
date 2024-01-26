@@ -16,7 +16,8 @@ public class SystemConnection extends Element {
     private Variable destination;
 
     @JsonCreator
-    public SystemConnection(@JsonProperty("id") int id, @JsonProperty("source") Variable source, @JsonProperty("destination") Variable destination) {
+    public SystemConnection(@JsonProperty("id") int id, @JsonProperty("source") Variable source,
+                            @JsonProperty("destination") Variable destination) {
         super(id);
         this.source = source;
         this.destination = destination;

@@ -21,6 +21,7 @@ public class System extends Element implements Renamable {
     private final Set<SystemConnection> connections;
     private final Set<Variable> variables;
     private String name;
+    @JsonIgnore
     private System parent;
     private String code;
     private Automaton automaton;

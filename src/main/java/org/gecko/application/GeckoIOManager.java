@@ -3,6 +3,7 @@ package org.gecko.application;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
@@ -38,19 +39,18 @@ public class GeckoIOManager {
     }
 
     public void createNewProject() {
-        File newFile = openFileChooser(FileTypes.JSON);
+        File newFile = saveFileChooser(FileTypes.JSON);
         if (newFile != null) {
             file = newFile;
-            GeckoModel geckoModel = new GeckoModel();
-            GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
-            geckoManager.setGecko(geckoModel, geckoViewModel);
+            Gecko newGecko = new Gecko();
+            geckoManager.setGecko(newGecko);
+            stage.setScene(new Scene(geckoManager.getGecko().getView().getMainPane()));
             saveGeckoProject(file);
         }
     }
 
     public void loadGeckoProject() {
         File fileToLoad = openFileChooser(FileTypes.JSON);
-
         if (fileToLoad != null) {
             ProjectFileParser projectFileParser = new ProjectFileParser();
             Pair<GeckoModel, GeckoViewModel> geckoPair = null;
@@ -63,20 +63,24 @@ public class GeckoIOManager {
             }
 
             if (geckoPair != null) {
-                geckoManager.setGecko(geckoPair.getKey(), geckoPair.getValue());
-            }
-            file = fileToLoad;
+                Gecko newGecko = new Gecko(geckoPair.getKey(), geckoPair.getValue());
+                geckoManager.setGecko(newGecko);
+                stage.setScene(new Scene(geckoManager.getGecko().getView().getMainPane()));
 
-            List<PositionableViewModelElement<?>> generatedViewModelElements =
-                projectFileParser.getGeneratedViewModelElements();
-            if (generatedViewModelElements != null && !generatedViewModelElements.isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                    "Loaded file contains elements with missing attributes. "
-                        + "Do you want to keep those elements with default attributes?", ButtonType.YES, ButtonType.NO);
-                alert.showAndWait();
-                if (alert.getResult().equals(ButtonType.NO)) {
-                    for (PositionableViewModelElement<?> viewModelElement : generatedViewModelElements) {
-                        geckoManager.getGecko().getViewModel().deleteViewModelElement(viewModelElement);
+                file = fileToLoad;
+
+                List<PositionableViewModelElement<?>> generatedViewModelElements =
+                    projectFileParser.getGeneratedViewModelElements();
+                if (generatedViewModelElements != null && !generatedViewModelElements.isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                        "Loaded file contains elements with missing attributes. "
+                            + "Do you want to keep those elements with default attributes?", ButtonType.YES,
+                        ButtonType.NO);
+                    alert.showAndWait();
+                    if (alert.getResult().equals(ButtonType.NO)) {
+                        for (PositionableViewModelElement<?> viewModelElement : generatedViewModelElements) {
+                            geckoManager.getGecko().getViewModel().deleteViewModelElement(viewModelElement);
+                        }
                     }
                 }
             }

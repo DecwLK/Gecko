@@ -23,6 +23,10 @@ public class ProjectFileParser implements FileParser {
     @Override
     public Pair<GeckoModel, GeckoViewModel> parse(File file) throws IOException {
         GeckoJsonWrapper geckoJsonWrapper = objectMapper.readValue(file, GeckoJsonWrapper.class);
+        if (geckoJsonWrapper == null || geckoJsonWrapper.getModel() == null
+            || geckoJsonWrapper.getViewModelProperties() == null) {
+            throw new IOException();
+        }
 
         System root = objectMapper.readValue(geckoJsonWrapper.getModel(), System.class);
         TypeReference<ArrayList<ViewModelPropertiesContainer>> typeRef = new TypeReference<>() {

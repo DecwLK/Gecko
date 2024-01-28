@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -78,16 +80,19 @@ public class EditorView {
         this.currentViewPane = new StackPane();
         this.viewPortPositionViewProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
 
-        this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
-            updateWorldSize(newValue);
-        };
-
         this.inspectorPanel = new Group();
         this.currentInspector = new SimpleObjectProperty<>(null);
         currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
         currentView =
             new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
+
+        this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
+            if (currentViewElements.stream().anyMatch(viewElement -> viewElement.getTarget().isCurrentlyModified())) {
+                return;
+            }
+            updateWorldSize(newValue);
+        };
 
         // Construct view elements pane container
         viewElementsVBoxContainer.setAlignment(Pos.CENTER);
@@ -106,16 +111,16 @@ public class EditorView {
         // Floating UI
         FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
         Node zoomButtons = floatingUIBuilder.buildZoomButtons();
-        AnchorPane.setBottomAnchor(zoomButtons, 10.0);
-        AnchorPane.setRightAnchor(zoomButtons, 10.0);
+        AnchorPane.setBottomAnchor(zoomButtons, 18.0);
+        AnchorPane.setRightAnchor(zoomButtons, 18.0);
 
         Node currentViewLabel = floatingUIBuilder.buildCurrentViewLabel();
-        AnchorPane.setTopAnchor(currentViewLabel, 10.0);
-        AnchorPane.setLeftAnchor(currentViewLabel, 10.0);
+        AnchorPane.setTopAnchor(currentViewLabel, 18.0);
+        AnchorPane.setLeftAnchor(currentViewLabel, 15.0);
 
         Node viewSwitchButton = floatingUIBuilder.buildViewSwitchButtons();
-        AnchorPane.setTopAnchor(viewSwitchButton, 10.0);
-        AnchorPane.setRightAnchor(viewSwitchButton, 10.0);
+        AnchorPane.setTopAnchor(viewSwitchButton, 18.0);
+        AnchorPane.setRightAnchor(viewSwitchButton, 18.0);
 
         AnchorPane floatingUI = new AnchorPane();
         floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton);
@@ -131,10 +136,10 @@ public class EditorView {
                 if (!newValue1) {
                     uncollapseInspectorButton =
                         floatingUIBuilder.buildUncollapseInspectorButton(currentInspector.get());
-                    AnchorPane.setTopAnchor(uncollapseInspectorButton, 10.0);
+                    AnchorPane.setTopAnchor(uncollapseInspectorButton, 18.0);
                     AnchorPane.setRightAnchor(uncollapseInspectorButton,
                         (viewModel.getCurrentSystem().getTarget().getParent() == null
-                            || viewModel.isAutomatonEditor()) ? 40.0 : 70.0);
+                            || viewModel.isAutomatonEditor()) ? 48.0 : 78.0);
                     floatingUI.getChildren().add(uncollapseInspectorButton);
                 } else {
                     floatingUI.getChildren().remove(uncollapseInspectorButton);
@@ -184,10 +189,20 @@ public class EditorView {
 
         viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.getViewPortSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
+            //currentViewElements.forEach(viewElement -> updateWorldSize(viewElement.getPosition()));
         });
 
         viewElementsGroup.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
+        });
+
+        BooleanBinding showing = Bindings.selectBoolean(viewElementsScrollPane.sceneProperty(), "window", "showing");
+        showing.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                //System.out.println(viewElementsScrollPane.getViewportBounds());
+                //System.out.println("Showing");
+                //currentViewElements.forEach(viewElement -> updateWorldSize(viewElement.getPosition()));
+            }
         });
     }
 
@@ -246,7 +261,11 @@ public class EditorView {
             if (viewModel.getCurrentTool() != null) {
                 viewElement.accept(getViewModel().getCurrentTool());
             }
+
+            // TODO: not center
             viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener);
+            System.out.println("View Element Pos:" + viewElement.getPosition());
+
         } else if (change.wasRemoved()) {
             // Find corresponding view element and remove it
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
@@ -324,13 +343,20 @@ public class EditorView {
     }
 
     private void updateWorldSize(Point2D newElementPosition) {
+
         Bounds bound = viewElementsGroup.getLayoutBounds();
         double widthBorder = viewElementsScrollPane.getViewportBounds().getWidth() / 4;
         double heightBorder = viewElementsScrollPane.getViewportBounds().getHeight() / 4;
-        if (newElementPosition.getX() < bound.getMinX() + widthBorder
-            || newElementPosition.getX() > bound.getMaxX() - widthBorder
-            || newElementPosition.getY() < bound.getMinY() + heightBorder
-            || newElementPosition.getY() > bound.getMaxY() - heightBorder) {
+        System.out.println(bound);
+        System.out.println(widthBorder);
+        System.out.println(heightBorder);
+        System.out.println(newElementPosition);
+
+        if (newElementPosition.getX() <= bound.getMinX() + widthBorder
+            || newElementPosition.getX() >= bound.getMaxX() - widthBorder
+            || newElementPosition.getY() <= bound.getMinY() + heightBorder
+            || newElementPosition.getY() >= bound.getMaxY() - heightBorder) {
+            System.out.println("Update world size");
             double increment = Math.max(viewElementsScrollPane.getViewportBounds().getHeight(),
                 viewElementsScrollPane.getViewportBounds().getWidth());
             placeholder.setPrefSize(viewElementsGroup.getLayoutBounds().getWidth() + increment,

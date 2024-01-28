@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import javafx.geometry.Point2D;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
@@ -18,6 +19,7 @@ public class CreatePortViewModelElementAction extends Action {
     @Override
     void run() {
         createdPortViewModel = geckoViewModel.getViewModelFactory().createPortViewModelIn(systemViewModel);
+        createdPortViewModel.setPosition(new Point2D(2, 2));
     }
 
     @Override

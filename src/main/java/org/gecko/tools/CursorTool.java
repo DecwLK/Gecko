@@ -19,6 +19,7 @@ import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewEle
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
+import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SelectionManager;
 
 public class CursorTool extends Tool {
@@ -170,6 +171,7 @@ public class CursorTool extends Tool {
     private void startDraggingElementHandler(MouseEvent event, Node element) {
         draggedElement = element;
         isDragging = true;
+        selectionManager.getCurrentSelection().forEach(selectedElement -> selectedElement.setCurrentlyModified(true));
         startDragPosition = getCoordinatesInPane(element).add(new Point2D(event.getX(), event.getY()));
         previousDragPosition = startDragPosition;
     }
@@ -192,6 +194,7 @@ public class CursorTool extends Tool {
         isDragging = false;
         Point2D endWorldPos = getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
         selectionManager.getCurrentSelection().forEach(element -> {
+            element.setCurrentlyModified(false);
             element.setPosition(element.getPosition().add(startDragPosition.subtract(endWorldPos)));
         });
         Action moveAction = actionManager.getActionFactory()

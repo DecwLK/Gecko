@@ -20,6 +20,7 @@ import org.gecko.model.Element;
 public abstract class PositionableViewModelElement<T extends Element> extends AbstractViewModelElement<T> {
     protected final Property<Point2D> positionProperty;
     protected final Property<Point2D> sizeProperty;
+    private boolean isCurrentlyModified;
 
     private final Set<PositionableViewModelElement<?>> observers;
 

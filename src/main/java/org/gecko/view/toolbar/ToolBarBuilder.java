@@ -46,6 +46,7 @@ public class ToolBarBuilder {
         for (Tool tool : toolList) {
             ToggleButton toolButton = new ToggleButton(tool.getName());
 
+            //PrefSize is important
             toolButton.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
             toolButton.setMaxSize(BUTTON_SIZE, BUTTON_SIZE);
             toolButton.setMinSize(BUTTON_SIZE, BUTTON_SIZE);

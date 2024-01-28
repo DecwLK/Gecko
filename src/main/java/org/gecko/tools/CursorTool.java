@@ -112,8 +112,8 @@ public class CursorTool extends Tool {
 
             // Create new scaler block
             Point2D newScalerBlockPosition =
-                getCoordinatesInPane(connectionElementScalerViewElementDecorator.drawElement(),
-                    new Point2D(event.getX(), event.getY()));
+                getWorldCoordinates(connectionElementScalerViewElementDecorator.drawElement(),
+                    new Point2D(event.getX(), event.getY())).multiply(1 / editorViewModel.getZoomScale());
             Action createScalerBlockAction = actionManager.getActionFactory()
                 .createCreateEdgeScalerBlockViewElementAction(connectionElementScalerViewElementDecorator,
                     newScalerBlockPosition);
@@ -137,7 +137,7 @@ public class CursorTool extends Tool {
             if (!isDragging) {
                 return;
             }
-            Point2D eventPosition = getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
+            Point2D eventPosition = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
             Point2D delta = eventPosition.subtract(previousDragPosition);
             scaler.setPoint(scaler.getPoint().add(delta));
             previousDragPosition = eventPosition;
@@ -146,7 +146,7 @@ public class CursorTool extends Tool {
             if (!isDragging) {
                 return;
             }
-            Point2D endWorldPos = getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
+            Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
             scaler.setPoint(scaler.getPoint().add(startDragPosition.subtract(endWorldPos)));
             Action moveAction = actionManager.getActionFactory()
                 .createMoveEdgeScalerBlockViewElementAction((EdgeViewModel) scaler.getDecoratorTarget().getTarget(),
@@ -170,7 +170,7 @@ public class CursorTool extends Tool {
     private void startDraggingElementHandler(MouseEvent event, Node element) {
         draggedElement = element;
         isDragging = true;
-        startDragPosition = getCoordinatesInPane(element).add(new Point2D(event.getX(), event.getY()));
+        startDragPosition = getWorldCoordinates(element).add(new Point2D(event.getX(), event.getY()));
         previousDragPosition = startDragPosition;
     }
 
@@ -178,7 +178,7 @@ public class CursorTool extends Tool {
         if (!isDragging) {
             return;
         }
-        Point2D eventPosition = getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
+        Point2D eventPosition = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
         Point2D delta = eventPosition.subtract(previousDragPosition);
         selectionManager.getCurrentSelection()
             .forEach(element -> element.setPosition(element.getPosition().add(delta)));
@@ -190,7 +190,7 @@ public class CursorTool extends Tool {
             return;
         }
         isDragging = false;
-        Point2D endWorldPos = getCoordinatesInPane(draggedElement).add(new Point2D(event.getX(), event.getY()));
+        Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
         selectionManager.getCurrentSelection().forEach(element -> {
             element.setPosition(element.getPosition().add(startDragPosition.subtract(endWorldPos)));
         });
@@ -206,12 +206,12 @@ public class CursorTool extends Tool {
         actionManager.run(select);
     }
 
-    private Point2D getCoordinatesInPane(Node node) {
+    private Point2D getWorldCoordinates(Node node) {
         Bounds nodeBounds = node.getBoundsInLocal();
-        return getCoordinatesInPane(node, new Point2D(nodeBounds.getMinX(), nodeBounds.getMinY()));
+        return getWorldCoordinates(node, new Point2D(nodeBounds.getMinX(), nodeBounds.getMinY()));
     }
 
-    private Point2D getCoordinatesInPane(Node node, Point2D point) {
+    private Point2D getWorldCoordinates(Node node, Point2D point) {
         double parentX = 0;
         double parentY = 0;
         Node current = node;

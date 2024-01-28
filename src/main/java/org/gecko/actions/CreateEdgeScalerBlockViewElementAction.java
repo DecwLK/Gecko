@@ -22,7 +22,7 @@ public class CreateEdgeScalerBlockViewElementAction extends Action {
 
     @Override
     void run() {
-        newScalerBlock = decorator.createNewPoint(editorViewModel.transformScreenToWorldCoordinates(position));
+        newScalerBlock = decorator.createNewPoint(position);
     }
 
     @Override

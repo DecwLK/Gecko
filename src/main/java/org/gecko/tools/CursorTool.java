@@ -1,5 +1,6 @@
 package org.gecko.tools;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -108,8 +109,8 @@ public class CursorTool extends Tool {
                 return;
             }
             Point2D newScalerBlockPosition =
-                getCoordinatesInPane(connectionElementScalerViewElementDecorator.drawElement()).add(event.getX(),
-                    event.getY());
+                getCoordinatesInPane(connectionElementScalerViewElementDecorator.drawElement(),
+                    new Point2D(event.getX(), event.getY()));
             Action createScalerBlockAction = actionManager.getActionFactory()
                 .createCreateEdgeScalerBlockViewElementAction(connectionElementScalerViewElementDecorator,
                     newScalerBlockPosition);
@@ -198,9 +199,27 @@ public class CursorTool extends Tool {
         actionManager.run(select);
     }
 
-    private Point2D getCoordinatesInPane(Node viewElement) {
+    private Point2D getCoordinatesInPane(Node node) {
+        Bounds nodeBounds = node.getBoundsInLocal();
+        return getCoordinatesInPane(node, new Point2D(nodeBounds.getMinX(), nodeBounds.getMinY()));
+    }
+
+    private Point2D getCoordinatesInPane(Node node, Point2D point) {
+        double parentX = 0;
+        double parentY = 0;
+        Node current = node;
+
+        while (current != null && current != viewPane) {
+            parentX += current.getLocalToParentTransform().getTx();
+            parentY += current.getLocalToParentTransform().getTy();
+            current = current.getParent();
+        }
+
+        if (current == null) {
+            return null;
+        }
+
         return editorViewModel.transformScreenToWorldCoordinates(
-            new Point2D(viewElement.getBoundsInParent().getMinX(),
-                viewElement.getBoundsInParent().getMinY()).multiply(editorViewModel.getZoomScale()));
+            new Point2D(parentX + point.getX(), parentY + point.getY()).multiply(editorViewModel.getZoomScale()));
     }
 }

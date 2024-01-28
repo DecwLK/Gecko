@@ -1,6 +1,5 @@
 package org.gecko.view.views.viewelement.decorator;
 
-import java.util.ArrayList;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
@@ -20,18 +19,14 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
     }
 
     public ElementScalerBlock createNewPoint(Point2D point) {
-        // The input point is in world coordinates, but the edge points are relative to the line.
-        Point2D relativePoint =
-            point.subtract(getEdgePoints().getFirst().getValue()).add(SCALER_SIZE / 2, SCALER_SIZE / 2);
-
         // Find the index of the edge point that is closest to the input point.
-        int minIndex = findMinimumIndex(relativePoint);
+        int minIndex = findMinimumIndex(point);
 
         if (minIndex == 0) {
             minIndex = 1;
         }
 
-        getEdgePoints().add(minIndex, new SimpleObjectProperty<>(relativePoint));
+        getEdgePoints().add(minIndex, new SimpleObjectProperty<>(point));
         return scalers.get(minIndex);
     }
 
@@ -62,8 +57,8 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
             return point.distance(p1);
         }
 
-        double u = ((point.getX() - p1.getX()) * xDelta + (point.getY() - p1.getY()) * yDelta) /
-            (xDelta * xDelta + yDelta * yDelta);
+        double u = ((point.getX() - p1.getX()) * xDelta + (point.getY() - p1.getY()) * yDelta) / (xDelta * xDelta
+            + yDelta * yDelta);
 
         if (u < 0) {
             // Closest point is p1

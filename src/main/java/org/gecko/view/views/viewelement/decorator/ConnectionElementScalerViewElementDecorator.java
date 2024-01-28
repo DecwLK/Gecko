@@ -31,7 +31,7 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
     }
 
     public int findMinimumIndex(Point2D point) {
-        int minIndex = -1;
+        int minIndex = 0;
         double minDistance = Double.MAX_VALUE;
 
         for (int i = 0; i < getEdgePoints().size() - 1; i++) {
@@ -45,33 +45,32 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
             }
         }
 
-        return minIndex;
+        return minIndex + 1;
     }
 
-    public static double distanceToSegment(Point2D point, Point2D p1, Point2D p2) {
-        double xDelta = p2.getX() - p1.getX();
-        double yDelta = p2.getY() - p1.getY();
+    // Returns the distance between a point and a line segment (p1 and p2).
+    private static double distanceToSegment(Point2D point, Point2D p1, Point2D p2) {
+        Point2D p1p2 = p2.subtract(p1);
+        Point2D p2p = point.subtract(p2);
+        Point2D p1p = point.subtract(p1);
 
-        if ((xDelta == 0) && (yDelta == 0)) {
-            // p1 and p2 are the same point
-            return point.distance(p1);
-        }
+        // Compute the dot product of p1p2 and p2p.
+        double dotP2 = p1p2.dotProduct(p2p);
+        double dotP1 = p1p2.dotProduct(p1p);
 
-        double u = ((point.getX() - p1.getX()) * xDelta + (point.getY() - p1.getY()) * yDelta) / (xDelta * xDelta
-            + yDelta * yDelta);
+        double result = 0;
 
-        if (u < 0) {
-            // Closest point is p1
-            return point.distance(p1);
-        } else if (u > 1) {
-            // Closest point is p2
-            return point.distance(p2);
+        if (dotP2 > 0) {
+            result = Math.sqrt(Math.pow(point.getX() - p2.getX(), 2) + Math.pow(point.getY() - p2.getY(), 2));
+        } else if (dotP1 < 0) {
+            result = Math.sqrt(Math.pow(point.getX() - p1.getX(), 2) + Math.pow(point.getY() - p1.getY(), 2));
         } else {
-            // Closest point is on the line segment between p1 and p2
-            double closestX = p1.getX() + u * xDelta;
-            double closestY = p1.getY() + u * yDelta;
-            return point.distance(closestX, closestY);
+            // Find the perpendicular distance from the point to the line segment.
+            double mod = Math.sqrt(Math.pow(p1p2.getX(), 2) + Math.pow(p1p2.getY(), 2));
+            result = Math.abs((p1p2.getX() * p1p.getY()) - (p1p.getX() * p1p2.getY())) / mod;
         }
+
+        return result;
     }
 
 

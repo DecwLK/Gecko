@@ -19,7 +19,7 @@ public interface ViewElementVisitor {
 
     void visit(ElementScalerViewElementDecorator elementScalarViewElementDecorator);
 
-    void visit(SelectableViewElementDecorator selectableElementDecorator);
+    void visit(SelectableViewElementDecorator selectableViewElementDecorator);
 
     void visit(ConnectionElementScalerViewElementDecorator connectionElementScalerViewElementDecorator);
 }

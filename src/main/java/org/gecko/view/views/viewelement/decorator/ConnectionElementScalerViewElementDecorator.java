@@ -61,9 +61,9 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         double result = 0;
 
         if (dotP2 > 0) {
-            result = Math.sqrt(Math.pow(point.getX() - p2.getX(), 2) + Math.pow(point.getY() - p2.getY(), 2));
+            result = point.distance(p2);
         } else if (dotP1 < 0) {
-            result = Math.sqrt(Math.pow(point.getX() - p1.getX(), 2) + Math.pow(point.getY() - p1.getY(), 2));
+            result = point.distance(p1);
         } else {
             // Find the perpendicular distance from the point to the line segment.
             double mod = Math.sqrt(Math.pow(p1p2.getX(), 2) + Math.pow(p1p2.getY(), 2));

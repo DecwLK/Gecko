@@ -70,8 +70,8 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     @Override
-    public void visit(ElementScalerViewElementDecorator elementScalerViewElementDecorator) {
-        setAllHandlers(elementScalerViewElementDecorator.drawElement(), null);
+    public void visit(ElementScalerViewElementDecorator elementScalarViewElementDecorator) {
+        setAllHandlers(elementScalarViewElementDecorator.drawElement(), null);
     }
 
     @Override

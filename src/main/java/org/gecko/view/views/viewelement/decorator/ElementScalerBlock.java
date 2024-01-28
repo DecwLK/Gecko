@@ -2,8 +2,10 @@ package org.gecko.view.views.viewelement.decorator;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
+import lombok.Getter;
 import lombok.Setter;
 
+@Getter
 public class ElementScalerBlock extends Rectangle {
     private final ElementScalerViewElementDecorator decoratorTarget;
     private final int index;

@@ -148,8 +148,8 @@ public class ActionFactory {
     }
 
     public MoveEdgeScalerBlockViewElementAction createMoveEdgeScalerBlockViewElementAction(
-        ElementScalerBlock scalerBlock, Point2D delta) {
-        return new MoveEdgeScalerBlockViewElementAction(scalerBlock, delta);
+        EdgeViewModel edgeViewModel, ElementScalerBlock scalerBlock, Point2D delta) {
+        return new MoveEdgeScalerBlockViewElementAction(geckoViewModel, edgeViewModel, scalerBlock, delta);
     }
 
     public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(

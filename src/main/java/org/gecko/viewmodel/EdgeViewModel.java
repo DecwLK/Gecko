@@ -44,13 +44,7 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         Property<Point2D> startPoint = new SimpleObjectProperty<>(getSource().getCenter());
         Property<Point2D> endPoint = new SimpleObjectProperty<>(getDestination().getCenter());
 
-        getSource().getPositionProperty().addListener((observable, oldValue, newValue) -> {
-            startPoint.setValue(getSource().getCenter());
-        });
-
-        getDestination().getPositionProperty().addListener((observable, oldValue, newValue) -> {
-            endPoint.setValue(getDestination().getCenter());
-        });
+        updateConnectionListener();
 
         edgePoints.add(startPoint);
         edgePoints.add(endPoint);
@@ -81,7 +75,10 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     }
 
     public void setSource(@NonNull StateViewModel source) {
+        clearConnectionListener();
         sourceProperty.setValue(source);
+        updateConnectionListener();
+        updateTarget();
     }
 
     public StateViewModel getSource() {
@@ -89,7 +86,10 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     }
 
     public void setDestination(@NonNull StateViewModel destination) {
+        clearConnectionListener();
         destinationProperty.setValue(destination);
+        updateConnectionListener();
+        updateTarget();
     }
 
     public StateViewModel getDestination() {
@@ -98,6 +98,25 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
 
     public void setEdgePoint(int index, Point2D point) {
         edgePoints.get(index).setValue(point);
+    }
+
+    private void clearConnectionListener() {
+        getSource().getPositionProperty()
+            .removeListener(
+                (observable, oldValue, newValue) -> edgePoints.getFirst().setValue(getSource().getCenter()));
+
+        getDestination().getPositionProperty()
+            .removeListener(
+                (observable, oldValue, newValue) -> edgePoints.getLast().setValue(getDestination().getCenter()));
+    }
+
+    private void updateConnectionListener() {
+        getSource().getPositionProperty()
+            .addListener((observable, oldValue, newValue) -> edgePoints.getFirst().setValue(getSource().getCenter()));
+
+        getDestination().getPositionProperty()
+            .addListener(
+                (observable, oldValue, newValue) -> edgePoints.getLast().setValue(getDestination().getCenter()));
     }
 
     @Override

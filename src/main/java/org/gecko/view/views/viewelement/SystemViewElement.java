@@ -90,6 +90,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
+        portViewElements.forEach(visitor::visit);
     }
 
     @Override

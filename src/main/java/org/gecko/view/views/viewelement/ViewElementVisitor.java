@@ -13,6 +13,8 @@ public interface ViewElementVisitor {
 
     void visit(SystemViewElement systemViewElement);
 
+    void visit(PortViewElement portViewElement);
+
     void visit(SystemConnectionViewElement systemConnectionViewElement);
 
     void visit(VariableBlockViewElement variableBlockViewElement);

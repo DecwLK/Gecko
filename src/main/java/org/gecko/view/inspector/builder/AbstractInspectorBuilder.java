@@ -9,8 +9,6 @@ import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.button.InspectorDeleteButton;
 import org.gecko.view.inspector.element.textfield.InspectorTextField;
-import org.gecko.view.views.EditorView;
-import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.Renamable;
 
@@ -40,10 +38,9 @@ public abstract class AbstractInspectorBuilder<T extends PositionableViewModelEl
         inspectorElements.add(element);
     }
 
-    public Inspector build(EditorView editorView, EditorViewModel editorViewModel) {
+    public Inspector build() {
         // Element delete button
         inspectorElements.add(new InspectorDeleteButton(actionManager, viewModel));
-
-        return new Inspector(inspectorElements, actionManager, editorView, editorViewModel);
+        return new Inspector(inspectorElements, actionManager);
     }
 }

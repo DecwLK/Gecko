@@ -1,8 +1,10 @@
 package org.gecko.view.views;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javafx.beans.property.ObjectProperty;
@@ -16,7 +18,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
@@ -48,7 +49,6 @@ public class EditorView {
     private final StackPane currentViewPane;
     private final ToolBar toolBar;
     private final ShortcutHandler shortcutHandler;
-    private Button uncollapseInspectorButton;
     private final InspectorFactory inspectorFactory;
     private final ScrollPane viewElementsScrollPane;
     private final VBox viewElementsVBoxContainer;
@@ -58,9 +58,10 @@ public class EditorView {
     private final Property<Point2D> viewPortPositionViewProperty;
     private final ChangeListener<Point2D> worldSizeUpdateListener;
 
+    private final Inspector emptyInspector;
 
+    @Getter
     private ObjectProperty<Inspector> currentInspector;
-    private Group inspectorPanel;
 
     public EditorView(
         ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel,
@@ -82,8 +83,8 @@ public class EditorView {
             updateWorldSize(newValue);
         };
 
-        this.inspectorPanel = new Group();
-        this.currentInspector = new SimpleObjectProperty<>(null);
+        emptyInspector = new Inspector(new ArrayList<>(), actionManager);
+        this.currentInspector = new SimpleObjectProperty<>(emptyInspector);
         currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
         currentView =
@@ -97,8 +98,6 @@ public class EditorView {
             placeholder.setMinSize(viewElementsScrollPane.getViewportBounds().getWidth(),
                 viewElementsScrollPane.getViewportBounds().getHeight());
         });
-        //Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, null, null));
-        //placeholder.setBorder(border);
         placeholder.setMouseTransparent(true);
         viewElementsScrollPane.layout();
 
@@ -121,27 +120,6 @@ public class EditorView {
         floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton);
         floatingUI.setPickOnBounds(false);
 
-        // Inspector Uncollapse Button
-        currentInspector.addListener((observable, oldValue, newValue) -> {
-            floatingUI.getChildren().remove(uncollapseInspectorButton);
-            if (newValue == null) {
-                return;
-            }
-            newValue.visibleProperty().addListener((observable1, oldValue1, newValue1) -> {
-                if (!newValue1) {
-                    uncollapseInspectorButton =
-                        floatingUIBuilder.buildUncollapseInspectorButton(currentInspector.get());
-                    AnchorPane.setTopAnchor(uncollapseInspectorButton, 10.0);
-                    AnchorPane.setRightAnchor(uncollapseInspectorButton,
-                        (viewModel.getCurrentSystem().getTarget().getParent() == null
-                            || viewModel.isAutomatonEditor()) ? 40.0 : 70.0);
-                    floatingUI.getChildren().add(uncollapseInspectorButton);
-                } else {
-                    floatingUI.getChildren().remove(uncollapseInspectorButton);
-                }
-            });
-        });
-
         // Build stack pane
         currentViewPane.getChildren().addAll(viewElementsScrollPane, floatingUI);
 
@@ -155,6 +133,7 @@ public class EditorView {
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
         viewModel.getSelectionManager().getCurrentSelectionProperty().addListener(this::selectionChanged);
+
         // Set current tool
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
 
@@ -227,11 +206,7 @@ public class EditorView {
     }
 
     public Node drawInspector() {
-        return inspectorPanel;
-    }
-
-    public void toggleInspector() {
-        currentInspector.get().toggleCollapse();
+        return currentInspector.get();
     }
 
     private void onUpdateViewElements(
@@ -282,14 +257,7 @@ public class EditorView {
     private void focusedElementChanged(
         ObservableValue<? extends PositionableViewModelElement<?>> observable, PositionableViewModelElement<?> oldValue,
         PositionableViewModelElement<?> newValue) {
-        if (newValue != null) {
-            inspectorPanel.getChildren().clear();
-            currentInspector.set(inspectorFactory.createInspector(newValue));
-            inspectorPanel.getChildren().add(currentInspector.get());
-        } else {
-            inspectorPanel.getChildren().clear();
-            currentInspector.set(null);
-        }
+        currentInspector.set((newValue != null) ? inspectorFactory.createInspector(newValue) : emptyInspector);
     }
 
     private void selectionChanged(
@@ -309,10 +277,11 @@ public class EditorView {
     }
 
     private void orderChildren() {
-        Set<Node> currentElements = currentViewElements.stream()
+        List<Node> currentElements = currentViewElements.stream()
             .sorted(Comparator.comparingInt(ViewElement::getZPriority))
             .map(ViewElement::drawElement)
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
+
         currentElements.add(placeholder);
         viewElementsGroup.getChildren().setAll(currentElements);
         viewElementsScrollPane.layout();

@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
-import org.gecko.view.inspector.Inspector;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class FloatingUIBuilder {
@@ -95,15 +94,6 @@ public class FloatingUIBuilder {
 
 
         return viewSwitchButtons;
-    }
-
-    public Button buildUncollapseInspectorButton(Inspector inspector) {
-        Button uncollapseInspectorButton = createStyledButton();
-        uncollapseInspectorButton.getStyleClass().add("floating-uncollapse-inspector-button");
-        uncollapseInspectorButton.setOnAction(event -> {
-            inspector.toggleCollapse();
-        });
-        return uncollapseInspectorButton;
     }
 
     private Button createStyledButton() {

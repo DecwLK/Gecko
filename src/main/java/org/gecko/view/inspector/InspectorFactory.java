@@ -56,6 +56,6 @@ public class InspectorFactory {
     }
 
     private Inspector buildInspector(AbstractInspectorBuilder<?> builder) {
-        return builder.build(editorView, editorViewModel);
+        return builder.build();
     }
 }

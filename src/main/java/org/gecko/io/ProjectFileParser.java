@@ -12,6 +12,9 @@ import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/**
+ * Provides methods for the conversion of data from a JSON file into Gecko-specific data.
+ */
 public class ProjectFileParser implements FileParser {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private List<PositionableViewModelElement<?>> generatedViewModelElements;

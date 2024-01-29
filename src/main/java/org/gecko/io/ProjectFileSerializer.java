@@ -10,6 +10,10 @@ import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;
 
+/**
+ * Provides methods for the conversion of Gecko-specific data to the JSON format
+ * and writing the converted data in a JSON file.
+ */
 public class ProjectFileSerializer implements FileSerializer {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

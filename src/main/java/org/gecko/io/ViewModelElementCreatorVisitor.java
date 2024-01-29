@@ -24,6 +24,12 @@ import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
 
+/**
+ * Visitor performing operations for every {@link org.gecko.model.Element Model-Element}
+ * from the subtree of a {@link System}, creating for each of them
+ * a {@link org.gecko.viewmodel.AbstractViewModelElement ViewModel-Element},
+ * depending on the attributes of the corresponding {@link ViewModelPropertiesContainer}.
+ */
 public class ViewModelElementCreatorVisitor implements ElementVisitor {
     @Getter
     private final List<PositionableViewModelElement<?>> generatedViewModelElements;

@@ -12,8 +12,6 @@ import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.button.AbstractInspectorButton;
 import org.gecko.view.inspector.element.button.InspectorSelectionBackwardButton;
 import org.gecko.view.inspector.element.button.InspectorSelectionForwardButton;
-import org.gecko.view.views.EditorView;
-import org.gecko.viewmodel.EditorViewModel;
 
 public class Inspector extends ScrollPane {
 

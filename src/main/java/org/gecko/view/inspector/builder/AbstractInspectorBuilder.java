@@ -9,8 +9,6 @@ import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.button.InspectorDeleteButton;
 import org.gecko.view.inspector.element.textfield.InspectorTextField;
-import org.gecko.view.views.EditorView;
-import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.Renamable;
 

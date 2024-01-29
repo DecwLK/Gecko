@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javafx.beans.property.ObjectProperty;
@@ -17,7 +18,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
@@ -277,10 +277,11 @@ public class EditorView {
     }
 
     private void orderChildren() {
-        Set<Node> currentElements = currentViewElements.stream()
+        List<Node> currentElements = currentViewElements.stream()
             .sorted(Comparator.comparingInt(ViewElement::getZPriority))
             .map(ViewElement::drawElement)
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
+
         currentElements.add(placeholder);
         viewElementsGroup.getChildren().setAll(currentElements);
         viewElementsScrollPane.layout();

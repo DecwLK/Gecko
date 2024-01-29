@@ -17,7 +17,6 @@ import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
-import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.SelectionManager;

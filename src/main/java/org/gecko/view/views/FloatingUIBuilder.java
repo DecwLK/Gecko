@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
-import org.gecko.view.inspector.Inspector;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class FloatingUIBuilder {

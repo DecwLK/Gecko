@@ -9,6 +9,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
+import com.sun.javafx.css.StyleManager;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.menubar.MenuBarBuilder;

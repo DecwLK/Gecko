@@ -20,11 +20,17 @@ public class SelectionManager {
     }
 
     public void goBack() {
+        if (undoSelectionStack.isEmpty()) {
+            return;
+        }
         redoSelectionStack.push(new HashSet<>(currentSelectionProperty.get()));
         currentSelectionProperty.set(undoSelectionStack.pop());
     }
 
     public void goForward() {
+        if (redoSelectionStack.isEmpty()) {
+            return;
+        }
         undoSelectionStack.push(new HashSet<>(currentSelectionProperty.get()));
         currentSelectionProperty.set(redoSelectionStack.pop());
     }
@@ -46,7 +52,9 @@ public class SelectionManager {
     public void deselect(Set<PositionableViewModelElement<?>> elements) {
         redoSelectionStack.clear();
         undoSelectionStack.push(new HashSet<>(currentSelectionProperty.get()));
-        currentSelectionProperty.set(elements);
+        Set<PositionableViewModelElement<?>> newSelection = new HashSet<>(currentSelectionProperty.get());
+        newSelection.removeAll(elements);
+        currentSelectionProperty.set(newSelection);
     }
 
     public void deselectAll() {

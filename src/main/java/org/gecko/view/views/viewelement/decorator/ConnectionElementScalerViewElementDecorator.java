@@ -73,7 +73,6 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         return result;
     }
 
-
     public void deletePoint(ElementScalerBlock scalerBlock) {
         int index = scalers.indexOf(scalerBlock);
         getEdgePoints().remove(index);

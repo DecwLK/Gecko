@@ -3,13 +3,13 @@ package org.gecko.view;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
-import com.sun.javafx.css.StyleManager;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.menubar.MenuBarBuilder;
@@ -119,7 +119,10 @@ public class GeckoView {
         centerPane.getSelectionModel().select(currentView.getCurrentView());
 
         mainPane.setLeft(currentView.drawToolbar());
-        mainPane.setRight(currentView.drawInspector());
+        mainPane.setRight(currentView.getCurrentInspector().get());
+        currentView.getCurrentInspector().addListener((Observable observable) -> {
+            mainPane.setRight(currentView.drawInspector());
+        });
         viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(),
             currentView.getViewModel().isAutomatonEditor());
     }

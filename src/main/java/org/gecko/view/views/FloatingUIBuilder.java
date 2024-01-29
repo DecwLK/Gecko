@@ -97,15 +97,6 @@ public class FloatingUIBuilder {
         return viewSwitchButtons;
     }
 
-    public Button buildUncollapseInspectorButton(Inspector inspector) {
-        Button uncollapseInspectorButton = createStyledButton();
-        uncollapseInspectorButton.getStyleClass().add("floating-uncollapse-inspector-button");
-        uncollapseInspectorButton.setOnAction(event -> {
-            inspector.toggleCollapse();
-        });
-        return uncollapseInspectorButton;
-    }
-
     private Button createStyledButton() {
         Button button = new Button();
         button.getStyleClass().add(FLOATING_BUTTON_STYLE_CLASS);

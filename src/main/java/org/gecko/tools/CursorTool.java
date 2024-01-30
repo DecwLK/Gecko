@@ -181,8 +181,8 @@ public class CursorTool extends Tool {
         Point2D eventPosition = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
         Point2D delta = eventPosition.subtract(previousDragPosition);
         selectionManager.getCurrentSelection().forEach(element -> {
-            element.setPosition(element.getPosition().add(delta));
             element.setCurrentlyModified(true);
+            element.setPosition(element.getPosition().add(delta));
         });
         previousDragPosition = eventPosition;
     }

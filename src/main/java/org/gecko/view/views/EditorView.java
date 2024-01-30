@@ -81,11 +81,11 @@ public class EditorView {
 
         this.currentInspector = new SimpleObjectProperty<>(null);
 
-        emptyInspector = new Inspector(new ArrayList<>(), actionManager);
+        this.emptyInspector = new Inspector(new ArrayList<>(), actionManager);
         this.currentInspector = new SimpleObjectProperty<>(emptyInspector);
-        currentViewElements = new HashSet<>();
+        this.currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
-        currentView =
+        this.currentView =
             new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
 
         this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {

@@ -8,6 +8,7 @@ import java.util.Set;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableSet;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
@@ -63,6 +64,12 @@ public class GeckoView {
             viewModel.getCurrentEditor().isAutomatonEditor());
         constructTab(currentView, viewModel.getCurrentEditor());
         centerPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+
+        centerPane.setPickOnBounds(false);
+        centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
+
+        // Menubar
+        mainPane.setTop(new MenuBarBuilder(this, viewModel.getActionManager()).build());
 
         refreshView();
     }
@@ -150,6 +157,9 @@ public class GeckoView {
 
         currentView.updateWorldSize();
         currentView.focus();
+
+        MenuBarBuilder.updateToolsMenu(((MenuBar) mainPane.getTop()).getMenus().get(3),
+            currentView.getViewModel().isAutomatonEditor());
     }
 
     private void onUpdateCurrentEditorToViewModel(

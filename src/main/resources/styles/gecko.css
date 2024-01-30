@@ -1,5 +1,17 @@
+* {
+    -fx-bg: #efefef;
+    -fx-fg0: #e0e0e0;
+    -fx-fg1: #d0d0d0;
+    -fx-fg2: lightgrey;
+    -fx-text: #222222;
+}
+
+.root {
+    -fx-focus-color: transparent;
+}
+
 .toolbar-icon {
-    -icon-paint: #222222;
+    -icon-paint: -fx-text;
     -fx-content-display: graphic-only;
     -fx-background-radius: 5;
     -fx-background-color: transparent;
@@ -9,11 +21,11 @@
 }
 
 .toolbar-icon:hover {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: -fx-fg0;
 }
 
 .toolbar-icon:pressed {
-    -fx-background-color: #d0d0d0;
+    -fx-background-color: -fx-fg1;
 }
 
 .toolbar-icon:selected {
@@ -61,7 +73,7 @@
 }
 
 .inspector-label {
-    -fx-text-fill: #222222;
+    -fx-text-fill: -fx-text;
     -fx-font-size: 12px;
     -fx-font-weight: bolder;
     -fx-font: 14px "sans-serif";
@@ -69,16 +81,16 @@
 }
 
 .inspector-button {
-    -icon-paint: #222222;
-    -fx-border-color: #222222;
+    -icon-paint: -fx-text;
+    -fx-border-color: -fx-text;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: -fx-fg0;
     -fx-background-size: 24px 24px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-text-alignment: center;
-    -fx-text-fill: #222222;
+    -fx-text-fill: -fx-text;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-padding: 2px;
@@ -86,15 +98,15 @@
 }
 
 .inspector-button:hover {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: -fx-fg0;
 }
 
 .inspector-button:pressed {
-    -fx-background-color: #d0d0d0;
+    -fx-background-color: -fx-fg1;
 }
 
 .inspector-button:selected {
-    -fx-background-color: lightgray;
+    -fx-background-color: -fx-fg2;
 }
 
 .inspector-selection-forward-button {
@@ -134,16 +146,16 @@
 }
 
 .floating-ui-button {
-    -icon-paint: #222222;
-    -fx-border-color: #222222;
+    -icon-paint: -fx-text;
+    -fx-border-color: -fx-text;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: -fx-fg0;
     -fx-background-size: 30px 30px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-text-alignment: center;
-    -fx-text-fill: #222222;
+    -fx-text-fill: -fx-text;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-padding: 2px;
@@ -151,15 +163,15 @@
 }
 
 .floating-ui-button:hover {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: -fx-fg0;
 }
 
 .floating-ui-button:pressed {
-    -fx-background-color: #d0d0d0;
+    -fx-background-color: -fx-fg1;
 }
 
 .floating-ui-button:selected {
-    -fx-background-color: lightgray;
+    -fx-background-color: -fx-fg2;
 }
 
 .floating-uncollapse-inspector-button {
@@ -184,4 +196,137 @@
 
 .floating-switch-to-automaton-button {
     -fx-background-image: url('icons/Toolbar_State.png');
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-border-radius: 2.0em;
+}
+
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-padding: 0.0 0.0 10.0 0.0;
+
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-padding: 0.0 10.0 0.0 0.0;
+
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0.15em 0.0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0.0 0.15em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-fg2;
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: -fx-fg1;
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
+}
+
+.text-field {
+    -fx-background-color: -fx-fg0;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.text-area {
+    -fx-background-color: -fx-fg0;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.tab-pane {
+    -fx-background-color: -fx-fg0;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.list-view {
+    -fx-background-color: -fx-fg0;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.list-cell {
+    -fx-background-color: -fx-fg0;
+    -fx-background-radius: 5;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.tab {
+    -fx-background-color: -fx-fg0;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.scroll-pane {
+    -fx-background-color: -fx-fg0;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
 }

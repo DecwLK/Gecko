@@ -9,13 +9,14 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
 @Getter
-public class SystemConnectionViewElement extends ConnectionViewElement
+public class SystemConnectionViewElement extends Line
     implements ViewElement<SystemConnectionViewModel> {
 
     private static final int Z_PRIORITY = 20;
@@ -26,13 +27,12 @@ public class SystemConnectionViewElement extends ConnectionViewElement
     private final StringProperty typeProperty;
 
     public SystemConnectionViewElement(SystemConnectionViewModel systemConnectionViewModel) {
-        super(systemConnectionViewModel.getEdgePoints());
+        //super(systemConnectionViewModel.getEdgePoints());
         this.visibilityProperty = new SimpleObjectProperty<>();
         this.typeProperty = new SimpleStringProperty();
         this.systemConnectionViewModel = systemConnectionViewModel;
         bindViewModel();
         constructVisualization();
-        // TODO: source and destination properties
     }
 
     @Override
@@ -65,19 +65,18 @@ public class SystemConnectionViewElement extends ConnectionViewElement
     }
 
     private void bindViewModel() {
-        getStartElement().xProperty()
+        startXProperty()
             .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getX(),
                 systemConnectionViewModel.getSource().getPositionProperty()));
-        getStartElement().yProperty()
+        startYProperty()
             .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getY(),
                 systemConnectionViewModel.getSource().getPositionProperty()));
-        getEndElement().xProperty()
+        endXProperty()
             .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getX(),
-                systemConnectionViewModel.getDestination().getSizeProperty()));
-        getEndElement().yProperty()
+                systemConnectionViewModel.getDestination().getPositionProperty()));
+        endYProperty()
             .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getY(),
-                systemConnectionViewModel.getDestination().getSizeProperty()));
-        //TODO source + destination properties
+                systemConnectionViewModel.getDestination().getPositionProperty()));
     }
 
     @Override
@@ -87,6 +86,6 @@ public class SystemConnectionViewElement extends ConnectionViewElement
 
     private void constructVisualization() {
         setStroke(Color.BLACK);
-        toBack();
+        setStrokeWidth(20);
     }
 }

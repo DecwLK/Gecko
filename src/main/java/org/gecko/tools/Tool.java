@@ -8,6 +8,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
+import org.gecko.view.views.viewelement.PortViewElement;
 import org.gecko.view.views.viewelement.RegionViewElement;
 import org.gecko.view.views.viewelement.StateViewElement;
 import org.gecko.view.views.viewelement.SystemConnectionViewElement;
@@ -82,6 +83,11 @@ public abstract class Tool implements ViewElementVisitor {
     @Override
     public void visit(SelectableViewElementDecorator selectableViewElementDecorator) {
         setAllHandlers(selectableViewElementDecorator.drawElement(), null);
+    }
+
+    @Override
+    public void visit(PortViewElement portViewElement) {
+        setAllHandlers(portViewElement, Event::consume);
     }
 
     private void setAllHandlers(Node node, EventHandler<MouseEvent> handler) {

@@ -32,8 +32,10 @@ public class DeletePositionableViewModelElementAction extends Action {
         for (PositionableViewModelElement<?> element : elementsToDelete) {
             for (PositionableViewModelElement<?> dependency : (Set<PositionableViewModelElement<?>>) element.accept(
                 visitor)) {
+                geckoViewModel.getCurrentEditor().getSelectionManager().deselect(dependency);
                 geckoViewModel.deleteViewModelElement(dependency);
             }
+            geckoViewModel.getCurrentEditor().getSelectionManager().deselect(element);
             geckoViewModel.deleteViewModelElement(element);
         }
     }

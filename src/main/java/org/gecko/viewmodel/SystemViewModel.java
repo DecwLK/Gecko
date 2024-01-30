@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class SystemViewModel extends BlockViewModelElement<System> {
         super(id, target);
         this.codeProperty = new SimpleStringProperty(target.getCode());
         this.portsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.sizeProperty.setValue(new Point2D(300, 300));
     }
 
     public List<PortViewModel> getPorts() {

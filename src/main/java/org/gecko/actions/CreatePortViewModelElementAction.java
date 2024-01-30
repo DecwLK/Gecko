@@ -19,7 +19,8 @@ public class CreatePortViewModelElementAction extends Action {
     @Override
     void run() {
         createdPortViewModel = geckoViewModel.getViewModelFactory().createPortViewModelIn(systemViewModel);
-        createdPortViewModel.setPosition(new Point2D(2, 2));
+        double offset = createdPortViewModel.getSize().getY() * (systemViewModel.getPorts().size() - 1);
+        createdPortViewModel.setPosition(new Point2D(2, 2 + offset));
     }
 
     @Override

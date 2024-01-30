@@ -5,8 +5,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -102,8 +100,6 @@ public class EditorView {
             placeholder.setMinSize(viewElementsScrollPane.getViewportBounds().getWidth(),
                 viewElementsScrollPane.getViewportBounds().getHeight());
         });
-        //Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, null, null));
-        //placeholder.setBorder(border);
         placeholder.setMouseTransparent(true);
         viewElementsScrollPane.layout();
 
@@ -189,20 +185,10 @@ public class EditorView {
 
         viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.getViewPortSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
-            //currentViewElements.forEach(viewElement -> updateWorldSize(viewElement.getPosition()));
         });
 
         viewElementsGroup.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
-        });
-
-        BooleanBinding showing = Bindings.selectBoolean(viewElementsScrollPane.sceneProperty(), "window", "showing");
-        showing.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                //System.out.println(viewElementsScrollPane.getViewportBounds());
-                //System.out.println("Showing");
-                //currentViewElements.forEach(viewElement -> updateWorldSize(viewElement.getPosition()));
-            }
         });
     }
 
@@ -264,8 +250,6 @@ public class EditorView {
 
             // TODO: not center
             viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener);
-            System.out.println("View Element Pos:" + viewElement.getPosition());
-
         } else if (change.wasRemoved()) {
             // Find corresponding view element and remove it
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
@@ -347,16 +331,11 @@ public class EditorView {
         Bounds bound = viewElementsGroup.getLayoutBounds();
         double widthBorder = viewElementsScrollPane.getViewportBounds().getWidth() / 4;
         double heightBorder = viewElementsScrollPane.getViewportBounds().getHeight() / 4;
-        System.out.println(bound);
-        System.out.println(widthBorder);
-        System.out.println(heightBorder);
-        System.out.println(newElementPosition);
 
         if (newElementPosition.getX() <= bound.getMinX() + widthBorder
             || newElementPosition.getX() >= bound.getMaxX() - widthBorder
             || newElementPosition.getY() <= bound.getMinY() + heightBorder
             || newElementPosition.getY() >= bound.getMaxY() - heightBorder) {
-            System.out.println("Update world size");
             double increment = Math.max(viewElementsScrollPane.getViewportBounds().getHeight(),
                 viewElementsScrollPane.getViewportBounds().getWidth());
             placeholder.setPrefSize(viewElementsGroup.getLayoutBounds().getWidth() + increment,

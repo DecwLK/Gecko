@@ -2,7 +2,6 @@ package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
 import java.util.Set;
 import org.gecko.model.GeckoModel;
 import org.gecko.viewmodel.GeckoViewModel;

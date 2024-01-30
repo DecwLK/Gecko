@@ -39,6 +39,9 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 
 public class EditorView {
+    private static final double RELATIVE_BORDER_SIZE = 0.25;
+    private static final double MIN_WORLD_SIZE = 1000;
+    private static final double WORLD_SIZE_DELTA = 1000;
 
     @Getter
     private final Collection<ViewElement<?>> currentViewElements;
@@ -89,10 +92,7 @@ public class EditorView {
             new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
 
         this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
-            if (currentViewElements.stream().anyMatch(viewElement -> viewElement.getTarget().isCurrentlyModified())) {
-                return;
-            }
-            updateWorldSize(newValue);
+            updateWorldSize();
         };
 
         // Construct view elements pane container
@@ -100,8 +100,10 @@ public class EditorView {
         viewElementsGroup.getChildren().add(placeholder);
 
         viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            placeholder.setMinSize(viewElementsScrollPane.getViewportBounds().getWidth(),
-                viewElementsScrollPane.getViewportBounds().getHeight());
+            double width = newValue.getWidth();
+            double height = newValue.getHeight();
+            placeholder.setMinSize(Math.max(width, MIN_WORLD_SIZE) * 1 / viewModel.getZoomScale(),
+                Math.max(height, MIN_WORLD_SIZE) * 1 / viewModel.getZoomScale());
         });
         placeholder.setMouseTransparent(true);
         viewElementsScrollPane.layout();
@@ -234,6 +236,7 @@ public class EditorView {
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
             if (viewElement != null) {
                 currentViewElements.remove(viewElement);
+                updateWorldSize();
             }
         }
         orderChildren();
@@ -299,36 +302,95 @@ public class EditorView {
             viewElementsGroupContainer.parentToLocal(viewElementsVBoxContainer.parentToLocal(point)));
     }
 
-    private void updateWorldSize(Point2D newElementPosition) {
+    private void updateWorldSize() {
+        if (currentViewElements.stream().anyMatch(viewElement -> viewElement.getTarget().isCurrentlyModified())) {
+            return;
+        }
 
-        Bounds bound = viewElementsGroup.getLayoutBounds();
-        double widthBorder = viewElementsScrollPane.getViewportBounds().getWidth() / 4;
-        double heightBorder = viewElementsScrollPane.getViewportBounds().getHeight() / 4;
+        boolean elementInBorder = currentViewElements.stream().anyMatch(viewElement -> {
+            Point2D position = viewElement.getTarget().getPosition();
+            Point2D size = viewElement.getTarget().getSize();
+            return isElementInGroupBorder(position, size);
+        });
+        if (elementInBorder) {
+            changeWorldSize(WORLD_SIZE_DELTA);
+            updateWorldSize();
+            return;
+        }
 
-        if (newElementPosition.getX() <= bound.getMinX() + widthBorder
-            || newElementPosition.getX() >= bound.getMaxX() - widthBorder
-            || newElementPosition.getY() <= bound.getMinY() + heightBorder
-            || newElementPosition.getY() >= bound.getMaxY() - heightBorder) {
-            double increment = Math.max(viewElementsScrollPane.getViewportBounds().getHeight(),
-                viewElementsScrollPane.getViewportBounds().getWidth());
-            placeholder.setPrefSize(viewElementsGroup.getLayoutBounds().getWidth() + increment,
-                viewElementsGroup.getLayoutBounds().getHeight() + increment);
+        boolean wouldElementBeInBorder = currentViewElements.stream().anyMatch(viewElement -> {
+            Point2D position = viewElement.getTarget().getPosition();
+            Point2D size = viewElement.getTarget().getSize();
+            return wouldElementBeInBorder(position, size);
+        });
+        if (!wouldElementBeInBorder && worldWouldHaveMinSize()) {
+            changeWorldSize(-WORLD_SIZE_DELTA);
+            updateWorldSize();
+        }
+    }
+
+    private boolean worldWouldHaveMinSize() {
+        Bounds viewportBounds = viewElementsScrollPane.getViewportBounds();
+        return viewElementsGroup.getLayoutBounds().getWidth() - WORLD_SIZE_DELTA >= Math.max(MIN_WORLD_SIZE,
+            viewportBounds.getWidth())
+            && viewElementsGroup.getLayoutBounds().getHeight() - WORLD_SIZE_DELTA >= Math.max(MIN_WORLD_SIZE,
+            viewportBounds.getHeight());
+    }
+
+    private void changeWorldSize(double delta) {
+        if (delta >= 0) {
+            placeholder.setPrefSize(viewElementsGroup.getLayoutBounds().getWidth() + delta,
+                viewElementsGroup.getLayoutBounds().getHeight() + delta);
             viewElementsScrollPane.layout();
-            currentViewElements.forEach(viewElement -> {
-                viewElement.getTarget().getPositionProperty().removeListener(worldSizeUpdateListener);
-            });
-            currentViewElements.forEach(viewElement -> {
-                Point2D position = viewElement.getPosition();
-                viewElement.getTarget()
-                    .getPositionProperty()
-                    .setValue(new Point2D(position.getX() + increment / 2, position.getY() + increment / 2));
-            });
-            currentViewElements.forEach(viewElement -> {
-                viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener);
-            });
-            setViewPortPosition(new Point2D(viewPortPositionViewProperty.getValue().getX() + increment / 2,
-                viewPortPositionViewProperty.getValue().getY() + increment / 2));
+            setViewPortPosition(new Point2D(viewPortPositionViewProperty.getValue().getX() + delta / 2,
+                viewPortPositionViewProperty.getValue().getY() + delta / 2));
+        } else {
+            setViewPortPosition(new Point2D(viewPortPositionViewProperty.getValue().getX() + delta / 2,
+                viewPortPositionViewProperty.getValue().getY() + delta / 2));
+            placeholder.setPrefSize(viewElementsGroup.getLayoutBounds().getWidth() + delta,
+                viewElementsGroup.getLayoutBounds().getHeight() + delta);
             viewElementsScrollPane.layout();
         }
+        moveAllElements(new Point2D(delta, delta).multiply(0.5));
+    }
+
+    private void moveAllElements(Point2D delta) {
+        currentViewElements.forEach(
+            viewElement -> viewElement.getTarget().getPositionProperty().removeListener(worldSizeUpdateListener));
+        currentViewElements.forEach(viewElement -> {
+            Point2D position = viewElement.getTarget().getPosition();
+            viewElement.getTarget()
+                .setPosition(new Point2D(position.getX() + delta.getX(), position.getY() + delta.getY()));
+        });
+        currentViewElements.forEach(
+            viewElement -> viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener));
+    }
+
+    private boolean wouldElementBeInBorder(Point2D position, Point2D size) {
+        Bounds bound = viewElementsGroup.getLayoutBounds();
+        Point2D minPoint = new Point2D(bound.getMinX() + WORLD_SIZE_DELTA / 2, bound.getMinY() + WORLD_SIZE_DELTA / 2);
+        Point2D maxPoint = new Point2D(bound.getMaxX() - WORLD_SIZE_DELTA / 2, bound.getMaxY() - WORLD_SIZE_DELTA / 2);
+        double widthBorder = viewElementsScrollPane.getViewportBounds().getWidth() * RELATIVE_BORDER_SIZE;
+        double heightBorder = viewElementsScrollPane.getViewportBounds().getHeight() * RELATIVE_BORDER_SIZE;
+        return isElementInBorder(position, size, minPoint, maxPoint, new Point2D(widthBorder, heightBorder));
+    }
+
+    private boolean isElementInGroupBorder(Point2D position, Point2D size) {
+        Bounds bound = viewElementsGroup.getBoundsInLocal();
+        System.out.println(bound);
+        Point2D minPoint = new Point2D(bound.getMinX(), bound.getMinY());
+        Point2D maxPoint = new Point2D(bound.getMaxX(), bound.getMaxY());
+        double widthBorder = viewElementsScrollPane.getViewportBounds().getWidth() * RELATIVE_BORDER_SIZE;
+        double heightBorder = viewElementsScrollPane.getViewportBounds().getHeight() * RELATIVE_BORDER_SIZE;
+        return isElementInBorder(position, size, minPoint, maxPoint, new Point2D(widthBorder, heightBorder));
+    }
+
+    private boolean isElementInBorder(
+        Point2D position, Point2D size, Point2D minPoint, Point2D maxPoint, Point2D borderSize) {
+        System.out.println(position);
+        return position.getX() <= minPoint.getX() + borderSize.getX()
+            || position.getX() + size.getX() >= maxPoint.getX() - borderSize.getX()
+            || position.getY() <= minPoint.getY() + borderSize.getY()
+            || position.getY() + size.getY() >= maxPoint.getY() - borderSize.getY();
     }
 }

@@ -71,6 +71,7 @@ public class GeckoView {
         for (EditorView editorView : openedViews) {
             if (editorView.getViewModel().equals(newValue)) {
                 currentView = editorView;
+                currentView.updateWorldSize();
                 break;
             }
         }
@@ -125,6 +126,8 @@ public class GeckoView {
         });
         viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(),
             currentView.getViewModel().isAutomatonEditor());
+
+        currentView.updateWorldSize();
     }
 
     private void onUpdateCurrentEditorToViewModel(

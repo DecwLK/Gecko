@@ -104,7 +104,9 @@ public class EditorView {
             double height = newValue.getHeight();
             placeholder.setMinSize(Math.max(width, MIN_WORLD_SIZE) * 1 / viewModel.getZoomScale(),
                 Math.max(height, MIN_WORLD_SIZE) * 1 / viewModel.getZoomScale());
+            viewElementsScrollPane.layout();
         });
+
         placeholder.setMouseTransparent(true);
         viewElementsScrollPane.layout();
 
@@ -302,7 +304,7 @@ public class EditorView {
             viewElementsGroupContainer.parentToLocal(viewElementsVBoxContainer.parentToLocal(point)));
     }
 
-    private void updateWorldSize() {
+    public void updateWorldSize() {
         if (currentViewElements.stream().anyMatch(viewElement -> viewElement.getTarget().isCurrentlyModified())) {
             return;
         }
@@ -376,7 +378,7 @@ public class EditorView {
     }
 
     private boolean isElementInGroupBorder(Point2D position, Point2D size) {
-        Bounds bound = viewElementsGroup.getBoundsInLocal();
+        Bounds bound = viewElementsGroup.getLayoutBounds();
         System.out.println(bound);
         Point2D minPoint = new Point2D(bound.getMinX(), bound.getMinY());
         Point2D maxPoint = new Point2D(bound.getMaxX(), bound.getMaxY());

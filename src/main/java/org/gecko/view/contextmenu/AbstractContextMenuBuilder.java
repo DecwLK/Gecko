@@ -1,6 +1,7 @@
 package org.gecko.view.contextmenu;
 
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.EditorView;
 
@@ -14,5 +15,15 @@ public abstract class AbstractContextMenuBuilder {
         this.editorView = editorView;
     }
 
-    public abstract ContextMenu build();
+    public ContextMenu build() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        // Data transfer commands:
+        MenuItem cutMenuItem = new MenuItem("Cut");
+        MenuItem copyMenuItem = new MenuItem("Copy");
+        MenuItem pasteMenuItem = new MenuItem("Paste");
+
+        contextMenu.getItems().addAll(cutMenuItem, copyMenuItem, pasteMenuItem);
+        return contextMenu;
+    }
 }

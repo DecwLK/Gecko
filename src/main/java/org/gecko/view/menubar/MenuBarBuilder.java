@@ -2,6 +2,8 @@ package org.gecko.view.menubar;
 
 import java.io.File;
 import java.util.Set;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -27,10 +29,8 @@ public class MenuBarBuilder {
         this.actionManager = actionManager;
         menuBar = new MenuBar();
 
-
         // TODO
-        menuBar.getMenus()
-            .addAll(setupFileMenu(), setupEditMenu(), new Menu("View"), setupToolsMenu(),
+        menuBar.getMenus().addAll(setupFileMenu(), setupEditMenu(), setupViewMenu(), setupToolsMenu(),
                 new Menu("Help"));
     }
 
@@ -89,13 +89,20 @@ public class MenuBarBuilder {
 
         // Edit history navigation:
         MenuItem undoMenuItem = new MenuItem("Undo");
+        undoMenuItem.setOnAction(e  -> actionManager.undo());
+
         MenuItem redoMenuItem = new MenuItem("Redo");
+        redoMenuItem.setOnAction(e -> actionManager.redo());
 
         SeparatorMenuItem historyToDataTransferSeparator = new SeparatorMenuItem();
 
         // Data transfer commands:
         MenuItem cutMenuItem = new MenuItem("Cut");
+
         MenuItem copyMenuItem = new MenuItem("Copy");
+        copyMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
+            .createCopyPositionableViewModelElementAction()));
+
         MenuItem pasteMenuItem = new MenuItem("Paste");
 
         // General selection commands:
@@ -115,6 +122,48 @@ public class MenuBarBuilder {
             copyMenuItem, pasteMenuItem, dataTransferToSelectionSeparator, selectAllMenuItem, deselectAllMenuItem);
 
         return editMenu;
+    }
+
+    private Menu setupViewMenu() {
+        Menu viewMenu = new Menu("View");
+
+        // View change commands:
+        MenuItem changeViewMenuItem = new MenuItem("Change View");
+        changeViewMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
+            .createViewSwitchAction(view.getCurrentView().getViewModel().getCurrentSystem(),
+                !view.getCurrentView().getViewModel().isAutomatonEditor())));
+
+        MenuItem goToParentSystemMenuItem = new MenuItem("Go To Parent System");
+        goToParentSystemMenuItem.setOnAction(e -> {
+            if (view.getCurrentView().getViewModel().getCurrentSystem().getName().equals("root")) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "The root system does not have a parent.",
+                    ButtonType.OK);
+                alert.showAndWait();
+            } else {
+                if (view.getCurrentView().getViewModel().isAutomatonEditor()) {
+                    changeViewMenuItem.fire();
+                }
+                actionManager.run(actionManager.getActionFactory()
+                    .createViewSwitchAction(view.getCurrentView().getViewModel().getParentSystem(), false));
+            }
+        });
+
+        SeparatorMenuItem viewSwitchToZoomSeparator = new SeparatorMenuItem();
+
+        // Zooming commands:
+
+        MenuItem zoomInMenuItem = new MenuItem("Zoom In");
+        zoomInMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
+            .createZoomCenterAction(1.1)));
+
+        MenuItem zoomOutMenuItem = new MenuItem("Zoom Out");
+        zoomOutMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
+            .createZoomCenterAction(1 / 1.1)));
+
+        viewMenu.getItems().addAll(changeViewMenuItem, goToParentSystemMenuItem, viewSwitchToZoomSeparator,
+            zoomInMenuItem, zoomOutMenuItem);
+
+        return viewMenu;
     }
 
     private Menu setupToolsMenu() {

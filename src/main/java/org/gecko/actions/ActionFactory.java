@@ -65,9 +65,8 @@ public class ActionFactory {
         return new ChangeVisibilityPortViewModelAction(portViewModel, visibility);
     }
 
-    public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(
-        List<PositionableViewModelElement<?>> elements) {
-        return new CopyPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), elements);
+    public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction() {
+        return new CopyPositionableViewModelElementAction(geckoViewModel.getCurrentEditor());
     }
 
     public CreateContractViewModelElementAction createCreateContractViewModelElementAction(

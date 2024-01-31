@@ -19,6 +19,7 @@ import org.gecko.view.views.EditorView;
 import org.gecko.view.views.ViewFactory;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
+import org.gecko.viewmodel.PositionableViewModelElement;
 
 /**
  * Represents the View component of a Gecko project. Holds a {@link ViewFactory}, a current {@link EditorView} and a
@@ -171,5 +172,14 @@ public class GeckoView {
                 .orElse(null);
             refreshView();
         }
+    }
+
+    public Set<PositionableViewModelElement<?>> getAllDisplayedElements() {
+        if (!viewModel.getCurrentEditor().isAutomatonEditor()) {
+            return viewModel.getViewModelElements(currentView.getViewModel().getCurrentSystem().getTarget()
+                .getAllElements());
+        }
+        return viewModel.getViewModelElements(currentView.getViewModel().getCurrentSystem().getTarget().getAutomaton()
+            .getAllElements());
     }
 }

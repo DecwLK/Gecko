@@ -1,27 +1,21 @@
 package org.gecko.view.menubar;
 
 import java.io.File;
+import java.util.Set;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import org.gecko.actions.ActionManager;
 import org.gecko.application.GeckoIOManager;
 import org.gecko.io.FileTypes;
-import org.gecko.tools.CursorTool;
-import org.gecko.tools.EdgeCreatorTool;
-import org.gecko.tools.MarqueeTool;
-import org.gecko.tools.PanTool;
-import org.gecko.tools.RegionCreatorTool;
-import org.gecko.tools.StateCreatorTool;
-import org.gecko.tools.SystemConnectionCreatorTool;
-import org.gecko.tools.SystemCreatorTool;
-import org.gecko.tools.VariableBlockCreatorTool;
-import org.gecko.tools.ZoomTool;
+import org.gecko.tools.ToolType;
 import org.gecko.view.GeckoView;
 import org.gecko.view.views.shortcuts.Shortcuts;
+import org.gecko.viewmodel.PositionableViewModelElement;
 
 public class MenuBarBuilder {
     private final MenuBar menuBar;
@@ -35,7 +29,8 @@ public class MenuBarBuilder {
 
 
         // TODO
-        menuBar.getMenus().addAll(setupFileMenu(), new Menu("Edit"), new Menu("View"), setupToolsMenu(),
+        menuBar.getMenus()
+            .addAll(setupFileMenu(), setupEditMenu(), new Menu("View"), setupToolsMenu(),
                 new Menu("Help"));
     }
 
@@ -89,78 +84,120 @@ public class MenuBarBuilder {
         return fileMenu;
     }
 
+    private  Menu setupEditMenu() {
+        Menu editMenu = new Menu("Edit");
+
+        // Edit history navigation:
+        MenuItem undoMenuItem = new MenuItem("Undo");
+        MenuItem redoMenuItem = new MenuItem("Redo");
+
+        SeparatorMenuItem historyToDataTransferSeparator = new SeparatorMenuItem();
+
+        // Data transfer commands:
+        MenuItem cutMenuItem = new MenuItem("Cut");
+        MenuItem copyMenuItem = new MenuItem("Copy");
+        MenuItem pasteMenuItem = new MenuItem("Paste");
+
+        // General selection commands:
+        MenuItem selectAllMenuItem = new MenuItem("Select All");
+        selectAllMenuItem.setOnAction(e -> {
+            Set<PositionableViewModelElement<?>> allElements = view.getAllDisplayedElements();
+            actionManager.run(actionManager.getActionFactory().createSelectAction(allElements, true));
+        });
+
+        MenuItem deselectAllMenuItem = new MenuItem("Deselect All");
+        deselectAllMenuItem.setOnAction(e
+            -> actionManager.run(actionManager.getActionFactory().createDeselectAction()));
+
+        SeparatorMenuItem dataTransferToSelectionSeparator = new SeparatorMenuItem();
+
+        editMenu.getItems().addAll(undoMenuItem, redoMenuItem, historyToDataTransferSeparator, cutMenuItem,
+            copyMenuItem, pasteMenuItem, dataTransferToSelectionSeparator, selectAllMenuItem, deselectAllMenuItem);
+
+        return editMenu;
+    }
+
     private Menu setupToolsMenu() {
         Menu toolsMenu = new Menu("Tools");
+
+        Menu changeToolMenu = new Menu("Change Tool");
 
         // General tools:
         MenuItem cursorMenuItem = new MenuItem("Cursor Tool");
         cursorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-                .createSelectToolAction(view.getCurrentView(), new CursorTool(actionManager,
-                 view.getCurrentView().getViewModel().getSelectionManager(), view.getCurrentView().getViewModel()))));
+                .createSelectToolAction(ToolType.CURSOR)));
 
         MenuItem marqueeMenuItem = new MenuItem("Marquee Tool");
         marqueeMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(view.getCurrentView(), new MarqueeTool(actionManager))));
+            .createSelectToolAction(ToolType.MARQUEE_TOOL)));
 
         MenuItem panMenuItem = new MenuItem("Pan Tool");
         panMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(view.getCurrentView(), new PanTool(actionManager))));
+            .createSelectToolAction(ToolType.PAN)));
 
         MenuItem zoomMenuItem = new MenuItem("Zoom Tool");
         zoomMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(view.getCurrentView(), new ZoomTool(actionManager))));
+            .createSelectToolAction(ToolType.ZOOM_TOOL)));
+
+        SeparatorMenuItem generalFromSystemSeparator = new SeparatorMenuItem();
 
         // System view tools:
         MenuItem systemCreatorMenuItem = new MenuItem("System Creator Tool");
         systemCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(view.getCurrentView(), new SystemCreatorTool(actionManager))));
+            .createSelectToolAction(ToolType.SYSTEM_CREATOR)));
 
         MenuItem systemConnectionCreatorMenuItem = new MenuItem("System Connection Creator Tool");
         systemConnectionCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(view.getCurrentView(), new SystemConnectionCreatorTool(actionManager))));
+            .createSelectToolAction(ToolType.CONNECTION_CREATOR)));
 
         MenuItem variableBlockCreatorMenuItem = new MenuItem("Variable Block Creator Tool");
         variableBlockCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(view.getCurrentView(), new VariableBlockCreatorTool(actionManager))));
+            .createSelectToolAction(ToolType.VARIABLE_BLOCK_CREATOR)));
+
+        SeparatorMenuItem systemFroAutomatonSeparator = new SeparatorMenuItem();
 
         // Automaton view tools:
         MenuItem stateCreatorMenuItem = new MenuItem("State Creator Tool");
         stateCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(view.getCurrentView(), new StateCreatorTool(actionManager))));
+            .createSelectToolAction(ToolType.STATE_CREATOR)));
         stateCreatorMenuItem.setDisable(true);
 
         MenuItem edgeCreatorMenuItem = new MenuItem("Edge Creator Tool");
         edgeCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(view.getCurrentView(), new EdgeCreatorTool(actionManager))));
+            .createSelectToolAction(ToolType.EDGE_CREATOR)));
         edgeCreatorMenuItem.setDisable(true);
 
         MenuItem regionCreatorMenuItem = new MenuItem("Region Creator Tool");
         regionCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(view.getCurrentView(), new RegionCreatorTool(actionManager))));
+            .createSelectToolAction(ToolType.REGION_CREATOR)));
         regionCreatorMenuItem.setDisable(true);
 
-        toolsMenu.getItems().addAll(cursorMenuItem, marqueeMenuItem, panMenuItem, zoomMenuItem, systemCreatorMenuItem,
-            systemConnectionCreatorMenuItem, variableBlockCreatorMenuItem, stateCreatorMenuItem, edgeCreatorMenuItem,
+        changeToolMenu.getItems().addAll(cursorMenuItem, marqueeMenuItem, panMenuItem, zoomMenuItem,
+            generalFromSystemSeparator, systemCreatorMenuItem, systemConnectionCreatorMenuItem,
+            variableBlockCreatorMenuItem, systemFroAutomatonSeparator, stateCreatorMenuItem, edgeCreatorMenuItem,
             regionCreatorMenuItem);
+
+        toolsMenu.getItems().add(changeToolMenu);
 
         return toolsMenu;
     }
 
     public static void updateToolsMenu(Menu toolsMenu, boolean isAutomatonEditor) {
+        Menu changeToolMenu = (Menu) toolsMenu.getItems().getFirst();
         if (isAutomatonEditor) {
-            toolsMenu.getItems().get(4).setDisable(true);
-            toolsMenu.getItems().get(5).setDisable(true);
-            toolsMenu.getItems().get(6).setDisable(true);
-            toolsMenu.getItems().get(7).setDisable(false);
-            toolsMenu.getItems().get(8).setDisable(false);
-            toolsMenu.getItems().get(9).setDisable(false);
+            changeToolMenu.getItems().get(5).setDisable(true);
+            changeToolMenu.getItems().get(6).setDisable(true);
+            changeToolMenu.getItems().get(7).setDisable(true);
+            changeToolMenu.getItems().get(9).setDisable(false);
+            changeToolMenu.getItems().get(10).setDisable(false);
+            changeToolMenu.getItems().get(11).setDisable(false);
         } else {
-            toolsMenu.getItems().get(4).setDisable(false);
-            toolsMenu.getItems().get(5).setDisable(false);
-            toolsMenu.getItems().get(6).setDisable(false);
-            toolsMenu.getItems().get(7).setDisable(true);
-            toolsMenu.getItems().get(8).setDisable(true);
-            toolsMenu.getItems().get(9).setDisable(true);
+            changeToolMenu.getItems().get(5).setDisable(false);
+            changeToolMenu.getItems().get(6).setDisable(false);
+            changeToolMenu.getItems().get(7).setDisable(false);
+            changeToolMenu.getItems().get(9).setDisable(true);
+            changeToolMenu.getItems().get(10).setDisable(true);
+            changeToolMenu.getItems().get(11).setDisable(true);
         }
     }
 }

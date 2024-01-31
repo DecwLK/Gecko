@@ -187,6 +187,10 @@ public class ActionFactory {
         return new SelectAction(geckoViewModel.getCurrentEditor(), elements, newSelection);
     }
 
+    public DeselectAction createDeselectAction() {
+        return new DeselectAction(geckoViewModel.getCurrentEditor());
+    }
+
     public SelectionHistoryBackAction createSelectionHistoryBackAction() {
         return new SelectionHistoryBackAction(geckoViewModel.getCurrentEditor().getSelectionManager());
     }

@@ -6,6 +6,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
+import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
 import org.gecko.view.views.EditorView;
@@ -51,8 +52,16 @@ public class ToolBarBuilder {
             toolButton.setMaxSize(BUTTON_SIZE, BUTTON_SIZE);
             toolButton.setMinSize(BUTTON_SIZE, BUTTON_SIZE);
 
-            toolButton.setOnMouseClicked(event -> {
-                actionManager.run(actionManager.getActionFactory().createSelectToolAction(editorView, tool));
+            //Would like to bind the selectedproperty of the button here but cannot because of a javafx bug
+            editorView.getViewModel().getCurrentToolProperty().addListener((observable, oldValue, newValue) -> {
+                toolButton.setSelected(newValue == tool);
+            });
+
+            toolButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    Action action = actionManager.getActionFactory().createSelectToolAction(editorView, tool);
+                    actionManager.run(action);
+                }
             });
 
             toolButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);

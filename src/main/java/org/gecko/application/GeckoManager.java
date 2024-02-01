@@ -9,6 +9,6 @@ public class GeckoManager {
     private Gecko gecko;
 
     public GeckoManager() {
-        gecko = new Gecko();
+        this.gecko = new Gecko();
     }
 }

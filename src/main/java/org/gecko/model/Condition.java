@@ -1,5 +1,7 @@
 package org.gecko.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -9,8 +11,8 @@ import lombok.Data;
 public class Condition {
     private String condition;
 
-    public Condition(String condition) {
+    @JsonCreator
+    public Condition(@JsonProperty("condition") String condition) {
         this.condition = condition;
     }
-
 }

@@ -1,5 +1,7 @@
 package org.gecko.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +19,10 @@ public class Edge extends Element {
     private State source;
     private State destination;
 
-    public Edge(int id, State source, State destination, Contract contract, Kind kind, int priority) {
+    @JsonCreator
+    public Edge(@JsonProperty("id") int id, @JsonProperty("source") State source,
+                @JsonProperty("destination") State destination, @JsonProperty("contract") Contract contract,
+                @JsonProperty("kind") Kind kind, @JsonProperty("priority") int priority) {
         super(id);
         this.source = source;
         this.destination = destination;

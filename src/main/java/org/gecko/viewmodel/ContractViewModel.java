@@ -27,20 +27,20 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
         setName(target.getName());
     }
 
-    public void setPrecondition(@NonNull String precondition) {
-        preConditionProperty.setValue(precondition);
-    }
-
-    public void setPostcondition(@NonNull String postcondition) {
-        postConditionProperty.setValue(postcondition);
-    }
-
     public String getPrecondition() {
         return preConditionProperty.getValue();
     }
 
+    public void setPrecondition(@NonNull String precondition) {
+        preConditionProperty.setValue(precondition);
+    }
+
     public String getPostcondition() {
         return postConditionProperty.getValue();
+    }
+
+    public void setPostcondition(@NonNull String postcondition) {
+        postConditionProperty.setValue(postcondition);
     }
 
     @Override

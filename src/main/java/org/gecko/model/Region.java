@@ -1,5 +1,7 @@
 package org.gecko.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -18,7 +20,10 @@ public class Region extends Element implements Renamable {
     private final Contract preAndPostCondition;
     private final Set<State> states;
 
-    public Region(int id, String name, Condition invariant, Contract preAndPostCondition) {
+    @JsonCreator
+    public Region(@JsonProperty("id") int id, @JsonProperty("name") String name,
+                  @JsonProperty("invariant") Condition invariant,
+                  @JsonProperty("preAndPostCondition") Contract preAndPostCondition) {
         super(id);
         this.name = name;
         this.invariant = invariant;

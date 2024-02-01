@@ -1,5 +1,7 @@
 package org.gecko.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +16,10 @@ public class Contract extends Element implements Renamable {
     private Condition preCondition;
     private Condition postCondition;
 
-    public Contract(int id, String name, Condition preCondition, Condition postCondition) {
+    @JsonCreator
+    public Contract(@JsonProperty("id") int id, @JsonProperty("name") String name,
+                    @JsonProperty("preCondition") Condition preCondition,
+                    @JsonProperty("postCondition") Condition postCondition) {
         super(id);
         this.name = name;
         this.preCondition = preCondition;

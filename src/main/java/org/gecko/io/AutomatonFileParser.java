@@ -1,13 +1,13 @@
 package org.gecko.io;
 
 import java.io.File;
-import org.gecko.application.Gecko;
+import javafx.util.Pair;
+import org.gecko.model.GeckoModel;
+import org.gecko.viewmodel.GeckoViewModel;
 
 public class AutomatonFileParser implements FileParser {
-
     @Override
-    public Gecko parse(File file) {
-        // TODO
+    public Pair<GeckoModel, GeckoViewModel> parse(File file) {
         return null;
     }
 }

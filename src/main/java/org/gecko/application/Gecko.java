@@ -17,4 +17,10 @@ public class Gecko {
         viewModel = new GeckoViewModel(model);
         view = new GeckoView(viewModel.getActionManager(), viewModel);
     }
+
+    protected Gecko(GeckoModel geckoModel, GeckoViewModel geckoViewModel) {
+        model = geckoModel;
+        viewModel = geckoViewModel;
+        view = new GeckoView(viewModel.getActionManager(), viewModel);
+    }
 }

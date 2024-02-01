@@ -379,7 +379,6 @@ public class EditorView {
 
     private boolean isElementInGroupBorder(Point2D position, Point2D size) {
         Bounds bound = viewElementsGroup.getLayoutBounds();
-        System.out.println(bound);
         Point2D minPoint = new Point2D(bound.getMinX(), bound.getMinY());
         Point2D maxPoint = new Point2D(bound.getMaxX(), bound.getMaxY());
         double widthBorder = viewElementsScrollPane.getViewportBounds().getWidth() * RELATIVE_BORDER_SIZE;
@@ -389,7 +388,6 @@ public class EditorView {
 
     private boolean isElementInBorder(
         Point2D position, Point2D size, Point2D minPoint, Point2D maxPoint, Point2D borderSize) {
-        System.out.println(position);
         return position.getX() <= minPoint.getX() + borderSize.getX()
             || position.getX() + size.getX() >= maxPoint.getX() - borderSize.getX()
             || position.getY() <= minPoint.getY() + borderSize.getY()

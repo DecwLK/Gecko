@@ -40,14 +40,14 @@ public class MenuBarBuilder {
 
         MenuItem saveFileItem = new MenuItem("Save");
         saveFileItem.setOnAction(e -> {
-            File file = GeckoIOManager.getFile();
+            File file = GeckoIOManager.getInstance().getFile();
             if (file != null) {
                 GeckoIOManager.getInstance().saveGeckoProject(file);
             } else {
                 File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.JSON);
                 if (fileToSaveTo != null) {
                     GeckoIOManager.getInstance().saveGeckoProject(fileToSaveTo);
-                    GeckoIOManager.setFile(fileToSaveTo);
+                    GeckoIOManager.getInstance().setFile(fileToSaveTo);
                 }
             }
         });

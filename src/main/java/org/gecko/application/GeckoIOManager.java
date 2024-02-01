@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.io.FileTypes;
@@ -18,18 +19,16 @@ import org.gecko.model.GeckoModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+@Getter
+@Setter
 public class GeckoIOManager {
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private static GeckoIOManager instance;
-    @Getter
-    @Setter
-    private GeckoManager geckoManager;
-    @Getter
-    @Setter
-    private Stage stage;
 
-    @Getter
-    @Setter
-    private static File file;
+    private GeckoManager geckoManager;
+    private Stage stage;
+    private File file;
 
     public static GeckoIOManager getInstance() {
         if (instance == null) {
@@ -112,7 +111,14 @@ public class GeckoIOManager {
 
     public File saveFileChooser(FileTypes fileType) {
         FileChooser fileChooser = getNewFileChooser(fileType);
-        return fileChooser.showSaveDialog(stage);
+        File result = fileChooser.showSaveDialog(stage);
+        if (result == null) {
+            return null;
+        }
+        if (!result.getName().endsWith("." + fileType.getFileExtension())) {
+            result = new File(result.getPath() + "." + fileType.getFileExtension());
+        }
+        return result;
     }
 
     private FileChooser getNewFileChooser(FileTypes fileType) {

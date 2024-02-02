@@ -7,21 +7,8 @@ import org.gecko.actions.ActionManager;
 
 public class StateCreatorTool extends Tool {
 
-    private static final String NAME = "State Creator Tool";
-    private static final String ICON_STYLE_NAME = "state-creator-icon";
-
     public StateCreatorTool(ActionManager actionManager) {
-        super(actionManager);
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
+        super(actionManager, ToolType.STATE_CREATOR_TOOL);
     }
 
     @Override

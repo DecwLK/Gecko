@@ -1,10 +1,10 @@
 package org.gecko.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,8 +27,9 @@ public class System extends Element implements Renamable {
     private Automaton automaton;
 
     @JsonCreator
-    public System(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("code") String code,
-                  @JsonProperty("automaton") Automaton automaton) {
+    public System(
+        @JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("code") String code,
+        @JsonProperty("automaton") Automaton automaton) {
         super(id);
         this.name = name;
         this.code = code;

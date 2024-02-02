@@ -6,22 +6,8 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 
 public class SystemCreatorTool extends Tool {
-
-    private static final String NAME = "System Creator Tool";
-    private static final String ICON_STYLE_NAME = "system-creator-icon";
-
     public SystemCreatorTool(ActionManager actionManager) {
-        super(actionManager);
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
+        super(actionManager, ToolType.SYSTEM_CREATOR_TOOL);
     }
 
     @Override

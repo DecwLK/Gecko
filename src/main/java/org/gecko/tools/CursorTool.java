@@ -22,12 +22,7 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.SelectionManager;
 
 public class CursorTool extends Tool {
-
-    private static final String NAME = "Cursor Tool";
-    private static final String ICON_STYLE_NAME = "cursor-icon";
-
     private boolean isDragging = false;
-
     private final SelectionManager selectionManager;
     private final EditorViewModel editorViewModel;
     private Point2D startDragPosition;
@@ -37,19 +32,9 @@ public class CursorTool extends Tool {
     private ScrollPane viewPane;
 
     public CursorTool(ActionManager actionManager, SelectionManager selectionManager, EditorViewModel editorViewModel) {
-        super(actionManager);
+        super(actionManager, ToolType.CURSOR_TOOL);
         this.selectionManager = selectionManager;
         this.editorViewModel = editorViewModel;
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
     }
 
     @Override

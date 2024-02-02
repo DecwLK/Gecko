@@ -17,8 +17,9 @@ public class Variable extends Element implements Renamable {
     private Visibility visibility;
 
     @JsonCreator
-    public Variable(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("type") String type,
-                    @JsonProperty("visibility") Visibility visibility) {
+    public Variable(
+        @JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("type") String type,
+        @JsonProperty("visibility") Visibility visibility) {
         super(id);
         this.visibility = visibility;
         this.name = name;

@@ -6,6 +6,7 @@ import java.util.Objects;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
@@ -128,6 +129,11 @@ public class GeckoView {
             currentView.getViewModel().isAutomatonEditor());
 
         currentView.updateWorldSize();
+        currentView.focus();
+        Scene scene = mainPane.getScene();
+        if (scene != null) {
+            currentView.postInit();
+        }
     }
 
     private void onUpdateCurrentEditorToViewModel(
@@ -139,5 +145,9 @@ public class GeckoView {
                 .orElse(null);
             refreshView();
         }
+    }
+
+    public void postInit() {
+        currentView.postInit();
     }
 }

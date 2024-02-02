@@ -21,6 +21,8 @@ public class Main extends Application {
 
         Scene scene = new Scene(geckoManager.getGecko().getView().getMainPane(), 1024, 768);
         stage.setScene(scene);
+        // currently not used
+        geckoManager.getGecko().getView().postInit();
 
         stage.show();
     }

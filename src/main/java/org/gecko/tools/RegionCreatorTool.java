@@ -5,23 +5,10 @@ import javafx.scene.control.ScrollPane;
 import org.gecko.actions.ActionManager;
 
 public class RegionCreatorTool extends Tool {
-
-    private static final String NAME = "Region Creator Tool";
-    private static final String ICON_STYLE_NAME = "region-creator-icon";
     private Point2D startPosition;
 
     public RegionCreatorTool(ActionManager actionManager) {
-        super(actionManager);
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
+        super(actionManager, ToolType.REGION_CREATOR_TOOL);
     }
 
     @Override

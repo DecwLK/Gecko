@@ -56,10 +56,12 @@ public class ToolBarBuilder {
             editorView.getViewModel().getCurrentToolProperty().addListener((observable, oldValue, newValue) -> {
                 toolButton.setSelected(newValue == tool);
             });
+            toolButton.setSelected(editorView.getViewModel().getCurrentToolType() == tool.getToolType());
 
             toolButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
-                    Action action = actionManager.getActionFactory().createSelectToolAction(editorView, tool);
+                    Action action =
+                        actionManager.getActionFactory().createSelectToolAction(editorView, tool.getToolType());
                     actionManager.run(action);
                 }
             });

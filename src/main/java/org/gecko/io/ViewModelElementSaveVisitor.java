@@ -17,9 +17,9 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.RegionViewModel;
 
 /**
- * Visitor performing operations for every {@link org.gecko.model.Element Model-Element}
- * from the subtree of a {@link System}, creating for each of them a {@link ViewModelPropertiesContainer},
- * depending on the attributes of the corresponding {@link PositionableViewModelElement}.
+ * Visitor performing operations for every {@link org.gecko.model.Element Model-Element} from the subtree of a
+ * {@link System}, creating for each of them a {@link ViewModelPropertiesContainer}, depending on the attributes of the
+ * corresponding {@link PositionableViewModelElement}.
  */
 public class ViewModelElementSaveVisitor implements ElementVisitor {
     private final GeckoViewModel geckoViewModel;
@@ -32,15 +32,15 @@ public class ViewModelElementSaveVisitor implements ElementVisitor {
 
     @Override
     public void visit(State state) {
-        ViewModelPropertiesContainer stateViewModelContainer
-            = this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(state));
+        ViewModelPropertiesContainer stateViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(state));
         this.viewModelProperties.add(stateViewModelContainer);
     }
 
     @Override
     public void visit(Region region) {
-        ViewModelPropertiesContainer regionViewModelContainer
-            = this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(region));
+        ViewModelPropertiesContainer regionViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(region));
 
         Color color = ((RegionViewModel) this.geckoViewModel.getViewModelElement(region)).getColor();
         regionViewModelContainer.setRed(color.getRed());
@@ -56,8 +56,8 @@ public class ViewModelElementSaveVisitor implements ElementVisitor {
 
     @Override
     public void visit(System system) {
-        ViewModelPropertiesContainer systemViewModelContainer
-            = this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(system));
+        ViewModelPropertiesContainer systemViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(system));
         this.viewModelProperties.add(systemViewModelContainer);
     }
 
@@ -70,15 +70,15 @@ public class ViewModelElementSaveVisitor implements ElementVisitor {
 
     @Override
     public void visit(Edge edge) {
-        ViewModelPropertiesContainer edgeViewModelContainer
-            = this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(edge));
+        ViewModelPropertiesContainer edgeViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(edge));
         this.viewModelProperties.add(edgeViewModelContainer);
     }
 
     @Override
     public void visit(Variable variable) {
-        ViewModelPropertiesContainer variableViewModelContainer
-            = this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(variable));
+        ViewModelPropertiesContainer variableViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(variable));
         this.viewModelProperties.add(variableViewModelContainer);
     }
 

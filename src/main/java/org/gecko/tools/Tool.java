@@ -5,7 +5,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.MouseEvent;
+import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
 import org.gecko.view.views.viewelement.PortViewElement;
@@ -22,14 +24,25 @@ import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator
 public abstract class Tool implements ViewElementVisitor {
 
     protected final ActionManager actionManager;
+    @Getter
+    private final ToolType toolType;
 
-    public Tool(ActionManager actionManager) {
+    public Tool(ActionManager actionManager, ToolType toolType) {
         this.actionManager = actionManager;
+        this.toolType = toolType;
     }
 
-    public abstract String getName();
+    public String getName() {
+        return toolType.getLabel();
+    }
 
-    public abstract String getIconStyleName();
+    public String getIconStyleName() {
+        return toolType.getIcon();
+    }
+
+    public KeyCodeCombination getKeyCodeCombination() {
+        return new KeyCodeCombination(toolType.getKeyCode());
+    }
 
     public void visitView(ScrollPane view) {
         view.setPannable(false);

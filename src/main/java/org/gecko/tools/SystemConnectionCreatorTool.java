@@ -9,24 +9,11 @@ import org.gecko.view.views.viewelement.SystemViewElement;
 
 public class SystemConnectionCreatorTool extends Tool {
 
-    private static final String NAME = "System Connection Creator Tool";
-    private static final String ICON_STYLE_NAME = "edge-icon";
-
     private PortViewElement firstPortViewElement;
 
     public SystemConnectionCreatorTool(ActionManager actionManager) {
-        super(actionManager);
+        super(actionManager, ToolType.CONNECTION_CREATOR_TOOL);
         firstPortViewElement = null;
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
     }
 
     @Override

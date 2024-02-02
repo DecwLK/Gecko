@@ -8,24 +8,11 @@ import org.gecko.view.views.viewelement.StateViewElement;
 import org.gecko.viewmodel.StateViewModel;
 
 public class EdgeCreatorTool extends Tool {
-
-    private static final String NAME = "Edge Creator Tool";
-    private static final String ICON_STYLE_NAME = "edge-icon";
     private StateViewModel source;
 
     public EdgeCreatorTool(ActionManager actionManager) {
-        super(actionManager);
+        super(actionManager, ToolType.EDGE_CREATOR_TOOL);
         source = null;
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
     }
 
     @Override

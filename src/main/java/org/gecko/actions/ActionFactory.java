@@ -6,7 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import org.gecko.model.Kind;
 import org.gecko.model.Visibility;
-import org.gecko.tools.Tool;
+import org.gecko.tools.ToolType;
 import org.gecko.view.views.EditorView;
 import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
@@ -216,7 +216,7 @@ public class ActionFactory {
         return new SelectionHistoryForwardAction(geckoViewModel.getCurrentEditor().getSelectionManager());
     }
 
-    public SelectToolAction createSelectToolAction(EditorView editorView, Tool tool) {
+    public SelectToolAction createSelectToolAction(EditorView editorView, ToolType tool) {
         return new SelectToolAction(editorView, geckoViewModel.getCurrentEditor(), tool);
     }
 

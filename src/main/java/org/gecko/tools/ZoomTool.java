@@ -6,23 +6,10 @@ import javafx.scene.control.ScrollPane;
 import org.gecko.actions.ActionManager;
 
 public class ZoomTool extends Tool {
-
-    private static final String NAME = "Zoom Tool";
-    private static final String ICON_STYLE_NAME = "zoom-icon";
     private static final double ZOOM_SCALE = 1.1;
 
     public ZoomTool(ActionManager actionManager) {
-        super(actionManager);
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
+        super(actionManager, ToolType.ZOOM_TOOL);
     }
 
     @Override

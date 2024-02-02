@@ -21,6 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -51,7 +52,7 @@ public class EditorView {
     private final Tab currentView;
     private final StackPane currentViewPane;
     private final ToolBar toolBar;
-    private final ShortcutHandler shortcutHandler;
+    private final ToolBarBuilder toolBarBuilder;
     private final InspectorFactory inspectorFactory;
     private final ScrollPane viewElementsScrollPane;
     private final VBox viewElementsVBoxContainer;
@@ -66,12 +67,13 @@ public class EditorView {
     @Getter
     private ObjectProperty<Inspector> currentInspector;
 
+    private ShortcutHandler shortcutHandler;
+
     public EditorView(
-        ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel,
-        ShortcutHandler shortcutHandler) {
+        ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel) {
         this.viewModel = viewModel;
-        this.toolBar = new ToolBarBuilder(actionManager, this, viewModel).build();
-        this.shortcutHandler = shortcutHandler;
+        this.toolBarBuilder = new ToolBarBuilder(actionManager, this, viewModel);
+        this.toolBar = toolBarBuilder.build();
         this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
 
         this.viewElementsGroup = new Group();
@@ -177,6 +179,18 @@ public class EditorView {
         viewElementsGroup.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
         });
+
+        focus();
+    }
+
+    public void setShortcutHandler(ShortcutHandler shortcutHandler) {
+        this.shortcutHandler = shortcutHandler;
+        currentViewPane.addEventHandler(KeyEvent.ANY, shortcutHandler);
+        toolBar.addEventHandler(KeyEvent.ANY, shortcutHandler);
+    }
+
+    public void focus() {
+        currentViewPane.requestFocus();
     }
 
     private void setViewPortPosition(Point2D point) {
@@ -227,7 +241,7 @@ public class EditorView {
 
             // Add view element to current view elements
             currentViewElements.add(viewElement);
-            if (viewModel.getCurrentTool() != null) {
+            if (viewModel.getCurrentToolType() != null) {
                 viewElement.accept(getViewModel().getCurrentTool());
             }
 
@@ -245,7 +259,7 @@ public class EditorView {
         viewElementsScrollPane.layout();
         calculateViewPortPosition();
 
-        if (viewModel.getCurrentTool() != null) {
+        if (viewModel.getCurrentToolType() != null) {
             for (ViewElement<?> viewElement : currentViewElements) {
                 viewElement.accept(getViewModel().getCurrentTool());
             }
@@ -270,6 +284,9 @@ public class EditorView {
         ObservableValue<? extends PositionableViewModelElement<?>> observable, PositionableViewModelElement<?> oldValue,
         PositionableViewModelElement<?> newValue) {
         currentInspector.set((newValue != null) ? inspectorFactory.createInspector(newValue) : emptyInspector);
+        if (shortcutHandler != null) {
+            currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
+        }
     }
 
     private void selectionChanged(
@@ -392,5 +409,8 @@ public class EditorView {
             || position.getX() + size.getX() >= maxPoint.getX() - borderSize.getX()
             || position.getY() <= minPoint.getY() + borderSize.getY()
             || position.getY() + size.getY() >= maxPoint.getY() - borderSize.getY();
+    }
+
+    public void postInit() {
     }
 }

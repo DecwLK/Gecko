@@ -8,21 +8,8 @@ import org.gecko.actions.ActionManager;
 
 public class VariableBlockCreatorTool extends Tool {
 
-    private static final String NAME = "Variable Block Creator Tool";
-    private static final String ICON_STYLE_NAME = "variable-block-creator-icon";
-
     public VariableBlockCreatorTool(ActionManager actionManager) {
-        super(actionManager);
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
+        super(actionManager, ToolType.VARIABLE_BLOCK_CREATOR_TOOL);
     }
 
     @Override

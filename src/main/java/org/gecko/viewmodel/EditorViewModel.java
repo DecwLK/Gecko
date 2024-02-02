@@ -20,6 +20,7 @@ import org.gecko.tools.StateCreatorTool;
 import org.gecko.tools.SystemConnectionCreatorTool;
 import org.gecko.tools.SystemCreatorTool;
 import org.gecko.tools.Tool;
+import org.gecko.tools.ToolType;
 import org.gecko.tools.VariableBlockCreatorTool;
 import org.gecko.tools.ZoomTool;
 
@@ -68,6 +69,8 @@ public class EditorViewModel {
                 setFocusedElement(null);
             }
         });
+
+        setCurrentTool(ToolType.CURSOR_TOOL);
     }
 
     public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
@@ -117,12 +120,27 @@ public class EditorViewModel {
         return new Point2D(viewPortSizeProperty.getValue().getX() / 2, viewPortSizeProperty.getValue().getY() / 2);
     }
 
+    public ToolType getCurrentToolType() {
+        return currentToolProperty.getValue().getToolType();
+    }
+
     public Tool getCurrentTool() {
         return currentToolProperty.getValue();
     }
 
-    public void setCurrentTool(Tool currentTool) {
-        currentToolProperty.setValue(currentTool);
+    public void setCurrentTool(ToolType currentToolType) {
+        Tool tool = getTool(currentToolType);
+        if (tool != null) {
+            currentToolProperty.setValue(tool);
+        }
+    }
+
+    private Tool getTool(ToolType toolType) {
+        return tools.stream()
+            .flatMap(List::stream)
+            .filter(tool -> tool.getToolType() == toolType)
+            .findFirst()
+            .orElse(null);
     }
 
     public PositionableViewModelElement<?> getFocusedElement() {
@@ -152,6 +170,10 @@ public class EditorViewModel {
 
     public void removePositionableViewModelElements(Set<PositionableViewModelElement<?>> elements) {
         elements.forEach(containedPositionableViewModelElementsProperty::remove);
+    }
+
+    public Set<PositionableViewModelElement<?>> getPositionableViewModelElements() {
+        return containedPositionableViewModelElementsProperty;
     }
 
     private void initializeTools() {

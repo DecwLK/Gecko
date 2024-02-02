@@ -1,18 +1,18 @@
 package org.gecko.io;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;
 
 /**
- * Provides methods for the conversion of Gecko-specific data to the JSON format
- * and writing the converted data in a JSON file.
+ * Provides methods for the conversion of Gecko-specific data to the JSON format and writing the converted data in a
+ * JSON file.
  */
 public class ProjectFileSerializer implements FileSerializer {
     private static final ObjectMapper objectMapper = new ObjectMapper();

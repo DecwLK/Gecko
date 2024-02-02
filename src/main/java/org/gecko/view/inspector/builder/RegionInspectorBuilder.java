@@ -1,6 +1,7 @@
 package org.gecko.view.inspector.builder;
 
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.container.InspectorContractItem;
 import org.gecko.view.inspector.element.container.InspectorRegionColorItem;
@@ -17,7 +18,7 @@ public class RegionInspectorBuilder extends AbstractInspectorBuilder<RegionViewM
         addInspectorElement(new InspectorSeparator());
 
         // Contracts
-        addInspectorElement(new InspectorLabel("L:Contract"));
+        addInspectorElement(new InspectorLabel(ResourceHandler.getString("Inspector", "contract")));
         addInspectorElement(new InspectorContractItem(actionManager, viewModel));
     }
 }

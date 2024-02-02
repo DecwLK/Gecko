@@ -29,6 +29,7 @@ import javafx.scene.transform.Scale;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.InspectorFactory;
 import org.gecko.view.toolbar.ToolBarBuilder;
@@ -88,8 +89,9 @@ public class EditorView {
         this.currentInspector = new SimpleObjectProperty<>(emptyInspector);
         this.currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
-        this.currentView =
-            new Tab(baseName + (viewModel.isAutomatonEditor() ? " (Automaton)" : " (System)"), currentViewPane);
+        this.currentView = new Tab(
+            baseName + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")" :
+                " (" + ResourceHandler.getString("View", "system") + ")"), currentViewPane);
 
         this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
             updateWorldSize();

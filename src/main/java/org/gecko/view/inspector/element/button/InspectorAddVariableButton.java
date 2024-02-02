@@ -2,6 +2,7 @@ package org.gecko.view.inspector.element.button;
 
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Visibility;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
@@ -11,7 +12,7 @@ public class InspectorAddVariableButton extends AbstractInspectorButton {
 
     public InspectorAddVariableButton(
         ActionManager actionManager, SystemViewModel systemViewModel, Visibility visibility) {
-        setText("L:Add");
+        setText(ResourceHandler.getString("Buttons", "inspector_add_variable"));
         setPrefWidth(WIDTH);
         setOnAction(event -> {
             actionManager.run(actionManager.getActionFactory().createCreatePortViewModelElementAction(systemViewModel));

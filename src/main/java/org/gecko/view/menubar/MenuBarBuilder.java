@@ -4,6 +4,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.GeckoView;
+import org.gecko.view.ResourceHandler;
 
 public class MenuBarBuilder {
 
@@ -18,7 +19,11 @@ public class MenuBarBuilder {
 
         // TODO
         menuBar.getMenus()
-            .addAll(new Menu("File"), new Menu("Edit"), new Menu("View"), new Menu("Tools"), new Menu("Help"));
+            .addAll(new Menu(ResourceHandler.getString("Labels", "file")),
+                new Menu(ResourceHandler.getString("Labels", "edit")),
+                new Menu(ResourceHandler.getString("Labels", "view")),
+                new Menu(ResourceHandler.getString("Labels", "tools")),
+                new Menu(ResourceHandler.getString("Labels", "help")));
     }
 
     public MenuBar build() {

@@ -2,6 +2,7 @@ package org.gecko.view.inspector.element.button;
 
 import javafx.scene.paint.Color;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
 public class InspectorDeleteButton extends AbstractInspectorButton {
@@ -14,7 +15,7 @@ public class InspectorDeleteButton extends AbstractInspectorButton {
             actionManager.run(
                 actionManager.getActionFactory().createDeletePositionableViewModelElementAction(elementToRemove));
         });
-        setText("L:Delete");
+        setText(ResourceHandler.getString("Buttons", "inspector_delete"));
         setPrefWidth(WIDTH);
         setStyle("-fx-background-color: " + COLOR.toString().replace("0x", "#")); //TODO correct?
     }

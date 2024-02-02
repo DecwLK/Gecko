@@ -1,6 +1,7 @@
 package org.gecko.view.menubar;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -14,6 +15,7 @@ import javafx.scene.input.KeyCombination;
 import org.gecko.actions.ActionManager;
 import org.gecko.application.GeckoIOManager;
 import org.gecko.io.FileTypes;
+import org.gecko.tools.Tool;
 import org.gecko.tools.ToolType;
 import org.gecko.view.GeckoView;
 import org.gecko.view.views.shortcuts.Shortcuts;
@@ -98,12 +100,13 @@ public class MenuBarBuilder {
 
         // Data transfer commands:
         MenuItem cutMenuItem = new MenuItem("Cut");
+        cutMenuItem.setOnAction(e -> actionManager.cut());
 
         MenuItem copyMenuItem = new MenuItem("Copy");
-        copyMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createCopyPositionableViewModelElementAction()));
+        copyMenuItem.setOnAction(e -> actionManager.copy());
 
         MenuItem pasteMenuItem = new MenuItem("Paste");
+        pasteMenuItem.setOnAction(e -> actionManager.paste());
 
         // General selection commands:
         MenuItem selectAllMenuItem = new MenuItem("Select All");
@@ -169,84 +172,78 @@ public class MenuBarBuilder {
     private Menu setupToolsMenu() {
         Menu toolsMenu = new Menu("Tools");
 
-        Menu changeToolMenu = new Menu("Change Tool");
-
         // General tools:
-        MenuItem cursorMenuItem = new MenuItem("Cursor Tool");
+        MenuItem cursorMenuItem = new MenuItem(ToolType.CURSOR.getLabel());
         cursorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
                 .createSelectToolAction(ToolType.CURSOR)));
 
-        MenuItem marqueeMenuItem = new MenuItem("Marquee Tool");
+        MenuItem marqueeMenuItem = new MenuItem(ToolType.MARQUEE_TOOL.getLabel());
         marqueeMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.MARQUEE_TOOL)));
 
-        MenuItem panMenuItem = new MenuItem("Pan Tool");
+        MenuItem panMenuItem = new MenuItem(ToolType.PAN.getLabel());
         panMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.PAN)));
 
-        MenuItem zoomMenuItem = new MenuItem("Zoom Tool");
+        MenuItem zoomMenuItem = new MenuItem(ToolType.ZOOM_TOOL.getLabel());
         zoomMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.ZOOM_TOOL)));
 
         SeparatorMenuItem generalFromSystemSeparator = new SeparatorMenuItem();
 
         // System view tools:
-        MenuItem systemCreatorMenuItem = new MenuItem("System Creator Tool");
+        MenuItem systemCreatorMenuItem = new MenuItem(ToolType.SYSTEM_CREATOR.getLabel());
         systemCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.SYSTEM_CREATOR)));
 
-        MenuItem systemConnectionCreatorMenuItem = new MenuItem("System Connection Creator Tool");
+        MenuItem systemConnectionCreatorMenuItem = new MenuItem(ToolType.CONNECTION_CREATOR.getLabel());
         systemConnectionCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.CONNECTION_CREATOR)));
 
-        MenuItem variableBlockCreatorMenuItem = new MenuItem("Variable Block Creator Tool");
+        MenuItem variableBlockCreatorMenuItem = new MenuItem(ToolType.VARIABLE_BLOCK_CREATOR.getLabel());
         variableBlockCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.VARIABLE_BLOCK_CREATOR)));
 
         SeparatorMenuItem systemFroAutomatonSeparator = new SeparatorMenuItem();
 
         // Automaton view tools:
-        MenuItem stateCreatorMenuItem = new MenuItem("State Creator Tool");
+        MenuItem stateCreatorMenuItem = new MenuItem(ToolType.STATE_CREATOR.getLabel());
         stateCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.STATE_CREATOR)));
         stateCreatorMenuItem.setDisable(true);
 
-        MenuItem edgeCreatorMenuItem = new MenuItem("Edge Creator Tool");
+        MenuItem edgeCreatorMenuItem = new MenuItem(ToolType.EDGE_CREATOR.getLabel());
         edgeCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.EDGE_CREATOR)));
         edgeCreatorMenuItem.setDisable(true);
 
-        MenuItem regionCreatorMenuItem = new MenuItem("Region Creator Tool");
+        MenuItem regionCreatorMenuItem = new MenuItem(ToolType.REGION_CREATOR.getLabel());
         regionCreatorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.REGION_CREATOR)));
         regionCreatorMenuItem.setDisable(true);
 
-        changeToolMenu.getItems().addAll(cursorMenuItem, marqueeMenuItem, panMenuItem, zoomMenuItem,
+        toolsMenu.getItems().addAll(cursorMenuItem, marqueeMenuItem, panMenuItem, zoomMenuItem,
             generalFromSystemSeparator, systemCreatorMenuItem, systemConnectionCreatorMenuItem,
             variableBlockCreatorMenuItem, systemFroAutomatonSeparator, stateCreatorMenuItem, edgeCreatorMenuItem,
             regionCreatorMenuItem);
 
-        toolsMenu.getItems().add(changeToolMenu);
-
         return toolsMenu;
     }
 
-    public static void updateToolsMenu(Menu toolsMenu, boolean isAutomatonEditor) {
-        Menu changeToolMenu = (Menu) toolsMenu.getItems().getFirst();
-        if (isAutomatonEditor) {
-            changeToolMenu.getItems().get(5).setDisable(true);
-            changeToolMenu.getItems().get(6).setDisable(true);
-            changeToolMenu.getItems().get(7).setDisable(true);
-            changeToolMenu.getItems().get(9).setDisable(false);
-            changeToolMenu.getItems().get(10).setDisable(false);
-            changeToolMenu.getItems().get(11).setDisable(false);
-        } else {
-            changeToolMenu.getItems().get(5).setDisable(false);
-            changeToolMenu.getItems().get(6).setDisable(false);
-            changeToolMenu.getItems().get(7).setDisable(false);
-            changeToolMenu.getItems().get(9).setDisable(true);
-            changeToolMenu.getItems().get(10).setDisable(true);
-            changeToolMenu.getItems().get(11).setDisable(true);
-        }
+    public static void updateToolsMenu(MenuBar menuBar, List<List<Tool>> toolLists) {
+        List<Tool> constantTools = toolLists.get(0);
+        List<Tool> variableTools = toolLists.get(1);
+
+        menuBar.getMenus().stream().filter(menu -> menu.getText().equals("Tools"))
+            .findFirst()
+            .ifPresent(toolsMenu -> toolsMenu.getItems().forEach(toolMenu -> {
+                Tool constantTool = constantTools.stream().filter(tool
+                    -> tool.getToolType().getLabel().equals(toolMenu.getText())).findAny().orElse(null);
+                Tool activeTool = variableTools.stream().filter(tool
+                    -> tool.getToolType().getLabel().equals(toolMenu.getText())).findAny().orElse(null);
+                if (constantTool == null) {
+                    toolMenu.setDisable(activeTool == null);
+                }
+            }));
     }
 }

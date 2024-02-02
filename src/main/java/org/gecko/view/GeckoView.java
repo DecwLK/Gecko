@@ -14,6 +14,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import lombok.Getter;
+import org.gecko.view.contextmenu.AbstractContextMenuBuilder;
+import org.gecko.view.contextmenu.ViewContextMenuBuilder;
 import org.gecko.view.menubar.MenuBarBuilder;
 import org.gecko.view.views.EditorView;
 import org.gecko.view.views.ViewFactory;
@@ -35,6 +37,7 @@ public class GeckoView {
     private final TabPane centerPane;
     private final GeckoViewModel viewModel;
     private final ViewFactory viewFactory;
+    private final MenuBar menuBar;
 
     @Getter
     private EditorView currentView;
@@ -71,7 +74,17 @@ public class GeckoView {
 
         // Menubar
         mainPane.setTop(new MenuBarBuilder(this, viewModel.getActionManager()).build());
+        AbstractContextMenuBuilder contextMenuBuilder =
+            new ViewContextMenuBuilder(viewModel.getActionManager(), currentView, currentView.getViewModel());
+        centerPane.setOnContextMenuRequested(event -> {
+            if (currentView.getViewModel().getSelectionManager().getCurrentSelection().size() != 1) {
+                contextMenuBuilder.build().show(centerPane, event.getScreenX(), event.getScreenY());
+            }
+        });
 
+        // Menubar
+        menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
+        mainPane.setTop(menuBar);
         refreshView();
     }
 
@@ -159,8 +172,7 @@ public class GeckoView {
         currentView.updateWorldSize();
         currentView.focus();
 
-        MenuBarBuilder.updateToolsMenu(((MenuBar) mainPane.getTop()).getMenus().get(3),
-            currentView.getViewModel().isAutomatonEditor());
+        MenuBarBuilder.updateToolsMenu(menuBar, currentView.getViewModel().getTools());
     }
 
     private void onUpdateCurrentEditorToViewModel(

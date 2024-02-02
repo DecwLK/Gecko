@@ -2,6 +2,7 @@ package org.gecko.view.contextmenu;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.EditorView;
 
@@ -20,10 +21,20 @@ public abstract class AbstractContextMenuBuilder {
 
         // Data transfer commands:
         MenuItem cutMenuItem = new MenuItem("Cut");
-        MenuItem copyMenuItem = new MenuItem("Copy");
-        MenuItem pasteMenuItem = new MenuItem("Paste");
+        cutMenuItem.setOnAction(e -> actionManager.cut());
 
-        contextMenu.getItems().addAll(cutMenuItem, copyMenuItem, pasteMenuItem);
+        MenuItem copyMenuItem = new MenuItem("Copy");
+        copyMenuItem.setOnAction(e -> actionManager.copy());
+
+        MenuItem pasteMenuItem = new MenuItem("Paste");
+        pasteMenuItem.setOnAction(e -> actionManager.paste());
+
+        SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
+
+        MenuItem deselectMenuItem = new MenuItem("Deselect All");
+        deselectMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory().createDeselectAction()));
+
+        contextMenu.getItems().addAll(cutMenuItem, copyMenuItem, pasteMenuItem, separatorMenuItem, deselectMenuItem);
         return contextMenu;
     }
 }

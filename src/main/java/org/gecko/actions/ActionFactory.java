@@ -1,6 +1,5 @@
 package org.gecko.actions;
 
-import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -65,8 +64,9 @@ public class ActionFactory {
         return new ChangeVisibilityPortViewModelAction(portViewModel, visibility);
     }
 
-    public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction() {
-        return new CopyPositionableViewModelElementAction(geckoViewModel.getCurrentEditor());
+    public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(
+        CopiedElementsContainer copiedElementsContainer) {
+        return new CopyPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), copiedElementsContainer);
     }
 
     public CreateContractViewModelElementAction createCreateContractViewModelElementAction(
@@ -105,10 +105,18 @@ public class ActionFactory {
         return new CreateVariableAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
     }
 
-    public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction(
-        List<PositionableViewModelElement<?>> elements) {
-        return new CutPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), elements);
-    }
+    /*public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction(
+        CopiedElementsContainer copiedElementsContainer) {
+        // Copy Action:
+        CopyPositionableViewModelElementAction copyAction
+            = createCopyPositionableViewModelElementAction(copiedElementsContainer);
+
+        // Delete Actions:
+        ActionGroup deleteActions = new ActionGroup(new ArrayList<>());
+        copiedElementsContainer.getAllElements().forEach(copiedElement -> deleteActions.getActions()
+            .add(createDeletePositionableViewModelElementAction(copiedElement)));
+        return new CutPositionableViewModelElementAction(copyAction, deleteActions);
+    }*/
 
     public DeleteContractViewModelAction createDeleteContractViewModelAction(
         StateViewModel parent, ContractViewModel contractViewModel) {
@@ -145,14 +153,15 @@ public class ActionFactory {
             elementScalerBlock, delta);
     }
 
-    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction() {
-        return new PastePositionableViewModelElementAction(geckoViewModel);
+    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
+        CopiedElementsContainer elementsToPaste) {
+        return new PastePositionableViewModelElementAction(geckoViewModel, elementsToPaste);
     }
 
-    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
+    /*public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
         List<PositionableViewModelElement<?>> elements) {
         return new PastePositionableViewModelElementAction(geckoViewModel, elements);
-    }
+    }*/
 
     public RenameViewModelElementAction createRenameViewModelElementAction(Renamable renamable, String name) {
         return new RenameViewModelElementAction(renamable, name);

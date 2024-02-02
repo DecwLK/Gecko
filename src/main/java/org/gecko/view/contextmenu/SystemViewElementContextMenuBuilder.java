@@ -20,12 +20,7 @@ public class SystemViewElementContextMenuBuilder extends AbstractContextMenuBuil
 
     @Override
     public ContextMenu build() {
-        ContextMenu systemContextMenu = new ContextMenu();
-
-        // Data transfer commands:
-        MenuItem cutMenuItem = new MenuItem("Cut");
-        MenuItem copyMenuItem = new MenuItem("Copy");
-        MenuItem pasteMenuItem = new MenuItem("Paste");
+        ContextMenu systemContextMenu = super.build();
 
         SeparatorMenuItem dataTransferToSystemAccessSeparator = new SeparatorMenuItem();
 
@@ -39,8 +34,7 @@ public class SystemViewElementContextMenuBuilder extends AbstractContextMenuBuil
             .createDeletePositionableViewModelElementAction(systemViewModel)));
 
 
-        systemContextMenu.getItems().addAll(cutMenuItem, copyMenuItem, pasteMenuItem,
-            dataTransferToSystemAccessSeparator, openSystemMenuItem, deleteMenuItem);
+        systemContextMenu.getItems().addAll(dataTransferToSystemAccessSeparator, openSystemMenuItem, deleteMenuItem);
         return systemContextMenu;
     }
 }

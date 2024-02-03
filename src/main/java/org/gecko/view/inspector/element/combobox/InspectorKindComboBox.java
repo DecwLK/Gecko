@@ -1,26 +1,23 @@
 package org.gecko.view.inspector.element.combobox;
 
-import javafx.scene.control.ComboBox;
+import java.util.Arrays;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Kind;
-import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.viewmodel.EdgeViewModel;
 
-public class InspectorKindComboBox extends ComboBox<Kind> implements InspectorElement<ComboBox<Kind>> {
+public class InspectorKindComboBox extends InspectorComboBox<Kind> {
+    private final EdgeViewModel viewModel;
+    private final ActionManager actionManager;
 
     public InspectorKindComboBox(ActionManager actionManager, EdgeViewModel viewModel) {
-        getItems().setAll(Kind.values());
-        setValue(viewModel.getKind());
-        valueProperty().addListener((observable, oldValue, newValue) -> {
-            Action changeKindAction =
-                actionManager.getActionFactory().createChangeKindAction(viewModel, valueProperty().get());
-            actionManager.run(changeKindAction);
-        });
+        super(actionManager, Arrays.stream(Kind.values()).toList(), viewModel.getKindProperty());
+        this.viewModel = viewModel;
+        this.actionManager = actionManager;
     }
 
     @Override
-    public ComboBox<Kind> getControl() {
-        return this;
+    protected Action getAction() {
+        return actionManager.getActionFactory().createChangeKindAction(viewModel, getValue());
     }
 }

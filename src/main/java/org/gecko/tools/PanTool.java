@@ -7,7 +7,7 @@ import org.gecko.actions.ActionManager;
 public class PanTool extends Tool {
 
     public PanTool(ActionManager actionManager) {
-        super(actionManager, ToolType.PAN_TOOL);
+        super(actionManager, ToolType.PAN);
     }
 
     @Override

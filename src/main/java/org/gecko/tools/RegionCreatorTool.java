@@ -8,7 +8,7 @@ public class RegionCreatorTool extends Tool {
     private Point2D startPosition;
 
     public RegionCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.REGION_CREATOR_TOOL);
+        super(actionManager, ToolType.REGION_CREATOR);
     }
 
     @Override

@@ -8,7 +8,7 @@ import org.gecko.actions.ActionManager;
 public class StateCreatorTool extends Tool {
 
     public StateCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.STATE_CREATOR_TOOL);
+        super(actionManager, ToolType.STATE_CREATOR);
     }
 
     @Override

@@ -70,7 +70,7 @@ public class EditorViewModel {
             }
         });
 
-        setCurrentTool(ToolType.CURSOR_TOOL);
+        setCurrentTool(ToolType.CURSOR);
     }
 
     public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {

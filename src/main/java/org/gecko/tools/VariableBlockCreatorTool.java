@@ -9,7 +9,7 @@ import org.gecko.actions.ActionManager;
 public class VariableBlockCreatorTool extends Tool {
 
     public VariableBlockCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.VARIABLE_BLOCK_CREATOR_TOOL);
+        super(actionManager, ToolType.VARIABLE_BLOCK_CREATOR);
     }
 
     @Override

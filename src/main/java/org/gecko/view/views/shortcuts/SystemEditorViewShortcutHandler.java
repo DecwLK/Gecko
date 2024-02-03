@@ -1,8 +1,6 @@
 package org.gecko.view.views.shortcuts;
 
 import java.util.List;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.ToolType;
 import org.gecko.view.views.EditorView;
@@ -19,9 +17,7 @@ public class SystemEditorViewShortcutHandler extends ShortcutHandler {
     }
 
     private void addNavigateSystemShortcuts() {
-        KeyCodeCombination openSystem =
-            new KeyCodeCombination(KeyCode.O, KeyCodeCombination.SHORTCUT_DOWN, KeyCodeCombination.SHIFT_DOWN);
-        shortcuts.put(openSystem, () -> {
+        shortcuts.put(Shortcuts.OPEN_CHILD_SYSTEM_EDITOR.get(), () -> {
             PositionableViewModelElement<?> focusedElement = editorView.getViewModel().getFocusedElement();
             if (focusedElement == null) {
                 return;
@@ -34,9 +30,7 @@ public class SystemEditorViewShortcutHandler extends ShortcutHandler {
             }
         });
 
-        KeyCodeCombination goToParentSystem =
-            new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN, KeyCodeCombination.SHIFT_DOWN);
-        shortcuts.put(goToParentSystem, () -> {
+        shortcuts.put(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get(), () -> {
             SystemViewModel parentSystem = editorView.getViewModel().getParentSystem();
             if (parentSystem == null) {
                 return;
@@ -46,11 +40,10 @@ public class SystemEditorViewShortcutHandler extends ShortcutHandler {
     }
 
     private void addCreatorShortcuts() {
-        List<ToolType> creatorTools = List.of(ToolType.SYSTEM_CREATOR_TOOL, ToolType.CONNECTION_CREATOR_TOOL,
-            ToolType.VARIABLE_BLOCK_CREATOR_TOOL);
+        List<ToolType> creatorTools =
+            List.of(ToolType.SYSTEM_CREATOR, ToolType.CONNECTION_CREATOR, ToolType.VARIABLE_BLOCK_CREATOR);
         creatorTools.forEach(tool -> {
-            KeyCodeCombination keyCodeCombination = new KeyCodeCombination(tool.getKeyCode());
-            shortcuts.put(keyCodeCombination,
+            shortcuts.put(tool.getKeyCodeCombination(),
                 () -> actionManager.run(actionFactory.createSelectToolAction(editorView, tool)));
         });
     }

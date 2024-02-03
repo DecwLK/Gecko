@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyEvent;
 import org.gecko.actions.ActionFactory;
@@ -53,70 +52,56 @@ public abstract class ShortcutHandler implements EventHandler<KeyEvent> {
 
     private void addSelectStandardToolShortcuts() {
         List<ToolType> standardTools =
-            List.of(ToolType.CURSOR_TOOL, ToolType.MARQUEE_TOOL, ToolType.PAN_TOOL, ToolType.ZOOM_TOOL);
+            List.of(ToolType.CURSOR, ToolType.MARQUEE_TOOL, ToolType.PAN, ToolType.ZOOM_TOOL);
         standardTools.forEach(tool -> {
-            KeyCodeCombination keyCodeCombination = new KeyCodeCombination(tool.getKeyCode());
-            shortcuts.put(keyCodeCombination,
+            shortcuts.put(tool.getKeyCodeCombination(),
                 () -> actionManager.run(actionFactory.createSelectToolAction(editorView, tool)));
         });
     }
 
     private void addZoomShortcuts() {
-        KeyCodeCombination zoomIn = new KeyCodeCombination(KeyCode.PLUS, KeyCodeCombination.SHORTCUT_DOWN);
-        shortcuts.put(zoomIn, () -> {
+        shortcuts.put(Shortcuts.ZOOM_IN.get(), () -> {
             actionManager.run(actionFactory.createZoomCenterAction(ZOOM_FACTOR));
         });
-        KeyCodeCombination zoomOut = new KeyCodeCombination(KeyCode.MINUS, KeyCodeCombination.SHORTCUT_DOWN);
-        shortcuts.put(zoomOut, () -> {
+        shortcuts.put(Shortcuts.ZOOM_OUT.get(), () -> {
             actionManager.run(actionFactory.createZoomCenterAction(1 / ZOOM_FACTOR));
         });
     }
 
     private void addSelectionShortcuts() {
-        KeyCodeCombination selectAll = new KeyCodeCombination(KeyCode.A, KeyCodeCombination.SHORTCUT_DOWN);
-        shortcuts.put(selectAll, () -> {
+        shortcuts.put(Shortcuts.SELECT_ALL.get(), () -> {
             actionManager.run(
                 actionFactory.createSelectAction(editorView.getViewModel().getPositionableViewModelElements(), true));
         });
 
-        KeyCodeCombination deselectAll =
-            new KeyCodeCombination(KeyCode.A, KeyCodeCombination.SHORTCUT_DOWN, KeyCodeCombination.SHIFT_DOWN);
-        shortcuts.put(deselectAll, () -> {
+        shortcuts.put(Shortcuts.DESELECT_ALL.get(), () -> {
             actionManager.run(actionFactory.createSelectAction(Set.of(), true));
         });
 
-        KeyCodeCombination selectionForward =
-            new KeyCodeCombination(KeyCode.U, KeyCodeCombination.SHORTCUT_DOWN, KeyCodeCombination.SHIFT_DOWN);
-        shortcuts.put(selectionForward, () -> {
+        shortcuts.put(Shortcuts.SELECTION_FORWARD.get(), () -> {
             actionManager.run(actionFactory.createSelectionHistoryForwardAction());
         });
 
-        KeyCodeCombination selectionBack = new KeyCodeCombination(KeyCode.U, KeyCodeCombination.SHORTCUT_DOWN);
-        shortcuts.put(selectionBack, () -> {
+        shortcuts.put(Shortcuts.SELECTION_BACK.get(), () -> {
             actionManager.run(actionFactory.createSelectionHistoryBackAction());
         });
     }
 
     private void addDeleteShortcuts() {
-        KeyCodeCombination delete = new KeyCodeCombination(KeyCode.BACK_SPACE, KeyCodeCombination.SHORTCUT_DOWN);
-        shortcuts.put(delete, () -> {
+        shortcuts.put(Shortcuts.DELETE.get(), () -> {
             actionManager.run(actionFactory.createDeletePositionableViewModelElementAction(
                 editorView.getViewModel().getSelectionManager().getCurrentSelection()));
         });
     }
 
     private void addUndoRedoShortcuts() {
-        KeyCodeCombination undo = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
-        shortcuts.put(undo, actionManager::undo);
+        shortcuts.put(Shortcuts.UNDO.get(), actionManager::undo);
 
-        KeyCodeCombination redo =
-            new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN, KeyCodeCombination.SHIFT_DOWN);
-        shortcuts.put(redo, actionManager::redo);
+        shortcuts.put(Shortcuts.REDO.get(), actionManager::redo);
     }
 
     private void addSwitchEditorShortcuts() {
-        KeyCodeCombination switchEditor = new KeyCodeCombination(KeyCode.F1, KeyCodeCombination.SHORTCUT_DOWN);
-        shortcuts.put(switchEditor, () -> {
+        shortcuts.put(Shortcuts.SWITCH_EDITOR.get(), () -> {
             EditorViewModel editorViewModel = editorView.getViewModel();
             actionManager.run(actionFactory.createViewSwitchAction(editorViewModel.getCurrentSystem(),
                 !editorViewModel.isAutomatonEditor()));

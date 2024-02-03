@@ -4,10 +4,14 @@ import java.io.File;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import org.gecko.actions.ActionManager;
 import org.gecko.application.GeckoIOManager;
 import org.gecko.io.FileTypes;
 import org.gecko.view.GeckoView;
+import org.gecko.view.views.shortcuts.Shortcuts;
 
 public class MenuBarBuilder {
 
@@ -34,9 +38,11 @@ public class MenuBarBuilder {
 
         MenuItem newFileItem = new MenuItem("New");
         newFileItem.setOnAction(e -> GeckoIOManager.getInstance().createNewProject());
+        newFileItem.setAccelerator(Shortcuts.NEW.get());
 
         MenuItem openFileItem = new MenuItem("Open");
         openFileItem.setOnAction(e -> GeckoIOManager.getInstance().loadGeckoProject());
+        openFileItem.setAccelerator(Shortcuts.OPEN.get());
 
         MenuItem saveFileItem = new MenuItem("Save");
         saveFileItem.setOnAction(e -> {
@@ -51,6 +57,7 @@ public class MenuBarBuilder {
                 }
             }
         });
+        saveFileItem.setAccelerator(Shortcuts.SAVE.get());
 
         MenuItem saveAsFileItem = new MenuItem("Save As");
         saveAsFileItem.setOnAction(e -> {
@@ -59,10 +66,13 @@ public class MenuBarBuilder {
                 GeckoIOManager.getInstance().saveGeckoProject(fileToSaveTo);
             }
         });
+        saveAsFileItem.setAccelerator(Shortcuts.SAVE_AS.get());
 
         MenuItem importFileItem = new MenuItem("Import");
+        importFileItem.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN));
 
         MenuItem exportFileItem = new MenuItem("Export");
+        exportFileItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));
 
         fileMenu.getItems()
             .addAll(newFileItem, openFileItem, saveFileItem, saveAsFileItem, importFileItem, exportFileItem);

@@ -12,7 +12,7 @@ public class SystemConnectionCreatorTool extends Tool {
     private PortViewElement firstPortViewElement;
 
     public SystemConnectionCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.CONNECTION_CREATOR_TOOL);
+        super(actionManager, ToolType.CONNECTION_CREATOR);
         firstPortViewElement = null;
     }
 

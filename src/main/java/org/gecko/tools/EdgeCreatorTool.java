@@ -11,7 +11,7 @@ public class EdgeCreatorTool extends Tool {
     private StateViewModel source;
 
     public EdgeCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.EDGE_CREATOR_TOOL);
+        super(actionManager, ToolType.EDGE_CREATOR);
         source = null;
     }
 

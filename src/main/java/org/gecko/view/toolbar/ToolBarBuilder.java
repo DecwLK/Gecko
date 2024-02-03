@@ -6,9 +6,11 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
+import org.gecko.tools.ToolType;
 import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 
@@ -45,7 +47,8 @@ public class ToolBarBuilder {
 
     private void addTools(ActionManager actionManager, ToggleGroup toggleGroup, List<Tool> toolList) {
         for (Tool tool : toolList) {
-            ToggleButton toolButton = new ToggleButton(tool.getName());
+            ToolType toolType = tool.getToolType();
+            ToggleButton toolButton = new ToggleButton(toolType.getLabel());
 
             //PrefSize is important
             toolButton.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
@@ -56,18 +59,20 @@ public class ToolBarBuilder {
             editorView.getViewModel().getCurrentToolProperty().addListener((observable, oldValue, newValue) -> {
                 toolButton.setSelected(newValue == tool);
             });
-            toolButton.setSelected(editorView.getViewModel().getCurrentToolType() == tool.getToolType());
+            toolButton.setSelected(editorView.getViewModel().getCurrentToolType() == toolType);
 
             toolButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
-                    Action action =
-                        actionManager.getActionFactory().createSelectToolAction(editorView, tool.getToolType());
+                    Action action = actionManager.getActionFactory().createSelectToolAction(editorView, toolType);
                     actionManager.run(action);
                 }
             });
 
             toolButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);
-            toolButton.getStyleClass().add(tool.getIconStyleName());
+            toolButton.getStyleClass().add(toolType.getIcon());
+            Tooltip tooltip =
+                new Tooltip(toolType.getLabel() + " (" + toolType.getKeyCodeCombination().getDisplayText() + ")");
+            toolButton.setTooltip(tooltip);
             toolBar.getItems().add(toolButton);
             toggleGroup.getToggles().add(toolButton);
         }

@@ -4,9 +4,11 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class FloatingUIBuilder {
@@ -34,6 +36,7 @@ public class FloatingUIBuilder {
         zoomInButton.setOnAction(event -> {
             actionManager.run(actionManager.getActionFactory().createZoomCenterAction(ZOOM_SCALE));
         });
+        zoomInButton.setTooltip(new Tooltip(Shortcuts.ZOOM_IN.get().getDisplayText()));
 
         Label zoomLabel = new Label();
         zoomLabel.textProperty().bind(Bindings.createStringBinding(() -> {
@@ -46,6 +49,7 @@ public class FloatingUIBuilder {
         zoomOutButton.setOnAction(event -> {
             actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1 / ZOOM_SCALE));
         });
+        zoomOutButton.setTooltip(new Tooltip(Shortcuts.ZOOM_OUT.get().getDisplayText()));
 
         zoomButtons.getChildren().addAll(zoomInButton, zoomLabel, zoomOutButton);
         return zoomButtons;
@@ -80,6 +84,7 @@ public class FloatingUIBuilder {
             switchViewButton.getStyleClass()
                 .add(automatonEditor ? switchToSystemStyleClass : switchToAutomatonStyleClass);
         });
+        switchViewButton.setTooltip(new Tooltip(Shortcuts.SWITCH_EDITOR.get().getDisplayText()));
 
         viewSwitchButtons.getChildren().add(switchViewButton);
 
@@ -88,6 +93,8 @@ public class FloatingUIBuilder {
             parentSystemSwitchButton.getStyleClass().add("floating-parent-system-switch-button");
             parentSystemSwitchButton.setOnAction(event -> actionManager.run(actionManager.getActionFactory()
                 .createViewSwitchAction(editorViewModel.getParentSystem(), editorViewModel.isAutomatonEditor())));
+            parentSystemSwitchButton.setTooltip(
+                new Tooltip(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get().getDisplayText()));
 
             viewSwitchButtons.getChildren().add(parentSystemSwitchButton);
         }

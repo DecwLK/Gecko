@@ -32,7 +32,7 @@ public class CursorTool extends Tool {
     private ScrollPane viewPane;
 
     public CursorTool(ActionManager actionManager, SelectionManager selectionManager, EditorViewModel editorViewModel) {
-        super(actionManager, ToolType.CURSOR_TOOL);
+        super(actionManager, ToolType.CURSOR);
         this.selectionManager = selectionManager;
         this.editorViewModel = editorViewModel;
     }

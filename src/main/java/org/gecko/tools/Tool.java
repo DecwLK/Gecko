@@ -5,7 +5,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.MouseEvent;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
@@ -30,18 +29,6 @@ public abstract class Tool implements ViewElementVisitor {
     public Tool(ActionManager actionManager, ToolType toolType) {
         this.actionManager = actionManager;
         this.toolType = toolType;
-    }
-
-    public String getName() {
-        return toolType.getLabel();
-    }
-
-    public String getIconStyleName() {
-        return toolType.getIcon();
-    }
-
-    public KeyCodeCombination getKeyCodeCombination() {
-        return new KeyCodeCombination(toolType.getKeyCode());
     }
 
     public void visitView(ScrollPane view) {

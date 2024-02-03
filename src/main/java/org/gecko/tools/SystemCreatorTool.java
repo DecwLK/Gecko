@@ -7,7 +7,7 @@ import org.gecko.actions.ActionManager;
 
 public class SystemCreatorTool extends Tool {
     public SystemCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.SYSTEM_CREATOR_TOOL);
+        super(actionManager, ToolType.SYSTEM_CREATOR);
     }
 
     @Override

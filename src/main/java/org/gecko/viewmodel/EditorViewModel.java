@@ -2,6 +2,7 @@ package org.gecko.viewmodel;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -177,7 +178,7 @@ public class EditorViewModel {
     }
 
     private void initializeTools() {
-        tools.add(List.of(new CursorTool(actionManager, selectionManager, this), new MarqueeTool(actionManager),
+        tools.add(List.of(new CursorTool(actionManager, selectionManager, this), new MarqueeTool(actionManager, this),
             new PanTool(actionManager), new ZoomTool(actionManager)));
         if (isAutomatonEditor()) {
             tools.add(List.of(new StateCreatorTool(actionManager), new EdgeCreatorTool(actionManager),
@@ -211,5 +212,13 @@ public class EditorViewModel {
             return getZoomScale() * zoomFactor <= MAX_ZOOM_SCALE;
         }
 
+    }
+
+    public Set<PositionableViewModelElement<?>> getElementsInArea(Point2D topLeft, Point2D bottomRight) {
+        return containedPositionableViewModelElementsProperty.stream().filter(element -> {
+            Point2D center = element.getCenter();
+            return center.getX() >= topLeft.getX() && center.getX() <= bottomRight.getX()
+                && center.getY() >= topLeft.getY() && center.getY() <= bottomRight.getY();
+        }).collect(Collectors.toSet());
     }
 }

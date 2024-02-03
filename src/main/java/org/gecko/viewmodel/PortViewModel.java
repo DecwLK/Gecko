@@ -3,6 +3,7 @@ package org.gecko.viewmodel;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import org.gecko.model.Visibility;
 @Getter
 public class PortViewModel extends BlockViewModelElement<Variable> {
     private final Property<Visibility> visibilityProperty;
-    private final Property<String> typeProperty;
+    private final StringProperty typeProperty;
 
     public PortViewModel(int id, @NonNull Variable target) {
         super(id, target);

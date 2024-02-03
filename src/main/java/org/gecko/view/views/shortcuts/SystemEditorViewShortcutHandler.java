@@ -44,7 +44,7 @@ public class SystemEditorViewShortcutHandler extends ShortcutHandler {
             List.of(ToolType.SYSTEM_CREATOR, ToolType.CONNECTION_CREATOR, ToolType.VARIABLE_BLOCK_CREATOR);
         creatorTools.forEach(tool -> {
             shortcuts.put(tool.getKeyCodeCombination(),
-                () -> actionManager.run(actionFactory.createSelectToolAction(editorView, tool)));
+                () -> actionManager.run(actionFactory.createSelectToolAction(tool)));
         });
     }
 }

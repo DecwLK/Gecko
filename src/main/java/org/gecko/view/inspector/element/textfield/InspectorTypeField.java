@@ -1,23 +1,21 @@
 package org.gecko.view.inspector.element.textfield;
 
-import javafx.scene.control.TextField;
+import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
-import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.viewmodel.PortViewModel;
 
-public class InspectorTypeField extends TextField implements InspectorElement<TextField> {
+public class InspectorTypeField extends InspectorTextField {
+    private final PortViewModel viewModel;
+    private final ActionManager actionManager;
 
     public InspectorTypeField(ActionManager actionManager, PortViewModel viewModel) {
-        setText(viewModel.getType());
-
-        setOnAction(event -> {
-            actionManager.run(
-                actionManager.getActionFactory().createChangeTypePortViewModelElementAction(viewModel, getText()));
-        });
+        super(viewModel.getTypeProperty(), actionManager);
+        this.viewModel = viewModel;
+        this.actionManager = actionManager;
     }
 
     @Override
-    public TextField getControl() {
-        return this;
+    protected Action getAction() {
+        return actionManager.getActionFactory().createChangeTypePortViewModelElementAction(viewModel, getText());
     }
 }

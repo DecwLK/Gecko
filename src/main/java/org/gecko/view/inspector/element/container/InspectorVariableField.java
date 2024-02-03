@@ -8,7 +8,7 @@ import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.button.InspectorRemoveVariableButton;
 import org.gecko.view.inspector.element.label.InspectorLabel;
-import org.gecko.view.inspector.element.textfield.InspectorTextField;
+import org.gecko.view.inspector.element.textfield.InspectorRenameField;
 import org.gecko.view.inspector.element.textfield.InspectorTypeField;
 import org.gecko.viewmodel.PortViewModel;
 
@@ -22,7 +22,7 @@ public class InspectorVariableField extends VBox implements InspectorElement<VBo
         HBox nameAndDeleteContainer = new HBox();
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        InspectorElement<?> variableNameField = new InspectorTextField(actionManager, portViewModel);
+        InspectorElement<?> variableNameField = new InspectorRenameField(actionManager, portViewModel);
         InspectorElement<?> deleteButton = new InspectorRemoveVariableButton(actionManager, portViewModel);
         nameAndDeleteContainer.getChildren().addAll(variableNameField.getControl(), spacer, deleteButton.getControl());
         InspectorElement<?> typeLabel = new InspectorLabel("L:Type:");

@@ -63,7 +63,7 @@ public class ToolBarBuilder {
 
             toolButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
-                    Action action = actionManager.getActionFactory().createSelectToolAction(editorView, toolType);
+                    Action action = actionManager.getActionFactory().createSelectToolAction(toolType);
                     actionManager.run(action);
                 }
             });

@@ -55,7 +55,7 @@ public abstract class ShortcutHandler implements EventHandler<KeyEvent> {
             List.of(ToolType.CURSOR, ToolType.MARQUEE_TOOL, ToolType.PAN, ToolType.ZOOM_TOOL);
         standardTools.forEach(tool -> {
             shortcuts.put(tool.getKeyCodeCombination(),
-                () -> actionManager.run(actionFactory.createSelectToolAction(editorView, tool)));
+                () -> actionManager.run(actionFactory.createSelectToolAction(tool)));
         });
     }
 

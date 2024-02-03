@@ -17,6 +17,7 @@ public class ActionManager {
     }
 
     public void undo() {
+        printStacks();
         if (undoStack.isEmpty()) {
             return;
         }
@@ -26,6 +27,7 @@ public class ActionManager {
     }
 
     public void redo() {
+        printStacks();
         if (redoStack.isEmpty()) {
             return;
         }
@@ -44,5 +46,17 @@ public class ActionManager {
             undoStack.addFirst(undoAction);
         }
         redoStack.clear();
+    }
+
+    private void printStacks() {
+        System.out.println("Undo stack:");
+        for (Action action : undoStack) {
+            System.out.println(action);
+        }
+        System.out.println("Redo stack:");
+        for (Action action : redoStack) {
+            System.out.println(action);
+        }
+        System.out.println("______________________");
     }
 }

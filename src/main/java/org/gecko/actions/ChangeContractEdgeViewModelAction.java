@@ -5,24 +5,24 @@ import org.gecko.viewmodel.EdgeViewModel;
 
 public class ChangeContractEdgeViewModelAction extends Action {
 
-    private final EdgeViewModel viewModel;
+    private final EdgeViewModel edgeViewModel;
     private ContractViewModel oldContract;
     private final ContractViewModel newContract;
 
-    public ChangeContractEdgeViewModelAction(EdgeViewModel viewModel, ContractViewModel newContract) {
-        this.viewModel = viewModel;
+    public ChangeContractEdgeViewModelAction(EdgeViewModel edgeViewModel, ContractViewModel newContract) {
+        this.edgeViewModel = edgeViewModel;
         this.newContract = newContract;
     }
 
     @Override
     void run() {
-        oldContract = viewModel.getContract();
-        viewModel.setContract(newContract);
-        viewModel.updateTarget();
+        oldContract = edgeViewModel.getContract();
+        edgeViewModel.setContract(newContract);
+        edgeViewModel.updateTarget();
     }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createChangeContractEdgeViewModelAction(viewModel, oldContract);
+        return actionFactory.createChangeContractEdgeViewModelAction(edgeViewModel, oldContract);
     }
 }

@@ -16,7 +16,7 @@ public class AutomatonEditorViewShortcutHandler extends ShortcutHandler {
         List<ToolType> creatorTools = List.of(ToolType.STATE_CREATOR, ToolType.EDGE_CREATOR, ToolType.REGION_CREATOR);
         creatorTools.forEach(tool -> {
             shortcuts.put(tool.getKeyCodeCombination(),
-                () -> actionManager.run(actionFactory.createSelectToolAction(editorView, tool)));
+                () -> actionManager.run(actionFactory.createSelectToolAction(tool)));
         });
     }
 }

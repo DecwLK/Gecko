@@ -60,6 +60,10 @@ public class GeckoViewModel {
                 () -> setupNewEditorViewModel(nextSystemViewModel, isAutomatonEditor));
     }
 
+    public void switchEditor(EditorViewModel editorViewModel) {
+        setCurrentEditor(editorViewModel);
+    }
+
     private void setupNewEditorViewModel(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
         SystemViewModel currentSystemViewModel = null;
         if (getCurrentEditor() != null) {

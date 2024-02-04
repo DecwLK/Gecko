@@ -2,6 +2,7 @@ package org.gecko.view.toolbar;
 
 import java.util.List;
 import javafx.geometry.Orientation;
+import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -17,6 +18,8 @@ import org.gecko.viewmodel.EditorViewModel;
 public class ToolBarBuilder {
 
     private static final String DEFAULT_TOOLBAR_ICON_STYLE_NAME = "toolbar-icon";
+    private static final String UNDO_ICON_STYLE_NAME = "undo-toolbar-icon";
+    private static final String REDO_ICON_STYLE_NAME = "redo-toolbar-icon";
     private static final int BUTTON_SIZE = 30;
 
     private final ToolBar toolBar;
@@ -43,6 +46,20 @@ public class ToolBarBuilder {
                 toolBar.getItems().add(new Separator());
             }
         }
+
+        // Undo and Redo buttons
+        toolBar.getItems().add(new Separator());
+        Button undoButton = new Button("Undo");
+        undoButton.setOnMouseClicked(event -> actionManager.undo());
+        undoButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);
+        undoButton.getStyleClass().add(UNDO_ICON_STYLE_NAME);
+        toolBar.getItems().add(undoButton);
+
+        Button redoButton = new Button("Redo");
+        redoButton.setOnMouseClicked(event -> actionManager.redo());
+        redoButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);
+        redoButton.getStyleClass().add(REDO_ICON_STYLE_NAME);
+        toolBar.getItems().add(redoButton);
     }
 
     private void addTools(ActionManager actionManager, ToggleGroup toggleGroup, List<Tool> toolList) {

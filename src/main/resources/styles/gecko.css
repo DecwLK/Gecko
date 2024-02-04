@@ -32,6 +32,14 @@
     -fx-background-color: lightgray;
 }
 
+.undo-toolbar-icon {
+    -fx-background-image: url('icons/Redo.png');
+}
+
+.redo-toolbar-icon {
+    -fx-background-image: url('icons/Undo.png');
+}
+
 .cursor-icon {
     -fx-background-image: url('icons/Toolbar_Cursor.png');
 }

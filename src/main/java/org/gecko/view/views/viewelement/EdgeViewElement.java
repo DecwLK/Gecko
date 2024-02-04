@@ -37,6 +37,38 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         this.kindProperty = new SimpleObjectProperty<>();
         this.edgeViewModel = edgeViewModel;
         constructVisualization();
+
+        edgeViewModel.getSourceProperty().addListener((observable, oldValue, newValue) -> {
+            updateMaskPathSourceListeners();
+        });
+
+        edgeViewModel.getDestinationProperty().addListener((observable, oldValue, newValue) -> {
+            updateMaskPathSourceListeners();
+        });
+
+        updateMaskPathSourceListeners();
+    }
+
+    public void updateMaskPathSourceListeners() {
+        edgeViewModel.getSource()
+            .getPositionProperty()
+            .addListener((observable, oldValue, newValue) -> maskPathSource());
+
+        edgeViewModel.getDestination()
+            .getPositionProperty()
+            .addListener((observable, oldValue, newValue) -> maskPathSource());
+
+        maskPathSource();
+    }
+
+    private void maskPathSource() {
+        getPathSource().getFirst()
+            .setValue(maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
+                edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter()));
+
+                getPathSource().getLast()
+                    .setValue(maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
+                        edgeViewModel.getSource().getCenter(), edgeViewModel.getDestination().getCenter()));
     }
 
     @Override

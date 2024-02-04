@@ -37,6 +37,10 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
         systemPortPositionProperty.setValue(position);
     }
 
+    public void setSystemPortSize(@NonNull Point2D size) {
+        systemPortSizeProperty.setValue(size);
+    }
+
     public Visibility getVisibility() {
         return visibilityProperty.getValue();
     }

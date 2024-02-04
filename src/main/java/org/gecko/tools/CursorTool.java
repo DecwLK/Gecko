@@ -89,28 +89,6 @@ public class CursorTool extends Tool {
     public void visit(ConnectionElementScalerViewElementDecorator connectionElementScalerViewElementDecorator) {
         super.visit(connectionElementScalerViewElementDecorator);
 
-        connectionElementScalerViewElementDecorator.drawElement().setOnMouseClicked(event -> {
-            if (!connectionElementScalerViewElementDecorator.isSelected()) {
-                return;
-            }
-            if (isDragging) {
-                isDragging = false;
-                return;
-            }
-
-            // Create new scaler block
-            Point2D newScalerBlockPosition =
-                getWorldCoordinates(connectionElementScalerViewElementDecorator.drawElement(),
-                    new Point2D(event.getX(), event.getY())).multiply(1 / editorViewModel.getZoomScale());
-            Action createScalerBlockAction = actionManager.getActionFactory()
-                .createCreateConnectionScalerBlockViewElementAction(connectionElementScalerViewElementDecorator,
-                    newScalerBlockPosition);
-            actionManager.run(createScalerBlockAction);
-
-            // Add handlers to the new scaler block
-            connectionElementScalerViewElementDecorator.accept(this);
-        });
-
         for (ElementScalerBlock scaler : connectionElementScalerViewElementDecorator.getScalers()) {
             setScalerBlockHandlers(scaler);
         }

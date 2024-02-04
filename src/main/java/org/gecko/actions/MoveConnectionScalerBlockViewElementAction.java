@@ -1,7 +1,12 @@
 package org.gecko.actions;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import org.gecko.model.State;
+import org.gecko.model.System;
+import org.gecko.model.Variable;
+import org.gecko.model.Visibility;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
@@ -65,8 +70,6 @@ public class MoveConnectionScalerBlockViewElementAction extends Action {
             if (newPortViewModel != null) {
                 systemConnectionViewModel.setDestination(newPortViewModel);
             }
-        } else {
-            elementScalerBlock.setPoint(elementScalerBlock.getPoint().add(delta));
         }
     }
 
@@ -93,14 +96,57 @@ public class MoveConnectionScalerBlockViewElementAction extends Action {
         PortViewModel portViewModel = getPortViewModelAt(elementScalerBlock.getPoint().add(delta));
         if (portViewModel != null) {
             validAction = true;
-            elementScalerBlock.setPoint(portViewModel.getCenter());
         }
 
         return portViewModel;
     }
 
     private PortViewModel getPortViewModelAt(Point2D point) {
+        // Check for variable blocks in the current system
+        for (Variable variable : editorViewModel.getCurrentSystem().getTarget().getVariables()) {
+            PortViewModel portViewModel = (PortViewModel) geckoViewModel.getViewModelElement(variable);
+            if (point.getX() > portViewModel.getPosition().getX()
+                && point.getX() < portViewModel.getPosition().getX() + portViewModel.getSize().getX()
+                && point.getY() > portViewModel.getPosition().getY()
+                && point.getY() < portViewModel.getPosition().getY() + portViewModel.getSize().getY()) {
+                systemConnectionViewModel.getEdgePoints()
+                    .set(elementScalerBlock.getIndex(), portViewModel.getPositionProperty());
+                return portViewModel;
+            }
+        }
+
+        // Check for ports in the children systems
+        for (System system : editorViewModel.getCurrentSystem().getTarget().getChildren()) {
+            for (Variable variable : system.getVariables()) {
+                PortViewModel portViewModel = (PortViewModel) geckoViewModel.getViewModelElement(variable);
+                if (point.getX() > portViewModel.getSystemPortPositionProperty().getValue().getX() && point.getX()
+                    < portViewModel.getSystemPortPositionProperty().getValue().getX()
+                    + portViewModel.getSystemPortSizeProperty().getValue().getX()
+                    && point.getY() > portViewModel.getSystemPortPositionProperty().getValue().getY() && point.getY()
+                    < portViewModel.getSystemPortPositionProperty().getValue().getY()
+                    + portViewModel.getSystemPortSizeProperty().getValue().getY()) {
+
+                    // create new position property at the tip of the port
+                    Property<Point2D> newPositionProperty = new SimpleObjectProperty<>(
+                        calculateEndPortPosition(portViewModel.getSystemPortPositionProperty().getValue(),
+                            portViewModel.getSystemPortSizeProperty().getValue(), portViewModel.getVisibility()));
+
+                    portViewModel.getSystemPortPositionProperty()
+                        .addListener((observable, oldValue, newValue) -> newPositionProperty.setValue(
+                            calculateEndPortPosition(portViewModel.getSystemPortPositionProperty().getValue(),
+                                portViewModel.getSystemPortSizeProperty().getValue(), portViewModel.getVisibility())));
+
+                    systemConnectionViewModel.getEdgePoints().set(elementScalerBlock.getIndex(), newPositionProperty);
+                    return portViewModel;
+                }
+            }
+        }
         return null;
+    }
+
+    private Point2D calculateEndPortPosition(Point2D position, Point2D size, Visibility visibility) {
+        return position.add(size.multiply(0.5))
+            .subtract((visibility == Visibility.INPUT ? 1 : -1) * size.getX() / 2, 0);
     }
 
     private StateViewModel attemptStateViewModelRelocation() {

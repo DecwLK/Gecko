@@ -30,14 +30,10 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
         this.sourceProperty = new SimpleObjectProperty<>(source);
         this.destinationProperty = new SimpleObjectProperty<>(destination);
         this.edgePoints = FXCollections.observableArrayList();
-
-        updateConnectionListener();
     }
 
     public void setSource(@NonNull PortViewModel source) {
-        clearConnectionListener();
         sourceProperty.setValue(source);
-        updateConnectionListener();
         updateTarget();
     }
 
@@ -46,33 +42,12 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     }
 
     public void setDestination(@NonNull PortViewModel destination) {
-        clearConnectionListener();
         destinationProperty.setValue(destination);
-        updateConnectionListener();
         updateTarget();
     }
 
     public PortViewModel getDestination() {
         return destinationProperty.getValue();
-    }
-
-    private void clearConnectionListener() {
-        getSource().getPositionProperty()
-            .removeListener(
-                (observable, oldValue, newValue) -> edgePoints.getFirst().setValue(getSource().getCenter()));
-
-        getDestination().getPositionProperty()
-            .removeListener(
-                (observable, oldValue, newValue) -> edgePoints.getLast().setValue(getDestination().getCenter()));
-    }
-
-    private void updateConnectionListener() {
-        getSource().getPositionProperty()
-            .addListener((observable, oldValue, newValue) -> edgePoints.getFirst().setValue(getSource().getCenter()));
-
-        getDestination().getPositionProperty()
-            .addListener(
-                (observable, oldValue, newValue) -> edgePoints.getLast().setValue(getDestination().getCenter()));
     }
 
     @Override

@@ -2,7 +2,9 @@ package org.gecko.actions;
 
 import org.gecko.exceptions.GeckoException;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
+import org.gecko.model.Visibility;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
@@ -29,10 +31,40 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
-        Property<Point2D> sourcePosition =
-            sourceIsPort ? source.getSystemPortPositionProperty() : source.getPositionProperty();
-        Property<Point2D> destinationPosition =
-            destIsPort ? destination.getSystemPortPositionProperty() : destination.getPositionProperty();
+        Property<Point2D> sourcePosition = new SimpleObjectProperty<>(sourceIsPort ?
+            calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
+                source.getSystemPortSizeProperty().getValue(), source.getVisibility()) :
+            source.getPositionProperty().getValue());
+
+        // position the line at the tip of the port
+        if (sourceIsPort) {
+            source.getSystemPortPositionProperty()
+                .addListener((observable, oldValue, newValue) -> sourcePosition.setValue(
+                    calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
+                        source.getSystemPortSizeProperty().getValue(), source.getVisibility())));
+        } else {
+            source.getPositionProperty()
+                .addListener((observable, oldValue, newValue) -> sourcePosition.setValue(
+                    source.getPositionProperty().getValue().add(source.getSizeProperty().getValue().multiply(0.5))));
+        }
+
+        Property<Point2D> destinationPosition = new SimpleObjectProperty<>(destIsPort ?
+            calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
+                destination.getSystemPortSizeProperty().getValue(), destination.getVisibility()) :
+            destination.getPositionProperty().getValue());
+
+        if (destIsPort) {
+            destination.getSystemPortPositionProperty()
+                .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
+                    calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
+                        destination.getSystemPortSizeProperty().getValue(), destination.getVisibility())));
+        } else {
+            destination.getPositionProperty()
+                .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
+                    destination.getPositionProperty()
+                        .getValue()
+                        .add(destination.getSizeProperty().getValue().multiply(0.5))));
+        }
 
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         SystemViewModel sourceSystem = (SystemViewModel) geckoViewModel.getViewModelElement(
@@ -61,6 +93,11 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
         return actionFactory.createDeletePositionableViewModelElementAction(createdSystemConnectionViewModel);
+    }
+
+    private Point2D calculateEndPortPosition(Point2D position, Point2D size, Visibility visibility) {
+        return position.add(size.multiply(0.5))
+            .subtract((visibility == Visibility.INPUT ? 1 : -1) * size.getX() / 2, 0);
     }
 
     private boolean isPort(PortViewModel portViewModel) {

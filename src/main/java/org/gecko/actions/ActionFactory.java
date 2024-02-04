@@ -76,11 +76,6 @@ public class ActionFactory {
         return new CreateContractViewModelElementAction(geckoViewModel.getViewModelFactory(), stateViewModel);
     }
 
-    public CreateConnectionScalerBlockViewElementAction createCreateConnectionScalerBlockViewElementAction(
-        ConnectionElementScalerViewElementDecorator decorator, Point2D position) {
-        return new CreateConnectionScalerBlockViewElementAction(decorator, position);
-    }
-
     public CreateEdgeViewModelElementAction createCreateEdgeViewModelElementAction(
         StateViewModel source, StateViewModel destination) {
         return new CreateEdgeViewModelElementAction(geckoViewModel, source, destination);
@@ -120,11 +115,6 @@ public class ActionFactory {
     public DeleteContractViewModelAction createDeleteContractViewModelAction(
         StateViewModel parent, ContractViewModel contractViewModel) {
         return new DeleteContractViewModelAction(geckoViewModel, parent, contractViewModel);
-    }
-
-    public DeleteConnectionScalerBlockViewElementAction createDestroyConnectionScalerBlockViewElementAction(
-        ConnectionElementScalerViewElementDecorator decorator, ElementScalerBlock scalerBlock) {
-        return new DeleteConnectionScalerBlockViewElementAction(decorator, scalerBlock);
     }
 
     public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction(

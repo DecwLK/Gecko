@@ -20,6 +20,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -31,6 +32,8 @@ import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
 import org.gecko.view.ResourceHandler;
+import org.gecko.view.contextmenu.AbstractContextMenuBuilder;
+import org.gecko.view.contextmenu.ViewContextMenuBuilder;
 import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.InspectorFactory;
 import org.gecko.view.toolbar.ToolBarBuilder;
@@ -53,6 +56,7 @@ public class EditorView {
     @Getter
     private final Tab currentView;
     private final StackPane currentViewPane;
+    @Getter
     private final ToolBar toolBar;
     private final ToolBarBuilder toolBarBuilder;
     private final InspectorFactory inspectorFactory;
@@ -197,6 +201,33 @@ public class EditorView {
 
     public void focus() {
         currentViewPane.requestFocus();
+        AbstractContextMenuBuilder contextMenuBuilder
+            = new ViewContextMenuBuilder(viewModel.getActionManager(), this, viewModel);
+        currentViewPane.setOnContextMenuRequested(event -> {
+            if (contextMenuBuilder.getContextMenu() != null) {
+                contextMenuBuilder.getContextMenu().hide();
+            }
+
+            switchToCursorTool();
+
+            if (viewModel.getSelectionManager().getCurrentSelection().size() != 1) {
+                contextMenuBuilder.build().show(currentViewPane, event.getScreenX(), event.getScreenY());
+            } else {
+                // TODO: Get actual coordinates of element on screen. They don't correspond at the moment.
+                PositionableViewModelElement<?> selectedElement =
+                    viewModel.getSelectionManager().getCurrentSelection().stream().toList().getFirst();
+
+                /*System.out.println("x: " + event.getScreenX());
+                System.out.println("y: " + event.getScreenY());*/
+
+                if ((event.getScreenX() < selectedElement.getPosition().getX()
+                    || event.getScreenX() > selectedElement.getPosition().getX() + selectedElement.getSize().getX())
+                    && (event.getScreenY() > selectedElement.getPosition().getY() - selectedElement.getSize().getY()
+                    || event.getScreenY() < selectedElement.getPosition().getY())) {
+                    contextMenuBuilder.build().show(currentViewPane, event.getScreenX(), event.getScreenY());
+                }
+            }
+        });
     }
 
     private void setViewPortPosition(Point2D point) {
@@ -432,5 +463,13 @@ public class EditorView {
             || position.getX() + size.getX() >= maxPoint.getX() - borderSize.getX()
             || position.getY() <= minPoint.getY() + borderSize.getY()
             || position.getY() + size.getY() >= maxPoint.getY() - borderSize.getY();
+    }
+
+    protected void switchToCursorTool() {
+        toolBar.getItems()
+            .stream()
+            .filter(button -> ((ToggleButton) button).getText().equals("Cursor Tool"))
+            .findFirst()
+            .ifPresent(cursorButton -> ((ToggleButton) cursorButton).fire());
     }
 }

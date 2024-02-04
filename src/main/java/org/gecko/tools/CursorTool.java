@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
@@ -26,6 +27,9 @@ import org.gecko.viewmodel.SelectionManager;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
 public class CursorTool extends Tool {
+    @Getter
+    private static final String NAME = "Cursor Tool";
+    private static final String ICON_STYLE_NAME = "cursor-icon";
     private boolean isDragging = false;
     private final SelectionManager selectionManager;
     private final EditorViewModel editorViewModel;

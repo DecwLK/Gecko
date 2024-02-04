@@ -222,10 +222,10 @@ public class MenuBarBuilder {
             .createSelectToolAction(ToolType.REGION_CREATOR)));
         regionCreatorMenuItem.setDisable(true);
 
-        toolsMenu.getItems().addAll(cursorMenuItem, marqueeMenuItem, panMenuItem, zoomMenuItem,
-            generalFromSystemSeparator, systemCreatorMenuItem, systemConnectionCreatorMenuItem,
-            variableBlockCreatorMenuItem, systemFroAutomatonSeparator, stateCreatorMenuItem, edgeCreatorMenuItem,
-            regionCreatorMenuItem);
+        toolsMenu.getItems()
+            .addAll(cursorMenuItem, marqueeMenuItem, panMenuItem, generalFromSystemSeparator, systemCreatorMenuItem,
+                systemConnectionCreatorMenuItem, variableBlockCreatorMenuItem, systemFroAutomatonSeparator,
+                stateCreatorMenuItem, edgeCreatorMenuItem, regionCreatorMenuItem);
 
         return toolsMenu;
     }

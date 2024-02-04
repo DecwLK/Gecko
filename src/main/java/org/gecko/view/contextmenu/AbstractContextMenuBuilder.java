@@ -3,6 +3,7 @@ package org.gecko.view.contextmenu;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.EditorView;
 
@@ -10,6 +11,8 @@ public abstract class AbstractContextMenuBuilder {
 
     protected final EditorView editorView;
     protected final ActionManager actionManager;
+    @Getter
+    protected ContextMenu contextMenu;
 
     protected AbstractContextMenuBuilder(ActionManager actionManager, EditorView editorView) {
         this.actionManager = actionManager;
@@ -35,6 +38,8 @@ public abstract class AbstractContextMenuBuilder {
         deselectMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory().createDeselectAction()));
 
         contextMenu.getItems().addAll(cutMenuItem, copyMenuItem, pasteMenuItem, separatorMenuItem, deselectMenuItem);
+
+        this.contextMenu = contextMenu;
         return contextMenu;
     }
 }

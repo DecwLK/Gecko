@@ -13,6 +13,7 @@ public class ViewContextMenuBuilder extends AbstractContextMenuBuilder {
         ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
         super(actionManager, editorView);
         this.editorViewModel = editorViewModel;
+        this.contextMenu = null;
     }
 
     @Override

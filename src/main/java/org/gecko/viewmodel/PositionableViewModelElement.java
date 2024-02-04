@@ -27,7 +27,7 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     PositionableViewModelElement(int id, @NonNull T target) {
         super(id, target);
         this.positionProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
-        this.sizeProperty = new SimpleObjectProperty<>(new Point2D(100, 100));
+        this.sizeProperty = new SimpleObjectProperty<>(new Point2D(200, 300));
         this.observers = new HashSet<>();
     }
 

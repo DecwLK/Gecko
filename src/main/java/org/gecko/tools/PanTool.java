@@ -2,6 +2,7 @@ package org.gecko.tools;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 
 public class PanTool extends Tool {
@@ -11,8 +12,8 @@ public class PanTool extends Tool {
     }
 
     @Override
-    public void visitView(ScrollPane view) {
-        super.visitView(view);
+    public void visitView(VBox vbox, ScrollPane view) {
+        super.visitView(vbox, view);
         view.setPannable(true);
         view.setCursor(Cursor.OPEN_HAND);
     }

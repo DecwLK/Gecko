@@ -6,6 +6,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
@@ -31,10 +32,10 @@ public abstract class Tool implements ViewElementVisitor {
         this.toolType = toolType;
     }
 
-    public void visitView(ScrollPane view) {
-        view.setPannable(false);
+    public void visitView(VBox vbox, ScrollPane view) {
         view.setCursor(Cursor.DEFAULT);
         setAllHandlers(view, null);
+        setAllHandlers(vbox, null);
     }
 
     @Override

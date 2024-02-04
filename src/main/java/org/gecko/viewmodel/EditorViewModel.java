@@ -8,6 +8,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import lombok.Data;
 import org.gecko.actions.ActionManager;
@@ -214,11 +216,12 @@ public class EditorViewModel {
 
     }
 
-    public Set<PositionableViewModelElement<?>> getElementsInArea(Point2D topLeft, Point2D bottomRight) {
+    public Set<PositionableViewModelElement<?>> getElementsInArea(Bounds bound) {
         return containedPositionableViewModelElementsProperty.stream().filter(element -> {
-            Point2D center = element.getCenter();
-            return center.getX() >= topLeft.getX() && center.getX() <= bottomRight.getX()
-                && center.getY() >= topLeft.getY() && center.getY() <= bottomRight.getY();
+            Bounds elementBound =
+                new BoundingBox(element.getPosition().getX(), element.getPosition().getY(), element.getSize().getX(),
+                    element.getSize().getY());
+            return bound.intersects(elementBound);
         }).collect(Collectors.toSet());
     }
 }

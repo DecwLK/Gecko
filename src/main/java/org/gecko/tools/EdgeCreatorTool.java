@@ -2,6 +2,7 @@ package org.gecko.tools;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.StateViewElement;
@@ -16,8 +17,8 @@ public class EdgeCreatorTool extends Tool {
     }
 
     @Override
-    public void visitView(ScrollPane view) {
-        super.visitView(view);
+    public void visitView(VBox vbox, ScrollPane view) {
+        super.visitView(vbox, view);
         view.setCursor(Cursor.CROSSHAIR);
     }
 

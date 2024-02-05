@@ -18,7 +18,8 @@ import org.gecko.model.SystemConnection;
  */
 @Getter
 @Setter
-public class SystemConnectionViewModel extends PositionableViewModelElement<SystemConnection> {
+public class SystemConnectionViewModel extends PositionableViewModelElement<SystemConnection>
+    implements ConnectionViewModel {
     private final Property<PortViewModel> sourceProperty;
     private final Property<PortViewModel> destinationProperty;
     private final ObservableList<Property<Point2D>> edgePoints;
@@ -30,15 +31,14 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
         this.destinationProperty = new SimpleObjectProperty<>(destination);
         this.edgePoints = FXCollections.observableArrayList();
 
-        Property<Point2D> startPoint = new SimpleObjectProperty<>(getSource().getCenter());
-        Property<Point2D> endPoint = new SimpleObjectProperty<>(getDestination().getCenter());
-
-        edgePoints.add(startPoint);
-        edgePoints.add(endPoint);
+        updateConnectionListener();
     }
 
     public void setSource(@NonNull PortViewModel source) {
+        clearConnectionListener();
         sourceProperty.setValue(source);
+        updateConnectionListener();
+        updateTarget();
     }
 
     public PortViewModel getSource() {
@@ -46,11 +46,33 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     }
 
     public void setDestination(@NonNull PortViewModel destination) {
+        clearConnectionListener();
         destinationProperty.setValue(destination);
+        updateConnectionListener();
+        updateTarget();
     }
 
     public PortViewModel getDestination() {
         return destinationProperty.getValue();
+    }
+
+    private void clearConnectionListener() {
+        getSource().getPositionProperty()
+            .removeListener(
+                (observable, oldValue, newValue) -> edgePoints.getFirst().setValue(getSource().getCenter()));
+
+        getDestination().getPositionProperty()
+            .removeListener(
+                (observable, oldValue, newValue) -> edgePoints.getLast().setValue(getDestination().getCenter()));
+    }
+
+    private void updateConnectionListener() {
+        getSource().getPositionProperty()
+            .addListener((observable, oldValue, newValue) -> edgePoints.getFirst().setValue(getSource().getCenter()));
+
+        getDestination().getPositionProperty()
+            .addListener(
+                (observable, oldValue, newValue) -> edgePoints.getLast().setValue(getDestination().getCenter()));
     }
 
     @Override
@@ -62,5 +84,10 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     @Override
     public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+        edgePoints.get(index).setValue(point);
     }
 }

@@ -76,9 +76,9 @@ public class ActionFactory {
         return new CreateContractViewModelElementAction(geckoViewModel.getViewModelFactory(), stateViewModel);
     }
 
-    public CreateEdgeScalerBlockViewElementAction createCreateEdgeScalerBlockViewElementAction(
+    public CreateConnectionScalerBlockViewElementAction createCreateConnectionScalerBlockViewElementAction(
         ConnectionElementScalerViewElementDecorator decorator, Point2D position) {
-        return new CreateEdgeScalerBlockViewElementAction(geckoViewModel.getCurrentEditor(), decorator, position);
+        return new CreateConnectionScalerBlockViewElementAction(decorator, position);
     }
 
     public CreateEdgeViewModelElementAction createCreateEdgeViewModelElementAction(
@@ -122,9 +122,9 @@ public class ActionFactory {
         return new DeleteContractViewModelAction(geckoViewModel, parent, contractViewModel);
     }
 
-    public DeleteEdgeScalerBlockViewElementAction createDestroyEdgeScalerBlockViewElementAction(
+    public DeleteConnectionScalerBlockViewElementAction createDestroyConnectionScalerBlockViewElementAction(
         ConnectionElementScalerViewElementDecorator decorator, ElementScalerBlock scalerBlock) {
-        return new DeleteEdgeScalerBlockViewElementAction(decorator, scalerBlock);
+        return new DeleteConnectionScalerBlockViewElementAction(decorator, scalerBlock);
     }
 
     public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction(
@@ -146,14 +146,15 @@ public class ActionFactory {
         return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), elementsToMove, delta);
     }
 
-    public MoveEdgeScalerBlockViewElementAction createMoveEdgeScalerBlockViewElementAction(
+    public MoveConnectionScalerBlockViewElementAction createMoveConnectionScalerBlockViewElementAction(
         EdgeViewModel edgeViewModel, ElementScalerBlock scalerBlock, Point2D delta) {
-        return new MoveEdgeScalerBlockViewElementAction(geckoViewModel, edgeViewModel, scalerBlock, delta);
+        return new MoveConnectionScalerBlockViewElementAction(geckoViewModel, edgeViewModel, scalerBlock, delta);
     }
 
-    public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(
-        EdgeViewModel edgeViewModel, StateViewModel stateViewModel, boolean isSource) {
-        return new MoveEdgeViewModelElementAction(edgeViewModel, stateViewModel, isSource);
+    public MoveConnectionScalerBlockViewElementAction createMoveConnectionScalerBlockViewElementAction(
+        SystemConnectionViewModel systemConnectionViewModel, ElementScalerBlock scalerBlock, Point2D delta) {
+        return new MoveConnectionScalerBlockViewElementAction(geckoViewModel, systemConnectionViewModel, scalerBlock,
+            delta);
     }
 
     public MoveSystemConnectionViewModelElementAction createMoveSystemConnectionViewModelElementAction(

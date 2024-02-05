@@ -8,6 +8,8 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.PortViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
+import org.gecko.view.views.viewelement.VariableBlockViewElement;
+import org.gecko.viewmodel.PortViewModel;
 
 public class SystemConnectionCreatorTool extends Tool {
 
@@ -40,6 +42,16 @@ public class SystemConnectionCreatorTool extends Tool {
         });
     }
 
+    private void setPortViewModel(PortViewModel portViewModel) {
+
+    }
+
+    @Override
+    public void visit(VariableBlockViewElement variableBlockViewElement) {
+        super.visit(variableBlockViewElement);
+    }
+
+    @Override
     public void visit(SystemViewElement systemViewElement) {
         super.visit(systemViewElement);
         //Pass events to the port view elements

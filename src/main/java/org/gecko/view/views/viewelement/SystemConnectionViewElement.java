@@ -1,6 +1,5 @@
 package org.gecko.view.views.viewelement;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,14 +8,14 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
 @Getter
-public class SystemConnectionViewElement extends Line implements ViewElement<SystemConnectionViewModel> {
+public class SystemConnectionViewElement extends ConnectionViewElement
+    implements ViewElement<SystemConnectionViewModel> {
 
     private static final int Z_PRIORITY = 20;
 
@@ -26,11 +25,10 @@ public class SystemConnectionViewElement extends Line implements ViewElement<Sys
     private final StringProperty typeProperty;
 
     public SystemConnectionViewElement(SystemConnectionViewModel systemConnectionViewModel) {
-        //super(systemConnectionViewModel.getEdgePoints());
+        super(systemConnectionViewModel.getEdgePoints());
         this.visibilityProperty = new SimpleObjectProperty<>();
         this.typeProperty = new SimpleStringProperty();
         this.systemConnectionViewModel = systemConnectionViewModel;
-        bindViewModel();
         constructVisualization();
     }
 
@@ -46,6 +44,7 @@ public class SystemConnectionViewElement extends Line implements ViewElement<Sys
 
     @Override
     public void setEdgePoint(int index, Point2D point) {
+        systemConnectionViewModel.setEdgePoint(index, point);
     }
 
     @Override
@@ -63,21 +62,6 @@ public class SystemConnectionViewElement extends Line implements ViewElement<Sys
         return Z_PRIORITY;
     }
 
-    private void bindViewModel() {
-        startXProperty().bind(
-            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getX(),
-                systemConnectionViewModel.getSource().getPositionProperty()));
-        startYProperty().bind(
-            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getY(),
-                systemConnectionViewModel.getSource().getPositionProperty()));
-        endXProperty().bind(
-            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getX(),
-                systemConnectionViewModel.getDestination().getPositionProperty()));
-        endYProperty().bind(
-            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getY(),
-                systemConnectionViewModel.getDestination().getPositionProperty()));
-    }
-
     @Override
     public void accept(ViewElementVisitor visitor) {
         visitor.visit(this);
@@ -85,6 +69,6 @@ public class SystemConnectionViewElement extends Line implements ViewElement<Sys
 
     private void constructVisualization() {
         setStroke(Color.BLACK);
-        setStrokeWidth(20);
+        setSmooth(true);
     }
 }

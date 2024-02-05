@@ -77,7 +77,7 @@ public class EditorView {
         this.viewModel = viewModel;
         this.toolBarBuilder = new ToolBarBuilder(actionManager, this, viewModel);
         this.toolBar = toolBarBuilder.build();
-        this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
+        this.inspectorFactory = new InspectorFactory(actionManager, viewModel);
 
         this.viewElementsGroup = new Group();
         this.viewElementsGroupContainer = new Group(viewElementsGroup);
@@ -305,10 +305,14 @@ public class EditorView {
     private void focusedElementChanged(
         ObservableValue<? extends PositionableViewModelElement<?>> observable, PositionableViewModelElement<?> oldValue,
         PositionableViewModelElement<?> newValue) {
-        currentInspector.set((newValue != null) ? inspectorFactory.createInspector(newValue) : emptyInspector);
+<<<<<<<HEAD currentInspector.set((newValue != null) ? inspectorFactory.createInspector(newValue) : emptyInspector);
         if (shortcutHandler != null) {
             currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
         }
+=======
+        Inspector newInspector = inspectorFactory.createInspector(newValue);
+        currentInspector.set((newInspector != null) ? newInspector : emptyInspector);
+>>>>>>>62 a030e(implemented modifiable edges)
     }
 
     private void selectionChanged(

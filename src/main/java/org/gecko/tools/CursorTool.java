@@ -22,6 +22,7 @@ import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.SelectionManager;
+import org.gecko.viewmodel.SystemConnectionViewModel;
 
 public class CursorTool extends Tool {
     private boolean isDragging = false;
@@ -102,7 +103,7 @@ public class CursorTool extends Tool {
                 getWorldCoordinates(connectionElementScalerViewElementDecorator.drawElement(),
                     new Point2D(event.getX(), event.getY())).multiply(1 / editorViewModel.getZoomScale());
             Action createScalerBlockAction = actionManager.getActionFactory()
-                .createCreateEdgeScalerBlockViewElementAction(connectionElementScalerViewElementDecorator,
+                .createCreateConnectionScalerBlockViewElementAction(connectionElementScalerViewElementDecorator,
                     newScalerBlockPosition);
             actionManager.run(createScalerBlockAction);
 
@@ -135,9 +136,20 @@ public class CursorTool extends Tool {
             }
             Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
             scaler.setPoint(scaler.getPoint().add(startDragPosition.subtract(endWorldPos)));
-            Action moveAction = actionManager.getActionFactory()
-                .createMoveEdgeScalerBlockViewElementAction((EdgeViewModel) scaler.getDecoratorTarget().getTarget(),
-                    scaler, endWorldPos.subtract(startDragPosition));
+            Action moveAction;
+
+            if (editorViewModel.isAutomatonEditor()) {
+                moveAction = actionManager.getActionFactory()
+                    .createMoveConnectionScalerBlockViewElementAction(
+                        (EdgeViewModel) scaler.getDecoratorTarget().getTarget(), scaler,
+                        endWorldPos.subtract(startDragPosition));
+            } else {
+                moveAction = actionManager.getActionFactory()
+                    .createMoveConnectionScalerBlockViewElementAction(
+                        (SystemConnectionViewModel) scaler.getDecoratorTarget().getTarget(), scaler,
+                        endWorldPos.subtract(startDragPosition));
+            }
+
             actionManager.run(moveAction);
             startDragPosition = null;
             draggedElement = null;

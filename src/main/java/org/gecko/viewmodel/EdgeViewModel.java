@@ -23,7 +23,7 @@ import org.gecko.model.Kind;
  */
 @Getter
 @Setter
-public class EdgeViewModel extends PositionableViewModelElement<Edge> {
+public class EdgeViewModel extends PositionableViewModelElement<Edge> implements ConnectionViewModel {
 
     private final Property<Kind> kindProperty;
     private final IntegerProperty priorityProperty;
@@ -95,10 +95,6 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         return destinationProperty.getValue();
     }
 
-    public void setEdgePoint(int index, Point2D point) {
-        edgePoints.get(index).setValue(point);
-    }
-
     private void clearConnectionListener() {
         getSource().getPositionProperty()
             .removeListener(
@@ -132,5 +128,10 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     @Override
     public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+        edgePoints.get(index).setValue(point);
     }
 }

@@ -8,7 +8,6 @@ import org.gecko.view.inspector.builder.RegionInspectorBuilder;
 import org.gecko.view.inspector.builder.StateInspectorBuilder;
 import org.gecko.view.inspector.builder.SystemInspectorBuilder;
 import org.gecko.view.inspector.builder.VariableBlockInspectorBuilder;
-import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -19,18 +18,19 @@ import org.gecko.viewmodel.SystemViewModel;
 
 public class InspectorFactory {
 
-    private final EditorView editorView;
     private final EditorViewModel editorViewModel;
     private final ActionManager actionManager;
 
-    public InspectorFactory(ActionManager actionManager, EditorView editorView, EditorViewModel editorViewModel) {
+    public InspectorFactory(ActionManager actionManager, EditorViewModel editorViewModel) {
         this.actionManager = actionManager;
-        this.editorView = editorView;
         this.editorViewModel = editorViewModel;
     }
 
     public Inspector createInspector(PositionableViewModelElement<?> viewElement) {
         InspectorFactoryVisitor visitor = new InspectorFactoryVisitor(this);
+        if (viewElement == null) {
+            return null;
+        }
         viewElement.accept(visitor);
         return visitor.getInspector();
     }

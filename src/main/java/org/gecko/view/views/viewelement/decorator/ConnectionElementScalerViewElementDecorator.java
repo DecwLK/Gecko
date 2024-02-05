@@ -27,10 +27,10 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         }
 
         getEdgePoints().add(minIndex, new SimpleObjectProperty<>(point));
-        return scalers.get(minIndex);
+        return getScalers().get(minIndex);
     }
 
-    public int findMinimumIndex(Point2D point) {
+    private int findMinimumIndex(Point2D point) {
         int minIndex = 0;
         double minDistance = Double.MAX_VALUE;
 
@@ -48,6 +48,30 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         return minIndex + 1;
     }
 
+    public void deletePoint(ElementScalerBlock scalerBlock) {
+        int index = getScalers().indexOf(scalerBlock);
+        getEdgePoints().remove(index);
+    }
+
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+        getDecoratorTarget().accept(visitor);
+    }
+
+    private void updateEdgePoints(Change<? extends Property<Point2D>> change) {
+        getDecoratedNode().getChildren().removeAll(getScalers());
+        getScalers().clear();
+
+        for (int i = 0; i < change.getList().size(); i++) {
+            ElementScalerBlock scalerBlock = new ElementScalerBlock(i, this, SCALER_SIZE, SCALER_SIZE);
+            scalerBlock.setFill(Color.RED);
+
+            getScalers().add(scalerBlock);
+            getDecoratedNode().getChildren().add(scalerBlock);
+        }
+    }
+
     // Returns the distance between a point and a line segment (p1 and p2).
     private static double distanceToSegment(Point2D point, Point2D p1, Point2D p2) {
         Point2D p1p2 = p2.subtract(p1);
@@ -58,7 +82,7 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         double dotP2 = p1p2.dotProduct(p2p);
         double dotP1 = p1p2.dotProduct(p1p);
 
-        double result = 0;
+        double result;
 
         if (dotP2 > 0) {
             result = point.distance(p2);
@@ -71,29 +95,5 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         }
 
         return result;
-    }
-
-    public void deletePoint(ElementScalerBlock scalerBlock) {
-        int index = scalers.indexOf(scalerBlock);
-        getEdgePoints().remove(index);
-    }
-
-    @Override
-    public void accept(ViewElementVisitor visitor) {
-        visitor.visit(this);
-        getDecoratorTarget().accept(visitor);
-    }
-
-    private void updateEdgePoints(Change<? extends Property<Point2D>> change) {
-        decoratedNode.getChildren().removeAll(scalers);
-        scalers.clear();
-
-        for (int i = 0; i < change.getList().size(); i++) {
-            ElementScalerBlock scalerBlock = new ElementScalerBlock(i, this, SCALER_SIZE, SCALER_SIZE);
-            scalerBlock.setFill(Color.RED);
-
-            scalers.add(scalerBlock);
-            decoratedNode.getChildren().add(scalerBlock);
-        }
     }
 }

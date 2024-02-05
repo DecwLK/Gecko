@@ -5,14 +5,14 @@ import org.gecko.exceptions.GeckoException;
 import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 
-public class DeleteEdgeScalerBlockViewElementAction extends Action {
+public class DeleteConnectionScalerBlockViewElementAction extends Action {
 
     private final ConnectionElementScalerViewElementDecorator decorator;
     private final ElementScalerBlock scalerBlock;
 
     private Point2D lastPosition;
 
-    DeleteEdgeScalerBlockViewElementAction(
+    DeleteConnectionScalerBlockViewElementAction(
         ConnectionElementScalerViewElementDecorator decorator, ElementScalerBlock scalerBlock) {
         this.decorator = decorator;
         this.scalerBlock = scalerBlock;
@@ -27,6 +27,6 @@ public class DeleteEdgeScalerBlockViewElementAction extends Action {
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createCreateEdgeScalerBlockViewElementAction(decorator, lastPosition);
+        return actionFactory.createCreateConnectionScalerBlockViewElementAction(decorator, lastPosition);
     }
 }

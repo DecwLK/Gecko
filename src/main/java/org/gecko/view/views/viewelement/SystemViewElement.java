@@ -128,10 +128,23 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         } else {
             outputPortsAligner.getChildren().add(portViewElement);
         }
+
+        updatePortViewModels();
+    }
+
+    private void updatePortViewModels() {
+        for (PortViewElement portViewElement : portViewElements) {
+            Point2D portViewElementPositionInScene =
+                portViewElement.localToScene(new Point2D(portViewElement.getLayoutX(), portViewElement.getLayoutY()));
+
+            Point2D calculatedWorldPosition =
+                sceneToLocal(portViewElementPositionInScene).add(systemViewModel.getPosition());
+            portViewElement.getViewModel().setSystemPortPosition(calculatedWorldPosition);
+        }
     }
 
     private void removePort(PortViewModel portViewModel) {
-        //This is safe, since the portViewElement should be present in the list
+        // This is safe, since the portViewElement should be present in the list
         PortViewElement portViewElement =
             portViewElements.stream().filter(pve -> pve.getViewModel().equals(portViewModel)).findFirst().orElseThrow();
         portViewElements.remove(portViewElement);

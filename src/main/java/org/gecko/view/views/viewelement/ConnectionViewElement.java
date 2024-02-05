@@ -14,7 +14,6 @@ import lombok.Getter;
 public abstract class ConnectionViewElement extends Path {
 
     private MoveTo startElement;
-    private LineTo endElement;
 
     private final ObservableList<Property<Point2D>> pathSource;
 
@@ -32,6 +31,11 @@ public abstract class ConnectionViewElement extends Path {
     private void updatePathVisualization() {
         getElements().clear();
 
+        // If there are less than two points, there is no path to draw
+        if (pathSource.size() < 2) {
+            return;
+        }
+
         // Start element
         startElement = new MoveTo(pathSource.getFirst().getValue().getX(), pathSource.getFirst().getValue().getY());
         startElement.xProperty()
@@ -47,13 +51,5 @@ public abstract class ConnectionViewElement extends Path {
             lineTo.yProperty().bind(Bindings.createDoubleBinding(() -> point.getValue().getY(), point));
             getElements().add(lineTo);
         }
-
-        // End element
-        endElement = new LineTo();
-        endElement.xProperty()
-            .bind(Bindings.createDoubleBinding(() -> pathSource.getLast().getValue().getX(), pathSource.getLast()));
-        endElement.yProperty()
-            .bind(Bindings.createDoubleBinding(() -> pathSource.getLast().getValue().getY(), pathSource.getLast()));
-        getElements().add(endElement);
     }
 }

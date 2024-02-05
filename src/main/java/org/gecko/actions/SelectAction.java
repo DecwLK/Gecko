@@ -19,6 +19,9 @@ public class SelectAction extends Action {
 
     @Override
     void run() {
+        if (elementsToSelect.isEmpty()) {
+            selectionManager.deselectAll();
+        }
         if (!newSelection) {
             elementsToSelect.addAll(selectionManager.getCurrentSelection());
         }

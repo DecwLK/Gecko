@@ -27,8 +27,9 @@ public class System extends Element implements Renamable {
     private Automaton automaton;
 
     @JsonCreator
-    public System(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("code") String code,
-                  @JsonProperty("automaton") Automaton automaton) {
+    public System(
+        @JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("code") String code,
+        @JsonProperty("automaton") Automaton automaton) {
         super(id);
         this.name = name;
         this.code = code;

@@ -1,22 +1,22 @@
 package org.gecko.view.inspector.element.textfield;
 
-import javafx.scene.control.TextArea;
+import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.ContractViewModel;
 
 public class InspectorPreconditionField extends InspectorContractField {
+    private final ActionManager actionManager;
+    private final ContractViewModel contractViewModel;
 
     public InspectorPreconditionField(ActionManager actionManager, ContractViewModel contractViewModel) {
-        setText(contractViewModel.getPrecondition());
-
-        textProperty().addListener(event -> {
-            actionManager.run(actionManager.getActionFactory()
-                .createChangePreconditionViewModelElementAction(contractViewModel, getText()));
-        });
+        super(actionManager, contractViewModel.getPreConditionProperty());
+        this.actionManager = actionManager;
+        this.contractViewModel = contractViewModel;
     }
 
     @Override
-    public TextArea getControl() {
-        return this;
+    protected Action getAction() {
+        return actionManager.getActionFactory()
+            .createChangePreconditionViewModelElementAction(contractViewModel, getText());
     }
 }

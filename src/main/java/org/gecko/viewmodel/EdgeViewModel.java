@@ -66,7 +66,7 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         return kindProperty.getValue();
     }
 
-    public void setContract(@NonNull ContractViewModel contract) {
+    public void setContract(ContractViewModel contract) {
         contractProperty.setValue(contract);
     }
 

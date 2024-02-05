@@ -8,7 +8,7 @@ import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.button.InspectorDeleteButton;
-import org.gecko.view.inspector.element.textfield.InspectorTextField;
+import org.gecko.view.inspector.element.textfield.InspectorRenameField;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.Renamable;
 
@@ -27,7 +27,7 @@ public abstract class AbstractInspectorBuilder<T extends PositionableViewModelEl
 
         // Name field if applicable
         try {
-            addInspectorElement(new InspectorTextField(actionManager, (Renamable) viewModel));
+            addInspectorElement(new InspectorRenameField(actionManager, (Renamable) viewModel));
             addInspectorElement(new InspectorSeparator());
         } catch (ClassCastException e) {
             // Do nothing

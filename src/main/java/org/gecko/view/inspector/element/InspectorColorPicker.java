@@ -7,10 +7,11 @@ import org.gecko.viewmodel.RegionViewModel;
 public class InspectorColorPicker extends ColorPicker implements InspectorElement<ColorPicker> {
     public InspectorColorPicker(ActionManager actionManager, RegionViewModel regionViewModel) {
         setValue(regionViewModel.getColor());
+        regionViewModel.getColorProperty().addListener((observable, oldValue, newValue) -> setValue(newValue));
 
-        valueProperty().addListener((observable, oldValue, newValue) -> {
+        setOnAction(event -> {
             actionManager.run(actionManager.getActionFactory()
-                .createChangeColorRegionViewModelElementAction(regionViewModel, newValue));
+                .createChangeColorRegionViewModelElementAction(regionViewModel, getValue()));
         });
     }
 

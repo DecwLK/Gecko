@@ -3,9 +3,11 @@ package org.gecko.tools;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
@@ -22,12 +24,7 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.SelectionManager;
 
 public class CursorTool extends Tool {
-
-    private static final String NAME = "Cursor Tool";
-    private static final String ICON_STYLE_NAME = "cursor-icon";
-
     private boolean isDragging = false;
-
     private final SelectionManager selectionManager;
     private final EditorViewModel editorViewModel;
     private Point2D startDragPosition;
@@ -37,24 +34,14 @@ public class CursorTool extends Tool {
     private ScrollPane viewPane;
 
     public CursorTool(ActionManager actionManager, SelectionManager selectionManager, EditorViewModel editorViewModel) {
-        super(actionManager);
+        super(actionManager, ToolType.CURSOR);
         this.selectionManager = selectionManager;
         this.editorViewModel = editorViewModel;
     }
 
     @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
-    }
-
-    @Override
-    public void visitView(ScrollPane view) {
-        super.visitView(view);
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
+        super.visitView(vbox, view, worldGroup, containerGroup);
         view.setCursor(Cursor.DEFAULT);
         view.setPannable(false);
         viewPane = view;

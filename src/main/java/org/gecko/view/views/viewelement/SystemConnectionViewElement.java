@@ -16,8 +16,7 @@ import org.gecko.model.Visibility;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
 @Getter
-public class SystemConnectionViewElement extends Line
-    implements ViewElement<SystemConnectionViewModel> {
+public class SystemConnectionViewElement extends Line implements ViewElement<SystemConnectionViewModel> {
 
     private static final int Z_PRIORITY = 20;
 
@@ -65,17 +64,17 @@ public class SystemConnectionViewElement extends Line
     }
 
     private void bindViewModel() {
-        startXProperty()
-            .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getX(),
+        startXProperty().bind(
+            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getX(),
                 systemConnectionViewModel.getSource().getPositionProperty()));
-        startYProperty()
-            .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getY(),
+        startYProperty().bind(
+            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getSource().getPosition().getY(),
                 systemConnectionViewModel.getSource().getPositionProperty()));
-        endXProperty()
-            .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getX(),
+        endXProperty().bind(
+            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getX(),
                 systemConnectionViewModel.getDestination().getPositionProperty()));
-        endYProperty()
-            .bind(Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getY(),
+        endYProperty().bind(
+            Bindings.createDoubleBinding(() -> systemConnectionViewModel.getDestination().getSize().getY(),
                 systemConnectionViewModel.getDestination().getPositionProperty()));
     }
 

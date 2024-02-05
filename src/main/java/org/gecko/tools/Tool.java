@@ -3,9 +3,12 @@ package org.gecko.tools;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.EdgeViewElement;
 import org.gecko.view.views.viewelement.PortViewElement;
@@ -22,19 +25,18 @@ import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator
 public abstract class Tool implements ViewElementVisitor {
 
     protected final ActionManager actionManager;
+    @Getter
+    private final ToolType toolType;
 
-    public Tool(ActionManager actionManager) {
+    public Tool(ActionManager actionManager, ToolType toolType) {
         this.actionManager = actionManager;
+        this.toolType = toolType;
     }
 
-    public abstract String getName();
-
-    public abstract String getIconStyleName();
-
-    public void visitView(ScrollPane view) {
-        view.setPannable(false);
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
         view.setCursor(Cursor.DEFAULT);
         setAllHandlers(view, null);
+        setAllHandlers(vbox, null);
     }
 
     @Override

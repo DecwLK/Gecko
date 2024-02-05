@@ -1,7 +1,9 @@
 package org.gecko.view.inspector.element.button;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
 public class InspectorDeleteButton extends AbstractInspectorButton {
@@ -17,5 +19,6 @@ public class InspectorDeleteButton extends AbstractInspectorButton {
         setText("L:Delete");
         setPrefWidth(WIDTH);
         setStyle("-fx-background-color: " + COLOR.toString().replace("0x", "#")); //TODO correct?
+        setTooltip(new Tooltip(Shortcuts.DELETE.get().getDisplayText()));
     }
 }

@@ -1,31 +1,20 @@
 package org.gecko.tools;
 
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 
 public class PanTool extends Tool {
 
-    private static final String NAME = "Pan Tool";
-    private static final String ICON_STYLE_NAME = "pan-icon";
-
     public PanTool(ActionManager actionManager) {
-        super(actionManager);
+        super(actionManager, ToolType.PAN);
     }
 
     @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
-    }
-
-    @Override
-    public void visitView(ScrollPane view) {
-        super.visitView(view);
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
+        super.visitView(vbox, view, worldGroup, containerGroup);
         view.setPannable(true);
         view.setCursor(Cursor.OPEN_HAND);
     }

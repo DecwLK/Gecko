@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Encapsulates {@link org.gecko.viewmodel.GeckoViewModel GeckoViewModel}-specific data
- * for a {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement},
- * useful for the restoration of the {@link org.gecko.view.GeckoView} after parsing an external file.
+ * Encapsulates {@link org.gecko.viewmodel.GeckoViewModel GeckoViewModel}-specific data for a
+ * {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement}, useful for the restoration of
+ * the {@link org.gecko.view.GeckoView} after parsing an external file.
  */
 @Getter
 @Setter

@@ -1,26 +1,23 @@
 package org.gecko.view.inspector.element.combobox;
 
-import javafx.scene.control.ComboBox;
+import java.util.Arrays;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Visibility;
-import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.viewmodel.PortViewModel;
 
-public class InspectorVisibilityComboBox extends ComboBox<Visibility>
-    implements InspectorElement<ComboBox<Visibility>> {
+public class InspectorVisibilityComboBox extends InspectorComboBox<Visibility> {
+    private final PortViewModel viewModel;
+    private final ActionManager actionManager;
+
     public InspectorVisibilityComboBox(ActionManager actionManager, PortViewModel viewModel) {
-        getItems().setAll(Visibility.values());
-        setValue(viewModel.getVisibility());
-        valueProperty().addListener((observable, oldValue, newValue) -> {
-            Action changeVisibilityAction = actionManager.getActionFactory()
-                .createChangeVisibilityPortViewModelAction(viewModel, valueProperty().get());
-            actionManager.run(changeVisibilityAction);
-        });
+        super(actionManager, Arrays.stream(Visibility.values()).toList(), viewModel.getVisibilityProperty());
+        this.viewModel = viewModel;
+        this.actionManager = actionManager;
     }
 
     @Override
-    public ComboBox<Visibility> getControl() {
-        return this;
+    protected Action getAction() {
+        return actionManager.getActionFactory().createChangeVisibilityPortViewModelAction(viewModel, getValue());
     }
 }

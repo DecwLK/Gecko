@@ -1,36 +1,25 @@
 package org.gecko.tools;
 
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.StateViewElement;
 import org.gecko.viewmodel.StateViewModel;
 
 public class EdgeCreatorTool extends Tool {
-
-    private static final String NAME = "Edge Creator Tool";
-    private static final String ICON_STYLE_NAME = "edge-icon";
     private StateViewModel source;
 
     public EdgeCreatorTool(ActionManager actionManager) {
-        super(actionManager);
+        super(actionManager, ToolType.EDGE_CREATOR);
         source = null;
     }
 
     @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
-    }
-
-    @Override
-    public void visitView(ScrollPane view) {
-        super.visitView(view);
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
+        super.visitView(vbox, view, worldGroup, containerGroup);
         view.setCursor(Cursor.CROSSHAIR);
     }
 

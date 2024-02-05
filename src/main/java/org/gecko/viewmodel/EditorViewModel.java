@@ -2,11 +2,14 @@ package org.gecko.viewmodel;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import lombok.Data;
 import org.gecko.actions.ActionManager;
@@ -20,6 +23,7 @@ import org.gecko.tools.StateCreatorTool;
 import org.gecko.tools.SystemConnectionCreatorTool;
 import org.gecko.tools.SystemCreatorTool;
 import org.gecko.tools.Tool;
+import org.gecko.tools.ToolType;
 import org.gecko.tools.VariableBlockCreatorTool;
 import org.gecko.tools.ZoomTool;
 
@@ -68,6 +72,8 @@ public class EditorViewModel {
                 setFocusedElement(null);
             }
         });
+
+        setCurrentTool(ToolType.CURSOR);
     }
 
     public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
@@ -117,12 +123,27 @@ public class EditorViewModel {
         return new Point2D(viewPortSizeProperty.getValue().getX() / 2, viewPortSizeProperty.getValue().getY() / 2);
     }
 
+    public ToolType getCurrentToolType() {
+        return currentToolProperty.getValue().getToolType();
+    }
+
     public Tool getCurrentTool() {
         return currentToolProperty.getValue();
     }
 
-    public void setCurrentTool(Tool currentTool) {
-        currentToolProperty.setValue(currentTool);
+    public void setCurrentTool(ToolType currentToolType) {
+        Tool tool = getTool(currentToolType);
+        if (tool != null) {
+            currentToolProperty.setValue(tool);
+        }
+    }
+
+    private Tool getTool(ToolType toolType) {
+        return tools.stream()
+            .flatMap(List::stream)
+            .filter(tool -> tool.getToolType() == toolType)
+            .findFirst()
+            .orElse(null);
     }
 
     public PositionableViewModelElement<?> getFocusedElement() {
@@ -133,15 +154,15 @@ public class EditorViewModel {
         focusedElementProperty.setValue(focusedElement);
     }
 
-    public void addPositionableViewModelElement(PositionableViewModelElement<?> element) {
-        addPositionableViewModelElements(Set.of(element));
+    public void addPositionableViewModelElement(PositionableViewModelElement<?> element, boolean select) {
+        addPositionableViewModelElements(Set.of(element), select);
     }
 
-    public void addPositionableViewModelElements(Set<PositionableViewModelElement<?>> elements) {
+    public void addPositionableViewModelElements(Set<PositionableViewModelElement<?>> elements, boolean select) {
         elements.removeAll(containedPositionableViewModelElementsProperty);
         containedPositionableViewModelElementsProperty.addAll(elements);
         //don't select elements if no elements are added to the current view
-        if (!elements.isEmpty()) {
+        if (!elements.isEmpty() && select) {
             actionManager.run(actionManager.getActionFactory().createSelectAction(elements, true));
         }
     }
@@ -154,8 +175,12 @@ public class EditorViewModel {
         elements.forEach(containedPositionableViewModelElementsProperty::remove);
     }
 
+    public Set<PositionableViewModelElement<?>> getPositionableViewModelElements() {
+        return containedPositionableViewModelElementsProperty;
+    }
+
     private void initializeTools() {
-        tools.add(List.of(new CursorTool(actionManager, selectionManager, this), new MarqueeTool(actionManager),
+        tools.add(List.of(new CursorTool(actionManager, selectionManager, this), new MarqueeTool(actionManager, this),
             new PanTool(actionManager), new ZoomTool(actionManager)));
         if (isAutomatonEditor()) {
             tools.add(List.of(new StateCreatorTool(actionManager), new EdgeCreatorTool(actionManager),
@@ -189,5 +214,14 @@ public class EditorViewModel {
             return getZoomScale() * zoomFactor <= MAX_ZOOM_SCALE;
         }
 
+    }
+
+    public Set<PositionableViewModelElement<?>> getElementsInArea(Bounds bound) {
+        return containedPositionableViewModelElementsProperty.stream().filter(element -> {
+            Bounds elementBound =
+                new BoundingBox(element.getPosition().getX(), element.getPosition().getY(), element.getSize().getX(),
+                    element.getSize().getY());
+            return bound.intersects(elementBound);
+        }).collect(Collectors.toSet());
     }
 }

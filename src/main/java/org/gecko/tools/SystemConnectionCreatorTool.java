@@ -1,7 +1,9 @@
 package org.gecko.tools;
 
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.PortViewElement;
@@ -9,29 +11,16 @@ import org.gecko.view.views.viewelement.SystemViewElement;
 
 public class SystemConnectionCreatorTool extends Tool {
 
-    private static final String NAME = "System Connection Creator Tool";
-    private static final String ICON_STYLE_NAME = "edge-icon";
-
     private PortViewElement firstPortViewElement;
 
     public SystemConnectionCreatorTool(ActionManager actionManager) {
-        super(actionManager);
+        super(actionManager, ToolType.CONNECTION_CREATOR);
         firstPortViewElement = null;
     }
 
     @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
-    }
-
-    @Override
-    public void visitView(ScrollPane view) {
-        super.visitView(view);
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
+        super.visitView(vbox, view, worldGroup, containerGroup);
         view.setCursor(Cursor.CROSSHAIR);
     }
 

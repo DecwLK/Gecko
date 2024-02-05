@@ -8,6 +8,7 @@ import java.util.Set;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableSet;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
@@ -33,6 +34,7 @@ public class GeckoView {
     private final TabPane centerPane;
     private final GeckoViewModel viewModel;
     private final ViewFactory viewFactory;
+    private final MenuBar menuBar;
 
     @Getter
     private EditorView currentView;
@@ -64,6 +66,9 @@ public class GeckoView {
         constructTab(currentView, viewModel.getCurrentEditor());
         centerPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
+        // Menubar
+        menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
+        mainPane.setTop(menuBar);
         refreshView();
     }
 

@@ -51,7 +51,7 @@ public abstract class ConnectionViewElement extends Path {
      * @param end           The end point of the line
      * @return The masked position of the block (end point)
      */
-    protected Point2D maskBlock(Point2D blockPosition, Point2D blockSize, Point2D start, Point2D end) {
+    protected Point2D maskBlock(Point2D blockPosition, Point2D blockSize, Point2D start, Point2D end, double offset) {
         List<Point2D> blockCorners = new ArrayList<>();
         blockCorners.add(blockPosition);
         blockCorners.add(blockPosition.add(new Point2D(blockSize.getX(), 0)));
@@ -73,8 +73,10 @@ public abstract class ConnectionViewElement extends Path {
                 || intersectionShape.getBoundsInLocal().getMaxY() <= 0) {
                 continue;
             }
+            Point2D vector = corner.subtract(nextCorner).normalize();
+
             intersection = new Point2D(intersectionShape.getBoundsInLocal().getMinX(),
-                intersectionShape.getBoundsInLocal().getMinY());
+                intersectionShape.getBoundsInLocal().getMinY()).add(vector.multiply(offset));
         }
 
         return intersection;

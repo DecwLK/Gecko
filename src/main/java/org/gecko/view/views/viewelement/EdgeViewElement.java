@@ -62,12 +62,19 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     private void maskPathSource() {
+        double destinationPointOffset = edgeViewModel.getDestination().getEdgeOffset(edgeViewModel);
+
         getPathSource().getFirst()
             .setValue(maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
-                edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter()));
+                edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(),
+                destinationPointOffset));
+
+        double sourcePointOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
 
         getPathSource().getLast()
             .setValue(maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
+                edgeViewModel.getSource().getCenter(), edgeViewModel.getDestination().getCenter(),
+                sourcePointOffset));
     }
 
     @Override

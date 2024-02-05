@@ -6,13 +6,11 @@ import java.util.Objects;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import lombok.Getter;
-import org.gecko.actions.ActionManager;
 import org.gecko.view.menubar.MenuBarBuilder;
 import org.gecko.view.views.EditorView;
 import org.gecko.view.views.ViewFactory;
@@ -39,11 +37,11 @@ public class GeckoView {
 
     private final List<EditorView> openedViews;
 
-    public GeckoView(ActionManager actionManager, GeckoViewModel viewModel) {
+    public GeckoView(GeckoViewModel viewModel) {
         this.viewModel = viewModel;
         this.mainPane = new BorderPane();
         this.centerPane = new TabPane();
-        this.viewFactory = new ViewFactory(actionManager, this);
+        this.viewFactory = new ViewFactory(viewModel.getActionManager(), this);
         this.openedViews = new ArrayList<>();
 
         mainPane.getStylesheets().add(Objects.requireNonNull(GeckoView.class.getResource(STYLE_SHEET)).toString());
@@ -56,7 +54,7 @@ public class GeckoView {
         centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
 
         // Menubar
-        mainPane.setTop(new MenuBarBuilder(this, actionManager).build());
+        mainPane.setTop(new MenuBarBuilder(this, viewModel.getActionManager()).build());
 
         // Initial view
         currentView = viewFactory.createEditorView(viewModel.getCurrentEditor(),
@@ -130,10 +128,6 @@ public class GeckoView {
 
         currentView.updateWorldSize();
         currentView.focus();
-        Scene scene = mainPane.getScene();
-        if (scene != null) {
-            currentView.postInit();
-        }
     }
 
     private void onUpdateCurrentEditorToViewModel(
@@ -145,9 +139,5 @@ public class GeckoView {
                 .orElse(null);
             refreshView();
         }
-    }
-
-    public void postInit() {
-        currentView.postInit();
     }
 }

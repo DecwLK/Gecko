@@ -3,6 +3,7 @@ package org.gecko.tools;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
@@ -39,8 +40,8 @@ public class CursorTool extends Tool {
     }
 
     @Override
-    public void visitView(VBox vbox, ScrollPane view) {
-        super.visitView(vbox, view);
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
+        super.visitView(vbox, view, worldGroup, containerGroup);
         view.setCursor(Cursor.DEFAULT);
         view.setPannable(false);
         viewPane = view;

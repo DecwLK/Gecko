@@ -276,7 +276,8 @@ public class EditorView {
     }
 
     private void onToolChanged(ObservableValue<? extends Tool> observable, Tool oldValue, Tool newValue) {
-        newValue.visitView(viewElementsVBoxContainer, viewElementsScrollPane);
+        newValue.visitView(viewElementsVBoxContainer, viewElementsScrollPane, viewElementsGroup,
+            viewElementsGroupContainer);
         currentViewElements.forEach(viewElement -> viewElement.accept(newValue));
     }
 

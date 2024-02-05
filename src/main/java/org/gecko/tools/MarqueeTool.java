@@ -25,10 +25,9 @@ public class MarqueeTool extends Tool {
     }
 
     @Override
-    public void visitView(VBox vbox, ScrollPane view) {
-        super.visitView(vbox, view);
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
+        super.visitView(vbox, view, worldGroup, containerGroup);
         view.setCursor(Cursor.CROSSHAIR);
-        Group group = (Group) vbox.getChildren().getFirst();
         startPosition = null;
 
         vbox.setOnMousePressed(event -> {
@@ -36,7 +35,7 @@ public class MarqueeTool extends Tool {
             createNewMarquee();
             marquee.setX(startPosition.getX());
             marquee.setY(startPosition.getY());
-            group.getChildren().add(marquee);
+            containerGroup.getChildren().add(marquee);
         });
 
         vbox.setOnMouseDragged(event -> {
@@ -55,11 +54,10 @@ public class MarqueeTool extends Tool {
             if (startPosition == null) {
                 return;
             }
-            group.getChildren().remove(marquee);
+            containerGroup.getChildren().remove(marquee);
 
             Bounds marqueeBounds = calculateMarqueeBounds(startPosition,
                 vbox.sceneToLocal(new Point2D(event.getSceneX(), event.getSceneY())));
-            Group worldGroup = (Group) group.getChildren().getFirst();
             marqueeBounds = worldGroup.sceneToLocal(vbox.localToScene(marqueeBounds));
             Set<PositionableViewModelElement<?>> elements = editorViewModel.getElementsInArea(marqueeBounds);
             if (elements.isEmpty()) {

@@ -1,6 +1,7 @@
 package org.gecko.tools;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
@@ -12,8 +13,8 @@ public class SystemCreatorTool extends Tool {
     }
 
     @Override
-    public void visitView(VBox vbox, ScrollPane view) {
-        super.visitView(vbox, view);
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
+        super.visitView(vbox, view, worldGroup, containerGroup);
         view.setOnMouseClicked(event -> {
             if (event.isConsumed()) {
                 return;

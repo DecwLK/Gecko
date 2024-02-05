@@ -3,6 +3,7 @@ package org.gecko.tools;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
@@ -32,7 +33,7 @@ public abstract class Tool implements ViewElementVisitor {
         this.toolType = toolType;
     }
 
-    public void visitView(VBox vbox, ScrollPane view) {
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
         view.setCursor(Cursor.DEFAULT);
         setAllHandlers(view, null);
         setAllHandlers(vbox, null);

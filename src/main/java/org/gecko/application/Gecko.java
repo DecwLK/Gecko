@@ -12,15 +12,14 @@ public class Gecko {
     private final GeckoView view;
 
     public Gecko() {
-        // TODO: on import, set system root
         model = new GeckoModel();
         viewModel = new GeckoViewModel(model);
-        view = new GeckoView(viewModel.getActionManager(), viewModel);
+        view = new GeckoView(viewModel);
     }
 
-    protected Gecko(GeckoModel geckoModel, GeckoViewModel geckoViewModel) {
-        model = geckoModel;
+    Gecko(GeckoViewModel geckoViewModel) {
+        model = geckoViewModel.getGeckoModel();
         viewModel = geckoViewModel;
-        view = new GeckoView(viewModel.getActionManager(), viewModel);
+        view = new GeckoView(viewModel);
     }
 }

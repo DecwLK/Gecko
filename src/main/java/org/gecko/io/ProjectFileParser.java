@@ -24,7 +24,7 @@ public class ProjectFileParser implements FileParser {
     }
 
     @Override
-    public Pair<GeckoModel, GeckoViewModel> parse(File file) throws IOException {
+    public GeckoViewModel parse(File file) throws IOException {
         GeckoJsonWrapper geckoJsonWrapper = objectMapper.readValue(file, GeckoJsonWrapper.class);
         if (geckoJsonWrapper == null || geckoJsonWrapper.getModel() == null
             || geckoJsonWrapper.getViewModelProperties() == null) {
@@ -45,8 +45,7 @@ public class ProjectFileParser implements FileParser {
                 generatedViewModelElements);
         visitor.visitModel(root);
         generatedViewModelElements = visitor.getGeneratedViewModelElements();
-
-        return new Pair<>(model, viewModel);
+        return viewModel;
     }
 
     public List<PositionableViewModelElement<?>> getGeneratedViewModelElements() {

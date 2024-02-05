@@ -1,7 +1,6 @@
 package org.gecko.application;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -13,17 +12,10 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // Initialize Gecko
-        GeckoManager geckoManager = new GeckoManager();
+        stage.setTitle("Gecko");
+        stage.show();
+        GeckoManager geckoManager = new GeckoManager(stage);
         GeckoIOManager.getInstance().setGeckoManager(geckoManager);
         GeckoIOManager.getInstance().setStage(stage);
-
-        stage.setTitle("Gecko");
-
-        Scene scene = new Scene(geckoManager.getGecko().getView().getMainPane(), 1024, 768);
-        stage.setScene(scene);
-        // currently not used
-        geckoManager.getGecko().getView().postInit();
-
-        stage.show();
     }
 }

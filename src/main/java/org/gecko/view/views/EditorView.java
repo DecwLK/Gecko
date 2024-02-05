@@ -305,14 +305,10 @@ public class EditorView {
     private void focusedElementChanged(
         ObservableValue<? extends PositionableViewModelElement<?>> observable, PositionableViewModelElement<?> oldValue,
         PositionableViewModelElement<?> newValue) {
-<<<<<<<HEAD currentInspector.set((newValue != null) ? inspectorFactory.createInspector(newValue) : emptyInspector);
+        currentInspector.set((newValue != null) ? inspectorFactory.createInspector(newValue) : emptyInspector);
         if (shortcutHandler != null) {
             currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
         }
-=======
-        Inspector newInspector = inspectorFactory.createInspector(newValue);
-        currentInspector.set((newInspector != null) ? newInspector : emptyInspector);
->>>>>>>62 a030e(implemented modifiable edges)
     }
 
     private void selectionChanged(

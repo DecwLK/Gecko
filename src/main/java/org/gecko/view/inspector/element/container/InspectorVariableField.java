@@ -5,6 +5,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.button.InspectorRemoveVariableButton;
 import org.gecko.view.inspector.element.label.InspectorLabel;
@@ -25,7 +26,7 @@ public class InspectorVariableField extends VBox implements InspectorElement<VBo
         InspectorElement<?> variableNameField = new InspectorRenameField(actionManager, portViewModel);
         InspectorElement<?> deleteButton = new InspectorRemoveVariableButton(actionManager, portViewModel);
         nameAndDeleteContainer.getChildren().addAll(variableNameField.getControl(), spacer, deleteButton.getControl());
-        InspectorElement<?> typeLabel = new InspectorLabel("L:Type:");
+        InspectorElement<?> typeLabel = new InspectorLabel(ResourceHandler.getString("Inspector", "type"));
         InspectorElement<?> typeField = new InspectorTypeField(actionManager, portViewModel);
         HBox typeContainer = new HBox();
         typeContainer.getChildren().addAll(typeLabel.getControl(), typeField.getControl());

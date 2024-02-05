@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
@@ -95,14 +96,17 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
             }
         }, isStartStateProperty));
         GridPane gridPane = new GridPane();
-        Label name = new Label("State: " + stateViewModel.getName());
+        Label name = new Label(ResourceHandler.getString("Labels", "state") + ": " + stateViewModel.getName());
         name.textProperty()
-            .bind(Bindings.createStringBinding(() -> "State: " + stateViewModel.getName(),
+            .bind(Bindings.createStringBinding(
+                () -> ResourceHandler.getString("Labels", "state") + ": " + stateViewModel.getName(),
                 stateViewModel.getNameProperty()));
-        Label contracts = new Label("Contracts: " + stateViewModel.getContractsProperty().size());
+        Label contracts = new Label(
+            ResourceHandler.getString("Labels", "contract_plural") + ": " + stateViewModel.getContractsProperty()
+                .size());
         contracts.textProperty()
-            .bind(Bindings.createStringBinding(() -> "Contracts: " + stateViewModel.getContractsProperty().size(),
-                stateViewModel.getContractsProperty()));
+            .bind(Bindings.createStringBinding(() -> ResourceHandler.getString("Labels", "contract_plural") + ": "
+                + stateViewModel.getContractsProperty().size(), stateViewModel.getContractsProperty()));
         gridPane.add(name, 0, 0);
         gridPane.add(contracts, 0, 1);
         getChildren().addAll(background, gridPane);

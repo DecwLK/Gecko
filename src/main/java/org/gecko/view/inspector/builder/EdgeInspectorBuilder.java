@@ -1,6 +1,7 @@
 package org.gecko.view.inspector.builder;
 
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.combobox.InspectorContractComboBox;
 import org.gecko.view.inspector.element.container.InspectorEdgeStateLabel;
@@ -19,8 +20,10 @@ public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel
         addInspectorElement(new InspectorSeparator());
 
         // Connected states
-        addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getSource(), "L:Source"));
-        addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getSource(), "L:Target"));
+        addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getSource(),
+            ResourceHandler.getString("Inspector", "source")));
+        addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getSource(),
+            ResourceHandler.getString("Inspector", "target")));
         addInspectorElement(new InspectorSeparator());
 
         // Priority
@@ -28,7 +31,7 @@ public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel
         addInspectorElement(new InspectorSeparator());
 
         // Contracts
-        addInspectorElement(new InspectorLabel("L:Contracts"));
+        addInspectorElement(new InspectorLabel(ResourceHandler.getString("Inspector", "contract_plural")));
         addInspectorElement(new InspectorContractComboBox(actionManager, viewModel));
     }
 }

@@ -11,6 +11,7 @@ import org.gecko.actions.ActionManager;
 import org.gecko.application.GeckoIOManager;
 import org.gecko.io.FileTypes;
 import org.gecko.view.GeckoView;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.views.shortcuts.Shortcuts;
 
 public class MenuBarBuilder {

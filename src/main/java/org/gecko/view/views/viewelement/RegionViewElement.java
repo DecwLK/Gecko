@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
@@ -105,22 +106,26 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
                 () -> new Color(colorProperty.getValue().getRed(), colorProperty.getValue().getGreen(),
                     colorProperty.getValue().getBlue(), 0.5), regionViewModel.getColorProperty()));
         GridPane gridPane = new GridPane();
+
         Label name = new Label();
         name.textProperty()
-            .bind(Bindings.createStringBinding(() -> "Region: " + regionViewModel.getName(),
+            .bind(Bindings.createStringBinding(
+                () -> ResourceHandler.getString("Labels", "region") + ": " + regionViewModel.getName(),
                 regionViewModel.getNameProperty()));
         Label preCondition = new Label();
         preCondition.textProperty()
-            .bind(Bindings.createStringBinding(() -> "PreCondition: " + regionViewModel.getContract().getPrecondition(),
-                regionViewModel.getContract().getPreConditionProperty()));
+            .bind(Bindings.createStringBinding(
+                () -> ResourceHandler.getString("Labels", "pre_condition") + ": " + regionViewModel.getContract()
+                    .getPrecondition(), regionViewModel.getContract().getPreConditionProperty()));
         Label postCondition = new Label();
         postCondition.textProperty()
-            .bind(
-                Bindings.createStringBinding(() -> "PostCondition: " + regionViewModel.getContract().getPostcondition(),
-                    regionViewModel.getContract().getPostConditionProperty()));
+            .bind(Bindings.createStringBinding(
+                () -> ResourceHandler.getString("Labels", "post_condition") + ": " + regionViewModel.getContract()
+                    .getPostcondition(), regionViewModel.getContract().getPostConditionProperty()));
         Label invariant = new Label();
         invariant.textProperty()
-            .bind(Bindings.createStringBinding(() -> "Invariant: " + regionViewModel.getInvariant(),
+            .bind(Bindings.createStringBinding(
+                () -> ResourceHandler.getString("Labels", "invariant") + ": " + regionViewModel.getInvariant(),
                 regionViewModel.getInvariantProperty()));
         gridPane.add(name, 0, 0);
         gridPane.add(preCondition, 0, 1);

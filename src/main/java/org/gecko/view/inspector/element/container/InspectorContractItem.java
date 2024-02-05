@@ -8,6 +8,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.button.InspectorCollapseContractButton;
 import org.gecko.view.inspector.element.button.InspectorRemoveContractButton;
@@ -41,7 +42,7 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
 
         GridPane contractConditions = new GridPane();
 
-        InspectorLabel preConditionLabel = new InspectorLabel("L:Pre:");
+        InspectorLabel preConditionLabel = new InspectorLabel(ResourceHandler.getString("Inspector", "pre_condition"));
         InspectorContractField preConditionField = new InspectorPreconditionField(actionManager, contractViewModel);
         contractFields.add(preConditionField);
         preConditionField.prefWidthProperty().bind(widthProperty().subtract(50));
@@ -49,7 +50,8 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
         contractConditions.add(preConditionField, 1, 0);
 
 
-        InspectorLabel postConditionLabel = new InspectorLabel("L:Post:");
+        InspectorLabel postConditionLabel =
+            new InspectorLabel(ResourceHandler.getString("Inspector", "post_condition"));
         InspectorContractField postConditionField = new InspectorPostconditionField(actionManager, contractViewModel);
         contractFields.add(postConditionField);
         postConditionField.prefWidthProperty().bind(widthProperty().subtract(50));
@@ -78,11 +80,12 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
     public InspectorContractItem(ActionManager actionManager, RegionViewModel regionViewModel) {
 
         GridPane regionConditions = new GridPane();
-        addContractItem("L:Pre:", new InspectorPreconditionField(actionManager, regionViewModel.getContract()), 0,
-            regionConditions);
-        addContractItem("L:Post:", new InspectorPostconditionField(actionManager, regionViewModel.getContract()), 1,
-            regionConditions);
-        addContractItem("L:Inv:", new InspectorInvariantField(actionManager, regionViewModel), 2, regionConditions);
+        addContractItem(ResourceHandler.getString("Inspector", "pre_condition"),
+            new InspectorPreconditionField(actionManager, regionViewModel.getContract()), 0, regionConditions);
+        addContractItem(ResourceHandler.getString("Inspector", "post_condition"),
+            new InspectorPostconditionField(actionManager, regionViewModel.getContract()), 1, regionConditions);
+        addContractItem(ResourceHandler.getString("Inspector", "invariant"),
+            new InspectorInvariantField(actionManager, regionViewModel), 2, regionConditions);
 
         // Build the contract item
         getChildren().add(regionConditions);

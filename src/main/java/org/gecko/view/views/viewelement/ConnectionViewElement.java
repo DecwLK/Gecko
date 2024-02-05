@@ -6,10 +6,15 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import lombok.Getter;
 
 @Getter
@@ -56,49 +61,23 @@ public abstract class ConnectionViewElement extends Path {
         // loop through the block corners and find the intersection point with the line
         Point2D intersection = null;
 
+        Line path = new Line(start.getX(), start.getY(), end.getX(), end.getY());
         for (int i = 0; i < blockCorners.size(); i++) {
             Point2D corner = blockCorners.get(i);
             Point2D nextCorner = blockCorners.get((i + 1) % blockCorners.size());
 
-            Point2D intersectionPoint = getIntersectionPoint(start, end, corner, nextCorner);
-            if (intersectionPoint != null) {
-                // if the intersection point is closer to the start point than the current intersection, update the
-                // intersection
-                if (intersection == null || intersection.distance(start) > intersectionPoint.distance(start)) {
-                    intersection = intersectionPoint;
-                }
+            Line border = new Line(corner.getX(), corner.getY(), nextCorner.getX(), nextCorner.getY());
+            Shape intersectionShape = Shape.intersect(path, border);
+
+            if (intersectionShape.getBoundsInLocal().getMaxX() <= 0
+                || intersectionShape.getBoundsInLocal().getMaxY() <= 0) {
+                continue;
             }
+            intersection = new Point2D(intersectionShape.getBoundsInLocal().getMinX(),
+                intersectionShape.getBoundsInLocal().getMinY());
         }
 
         return intersection;
-    }
-
-    private Point2D getIntersectionPoint(Point2D x0, Point2D x1, Point2D y0, Point2D y1) {
-        double x0x1 = x0.getX() - x1.getX();
-        double y0y1 = x0.getY() - x1.getY();
-        double x0y1 = x0.getX() * x1.getY() - x0.getY() * x1.getX();
-
-        double y0y1_ = y0.getY() - y1.getY();
-        double x0x1_ = y0.getX() - y1.getX();
-        double y0x1_ = y0.getX() * y1.getY() - y0.getY() * y1.getX();
-
-        double det = x0x1 * y0y1_ - y0y1 * x0x1_;
-        if (det == 0) {
-            return null;
-        }
-
-        // check if the intersection point is within the line segments
-        if (Math.min(x0.getX(), x1.getX()) > Math.max(y0.getX(), y1.getX()) ||
-            Math.max(x0.getX(), x1.getX()) < Math.min(y0.getX(), y1.getX()) ||
-            Math.min(x0.getY(), x1.getY()) > Math.max(y0.getY(), y1.getY()) ||
-            Math.max(x0.getY(), x1.getY()) < Math.min(y0.getY(), y1.getY())) {
-            return null;
-        }
-
-        double x = (x0y1 * x0x1_ - x0x1 * y0x1_) / det;
-        double y = (x0y1 * y0y1_ - y0y1 * y0x1_) / det;
-
-        return new Point2D(x, y);
     }
 
     private void updatePathVisualization() {

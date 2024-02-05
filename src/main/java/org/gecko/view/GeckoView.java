@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
@@ -79,8 +79,8 @@ public class GeckoView {
     }
 
     private void onOpenedEditorChanged(
-        ObservableValue<? extends ObservableList<EditorViewModel>> observable, ObservableList<EditorViewModel> oldValue,
-        ObservableList<EditorViewModel> newValue) {
+        ObservableValue<? extends ObservableSet<EditorViewModel>> observable, ObservableSet<EditorViewModel> oldValue,
+        ObservableSet<EditorViewModel> newValue) {
         if (newValue != null) {
             for (EditorViewModel editorViewModel : newValue) {
                 if (openedViews.stream().anyMatch(editorView -> editorView.getViewModel().equals(editorViewModel))) {

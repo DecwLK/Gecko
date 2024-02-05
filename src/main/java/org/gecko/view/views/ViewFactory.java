@@ -18,8 +18,8 @@ import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.view.views.viewelement.ViewElement;
+import org.gecko.view.views.viewelement.decorator.BlockElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
-import org.gecko.view.views.viewelement.decorator.ElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
@@ -60,7 +60,7 @@ public class ViewFactory {
             new RegionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), regionViewModel);
         newRegionViewElement.setOnContextMenuRequested(
             event -> contextMenuBuilder.build().show(newRegionViewElement, event.getScreenX(), event.getScreenY()));
-        return new SelectableViewElementDecorator(new ElementScalerViewElementDecorator(newRegionViewElement));
+        return new SelectableViewElementDecorator(new BlockElementScalerViewElementDecorator(newRegionViewElement));
     }
 
     public ViewElement<?> createViewElementFrom(PortViewModel portViewModel) {

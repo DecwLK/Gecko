@@ -32,28 +32,23 @@ public class SelectableViewElementDecorator extends ViewElementDecorator {
         MoveTo startPoint = new MoveTo(decoratorTarget.getPosition().getX() + borderPoints.getFirst().getValue().getX(),
             decoratorTarget.getPosition().getY() + borderPoints.getFirst().getValue().getY());
         startPoint.xProperty()
-            .bind(Bindings.createDoubleBinding(
-                () -> decoratorTarget.getPosition().getX() + borderPoints.getFirst().getValue().getX(),
-                borderPoints.getFirst()));
+            .bind(
+                Bindings.createDoubleBinding(() -> borderPoints.getFirst().getValue().getX(), borderPoints.getFirst()));
         startPoint.yProperty()
-            .bind(Bindings.createDoubleBinding(
-                () -> decoratorTarget.getPosition().getY() + borderPoints.getFirst().getValue().getY(),
-                borderPoints.getFirst()));
+            .bind(
+                Bindings.createDoubleBinding(() -> borderPoints.getFirst().getValue().getY(), borderPoints.getFirst()));
 
         borderLine.getElements().add(startPoint);
 
         for (int i = 1; i < borderPoints.size(); i++) {
             LineTo connectingPoint =
-                new LineTo(decoratorTarget.getPosition().getX() + borderPoints.get(i).getValue().getX(),
-                    decoratorTarget.getPosition().getY() + borderPoints.get(i).getValue().getY());
+                new LineTo(borderPoints.get(i).getValue().getX(), borderPoints.get(i).getValue().getY());
             int finalI = i;
             connectingPoint.xProperty()
-                .bind(Bindings.createDoubleBinding(
-                    () -> decoratorTarget.getPosition().getX() + borderPoints.get(finalI).getValue().getX(),
+                .bind(Bindings.createDoubleBinding(() -> borderPoints.get(finalI).getValue().getX(),
                     borderPoints.get(i)));
             connectingPoint.yProperty()
-                .bind(Bindings.createDoubleBinding(
-                    () -> decoratorTarget.getPosition().getY() + borderPoints.get(finalI).getValue().getY(),
+                .bind(Bindings.createDoubleBinding(() -> borderPoints.get(finalI).getValue().getY(),
                     borderPoints.get(i)));
 
             borderLine.getElements().add(connectingPoint);

@@ -1,7 +1,6 @@
 package org.gecko.view.views.viewelement.decorator;
 
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;

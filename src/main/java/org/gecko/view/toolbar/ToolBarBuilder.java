@@ -2,12 +2,16 @@ package org.gecko.view.toolbar;
 
 import java.util.List;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
@@ -49,17 +53,28 @@ public class ToolBarBuilder {
 
         // Undo and Redo buttons
         toolBar.getItems().add(new Separator());
+        VBox spacer = new VBox();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        toolBar.getItems().add(spacer);
+
+        HBox undoButtonBox = new HBox();
         Button undoButton = new Button("Undo");
-        undoButton.setOnMouseClicked(event -> actionManager.undo());
+        undoButton.setOnAction(event -> actionManager.undo());
         undoButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);
         undoButton.getStyleClass().add(UNDO_ICON_STYLE_NAME);
-        toolBar.getItems().add(undoButton);
+        undoButtonBox.setAlignment(Pos.CENTER);
+        undoButtonBox.getChildren().add(undoButton);
+        toolBar.getItems().add(undoButtonBox);
 
+        HBox redoButtonBox = new HBox();
         Button redoButton = new Button("Redo");
-        redoButton.setOnMouseClicked(event -> actionManager.redo());
+        redoButton.setOnAction(event -> actionManager.redo());
         redoButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);
         redoButton.getStyleClass().add(REDO_ICON_STYLE_NAME);
-        toolBar.getItems().add(redoButton);
+        redoButtonBox.setAlignment(Pos.CENTER);
+        redoButtonBox.getChildren().add(redoButton);
+        toolBar.getItems().add(redoButtonBox);
     }
 
     private void addTools(ActionManager actionManager, ToggleGroup toggleGroup, List<Tool> toolList) {

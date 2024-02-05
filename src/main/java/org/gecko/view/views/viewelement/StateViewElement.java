@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -26,6 +27,7 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
     private static final int Z_PRIORITY = 30;
     private static final int CORNER_RADIUS = 10;
     private static final int INNER_CORNER_RADIUS = 20;
+    private static final int SPACING = 5;
 
     private static final String STYLE = "state-view-element";
     private static final String INNER_STYLE = "state-inner-view-element";
@@ -97,6 +99,7 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         VBox contents = new VBox();
         contents.prefWidthProperty().bind(prefWidthProperty());
         contents.prefHeightProperty().bind(prefHeightProperty());
+        contents.setPadding(new Insets(SPACING));
 
         // State name:
         Pane stateName = new Pane();
@@ -135,15 +138,17 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         contents.getChildren().add(contracts);
 
         VBox contractsPane = new VBox();
+        double maxHeight = getHeight() - stateName.getHeight() - 2 * SPACING;
 
-        contractsProperty.addListener((observable, oldValue, newValue) -> refreshContracts(contractsPane));
+        contractsProperty.addListener((observable, oldValue, newValue) -> refreshContracts(contractsPane, maxHeight));
 
         contents.getChildren().add(contractsPane);
         getChildren().addAll(contents);
     }
 
-    private void refreshContracts(Pane contractsPane) {
+    private void refreshContracts(VBox contractsPane, double maxHeight) {
         contractsPane.getChildren().clear();
+        contractsPane.setSpacing(SPACING);
 
         for (ContractViewModel contract : stateViewModel.getContracts()) {
             VBox contractBox = new VBox();
@@ -165,6 +170,9 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
             postconditionBox.getChildren().addAll(postconditionLabel, postcondition);
 
             contractBox.getChildren().addAll(contractLabel, preconditionBox, postconditionBox);
+            if (contractBox.getHeight() + contractsPane.getHeight() > maxHeight) {
+                return;
+            }
 
             contractsPane.getChildren().add(contractBox);
         }

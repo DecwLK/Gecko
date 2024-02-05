@@ -66,9 +66,8 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
             .setValue(maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
                 edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter()));
 
-                getPathSource().getLast()
-                    .setValue(maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
-                        edgeViewModel.getSource().getCenter(), edgeViewModel.getDestination().getCenter()));
+        getPathSource().getLast()
+            .setValue(maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
     }
 
     @Override

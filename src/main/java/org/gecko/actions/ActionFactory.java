@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import org.gecko.model.Kind;
 import org.gecko.model.Visibility;
 import org.gecko.tools.ToolType;
-import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.BlockViewModelElement;
 import org.gecko.viewmodel.ContractViewModel;

@@ -92,4 +92,8 @@ public class ModelFactory {
         system.setAutomaton(automaton);
         return automaton;
     }
+
+    public Condition createCondition(@NonNull String init) {
+        return new Condition(init);
+    }
 }

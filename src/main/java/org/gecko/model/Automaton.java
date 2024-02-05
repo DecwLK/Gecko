@@ -89,6 +89,10 @@ public class Automaton {
         this.edges.removeAll(edges);
     }
 
+    public State getStateByName(String name) {
+        return states.stream().filter(state -> state.getName().equals(name)).findFirst().orElse(null);
+    }
+
     @JsonIgnore
     public Set<Element> getAllElements() {
         Set<Element> allElements = new HashSet<>();

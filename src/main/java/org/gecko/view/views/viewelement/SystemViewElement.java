@@ -107,6 +107,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         container.getChildren().addAll(portContainers.getFirst(), getCenteredNameLabel(), portContainers.getLast());
         getChildren().addAll(getBackgroundRectangle(), container);
         portsProperty.addListener(this::onPortsChanged);
+        portsProperty.forEach(this::addPort);
     }
 
     private void onPortsChanged(ListChangeListener.Change<? extends PortViewModel> change) {

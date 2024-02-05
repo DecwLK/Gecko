@@ -1,5 +1,6 @@
 package org.gecko.io;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javafx.geometry.Point2D;
@@ -36,14 +37,13 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
     HashMap<Integer, ViewModelPropertiesContainer> viewModelProperties;
 
     ViewModelElementCreatorVisitor(
-        ViewModelFactory viewModelFactory, List<ViewModelPropertiesContainer> viewModelProperties,
-        List<PositionableViewModelElement<?>> generatedViewModelElements) {
+        ViewModelFactory viewModelFactory, List<ViewModelPropertiesContainer> viewModelProperties) {
         this.viewModelFactory = viewModelFactory;
         this.viewModelProperties = new HashMap<>();
         for (ViewModelPropertiesContainer container : viewModelProperties) {
             this.viewModelProperties.put(container.getElementId(), container);
         }
-        this.generatedViewModelElements = generatedViewModelElements;
+        this.generatedViewModelElements = new ArrayList<>();
     }
 
     private static void setPositionAndSize(
@@ -55,10 +55,6 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
     }
 
     protected void visitModel(System system) {
-        for (Variable variable : system.getVariables()) {
-            visit(variable);
-        }
-
         for (SystemConnection systemConnection : system.getConnections()) {
             visit(systemConnection);
         }
@@ -95,10 +91,6 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
     }
 
     @Override
-    public void visit(Contract contract) {
-    }
-
-    @Override
     public void visit(SystemConnection systemConnection) {
         SystemConnectionViewModel systemConnectionViewModel = null;
         try {
@@ -118,17 +110,6 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
             } else {
                 setPositionAndSize(systemConnectionViewModel, container);
             }
-        }
-    }
-
-    @Override
-    public void visit(Variable variable) {
-        PortViewModel portViewModel = viewModelFactory.createPortViewModelFrom(variable);
-        ViewModelPropertiesContainer container = viewModelProperties.get(variable.getId());
-        if (container == null) {
-            generatedViewModelElements.add(portViewModel);
-        } else {
-            setPositionAndSize(portViewModel, container);
         }
     }
 
@@ -188,5 +169,13 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
                 setPositionAndSize(edgeViewModel, container);
             }
         }
+    }
+
+    @Override
+    public void visit(Variable variable) {
+    }
+
+    @Override
+    public void visit(Contract contract) {
     }
 }

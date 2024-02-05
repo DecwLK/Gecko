@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.io.AutomatonFileParser;
 import org.gecko.io.FileTypes;
 import org.gecko.io.ProjectFileParser;
 import org.gecko.io.ProjectFileSerializer;
@@ -80,7 +81,20 @@ public class GeckoIOManager {
     }
 
     public void importAutomatonFile(File file) {
-
+        AutomatonFileParser automatonFileParser = new AutomatonFileParser();
+        GeckoViewModel gvm;
+        try {
+            gvm = automatonFileParser.parse(file);
+        } catch (IOException e) {
+            String message =
+                "Corrupted file. Could not read file: %s.%s%s".formatted(file.getPath(), System.lineSeparator(),
+                    e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+        Gecko newGecko = new Gecko(gvm);
+        geckoManager.setGecko(newGecko);
     }
 
     public void saveGeckoProject(File file) {

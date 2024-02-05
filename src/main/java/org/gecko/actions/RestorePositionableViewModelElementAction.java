@@ -8,23 +8,21 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 public class RestorePositionableViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;
-    private final Set<PositionableViewModelElement<?>> elementsToDelete;
+    private final Set<PositionableViewModelElement<?>> deletedElements;
 
     RestorePositionableViewModelElementAction(
         GeckoViewModel geckoViewModel, Set<PositionableViewModelElement<?>> elements) {
         this.geckoViewModel = geckoViewModel;
-        this.elementsToDelete = new HashSet<>(elements);
+        this.deletedElements = new HashSet<>(elements);
     }
 
     @Override
     void run() {
-        for (PositionableViewModelElement<?> element : elementsToDelete) {
-            geckoViewModel.restoreViewModelElement(element);
-        }
+        deletedElements.forEach(geckoViewModel::restoreViewModelElement);
     }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createDeletePositionableViewModelElementAction(elementsToDelete);
+        return actionFactory.createDeletePositionableViewModelElementAction(deletedElements);
     }
 }

@@ -4,9 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
-import org.gecko.viewmodel.PositionableViewModelElementVisitor;
-import org.gecko.viewmodel.SelectionManager;
-import org.gecko.viewmodel.ViewModelElementDependencyFinderVisitor;
 
 public class DeletePositionableViewModelElementAction extends Action {
 
@@ -26,9 +23,9 @@ public class DeletePositionableViewModelElementAction extends Action {
 
     @Override
     void run() {
-        SelectionManager selectionManager = geckoViewModel.getCurrentEditor().getSelectionManager();
+        //SelectionManager selectionManager = geckoViewModel.getCurrentEditor().getSelectionManager();
         // Find all dependencies
-        PositionableViewModelElementVisitor visitor = new ViewModelElementDependencyFinderVisitor(geckoViewModel,
+        /*PositionableViewModelElementVisitor visitor = new ViewModelElementDependencyFinderVisitor(geckoViewModel,
             geckoViewModel.getCurrentEditor().getCurrentSystem());
 
         for (PositionableViewModelElement<?> element : elementsToDelete) {
@@ -41,7 +38,8 @@ public class DeletePositionableViewModelElementAction extends Action {
             selectionManager.deselect(element);
             selectionManager.updateSelections(element);
             geckoViewModel.deleteViewModelElement(element);
-        }
+        }*/
+        elementsToDelete.forEach(geckoViewModel::deleteViewModelElement);
     }
 
     @Override

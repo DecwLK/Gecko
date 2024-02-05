@@ -40,6 +40,9 @@ public class SelectionManager {
     }
 
     public void select(Set<PositionableViewModelElement<?>> elements) {
+        if (elements.isEmpty() || elements.equals(currentSelectionProperty.get())) {
+            return;
+        }
         redoSelectionStack.clear();
         undoSelectionStack.push(new HashSet<>(currentSelectionProperty.get()));
         currentSelectionProperty.set(elements);
@@ -50,6 +53,9 @@ public class SelectionManager {
     }
 
     public void deselect(Set<PositionableViewModelElement<?>> elements) {
+        if (elements.isEmpty() || elements.stream().noneMatch(currentSelectionProperty.get()::contains)) {
+            return;
+        }
         redoSelectionStack.clear();
         undoSelectionStack.push(new HashSet<>(currentSelectionProperty.get()));
         Set<PositionableViewModelElement<?>> newSelection = new HashSet<>(currentSelectionProperty.get());
@@ -63,5 +69,26 @@ public class SelectionManager {
 
     public Set<PositionableViewModelElement<?>> getCurrentSelection() {
         return new HashSet<>(currentSelectionProperty.get());
+    }
+
+    public void updateSelections(Set<PositionableViewModelElement<?>> removedElements) {
+        redoSelectionStack.clear();
+        ArrayDeque<Set<PositionableViewModelElement<?>>> selectionToBeRemoved = new ArrayDeque<>();
+        Set<PositionableViewModelElement<?>> lastSelection = null;
+        for (Set<PositionableViewModelElement<?>> selection : undoSelectionStack) {
+            if (selection.isEmpty()) {
+                continue;
+            }
+            selection.removeAll(removedElements);
+            if (selection.isEmpty() || selection.equals(lastSelection)) {
+                selectionToBeRemoved.push(selection);
+            }
+            lastSelection = selection;
+        }
+        this.undoSelectionStack.removeAll(selectionToBeRemoved);
+    }
+
+    public void updateSelections(PositionableViewModelElement<?> removedElement) {
+        updateSelections(Set.of(removedElement));
     }
 }

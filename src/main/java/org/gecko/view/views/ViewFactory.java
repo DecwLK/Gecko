@@ -110,10 +110,14 @@ public class ViewFactory {
     }
 
     private EditorView createAutomatonEditorView(EditorViewModel editorViewModel) {
-        return new EditorView(this, actionManager, editorViewModel, new AutomatonEditorViewShortcutHandler());
+        EditorView editorView = new EditorView(this, actionManager, editorViewModel);
+        editorView.setShortcutHandler(new AutomatonEditorViewShortcutHandler(actionManager, editorView));
+        return editorView;
     }
 
     private EditorView createSystemEditorView(EditorViewModel editorViewModel) {
-        return new EditorView(this, actionManager, editorViewModel, new SystemEditorViewShortcutHandler());
+        EditorView editorView = new EditorView(this, actionManager, editorViewModel);
+        editorView.setShortcutHandler(new SystemEditorViewShortcutHandler(actionManager, editorView));
+        return editorView;
     }
 }

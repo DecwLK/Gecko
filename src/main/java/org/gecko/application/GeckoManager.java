@@ -1,14 +1,21 @@
 package org.gecko.application;
 
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import lombok.Getter;
-import lombok.Setter;
 
 public class GeckoManager {
     @Getter
-    @Setter
     private Gecko gecko;
+    private final Stage stage;
 
-    public GeckoManager() {
-        this.gecko = new Gecko();
+    public GeckoManager(Stage stage) {
+        this.stage = stage;
+        setGecko(new Gecko());
+    }
+
+    public void setGecko(Gecko gecko) {
+        this.gecko = gecko;
+        stage.setScene(new Scene(gecko.getView().getMainPane(), 1024, 768));
     }
 }

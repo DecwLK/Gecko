@@ -21,6 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -46,13 +47,14 @@ public class EditorView {
 
     @Getter
     private final Collection<ViewElement<?>> currentViewElements;
+    private final ViewFactory viewFactory;
     @Getter
     private final EditorViewModel viewModel;
     @Getter
     private final Tab currentView;
     private final StackPane currentViewPane;
     private final ToolBar toolBar;
-    private final ShortcutHandler shortcutHandler;
+    private final ToolBarBuilder toolBarBuilder;
     private final InspectorFactory inspectorFactory;
     private final ScrollPane viewElementsScrollPane;
     private final VBox viewElementsVBoxContainer;
@@ -67,12 +69,14 @@ public class EditorView {
     @Getter
     private ObjectProperty<Inspector> currentInspector;
 
+    private ShortcutHandler shortcutHandler;
+
     public EditorView(
-        ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel,
-        ShortcutHandler shortcutHandler) {
+        ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel) {
+        this.viewFactory = viewFactory;
         this.viewModel = viewModel;
-        this.toolBar = new ToolBarBuilder(actionManager, this, viewModel).build();
-        this.shortcutHandler = shortcutHandler;
+        this.toolBarBuilder = new ToolBarBuilder(actionManager, this, viewModel);
+        this.toolBar = toolBarBuilder.build();
         this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
 
         this.viewElementsGroup = new Group();
@@ -135,10 +139,7 @@ public class EditorView {
         currentViewPane.getChildren().addAll(viewElementsScrollPane, floatingUI);
 
         // View element creator listener
-        viewModel.getContainedPositionableViewModelElementsProperty()
-            .addListener((SetChangeListener<PositionableViewModelElement<?>>) change -> {
-                onUpdateViewElements(viewFactory, change);
-            });
+        viewModel.getContainedPositionableViewModelElementsProperty().addListener(this::onUpdateViewElements);
 
 
         // Inspector creator listener
@@ -179,6 +180,19 @@ public class EditorView {
         viewElementsGroup.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
         });
+
+        initializeViewElements();
+        focus();
+    }
+
+    public void setShortcutHandler(ShortcutHandler shortcutHandler) {
+        this.shortcutHandler = shortcutHandler;
+        currentViewPane.addEventHandler(KeyEvent.ANY, shortcutHandler);
+        toolBar.addEventHandler(KeyEvent.ANY, shortcutHandler);
+    }
+
+    public void focus() {
+        currentViewPane.requestFocus();
     }
 
     private void setViewPortPosition(Point2D point) {
@@ -220,21 +234,9 @@ public class EditorView {
         return currentInspector.get();
     }
 
-    private void onUpdateViewElements(
-        ViewFactory viewFactory, SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
+    private void onUpdateViewElements(SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
         if (change.wasAdded()) {
-            // Create new view element
-            PositionableViewModelElementVisitor visitor = new ViewElementCreatorVisitor(viewFactory);
-            ViewElement<?> viewElement = (ViewElement<?>) change.getElementAdded().accept(visitor);
-
-            // Add view element to current view elements
-            currentViewElements.add(viewElement);
-            if (viewModel.getCurrentTool() != null) {
-                viewElement.accept(getViewModel().getCurrentTool());
-            }
-
-            // TODO: not center
-            viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener);
+            addElement(change.getElementAdded());
         } else if (change.wasRemoved()) {
             // Find corresponding view element and remove it
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
@@ -243,17 +245,38 @@ public class EditorView {
                 updateWorldSize();
             }
         }
+        postUpdate();
+    }
+
+    private void postUpdate() {
         orderChildren();
         viewElementsScrollPane.layout();
         calculateViewPortPosition();
-
-        if (viewModel.getCurrentTool() != null) {
+        if (viewModel.getCurrentToolType() != null) {
             for (ViewElement<?> viewElement : currentViewElements) {
                 viewElement.accept(getViewModel().getCurrentTool());
             }
         }
-
         viewElementsScrollPane.requestLayout();
+    }
+
+    private void initializeViewElements() {
+        viewModel.getContainedPositionableViewModelElementsProperty().forEach(this::addElement);
+        postUpdate();
+    }
+
+    private void addElement(PositionableViewModelElement<?> element) {
+        PositionableViewModelElementVisitor visitor = new ViewElementCreatorVisitor(viewFactory);
+        ViewElement<?> viewElement = (ViewElement<?>) element.accept(visitor);
+
+        // Add view element to current view elements
+        currentViewElements.add(viewElement);
+        if (viewModel.getCurrentToolType() != null) {
+            viewElement.accept(getViewModel().getCurrentTool());
+        }
+
+        // TODO: not center
+        viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener);
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
@@ -264,7 +287,8 @@ public class EditorView {
     }
 
     private void onToolChanged(ObservableValue<? extends Tool> observable, Tool oldValue, Tool newValue) {
-        newValue.visitView(viewElementsScrollPane);
+        newValue.visitView(viewElementsVBoxContainer, viewElementsScrollPane, viewElementsGroup,
+            viewElementsGroupContainer);
         currentViewElements.forEach(viewElement -> viewElement.accept(newValue));
     }
 
@@ -272,6 +296,9 @@ public class EditorView {
         ObservableValue<? extends PositionableViewModelElement<?>> observable, PositionableViewModelElement<?> oldValue,
         PositionableViewModelElement<?> newValue) {
         currentInspector.set((newValue != null) ? inspectorFactory.createInspector(newValue) : emptyInspector);
+        if (shortcutHandler != null) {
+            currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
+        }
     }
 
     private void selectionChanged(

@@ -2,32 +2,21 @@ package org.gecko.tools;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 
 public class ZoomTool extends Tool {
-
-    private static final String NAME = "Zoom Tool";
-    private static final String ICON_STYLE_NAME = "zoom-icon";
     private static final double ZOOM_SCALE = 1.1;
 
     public ZoomTool(ActionManager actionManager) {
-        super(actionManager);
+        super(actionManager, ToolType.ZOOM_TOOL);
     }
 
     @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
-    public String getIconStyleName() {
-        return ICON_STYLE_NAME;
-    }
-
-    @Override
-    public void visitView(ScrollPane view) {
-        super.visitView(view);
+    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
+        super.visitView(vbox, view, worldGroup, containerGroup);
         view.setCursor(Cursor.CROSSHAIR);
 
         view.setOnMouseClicked(event -> {

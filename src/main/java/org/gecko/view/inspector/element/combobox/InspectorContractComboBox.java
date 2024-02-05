@@ -15,14 +15,25 @@ public class InspectorContractComboBox extends ComboBox<String> implements Inspe
         this.viewModel = viewModel;
         setPrefWidth(PREF_WIDTH);
         getItems().setAll(viewModel.getSource().getContracts().stream().map(ContractViewModel::getName).toList());
-        valueProperty().addListener((observable, oldValue, newValue) -> {
-            //Should never not be present because we are choosing the name of a contract
+        viewModel.getSource().getContractsProperty().addListener((observable, oldValue, newValue) -> {
+            getItems().setAll(viewModel.getSource().getContracts().stream().map(ContractViewModel::getName).toList());
+        });
+        setValue(viewModel.getContract() == null ? null : viewModel.getContract().getName());
+        viewModel.getContractProperty().addListener((observable, oldValue, newValue) -> {
+            setValue(newValue == null ? null : newValue.getName());
+        });
+
+        setOnAction(event -> {
+            if (getValue() == null || (viewModel.getContract() != null && getValue().equals(
+                viewModel.getContract().getName()))) {
+                return;
+            }
             ContractViewModel newContract = viewModel.getSource()
-                .getContracts()
-                .stream()
-                .filter(contract -> contract.getName().equals(newValue))
+                .getContracts().stream().filter(contract -> contract.getName().equals(getValue()))
                 .findFirst()
                 .orElseThrow();
+            actionManager.run(
+                actionManager.getActionFactory().createChangeContractEdgeViewModelAction(viewModel, newContract));
         });
     }
 

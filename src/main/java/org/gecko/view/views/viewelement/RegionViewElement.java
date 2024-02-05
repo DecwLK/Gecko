@@ -106,27 +106,26 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
                 () -> new Color(colorProperty.getValue().getRed(), colorProperty.getValue().getGreen(),
                     colorProperty.getValue().getBlue(), 0.5), regionViewModel.getColorProperty()));
         GridPane gridPane = new GridPane();
-        Label name = new Label(ResourceHandler.getString("Labels", "region") + ": " + regionViewModel.getName());
-        Bindings.createStringBinding(
-            () -> ResourceHandler.getString("Labels", "region") + ": " + regionViewModel.getName(),
-            regionViewModel.getNameProperty());
-        Label preCondition = new Label(
-            ResourceHandler.getString("Labels", "pre_condition") + ": " + regionViewModel.getContract()
-                .getPrecondition());
-        Bindings.createStringBinding(
-            () -> ResourceHandler.getString("Labels", "pre_condition") + ": " + regionViewModel.getContract()
-                .getPrecondition(), regionViewModel.getContract().getPreConditionProperty());
-        Label postCondition = new Label(
-            ResourceHandler.getString("Labels", "post_condition") + ": " + regionViewModel.getContract()
-                .getPostcondition());
-        Bindings.createStringBinding(
-            () -> ResourceHandler.getString("Labels", "post_condition") + ": " + regionViewModel.getContract()
-                .getPostcondition(), regionViewModel.getContract().getPostConditionProperty());
-        Label invariant =
-            new Label(ResourceHandler.getString("Labels", "invariant") + ": " + regionViewModel.getInvariant());
-        Bindings.createStringBinding(
-            () -> ResourceHandler.getString("Labels", "invariant") + ": " + regionViewModel.getInvariant(),
-            regionViewModel.getInvariantProperty());
+      
+        Label name = new Label();
+        name.textProperty()
+            .bind(Bindings.createStringBinding(ResourceHandler.getString("Labels", "region") + ": " + regionViewModel.getName(),
+                regionViewModel.getNameProperty()));
+        Label preCondition = new Label();
+        preCondition.textProperty()
+            .bind(Bindings.createStringBinding(ResourceHandler.getString("Labels", "pre_condition") + ": " + regionViewModel.getContract()
+                .getPrecondition(),
+                regionViewModel.getContract().getPreConditionProperty()));
+        Label postCondition = new Label();
+        postCondition.textProperty()
+            .bind(
+                Bindings.createStringBinding(ResourceHandler.getString("Labels", "post_condition") + ": " + regionViewModel.getContract()
+                .getPostcondition(),
+                    regionViewModel.getContract().getPostConditionProperty()));
+        Label invariant = new Label();
+        invariant.textProperty()
+            .bind(ResourceHandler.getString("Labels", "invariant") + ": " + regionViewModel.getInvariant(),
+                regionViewModel.getInvariantProperty()));
         gridPane.add(name, 0, 0);
         gridPane.add(preCondition, 0, 1);
         gridPane.add(postCondition, 0, 2);

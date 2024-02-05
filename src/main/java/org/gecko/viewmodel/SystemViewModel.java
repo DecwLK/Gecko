@@ -24,6 +24,7 @@ import org.gecko.model.System;
 public class SystemViewModel extends BlockViewModelElement<System> {
     private final StringProperty codeProperty;
     private final ListProperty<PortViewModel> portsProperty;
+    private StateViewModel startState;
 
     public SystemViewModel(int id, @NonNull System target) {
         super(id, target);
@@ -50,6 +51,7 @@ public class SystemViewModel extends BlockViewModelElement<System> {
         target.setCode(getCode());
         target.getVariables().clear();
         target.addVariables(portsProperty.stream().map(PortViewModel::getTarget).collect(Collectors.toSet()));
+        target.getAutomaton().setStartState(startState.getTarget());
     }
 
     public void addPort(@NonNull PortViewModel port) {
@@ -59,6 +61,14 @@ public class SystemViewModel extends BlockViewModelElement<System> {
 
     public void removePort(@NonNull PortViewModel port) {
         portsProperty.remove(port);
+    }
+
+    public void setStartState(@NonNull StateViewModel newStartState) {
+        if (startState != null) {
+            startState.setStartState(false);
+        }
+        startState = newStartState;
+        startState.setStartState(true);
     }
 
     @Override

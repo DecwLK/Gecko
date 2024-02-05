@@ -6,7 +6,6 @@ public class ChangeInvariantViewModelElementAction extends Action {
 
     private final RegionViewModel regionViewModel;
     private final String newInvariant;
-
     private final String oldInvariant;
 
     ChangeInvariantViewModelElementAction(RegionViewModel regionViewModel, String newInvariant) {

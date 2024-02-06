@@ -37,7 +37,7 @@ public class MenuBarBuilder {
         // TODO
         menuBar.getMenus()
             .addAll(setupFileMenu(), new Menu("Edit"), new Menu("View"), new Menu("Tools"),
-                new Menu("Help"), setupSearchBar());
+                setupHelpMenu());
     }
 
     public MenuBar build() {
@@ -90,32 +90,47 @@ public class MenuBarBuilder {
         return fileMenu;
     }
 
-    private Menu setupSearchBar() {
-        Menu searchBarMenu = new Menu(null, createSearchBar());
-        return searchBarMenu;
+    private Menu setupHelpMenu() {
+        Menu helpMenu = new Menu("Help");
+
+        MenuItem findElementMenuItem = new MenuItem("Find Element");
+        findElementMenuItem.setOnAction(e -> menuBar.getMenus().add(setupSearchBar()));
+
+        helpMenu.getItems().add(findElementMenuItem);
+        return helpMenu;
     }
 
-    private ToolBar createSearchBar() {
+    private Menu setupSearchBar() {
         ToolBar searchBar = new ToolBar();
+        searchBar.setStyle("-fx-background-color:transparent;-fx-padding:0;-fx-background-size:0;");
+
 
         // Close Search:
         Button closeButton = new Button("x");
         closeButton.setCancelButton(true);
+        closeButton.setStyle("-fx-background-color:transparent;-fx-padding:0;-fx-background-size:0;");
 
         // Navigate Search:
         Button backwardButton = new Button("<");
         backwardButton.setDisable(true);
+        backwardButton.setStyle("-fx-background-color:transparent;-fx-padding:0;-fx-background-size:0;");
 
         Button forwardButton = new Button(">");
         forwardButton.setDisable(true);
+        forwardButton.setStyle("-fx-background-color:transparent;-fx-padding:0;-fx-background-size:0;");
 
         Label matchesLabel = new Label();
         matchesLabel.setTextFill(Color.BLACK);
+        matchesLabel.setStyle("-fx-background-color:transparent;-fx-padding:0;-fx-background-size:0;");
 
         final List<PositionableViewModelElement<?>> matches = new ArrayList<>();
         TextField searchTextField = new TextField();
-        searchTextField.setMaxHeight(1);
+        searchTextField.setStyle("-fx-background-color:transparent;-fx-padding:0;-fx-background-size:0;");
         searchTextField.setPromptText("Search");
+
+        searchBar.getItems().addAll(closeButton, searchTextField, backwardButton, forwardButton, matchesLabel);
+        Menu searchMenu = new Menu(null, searchBar);
+
         searchTextField.setOnAction(e -> {
             List<PositionableViewModelElement<?>> oldSearchMatches = new ArrayList<>(matches);
             oldSearchMatches.forEach(matches::remove);
@@ -161,9 +176,9 @@ public class MenuBarBuilder {
         closeButton.setOnAction(e -> {
             searchTextField.setText("");
             matchesLabel.setText("");
+            menuBar.getMenus().remove(searchMenu);
         });
 
-        searchBar.getItems().addAll(closeButton, searchTextField, backwardButton, forwardButton, matchesLabel);
-        return searchBar;
+        return searchMenu;
     }
 }

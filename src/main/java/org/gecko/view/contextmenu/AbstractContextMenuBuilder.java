@@ -5,7 +5,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
+import org.gecko.actions.CopyPositionableViewModelElementAction;
 import org.gecko.view.views.EditorView;
+import org.gecko.view.views.shortcuts.Shortcuts;
 
 public abstract class AbstractContextMenuBuilder {
 
@@ -25,17 +27,21 @@ public abstract class AbstractContextMenuBuilder {
         // Data transfer commands:
         MenuItem cutMenuItem = new MenuItem("Cut");
         cutMenuItem.setOnAction(e -> actionManager.cut());
+        cutMenuItem.setAccelerator(Shortcuts.CUT.get());
 
         MenuItem copyMenuItem = new MenuItem("Copy");
         copyMenuItem.setOnAction(e -> actionManager.copy());
+        copyMenuItem.setAccelerator(Shortcuts.COPY.get());
 
         MenuItem pasteMenuItem = new MenuItem("Paste");
         pasteMenuItem.setOnAction(e -> actionManager.paste());
+        pasteMenuItem.setAccelerator(Shortcuts.PASTE.get());
 
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
 
         MenuItem deselectMenuItem = new MenuItem("Deselect All");
         deselectMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory().createDeselectAction()));
+        deselectMenuItem.setAccelerator(Shortcuts.DESELECT_ALL.get());
 
         contextMenu.getItems().addAll(cutMenuItem, copyMenuItem, pasteMenuItem, separatorMenuItem, deselectMenuItem);
 

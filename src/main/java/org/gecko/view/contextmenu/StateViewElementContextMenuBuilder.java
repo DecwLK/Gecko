@@ -24,7 +24,7 @@ public class StateViewElementContextMenuBuilder extends AbstractContextMenuBuild
         SeparatorMenuItem dataTransferToStateEditingSeparator = new SeparatorMenuItem();
 
         // State editing commands:
-        MenuItem startStateMenuItem = new MenuItem("Start State"); // TODO: Synchronize field showed in inspector.
+        MenuItem startStateMenuItem = new MenuItem("Start State");
         startStateMenuItem.setDisable(stateViewModel.getIsStartState());
         startStateMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSetStartStateViewModelElementAction(stateViewModel)));

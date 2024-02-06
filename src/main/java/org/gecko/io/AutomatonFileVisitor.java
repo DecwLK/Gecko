@@ -3,6 +3,7 @@ package org.gecko.io;
 import gecko.parser.SystemDefBaseVisitor;
 import gecko.parser.SystemDefParser;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import org.gecko.model.Contract;
@@ -121,6 +122,16 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             if (result != null) {
                 return result;
             }
+        }
+        List<State> startStateCandidates = currentSystem.getAutomaton()
+            .getStates()
+            .stream()
+            .filter(state -> state.getName().matches("[a-z].*"))
+            .toList();
+        if (startStateCandidates.size() > 1) {
+            return "Found multiple start states in automaton %s".formatted(ctx.ident().getText());
+        } else if(startStateCandidates.size() == 1) {
+            currentSystem.getAutomaton().setStartState(startStateCandidates.getFirst());
         }
         return null;
     }

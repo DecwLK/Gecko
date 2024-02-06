@@ -87,7 +87,7 @@ public class GeckoIOManager {
             gvm = automatonFileParser.parse(file);
         } catch (IOException e) {
             String message =
-                "Corrupted file. Could not read file: %s.%s%s".formatted(file.getPath(), System.lineSeparator(),
+                "Could not read file: %s.%s%s".formatted(file.getPath(), System.lineSeparator(),
                     e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
             alert.showAndWait();

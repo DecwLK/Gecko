@@ -34,6 +34,11 @@ public class GeckoIOManager {
         return instance;
     }
 
+    public void setStage(Stage stage) {
+        this.stage = stage;
+        stage.setOnCloseRequest(e -> launchSaveChangesAlert());
+    }
+
     public void createNewProject() {
         File newFile = saveFileChooser(FileTypes.JSON);
         if (newFile != null) {
@@ -120,5 +125,24 @@ public class GeckoIOManager {
         fileChooser.getExtensionFilters()
             .addAll(new FileChooser.ExtensionFilter(fileType.getFileDescription(), fileType.getFileNameRegex()));
         return fileChooser;
+    }
+
+    private void launchSaveChangesAlert() {
+        Alert saveChangesAlert
+            = new Alert(Alert.AlertType.NONE, "Do you want to save changes?", ButtonType.YES, ButtonType.NO);
+        saveChangesAlert.setTitle("Confirm Exit");
+        saveChangesAlert.showAndWait();
+
+        if (saveChangesAlert.getResult().equals(ButtonType.NO)) {
+            return;
+        }
+
+        if (file == null) {
+            File newFile = saveFileChooser(FileTypes.JSON);
+            if (newFile != null) {
+                file = newFile;
+            }
+        }
+        saveGeckoProject(this.file);
     }
 }

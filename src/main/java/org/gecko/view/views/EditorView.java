@@ -305,7 +305,8 @@ public class EditorView {
     private void focusedElementChanged(
         ObservableValue<? extends PositionableViewModelElement<?>> observable, PositionableViewModelElement<?> oldValue,
         PositionableViewModelElement<?> newValue) {
-        currentInspector.set((newValue != null) ? inspectorFactory.createInspector(newValue) : emptyInspector);
+        Inspector newInspector = inspectorFactory.createInspector(newValue);
+        currentInspector.set((newInspector != null) ? newInspector : emptyInspector);
         if (shortcutHandler != null) {
             currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
         }

@@ -58,12 +58,10 @@ public class SystemViewModel extends BlockViewModelElement<System> {
     public void addPort(@NonNull PortViewModel port) {
         // TODO: prior checks
         portsProperty.add(port);
-        updateTarget();
     }
 
     public void removePort(@NonNull PortViewModel port) {
         portsProperty.remove(port);
-        updateTarget();
     }
 
     public void setStartState(@NonNull StateViewModel newStartState) {

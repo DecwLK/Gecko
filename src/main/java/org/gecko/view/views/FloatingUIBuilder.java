@@ -46,9 +46,8 @@ public class FloatingUIBuilder {
 
         Button zoomOutButton = createStyledButton();
         zoomOutButton.getStyleClass().add(ZOOM_OUT_STYLE_CLASS);
-        zoomOutButton.setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1 / ZOOM_SCALE));
-        });
+        zoomOutButton.setOnAction(
+            event -> actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1 / ZOOM_SCALE)));
         zoomOutButton.setTooltip(new Tooltip(Shortcuts.ZOOM_OUT.get().getDisplayText()));
 
         zoomButtons.getChildren().addAll(zoomInButton, zoomLabel, zoomOutButton);

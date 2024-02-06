@@ -1,5 +1,6 @@
 package org.gecko.view.views;
 
+import javafx.scene.Node;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.GeckoView;
 import org.gecko.view.contextmenu.AbstractContextMenuBuilder;
@@ -48,11 +49,7 @@ public class ViewFactory {
 
         AbstractContextMenuBuilder contextMenuBuilder =
             new StateViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), stateViewModel);
-        newStateViewElement.setOnContextMenuRequested(event -> {
-            hideShowingContextMenu(contextMenuBuilder);
-            geckoView.getCurrentView().switchToCursorTool();
-            contextMenuBuilder.build().show(newStateViewElement, event.getScreenX(), event.getScreenY());
-        });
+        setContextMenu(newStateViewElement, contextMenuBuilder);
         return new SelectableViewElementDecorator(newStateViewElement);
     }
 
@@ -61,11 +58,7 @@ public class ViewFactory {
 
         AbstractContextMenuBuilder contextMenuBuilder =
             new RegionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), regionViewModel);
-        newRegionViewElement.setOnContextMenuRequested(event -> {
-            hideShowingContextMenu(contextMenuBuilder);
-            geckoView.getCurrentView().switchToCursorTool();
-            contextMenuBuilder.build().show(newRegionViewElement, event.getScreenX(), event.getScreenY());
-        });
+        setContextMenu(newRegionViewElement, contextMenuBuilder);
         return new SelectableViewElementDecorator(new ElementScalerViewElementDecorator(newRegionViewElement));
     }
 
@@ -74,11 +67,7 @@ public class ViewFactory {
 
         AbstractContextMenuBuilder contextMenuBuilder =
             new VariableBlockViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), portViewModel);
-        newVariableBlockViewElement.setOnContextMenuRequested(event -> {
-            hideShowingContextMenu(contextMenuBuilder);
-            geckoView.getCurrentView().switchToCursorTool();
-            contextMenuBuilder.build().show(newVariableBlockViewElement, event.getScreenX(), event.getScreenY());
-        });
+        setContextMenu(newVariableBlockViewElement, contextMenuBuilder);
 
         return new SelectableViewElementDecorator(newVariableBlockViewElement);
     }
@@ -88,11 +77,7 @@ public class ViewFactory {
 
         AbstractContextMenuBuilder contextMenuBuilder =
             new EdgeViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), edgeViewModel);
-        newEdgeViewElement.setOnContextMenuRequested(event -> {
-            hideShowingContextMenu(contextMenuBuilder);
-            geckoView.getCurrentView().switchToCursorTool();
-            contextMenuBuilder.build().show(newEdgeViewElement, event.getScreenX(), event.getScreenY());
-        });
+        setContextMenu(newEdgeViewElement, contextMenuBuilder);
 
         return new ConnectionElementScalerViewElementDecorator(newEdgeViewElement);
     }
@@ -104,11 +89,7 @@ public class ViewFactory {
         AbstractContextMenuBuilder contextMenuBuilder =
             new SystemConnectionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(),
                 systemConnectionViewModel);
-        newSystemConnectionViewElement.setOnContextMenuRequested(event -> {
-            hideShowingContextMenu(contextMenuBuilder);
-            geckoView.getCurrentView().switchToCursorTool();
-            contextMenuBuilder.build().show(newSystemConnectionViewElement, event.getScreenX(), event.getScreenY());
-        });
+        setContextMenu(newSystemConnectionViewElement, contextMenuBuilder);
 
         return new ConnectionElementScalerViewElementDecorator(newSystemConnectionViewElement);
     }
@@ -118,13 +99,18 @@ public class ViewFactory {
 
         AbstractContextMenuBuilder contextMenuBuilder =
             new SystemViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView(), systemViewModel);
-        newSystemViewElement.setOnContextMenuRequested(event -> {
-            hideShowingContextMenu(contextMenuBuilder);
-            geckoView.getCurrentView().switchToCursorTool();
-            contextMenuBuilder.build().show(newSystemViewElement, event.getScreenX(), event.getScreenY());
-        });
+        setContextMenu(newSystemViewElement, contextMenuBuilder);
 
         return new SelectableViewElementDecorator(newSystemViewElement);
+    }
+
+    private void setContextMenu(Node newViewElement, AbstractContextMenuBuilder contextMenuBuilder) {
+        newViewElement.setOnContextMenuRequested(event -> {
+            geckoView.getCurrentView().switchToCursorTool();
+            geckoView.getCurrentView().changeContextMenu(contextMenuBuilder.build());
+            contextMenuBuilder.getContextMenu().show(newViewElement, event.getScreenX(), event.getScreenY());
+            event.consume();
+        });
     }
 
     private EditorView createAutomatonEditorView(EditorViewModel editorViewModel) {
@@ -137,11 +123,5 @@ public class ViewFactory {
         EditorView editorView = new EditorView(this, actionManager, editorViewModel);
         editorView.setShortcutHandler(new SystemEditorViewShortcutHandler(actionManager, editorView));
         return editorView;
-    }
-
-    private void hideShowingContextMenu(AbstractContextMenuBuilder contextMenuBuilder) {
-        if (contextMenuBuilder.getContextMenu() != null) {
-            contextMenuBuilder.getContextMenu().hide();
-        }
     }
 }

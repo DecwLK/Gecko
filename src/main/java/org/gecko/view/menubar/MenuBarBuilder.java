@@ -92,21 +92,26 @@ public class MenuBarBuilder {
         // Edit history navigation:
         MenuItem undoMenuItem = new MenuItem("Undo");
         undoMenuItem.setOnAction(e  -> actionManager.undo());
+        undoMenuItem.setAccelerator(Shortcuts.UNDO.get());
 
         MenuItem redoMenuItem = new MenuItem("Redo");
         redoMenuItem.setOnAction(e -> actionManager.redo());
+        redoMenuItem.setAccelerator(Shortcuts.REDO.get());
 
         SeparatorMenuItem historyToDataTransferSeparator = new SeparatorMenuItem();
 
         // Data transfer commands:
         MenuItem cutMenuItem = new MenuItem("Cut");
         cutMenuItem.setOnAction(e -> actionManager.cut());
+        cutMenuItem.setAccelerator(Shortcuts.CUT.get());
 
         MenuItem copyMenuItem = new MenuItem("Copy");
         copyMenuItem.setOnAction(e -> actionManager.copy());
+        copyMenuItem.setAccelerator(Shortcuts.COPY.get());
 
         MenuItem pasteMenuItem = new MenuItem("Paste");
         pasteMenuItem.setOnAction(e -> actionManager.paste());
+        pasteMenuItem.setAccelerator(Shortcuts.PASTE.get());
 
         // General selection commands:
         MenuItem selectAllMenuItem = new MenuItem("Select All");
@@ -114,10 +119,12 @@ public class MenuBarBuilder {
             Set<PositionableViewModelElement<?>> allElements = view.getAllDisplayedElements();
             actionManager.run(actionManager.getActionFactory().createSelectAction(allElements, true));
         });
+        selectAllMenuItem.setAccelerator(Shortcuts.SELECT_ALL.get());
 
         MenuItem deselectAllMenuItem = new MenuItem("Deselect All");
         deselectAllMenuItem.setOnAction(e
             -> actionManager.run(actionManager.getActionFactory().createDeselectAction()));
+        deselectAllMenuItem.setAccelerator(Shortcuts.DESELECT_ALL.get());
 
         SeparatorMenuItem dataTransferToSelectionSeparator = new SeparatorMenuItem();
 
@@ -135,6 +142,7 @@ public class MenuBarBuilder {
         changeViewMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createViewSwitchAction(view.getCurrentView().getViewModel().getCurrentSystem(),
                 !view.getCurrentView().getViewModel().isAutomatonEditor())));
+        changeViewMenuItem.setAccelerator(Shortcuts.SWITCH_EDITOR.get());
 
         MenuItem goToParentSystemMenuItem = new MenuItem("Go To Parent System");
         goToParentSystemMenuItem.setOnAction(e -> {
@@ -150,6 +158,7 @@ public class MenuBarBuilder {
                     .createViewSwitchAction(view.getCurrentView().getViewModel().getParentSystem(), false));
             }
         });
+        goToParentSystemMenuItem.setAccelerator(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get());
 
         SeparatorMenuItem viewSwitchToZoomSeparator = new SeparatorMenuItem();
 
@@ -158,10 +167,12 @@ public class MenuBarBuilder {
         MenuItem zoomInMenuItem = new MenuItem("Zoom In");
         zoomInMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createZoomCenterAction(1.1)));
+        zoomInMenuItem.setAccelerator(Shortcuts.ZOOM_IN.get());
 
         MenuItem zoomOutMenuItem = new MenuItem("Zoom Out");
         zoomOutMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createZoomCenterAction(1 / 1.1)));
+        zoomOutMenuItem.setAccelerator(Shortcuts.ZOOM_OUT.get());
 
         viewMenu.getItems().addAll(changeViewMenuItem, goToParentSystemMenuItem, viewSwitchToZoomSeparator,
             zoomInMenuItem, zoomOutMenuItem);
@@ -176,18 +187,17 @@ public class MenuBarBuilder {
         MenuItem cursorMenuItem = new MenuItem(ToolType.CURSOR.getLabel());
         cursorMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
                 .createSelectToolAction(ToolType.CURSOR)));
+        cursorMenuItem.setAccelerator(Shortcuts.CURSOR_TOOL.get());
 
         MenuItem marqueeMenuItem = new MenuItem(ToolType.MARQUEE_TOOL.getLabel());
         marqueeMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.MARQUEE_TOOL)));
+        marqueeMenuItem.setAccelerator(Shortcuts.MARQUEE_TOOL.get());
 
         MenuItem panMenuItem = new MenuItem(ToolType.PAN.getLabel());
         panMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectToolAction(ToolType.PAN)));
-
-        MenuItem zoomMenuItem = new MenuItem(ToolType.ZOOM_TOOL.getLabel());
-        zoomMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSelectToolAction(ToolType.ZOOM_TOOL)));
+        panMenuItem.setAccelerator(Shortcuts.PAN_TOOL.get());
 
         SeparatorMenuItem generalFromSystemSeparator = new SeparatorMenuItem();
 

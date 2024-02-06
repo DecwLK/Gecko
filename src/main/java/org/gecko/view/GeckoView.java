@@ -14,8 +14,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import lombok.Getter;
-import org.gecko.view.contextmenu.AbstractContextMenuBuilder;
-import org.gecko.view.contextmenu.ViewContextMenuBuilder;
 import org.gecko.view.menubar.MenuBarBuilder;
 import org.gecko.view.views.EditorView;
 import org.gecko.view.views.ViewFactory;
@@ -61,7 +59,8 @@ public class GeckoView {
         centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
 
         // Menubar
-        mainPane.setTop(new MenuBarBuilder(this, viewModel.getActionManager()).build());
+        menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
+        mainPane.setTop(menuBar);
 
         // Initial view
         currentView = viewFactory.createEditorView(viewModel.getCurrentEditor(),
@@ -72,19 +71,6 @@ public class GeckoView {
         centerPane.setPickOnBounds(false);
         centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
 
-        // Menubar
-        mainPane.setTop(new MenuBarBuilder(this, viewModel.getActionManager()).build());
-        AbstractContextMenuBuilder contextMenuBuilder =
-            new ViewContextMenuBuilder(viewModel.getActionManager(), currentView, currentView.getViewModel());
-        centerPane.setOnContextMenuRequested(event -> {
-            if (currentView.getViewModel().getSelectionManager().getCurrentSelection().size() != 1) {
-                contextMenuBuilder.build().show(centerPane, event.getScreenX(), event.getScreenY());
-            }
-        });
-
-        // Menubar
-        menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
-        mainPane.setTop(menuBar);
         refreshView();
     }
 

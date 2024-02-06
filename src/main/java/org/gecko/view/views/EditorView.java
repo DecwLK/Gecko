@@ -18,6 +18,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
@@ -74,6 +75,7 @@ public class EditorView {
     private ObjectProperty<Inspector> currentInspector;
 
     private ShortcutHandler shortcutHandler;
+    private ContextMenu contextMenu;
 
     public EditorView(
         ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel) {
@@ -185,6 +187,15 @@ public class EditorView {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
         });
 
+        AbstractContextMenuBuilder contextMenuBuilder =
+            new ViewContextMenuBuilder(viewModel.getActionManager(), this, viewModel);
+        this.contextMenu = contextMenuBuilder.build();
+        currentViewPane.setOnContextMenuRequested(event -> {
+            changeContextMenu(contextMenuBuilder.getContextMenu());
+            this.contextMenu.show(currentViewPane, event.getScreenX(), event.getScreenY());
+            event.consume();
+        });
+
         initializeViewElements();
         acceptTool(viewModel.getCurrentTool());
         focus();
@@ -201,33 +212,6 @@ public class EditorView {
 
     public void focus() {
         currentViewPane.requestFocus();
-        AbstractContextMenuBuilder contextMenuBuilder
-            = new ViewContextMenuBuilder(viewModel.getActionManager(), this, viewModel);
-        currentViewPane.setOnContextMenuRequested(event -> {
-            if (contextMenuBuilder.getContextMenu() != null) {
-                contextMenuBuilder.getContextMenu().hide();
-            }
-
-            switchToCursorTool();
-
-            if (viewModel.getSelectionManager().getCurrentSelection().size() != 1) {
-                contextMenuBuilder.build().show(currentViewPane, event.getScreenX(), event.getScreenY());
-            } else {
-                // TODO: Get actual coordinates of element on screen. They don't correspond at the moment.
-                PositionableViewModelElement<?> selectedElement =
-                    viewModel.getSelectionManager().getCurrentSelection().stream().toList().getFirst();
-
-                /*System.out.println("x: " + event.getScreenX());
-                System.out.println("y: " + event.getScreenY());*/
-
-                if ((event.getScreenX() < selectedElement.getPosition().getX()
-                    || event.getScreenX() > selectedElement.getPosition().getX() + selectedElement.getSize().getX())
-                    && (event.getScreenY() > selectedElement.getPosition().getY() - selectedElement.getSize().getY()
-                    || event.getScreenY() < selectedElement.getPosition().getY())) {
-                    contextMenuBuilder.build().show(currentViewPane, event.getScreenX(), event.getScreenY());
-                }
-            }
-        });
     }
 
     private void setViewPortPosition(Point2D point) {
@@ -471,5 +455,12 @@ public class EditorView {
             .filter(button -> ((ToggleButton) button).getText().equals("Cursor Tool"))
             .findFirst()
             .ifPresent(cursorButton -> ((ToggleButton) cursorButton).fire());
+    }
+
+    public void changeContextMenu(ContextMenu contextMenu) {
+        if (this.contextMenu != null) {
+            this.contextMenu.hide();
+        }
+        this.contextMenu = contextMenu;
     }
 }

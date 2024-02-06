@@ -42,9 +42,14 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             model = new GeckoModel(newRoot);
         } else if (scout.getRootChildren().size() > 1) {
             //We need to create a new root system and add the old roots as children
-            scout.getRootChildren().forEach(this::visitSystem);
+            for (SystemDefParser.SystemContext rootChild : scout.getRootChildren()) {
+                String result = rootChild.accept(this);
+                if (result != null) {
+                    return result;
+                }
+            }
         } else {
-            return "No root system found"; //TODO
+            return "No root system found";
         }
         return null;
     }
@@ -74,7 +79,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         }
         if (ctx.use_contracts() != null) {
             if (ctx.use_contracts().size() > 1 || ctx.use_contracts().getFirst().use_contract().size() > 1) {
-                return "Multiple automata not supported"; //TODO
+                return "Multiple automata in one system not supported";
             }
             String result = ctx.use_contracts().getFirst().use_contract().getFirst().accept(this);
             if (result != null) {
@@ -88,20 +93,28 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
     @Override
     public String visitUse_contract(SystemDefParser.Use_contractContext ctx) {
         if (!ctx.subst().isEmpty()) {
-            return "Substitution not supported"; //TODO
+            return "Substitution not supported";
         }
         SystemDefParser.AutomataContext automata = scout.getAutomaton(ctx.ident().getText());
         if (automata == null) {
-            return "Automaton not found"; //TODO
+            return "Automaton %s not found".formatted(ctx.ident().getText());
         }
         return automata.accept(this);
     }
 
     @Override
     public String visitAutomata(SystemDefParser.AutomataContext ctx) {
-        if (!(ctx.io().isEmpty() && ctx.history().isEmpty() && ctx.prepost().isEmpty() && ctx.use_contracts()
-            .isEmpty())) {
-            return "Unsupported automata features"; //TODO
+        if (!ctx.io().isEmpty()) {
+            return "Automata io not supported";
+        }
+        if (!ctx.history().isEmpty()) {
+            return "Automata history not supported";
+        }
+        if (!ctx.prepost().isEmpty()) {
+            return "Automata prepost not supported";
+        }
+        if (!ctx.use_contracts().isEmpty()) {
+            return "Automata use_contracts not supported";
         }
         for (SystemDefParser.TransitionContext transition : ctx.transition()) {
             String result = transition.accept(this);
@@ -114,8 +127,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
 
     @Override
     public String visitTransition(SystemDefParser.TransitionContext ctx) {
-        if (ctx.vvguard() != null || ctx.contr != null) {
-            return "Unsupported transition features"; //TODO
+        if (ctx.vvguard() != null) {
+            return "Vvguards are not supported";
+        }
+        if (ctx.contr != null) {
+            return "Nested automata are not supported";
         }
         String startName = ctx.from.getText();
         String endName = ctx.to.getText();
@@ -150,7 +166,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         for (SystemDefParser.VariableContext variable : ctx.variable()) {
             if (!Variable.getBuiltinTypes().contains(variable.t.getText())) {
                 if (scout.getSystem(variable.t.getText()) == null) {
-                    return "Invalid type"; //TODO
+                    return "Type %s not found".formatted(variable.t.getText());
                 }
                 continue;
             }
@@ -170,25 +186,25 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
     @Override
     public String visitConnection(SystemDefParser.ConnectionContext ctx) {
         if (ctx.from.inst == null || ctx.to.stream().anyMatch(ident -> ident.inst == null)) {
-            return "Invalid connection"; //TODO
+            return "Invalid system in system connection";
         }
         System startSystem = currentSystem.getChildByName(ctx.from.inst.getText());
         if (startSystem == null) {
-            return "Invalid connection"; //TODO
+            return "Could not find system %s".formatted(ctx.from.inst.getText());
         }
         Variable start = startSystem.getVariableByName(ctx.from.port.getText());
         if (start == null) {
-            return "Invalid connection"; //TODO
+            return "Could not find variable %s".formatted(ctx.from.port.getText());
         }
         Set<Variable> end = new HashSet<>();
         for (SystemDefParser.IoportContext ident : ctx.to) {
             System endSystem = currentSystem.getChildByName(ident.inst.getText());
             if (endSystem == null) {
-                return "Invalid connection"; //TODO
+                return "Could not find system %s".formatted(ident.inst.getText());
             }
             Variable endVar = endSystem.getVariableByName(ident.port.getText());
             if (endVar == null) {
-                return "Invalid connection"; //TODO
+                return "Could not find variable %s".formatted(ident.port.getText());
             }
             end.add(endVar);
         }

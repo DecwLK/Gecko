@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class DeleteRestoreActionTest {
     private static ActionManager actionManager;
@@ -28,8 +29,12 @@ class DeleteRestoreActionTest {
         actionManager = new ActionManager(geckoViewModel);
         rootSystemViewModel = geckoViewModel.getCurrentEditor().getCurrentSystem();
         childSystemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
-        stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
-        stateViewModel2 = viewModelFactory.createStateViewModelIn(childSystemViewModel1);
+        try {
+            stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+            stateViewModel2 = viewModelFactory.createStateViewModelIn(childSystemViewModel1);
+        } catch (Exception e) {
+            fail();
+        }
     }
 
     @Test

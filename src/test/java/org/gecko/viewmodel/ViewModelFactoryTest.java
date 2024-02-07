@@ -2,6 +2,7 @@ package org.gecko.viewmodel;
 
 import java.util.Set;
 import org.gecko.exceptions.MissingViewModelElementException;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.GeckoModel;
@@ -42,8 +43,12 @@ class ViewModelFactoryTest {
         systemViewModel1 = viewModelFactory.createSystemViewModelIn(root);
         systemViewModel2 = viewModelFactory.createSystemViewModelIn(root);
         systemViewModel11 = viewModelFactory.createSystemViewModelIn(systemViewModel1);
-        stateViewModel1 = viewModelFactory.createStateViewModelIn(systemViewModel1);
-        stateViewModel2 = viewModelFactory.createStateViewModelIn(systemViewModel1);
+        try {
+            stateViewModel1 = viewModelFactory.createStateViewModelIn(systemViewModel1);
+            stateViewModel2 = viewModelFactory.createStateViewModelIn(systemViewModel1);
+        } catch (ModelException e) {
+            fail();
+        }
     }
 
     @Test

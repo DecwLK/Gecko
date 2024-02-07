@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class CreateContractViewModelElementActionTest {
 
@@ -24,7 +25,11 @@ class CreateContractViewModelElementActionTest {
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
         SystemViewModel rootSystemViewModel =
             viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
-        state = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        try {
+            state = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        } catch (Exception e) {
+            fail();
+        }
         geckoViewModel.switchEditor(rootSystemViewModel, true);
     }
 

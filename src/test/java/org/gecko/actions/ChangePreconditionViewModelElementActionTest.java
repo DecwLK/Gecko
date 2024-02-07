@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class ChangePreconditionViewModelElementActionTest {
 
@@ -26,7 +27,12 @@ class ChangePreconditionViewModelElementActionTest {
         SystemViewModel rootSystemViewModel =
             viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
-        StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        StateViewModel stateViewModel = null;
+        try {
+            stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        } catch (Exception e) {
+            fail();
+        }
         viewModelFactory.createContractViewModelIn(stateViewModel);
         String preCondition = stateViewModel.getContractsProperty().getFirst().getPrecondition();
         String postCondition = stateViewModel.getContractsProperty().getFirst().getPostcondition();

@@ -18,7 +18,7 @@ public class ViewElementSearchVisitor implements PositionableViewModelElementVis
 
     @Override
     public SystemViewModel visit(SystemViewModel systemViewModel) {
-        if (search.equals(systemViewModel.getName())) {
+        if (systemViewModel.getName().toLowerCase().contains(search.toLowerCase())) {
             return systemViewModel;
         }
         return null;
@@ -26,7 +26,7 @@ public class ViewElementSearchVisitor implements PositionableViewModelElementVis
 
     @Override
     public RegionViewModel visit(RegionViewModel regionViewModel) {
-        if (search.equals(regionViewModel.getName())) {
+        if (regionViewModel.getName().toLowerCase().contains(search.toLowerCase())) {
             return regionViewModel;
         }
         return null;
@@ -47,7 +47,7 @@ public class ViewElementSearchVisitor implements PositionableViewModelElementVis
 
     @Override
     public StateViewModel visit(StateViewModel stateViewModel) {
-        if (search.equals(stateViewModel.getName())) {
+        if (stateViewModel.getName().toLowerCase().contains(search.toLowerCase())) {
             return stateViewModel;
         }
         for (ContractViewModel contractViewModel : stateViewModel.getContracts()) {
@@ -60,13 +60,13 @@ public class ViewElementSearchVisitor implements PositionableViewModelElementVis
 
     @Override
     public PortViewModel visit(PortViewModel portViewModel) {
-        if (search.equals(portViewModel.getName())) {
+        if (portViewModel.getName().toLowerCase().contains(search.toLowerCase())) {
             return portViewModel;
         }
         return null;
     }
 
     private boolean visit(ContractViewModel contractViewModel) {
-        return search.equals(contractViewModel.getName());
+        return contractViewModel.getName().toLowerCase().contains(search.toLowerCase());
     }
 }

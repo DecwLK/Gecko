@@ -93,10 +93,10 @@ public class MenuBarBuilder {
     private Menu setupHelpMenu() {
         Menu helpMenu = new Menu("Help");
 
-        MenuItem findElementMenuItem = new MenuItem("Find Element");
-        findElementMenuItem.setOnAction(e -> menuBar.getMenus().add(setupSearchBar()));
+        MenuItem findElementsMenuItem = new MenuItem("Find Elements");
+        findElementsMenuItem.setOnAction(e -> menuBar.getMenus().add(setupSearchBar()));
 
-        helpMenu.getItems().add(findElementMenuItem);
+        helpMenu.getItems().add(findElementsMenuItem);
         return helpMenu;
     }
 
@@ -132,6 +132,7 @@ public class MenuBarBuilder {
         Menu searchMenu = new Menu(null, searchBar);
 
         searchTextField.setOnAction(e -> {
+            // TODO: Deselect current selection.
             List<PositionableViewModelElement<?>> oldSearchMatches = new ArrayList<>(matches);
             oldSearchMatches.forEach(matches::remove);
             matches.addAll(view.getCurrentView().getViewModel().getElementsByName(searchTextField.getText()));

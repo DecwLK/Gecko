@@ -21,7 +21,8 @@ public class RestoreEdgeViewModelElementAction extends Action {
     boolean run() throws GeckoException {
         automaton.addEdge(edgeViewModel.getTarget());
         geckoViewModel.addViewModelElement(edgeViewModel);
-        //add to source and destination states
+        edgeViewModel.getSource().getOutgoingEdges().add(edgeViewModel);
+        edgeViewModel.getDestination().getIncomingEdges().add(edgeViewModel);
         return true;
     }
 

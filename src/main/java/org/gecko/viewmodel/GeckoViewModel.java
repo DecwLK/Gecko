@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -32,7 +32,7 @@ public class GeckoViewModel {
     private final GeckoModel geckoModel;
     private final ViewModelFactory viewModelFactory;
     private final Property<EditorViewModel> currentEditorProperty;
-    private final ListProperty<EditorViewModel> openedEditorsProperty;
+    private final SetProperty<EditorViewModel> openedEditorsProperty;
     @Getter
     private final ActionManager actionManager;
 
@@ -41,7 +41,7 @@ public class GeckoViewModel {
         this.geckoModel = geckoModel;
         actionManager = new ActionManager(this);
         viewModelFactory = new ViewModelFactory(actionManager, this, geckoModel.getModelFactory());
-        openedEditorsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
+        openedEditorsProperty = new SimpleSetProperty<>(FXCollections.observableSet());
         currentEditorProperty = new SimpleObjectProperty<>();
 
         // Create root system view model

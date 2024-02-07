@@ -18,11 +18,11 @@ public enum Shortcuts {
     SELECTION_BACK(KeyCode.U, KeyCombination.SHORTCUT_DOWN),
     SELECTION_FORWARD(KeyCode.U, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN),
     ZOOM_IN(KeyCode.PLUS, KeyCombination.SHORTCUT_DOWN), ZOOM_OUT(KeyCode.MINUS, KeyCombination.SHORTCUT_DOWN),
-    SWITCH_EDITOR(KeyCode.F1, KeyCombination.SHORTCUT_DOWN),
-    OPEN_CHILD_SYSTEM_EDITOR(KeyCode.F2, KeyCombination.SHORTCUT_DOWN),
-    OPEN_PARENT_SYSTEM_EDITOR(KeyCode.F3, KeyCombination.SHORTCUT_DOWN), CURSOR_TOOL(KeyCode.A),
-    MARQUEE_TOOL(KeyCode.M), PAN_TOOL(KeyCode.H), ZOOM_TOOL(KeyCode.Z), SYSTEM_CREATOR(KeyCode.Y),
-    CONNECTION_CREATOR(KeyCode.C), VARIABLE_BLOCK_CREATOR(KeyCode.V), STATE_CREATOR(KeyCode.S), EDGE_CREATOR(KeyCode.E),
+    SWITCH_EDITOR(KeyCode.DIGIT1, KeyCombination.SHORTCUT_DOWN),
+    OPEN_CHILD_SYSTEM_EDITOR(KeyCode.DIGIT2, KeyCombination.SHORTCUT_DOWN),
+    OPEN_PARENT_SYSTEM_EDITOR(KeyCode.DIGIT3, KeyCombination.SHORTCUT_DOWN), CURSOR_TOOL(KeyCode.A),
+    MARQUEE_TOOL(KeyCode.M), PAN_TOOL(KeyCode.H), ZOOM_TOOL(KeyCode.Z), SYSTEM_CREATOR(KeyCode.S),
+    CONNECTION_CREATOR(KeyCode.E), VARIABLE_BLOCK_CREATOR(KeyCode.V), STATE_CREATOR(KeyCode.S), EDGE_CREATOR(KeyCode.E),
     REGION_CREATOR(KeyCode.R);
 
     private final KeyCodeCombination keyCodeCombination;

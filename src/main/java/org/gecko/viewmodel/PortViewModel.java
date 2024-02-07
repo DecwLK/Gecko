@@ -4,6 +4,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -21,10 +22,23 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
     private final Property<Visibility> visibilityProperty;
     private final StringProperty typeProperty;
 
+    private final Property<Point2D> systemPortPositionProperty;
+    private final Property<Point2D> systemPortSizeProperty;
+
     public PortViewModel(int id, @NonNull Variable target) {
         super(id, target);
         this.visibilityProperty = new SimpleObjectProperty<>(target.getVisibility());
         this.typeProperty = new SimpleStringProperty(target.getType());
+        this.systemPortPositionProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
+        this.systemPortSizeProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
+    }
+
+    public void setSystemPortPosition(@NonNull Point2D position) {
+        systemPortPositionProperty.setValue(position);
+    }
+
+    public void setSystemPortSize(@NonNull Point2D size) {
+        systemPortSizeProperty.setValue(size);
     }
 
     public Visibility getVisibility() {

@@ -17,11 +17,13 @@ import org.gecko.view.views.viewelement.SystemConnectionViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.view.views.viewelement.ViewElement;
+import org.gecko.view.views.viewelement.decorator.BlockElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.SelectionManager;
+import org.gecko.viewmodel.SystemConnectionViewModel;
 
 public class CursorTool extends Tool {
     private boolean isDragging = false;
@@ -88,34 +90,21 @@ public class CursorTool extends Tool {
     public void visit(ConnectionElementScalerViewElementDecorator connectionElementScalerViewElementDecorator) {
         super.visit(connectionElementScalerViewElementDecorator);
 
-        connectionElementScalerViewElementDecorator.drawElement().setOnMouseClicked(event -> {
-            if (!connectionElementScalerViewElementDecorator.isSelected()) {
-                return;
-            }
-            if (isDragging) {
-                isDragging = false;
-                return;
-            }
-
-            // Create new scaler block
-            Point2D newScalerBlockPosition =
-                getWorldCoordinates(connectionElementScalerViewElementDecorator.drawElement(),
-                    new Point2D(event.getX(), event.getY())).multiply(1 / editorViewModel.getZoomScale());
-            Action createScalerBlockAction = actionManager.getActionFactory()
-                .createCreateEdgeScalerBlockViewElementAction(connectionElementScalerViewElementDecorator,
-                    newScalerBlockPosition);
-            actionManager.run(createScalerBlockAction);
-
-            // Add handlers to the new scaler block
-            connectionElementScalerViewElementDecorator.accept(this);
-        });
-
         for (ElementScalerBlock scaler : connectionElementScalerViewElementDecorator.getScalers()) {
-            setScalerBlockHandlers(scaler);
+            setConnectionScalerElementsHandlers(scaler);
         }
     }
 
-    private void setScalerBlockHandlers(ElementScalerBlock scaler) {
+    @Override
+    public void visit(BlockElementScalerViewElementDecorator blockElementScalerViewElementDecorator) {
+        super.visit(blockElementScalerViewElementDecorator);
+
+        for (ElementScalerBlock scaler : blockElementScalerViewElementDecorator.getScalers()) {
+            setBlockScalerElementHandlers(scaler);
+        }
+    }
+
+    private void setBlockScalerElementHandlers(ElementScalerBlock scaler) {
         scaler.setOnMousePressed(event -> {
             startDraggingElementHandler(event, scaler);
             scaler.setDragging(true);
@@ -135,9 +124,47 @@ public class CursorTool extends Tool {
             }
             Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
             scaler.setPoint(scaler.getPoint().add(startDragPosition.subtract(endWorldPos)));
-            Action moveAction = actionManager.getActionFactory()
-                .createMoveEdgeScalerBlockViewElementAction((EdgeViewModel) scaler.getDecoratorTarget().getTarget(),
-                    scaler, endWorldPos.subtract(startDragPosition));
+            //            Action resizeAction = actionManager.getActionFactory();
+            //            actionManager.run(resizeAction);
+            startDragPosition = null;
+            draggedElement = null;
+            scaler.setDragging(false);
+        });
+    }
+
+    private void setConnectionScalerElementsHandlers(ElementScalerBlock scaler) {
+        scaler.setOnMousePressed(event -> {
+            startDraggingElementHandler(event, scaler);
+            scaler.setDragging(true);
+        });
+        scaler.setOnMouseDragged(event -> {
+            if (!isDragging) {
+                return;
+            }
+            Point2D eventPosition = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
+            Point2D delta = eventPosition.subtract(previousDragPosition);
+            scaler.setPoint(scaler.getPoint().add(delta));
+            previousDragPosition = eventPosition;
+        });
+        scaler.setOnMouseReleased(event -> {
+            if (!isDragging) {
+                return;
+            }
+            Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
+            scaler.setPoint(scaler.getPoint().add(startDragPosition.subtract(endWorldPos)));
+            Action moveAction;
+
+            if (editorViewModel.isAutomatonEditor()) {
+                moveAction = actionManager.getActionFactory()
+                    .createMoveEdgeViewModelElementAction((EdgeViewModel) scaler.getDecoratorTarget().getTarget(),
+                        scaler, endWorldPos.subtract(startDragPosition));
+            } else {
+                moveAction = actionManager.getActionFactory()
+                    .createMoveSystemConnectionViewModelElementAction(
+                        (SystemConnectionViewModel) scaler.getDecoratorTarget().getTarget(), scaler,
+                        endWorldPos.subtract(startDragPosition));
+            }
+
             actionManager.run(moveAction);
             startDragPosition = null;
             draggedElement = null;

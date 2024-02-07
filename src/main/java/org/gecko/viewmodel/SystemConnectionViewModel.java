@@ -18,7 +18,8 @@ import org.gecko.model.SystemConnection;
  */
 @Getter
 @Setter
-public class SystemConnectionViewModel extends PositionableViewModelElement<SystemConnection> {
+public class SystemConnectionViewModel extends PositionableViewModelElement<SystemConnection>
+    implements ConnectionViewModel {
     private final Property<PortViewModel> sourceProperty;
     private final Property<PortViewModel> destinationProperty;
     private final ObservableList<Property<Point2D>> edgePoints;
@@ -29,12 +30,6 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
         this.sourceProperty = new SimpleObjectProperty<>(source);
         this.destinationProperty = new SimpleObjectProperty<>(destination);
         this.edgePoints = FXCollections.observableArrayList();
-
-        Property<Point2D> startPoint = new SimpleObjectProperty<>(getSource().getCenter());
-        Property<Point2D> endPoint = new SimpleObjectProperty<>(getDestination().getCenter());
-
-        edgePoints.add(startPoint);
-        edgePoints.add(endPoint);
     }
 
     public void setSource(@NonNull PortViewModel source) {
@@ -62,5 +57,10 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     @Override
     public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+        edgePoints.get(index).setValue(point);
     }
 }

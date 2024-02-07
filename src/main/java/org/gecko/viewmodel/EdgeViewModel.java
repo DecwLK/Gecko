@@ -23,7 +23,7 @@ import org.gecko.model.Kind;
  */
 @Getter
 @Setter
-public class EdgeViewModel extends PositionableViewModelElement<Edge> {
+public class EdgeViewModel extends PositionableViewModelElement<Edge> implements ConnectionViewModel {
 
     private final Property<Kind> kindProperty;
     private final IntegerProperty priorityProperty;
@@ -46,6 +46,9 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         Property<Point2D> endPoint = new SimpleObjectProperty<>(getDestination().getCenter());
 
         updateConnectionListener();
+
+        getSource().getOutgoingEdges().add(this);
+        getDestination().getIncomingEdges().add(this);
 
         edgePoints.add(startPoint);
         edgePoints.add(endPoint);
@@ -77,7 +80,9 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
 
     public void setSource(@NonNull StateViewModel source) {
         clearConnectionListener();
+        getSource().getOutgoingEdges().remove(this);
         sourceProperty.setValue(source);
+        getSource().getOutgoingEdges().add(this);
         updateConnectionListener();
     }
 
@@ -87,16 +92,14 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
 
     public void setDestination(@NonNull StateViewModel destination) {
         clearConnectionListener();
+        getDestination().getIncomingEdges().remove(this);
         destinationProperty.setValue(destination);
+        getDestination().getIncomingEdges().add(this);
         updateConnectionListener();
     }
 
     public StateViewModel getDestination() {
         return destinationProperty.getValue();
-    }
-
-    public void setEdgePoint(int index, Point2D point) {
-        edgePoints.get(index).setValue(point);
     }
 
     private void clearConnectionListener() {
@@ -132,5 +135,10 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     @Override
     public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public void setEdgePoint(int index, Point2D point) {
+        edgePoints.get(index).setValue(point);
     }
 }

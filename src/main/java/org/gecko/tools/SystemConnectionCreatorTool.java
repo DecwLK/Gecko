@@ -8,14 +8,16 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.PortViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
+import org.gecko.view.views.viewelement.VariableBlockViewElement;
+import org.gecko.viewmodel.PortViewModel;
 
 public class SystemConnectionCreatorTool extends Tool {
 
-    private PortViewElement firstPortViewElement;
+    private PortViewModel firstPortViewModel;
 
     public SystemConnectionCreatorTool(ActionManager actionManager) {
         super(actionManager, ToolType.CONNECTION_CREATOR);
-        firstPortViewElement = null;
+        firstPortViewModel = null;
     }
 
     @Override
@@ -27,22 +29,30 @@ public class SystemConnectionCreatorTool extends Tool {
     @Override
     public void visit(PortViewElement portViewElement) {
         super.visit(portViewElement);
-        portViewElement.setOnMouseClicked(event -> {
-            if (firstPortViewElement == null || firstPortViewElement == portViewElement) {
-                firstPortViewElement = portViewElement;
-            } else {
-                Action createAction = actionManager.getActionFactory()
-                    .createCreateSystemConnectionViewModelElementAction(firstPortViewElement.getViewModel(),
-                        portViewElement.getViewModel());
-                actionManager.run(createAction);
-                firstPortViewElement = null;
-            }
-        });
+        portViewElement.setOnMouseClicked(event -> setPortViewModel(portViewElement.getViewModel()));
     }
 
+    @Override
+    public void visit(VariableBlockViewElement variableBlockViewElement) {
+        super.visit(variableBlockViewElement);
+        variableBlockViewElement.setOnMouseClicked(event -> setPortViewModel(variableBlockViewElement.getTarget()));
+    }
+
+    @Override
     public void visit(SystemViewElement systemViewElement) {
         super.visit(systemViewElement);
         //Pass events to the port view elements
         systemViewElement.setOnMouseClicked(null);
+    }
+
+    private void setPortViewModel(PortViewModel portViewModel) {
+        if (firstPortViewModel == null || firstPortViewModel == portViewModel) {
+            firstPortViewModel = portViewModel;
+        } else {
+            Action createAction = actionManager.getActionFactory()
+                .createCreateSystemConnectionViewModelElementAction(firstPortViewModel, portViewModel);
+            actionManager.run(createAction);
+            firstPortViewModel = null;
+        }
     }
 }

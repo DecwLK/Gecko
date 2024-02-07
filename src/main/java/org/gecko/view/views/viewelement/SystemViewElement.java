@@ -85,6 +85,8 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         prefHeightProperty().bind(
             Bindings.createDoubleBinding(() -> systemViewModel.getSize().getY(), systemViewModel.getSizeProperty()));
         portsProperty.bind(systemViewModel.getPortsProperty());
+
+        systemViewModel.getPositionProperty().addListener((observable, oldValue, newValue) -> updatePortViewModels());
     }
 
     @Override
@@ -120,6 +122,19 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         }
     }
 
+    private void updatePortViewModels() {
+        for (PortViewElement portViewElement : portViewElements) {
+            portViewElement.getViewModel().setSystemPortSize(portViewElement.getViewSize());
+
+            Point2D portViewElementPositionInScene = portViewElement.localToScene(portViewElement.getViewPosition());
+
+            // translate the port position to the world coordinate system
+            Point2D calculatedWorldPosition = sceneToLocal(portViewElementPositionInScene).add(getPosition())
+                .subtract(portViewElement.getViewPosition());
+            portViewElement.getViewModel().setSystemPortPosition(calculatedWorldPosition);
+        }
+    }
+
     private void addPort(PortViewModel portViewModel) {
         PortViewElement portViewElement = new PortViewElement(portViewModel);
         portViewElements.add(portViewElement);
@@ -128,10 +143,11 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         } else {
             outputPortsAligner.getChildren().add(portViewElement);
         }
+        updatePortViewModels();
     }
 
     private void removePort(PortViewModel portViewModel) {
-        //This is safe, since the portViewElement should be present in the list
+        // This is safe, since the portViewElement should be present in the list
         PortViewElement portViewElement =
             portViewElements.stream().filter(pve -> pve.getViewModel().equals(portViewModel)).findFirst().orElseThrow();
         portViewElements.remove(portViewElement);

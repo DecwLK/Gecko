@@ -32,6 +32,14 @@
     -fx-background-color: lightgray;
 }
 
+.undo-toolbar-icon {
+    -fx-background-image: url('icons/Redo.png');
+}
+
+.redo-toolbar-icon {
+    -fx-background-image: url('icons/Undo.png');
+}
+
 .cursor-icon {
     -fx-background-image: url('icons/Toolbar_Cursor.png');
 }
@@ -321,6 +329,53 @@
 
 .scroll-pane {
     -fx-background-color: -fx-fg0;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.color-picker {
+    -fx-background-color: -fx-fg0;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-font: 12px "System";
+}
+
+.state-view-element {
+    -fx-background-color: -fx-fg0;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.state-inner-view-element {
+    -fx-background-color: -fx-fg1;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.state-inner-inner-view-element {
+    -fx-background-color: -fx-fg2;
     -fx-background-radius: 5;
     -fx-border-radius: 5;
     -fx-border-color: -fx-text;

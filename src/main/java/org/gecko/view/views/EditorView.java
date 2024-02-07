@@ -77,7 +77,7 @@ public class EditorView {
         this.viewModel = viewModel;
         this.toolBarBuilder = new ToolBarBuilder(actionManager, this, viewModel);
         this.toolBar = toolBarBuilder.build();
-        this.inspectorFactory = new InspectorFactory(actionManager, this, viewModel);
+        this.inspectorFactory = new InspectorFactory(actionManager, viewModel);
 
         this.viewElementsGroup = new Group();
         this.viewElementsGroupContainer = new Group(viewElementsGroup);
@@ -94,8 +94,8 @@ public class EditorView {
         this.currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
         this.currentView = new Tab(
-            baseName + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")" :
-                " (" + ResourceHandler.getString("View", "system") + ")"), currentViewPane);
+            baseName + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
+                : " (" + ResourceHandler.getString("View", "system") + ")"), currentViewPane);
 
         this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
             updateWorldSize();
@@ -305,7 +305,8 @@ public class EditorView {
     private void focusedElementChanged(
         ObservableValue<? extends PositionableViewModelElement<?>> observable, PositionableViewModelElement<?> oldValue,
         PositionableViewModelElement<?> newValue) {
-        currentInspector.set((newValue != null) ? inspectorFactory.createInspector(newValue) : emptyInspector);
+        Inspector newInspector = inspectorFactory.createInspector(newValue);
+        currentInspector.set((newInspector != null) ? newInspector : emptyInspector);
         if (shortcutHandler != null) {
             currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
         }

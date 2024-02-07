@@ -7,15 +7,16 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
@@ -23,6 +24,13 @@ import org.gecko.viewmodel.StateViewModel;
 public class StateViewElement extends BlockViewElement implements ViewElement<StateViewModel> {
 
     private static final int Z_PRIORITY = 30;
+    private static final int CORNER_RADIUS = 10;
+    private static final int INNER_CORNER_RADIUS = 20;
+    private static final int SPACING = 5;
+
+    private static final String STYLE = "state-view-element";
+    private static final String INNER_STYLE = "state-inner-view-element";
+    private static final String INNER_INNER_STYLE = "state-inner-inner-view-element";
 
     @Getter(AccessLevel.NONE)
     private final StateViewModel stateViewModel;
@@ -85,30 +93,92 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
     }
 
     private void constructVisualization() {
-        Rectangle background = new Rectangle();
-        background.widthProperty().bind(widthProperty());
-        background.heightProperty().bind(heightProperty());
-        background.fillProperty().bind(Bindings.createObjectBinding(() -> {
-            if (isStartStateProperty.get()) {
-                return Color.GREEN;
-            } else {
-                return Color.LIGHTBLUE;
-            }
-        }, isStartStateProperty));
-        GridPane gridPane = new GridPane();
-        Label name = new Label(ResourceHandler.getString("Labels", "state") + ": " + stateViewModel.getName());
-        name.textProperty()
-            .bind(Bindings.createStringBinding(
-                () -> ResourceHandler.getString("Labels", "state") + ": " + stateViewModel.getName(),
-                stateViewModel.getNameProperty()));
-        Label contracts = new Label(
-            ResourceHandler.getString("Labels", "contract_plural") + ": " + stateViewModel.getContractsProperty()
-                .size());
+        getStyleClass().add(STYLE);
+
+        VBox contents = new VBox();
+        contents.prefWidthProperty().bind(prefWidthProperty());
+        contents.prefHeightProperty().bind(prefHeightProperty());
+        contents.setPadding(new Insets(SPACING));
+
+        // State name:
+        Pane stateName = new Pane();
+        colorStateName(stateName);
+        // Color the state name according to its type
+        isStartStateProperty.addListener((observable, oldValue, newValue) -> {
+            colorStateName(stateName);
+        });
+        stateName.getStyleClass().add(INNER_STYLE);
+
+        Label name = new Label(stateViewModel.getName());
+        name.textProperty().bind(stateViewModel.getNameProperty());
+
+        // center the label
+        name.layoutXProperty()
+            .bind(Bindings.createDoubleBinding(() -> (stateName.getWidth() - name.getWidth()) / 2,
+                stateName.widthProperty(), name.widthProperty()));
+        name.layoutYProperty()
+            .bind(Bindings.createDoubleBinding(() -> (stateName.getHeight() - name.getHeight()) / 2,
+                stateName.heightProperty(), name.heightProperty()));
+
+        stateName.getChildren().add(name);
+
+        contents.getChildren().add(stateName);
+        contents.getChildren().add(new Separator());
+
+        // Contracts
+        Label contracts = new Label("Contracts: " + stateViewModel.getContractsProperty().size());
         contracts.textProperty()
-            .bind(Bindings.createStringBinding(() -> ResourceHandler.getString("Labels", "contract_plural") + ": "
-                + stateViewModel.getContractsProperty().size(), stateViewModel.getContractsProperty()));
-        gridPane.add(name, 0, 0);
-        gridPane.add(contracts, 0, 1);
-        getChildren().addAll(background, gridPane);
+            .bind(Bindings.createStringBinding(() -> "Contracts: " + stateViewModel.getContractsProperty().size(),
+                stateViewModel.getContractsProperty()));
+
+        contents.getChildren().add(contracts);
+
+        VBox contractsPane = new VBox();
+        double maxHeight = getHeight() - stateName.getHeight() - 2 * SPACING;
+
+        contractsProperty.addListener((observable, oldValue, newValue) -> refreshContracts(contractsPane, maxHeight));
+
+        contents.getChildren().add(contractsPane);
+        getChildren().addAll(contents);
+    }
+
+    private void refreshContracts(VBox contractsPane, double maxHeight) {
+        contractsPane.getChildren().clear();
+        contractsPane.setSpacing(SPACING);
+
+        for (ContractViewModel contract : stateViewModel.getContracts()) {
+            VBox contractBox = new VBox();
+            contractBox.getStyleClass().add(INNER_INNER_STYLE);
+
+            Label contractLabel = new Label(contract.getName());
+            contractLabel.textProperty().bind(contract.getNameProperty());
+
+            HBox preconditionBox = new HBox();
+            Label preconditionLabel = new Label("PRE: ");
+            Label precondition = new Label(contract.getPrecondition());
+            precondition.textProperty().bind(contract.getPreConditionProperty());
+            preconditionBox.getChildren().addAll(preconditionLabel, precondition);
+
+            HBox postconditionBox = new HBox();
+            Label postconditionLabel = new Label("POST: ");
+            Label postcondition = new Label(contract.getPostcondition());
+            postcondition.textProperty().bind(contract.getPostConditionProperty());
+            postconditionBox.getChildren().addAll(postconditionLabel, postcondition);
+
+            contractBox.getChildren().addAll(contractLabel, preconditionBox, postconditionBox);
+            if (contractBox.getHeight() + contractsPane.getHeight() > maxHeight) {
+                return;
+            }
+
+            contractsPane.getChildren().add(contractBox);
+        }
+    }
+
+    private void colorStateName(Pane stateName) {
+        if (isStartStateProperty.getValue()) {
+            stateName.setStyle("-fx-background-color: green;");
+        } else {
+            stateName.setStyle("-fx-background-color: lightgray;");
+        }
     }
 }

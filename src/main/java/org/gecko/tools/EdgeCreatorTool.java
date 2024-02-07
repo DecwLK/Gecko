@@ -28,7 +28,7 @@ public class EdgeCreatorTool extends Tool {
         super.visit(stateViewElement);
         source = null;
         stateViewElement.setOnMouseClicked(event -> {
-            if (source == null || source == stateViewElement.getTarget()) {
+            if (source == null) {
                 source = stateViewElement.getTarget();
             } else {
                 Action createEdgeAction = actionManager.getActionFactory()

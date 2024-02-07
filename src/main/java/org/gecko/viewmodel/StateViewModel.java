@@ -8,6 +8,7 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -25,10 +26,15 @@ public class StateViewModel extends BlockViewModelElement<State> {
     private final BooleanProperty isStartStateProperty;
     private final ListProperty<ContractViewModel> contractsProperty;
 
+    private final ObservableList<EdgeViewModel> incomingEdges;
+    private final ObservableList<EdgeViewModel> outgoingEdges;
+
     public StateViewModel(int id, @NonNull State target) {
         super(id, target);
         this.isStartStateProperty = new SimpleBooleanProperty();
         this.contractsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.incomingEdges = FXCollections.observableArrayList();
+        this.outgoingEdges = FXCollections.observableArrayList();
     }
 
     public boolean getIsStartState() {
@@ -62,6 +68,29 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
     public List<ContractViewModel> getContracts() {
         return new ArrayList<>(contractsProperty);
+    }
+
+    public double getEdgeOffset(EdgeViewModel edgeViewModel) {
+        List<EdgeViewModel> edges = new ArrayList<>(incomingEdges);
+        edges.addAll(outgoingEdges);
+
+        double edgeCount = 0;
+        double edgeIndex = 0;
+        for (int i = 0; i < edges.size(); i++) {
+            EdgeViewModel edge = edges.get(i);
+
+            if (edge.equals(edgeViewModel)) {
+                edgeIndex = i;
+            }
+
+            if ((edge.getSource() == edgeViewModel.getSource()
+                && edge.getDestination() == edgeViewModel.getDestination()) || (
+                edge.getSource() == edgeViewModel.getDestination()
+                    && edge.getDestination() == edgeViewModel.getSource())) {
+                edgeCount++;
+            }
+        }
+        return (edgeCount <= 1) ? -1 : edgeIndex / edgeCount;
     }
 
     @Override

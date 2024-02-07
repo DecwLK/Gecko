@@ -2,6 +2,7 @@ package org.gecko.io;
 
 import gecko.parser.SystemDefBaseVisitor;
 import gecko.parser.SystemDefParser;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +20,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
 
     private GeckoModel model;
     private System currentSystem;
+    private String nextSystemName;
     private AutomatonFileScout scout;
+
+    private static final String START_STATE_REGEX = "[a-z].*";
+    private static final String SELF_REFERENCE_TOKEN = "self";
 
     public AutomatonFileVisitor() {
         this.model = new GeckoModel();
@@ -29,6 +34,9 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
     @Override
     public String visitModel(SystemDefParser.ModelContext ctx) {
         scout = new AutomatonFileScout(ctx);
+        if (hasCyclicChildSystems(ctx)) {
+            return "Cyclic child systems found";
+        }
         if (scout.getRootChildren().size() == 1) {
             //We can use the first root system as the root of the model
             String result = scout.getSystem(scout.getRootChildren().iterator().next().ident().getText()).accept(this);
@@ -38,11 +46,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             System newRoot = model.getRoot()
                 .getChildren()
                 .iterator()
-                .next(); //Because rootChildren has size 1 root now has exactly 1 child
+                .next(); //Because rootChildren had size 1, root now has exactly 1 child
             newRoot.setParent(null);
             model = new GeckoModel(newRoot);
         } else if (scout.getRootChildren().size() > 1) {
-            //We need to create a new root system and add the old roots as children
+            //Because we can't have multiple roots, we need to create a new root system
             for (SystemDefParser.SystemContext rootChild : scout.getRootChildren()) {
                 String result = rootChild.accept(this);
                 if (result != null) {
@@ -65,8 +73,12 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                 return result;
             }
         }
-        for (String child : scout.getChildSystemNames(ctx)) {
-            SystemDefParser.SystemContext childCtx = scout.getSystem(child);
+        for (AutomatonFileScout.SystemInfo child : scout.getChildSystemInfos(ctx)) {
+            if (scout.getSystem(child.type()) == null) {
+                return "System %s not found".formatted(child);
+            }
+            SystemDefParser.SystemContext childCtx = scout.getSystem(child.type());
+            nextSystemName = child.name();
             String result = childCtx.accept(this);
             if (result != null) {
                 return result;
@@ -126,11 +138,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         List<State> startStateCandidates = currentSystem.getAutomaton()
             .getStates()
             .stream()
-            .filter(state -> state.getName().matches("[a-z].*"))
+            .filter(state -> state.getName().matches(START_STATE_REGEX))
             .toList();
         if (startStateCandidates.size() > 1) {
             return "Found multiple start states in automaton %s".formatted(ctx.ident().getText());
-        } else if(startStateCandidates.size() == 1) {
+        } else if (startStateCandidates.size() == 1) {
             currentSystem.getAutomaton().setStartState(startStateCandidates.getFirst());
         }
         return null;
@@ -169,19 +181,20 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         Visibility visibility = switch (ctx.type.getType()) {
             case SystemDefParser.INPUT -> Visibility.INPUT;
             case SystemDefParser.OUTPUT -> Visibility.OUTPUT;
+            case SystemDefParser.STATE -> Visibility.STATE;
             default -> null;
         };
-        if (visibility == null) {
+        if (visibility == Visibility.STATE) {
             return null;
         }
         for (SystemDefParser.VariableContext variable : ctx.variable()) {
             if (!Variable.getBuiltinTypes().contains(variable.t.getText())) {
-                if (scout.getSystem(variable.t.getText()) == null) {
-                    return "Type %s not found".formatted(variable.t.getText());
-                }
-                continue;
+                return "Input and Output types must be built-in types";
             }
             for (SystemDefParser.IdentContext ident : variable.n) {
+                if (currentSystem.getVariableByName(ident.Ident().getText()) != null) {
+                    continue;
+                }
                 Variable var = model.getModelFactory().createVariable(currentSystem);
                 var.setName(ident.Ident().getText());
                 var.setType(variable.t.getText());
@@ -199,9 +212,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         if (ctx.from.inst == null || ctx.to.stream().anyMatch(ident -> ident.inst == null)) {
             return "Invalid system in system connection";
         }
-        System startSystem = currentSystem.getChildByName(ctx.from.inst.getText());
-        if (startSystem == null) {
-            return "Could not find system %s".formatted(ctx.from.inst.getText());
+        System startSystem;
+        try {
+            startSystem = parseSystemReference(ctx.from.inst.getText());
+        } catch (Exception e) {
+            return e.getMessage();
         }
         Variable start = startSystem.getVariableByName(ctx.from.port.getText());
         if (start == null) {
@@ -209,9 +224,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         }
         Set<Variable> end = new HashSet<>();
         for (SystemDefParser.IoportContext ident : ctx.to) {
-            System endSystem = currentSystem.getChildByName(ident.inst.getText());
-            if (endSystem == null) {
-                return "Could not find system %s".formatted(ident.inst.getText());
+            System endSystem;
+            try {
+                endSystem = parseSystemReference(ident.inst.getText());
+            } catch (Exception e) {
+                return e.getMessage();
             }
             Variable endVar = endSystem.getVariableByName(ident.port.getText());
             if (endVar == null) {
@@ -227,7 +244,12 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
 
     private System buildSystem(SystemDefParser.SystemContext ctx) {
         System system = model.getModelFactory().createSystem(currentSystem);
-        system.setName(ctx.ident().Ident().getText());
+        if (nextSystemName != null) {
+            system.setName(nextSystemName);
+            nextSystemName = null;
+        } else {
+            system.setName(ctx.ident().Ident().getText());
+        }
         if (ctx.reaction() != null) {
             system.setCode(cleanCode(ctx.reaction().getText()));
         }
@@ -236,5 +258,33 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
 
     private String cleanCode(String code) {
         return code.substring(2, code.length() - 2);
+    }
+
+    private System parseSystemReference(String name) throws Exception {
+        System system;
+        if (name.equals(SELF_REFERENCE_TOKEN)) {
+            system = currentSystem;
+        } else {
+            system = currentSystem.getChildByName(name);
+            if (system == null) {
+                throw new Exception("Could not find system %s".formatted(name));
+            }
+        }
+        return system;
+    }
+
+    private boolean hasCyclicChildSystems(SystemDefParser.ModelContext ctx) {
+        for (SystemDefParser.SystemContext system : ctx.system()) {
+            List<SystemDefParser.SystemContext> parents = new ArrayList<>();
+            List<SystemDefParser.SystemContext> currentParents = scout.getParents(system);
+            while (currentParents != null && !currentParents.isEmpty()) {
+                parents.addAll(currentParents);
+                currentParents = currentParents.stream().map(scout::getParents).flatMap(List::stream).toList();
+                if (parents.contains(system)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

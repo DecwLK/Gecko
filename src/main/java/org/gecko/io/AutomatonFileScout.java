@@ -13,13 +13,16 @@ import org.gecko.model.Variable;
 
 public final class AutomatonFileScout {
 
+    record SystemInfo(String name, String type) { }
+
     private final Map<String, SystemDefParser.SystemContext> systems;
     private final Map<String, SystemDefParser.AutomataContext> automata;
 
-    private final Set<String> foundChildren;
+    private final Set<SystemInfo> foundChildren;
     private final Set<String> rootChildrenIdents;
     @Getter
     private final Set<SystemDefParser.SystemContext> rootChildren;
+    private final Map<SystemDefParser.SystemContext, List<SystemDefParser.SystemContext>> parents;
 
     private final ScoutVisitor scoutVisitor;
 
@@ -28,10 +31,12 @@ public final class AutomatonFileScout {
         this.automata = new HashMap<>();
         this.foundChildren = new HashSet<>();
         this.rootChildrenIdents = new HashSet<>();
+        this.parents = new HashMap<>();
         this.rootChildren = new HashSet<>();
         this.scoutVisitor = new ScoutVisitor();
         ctx.accept(scoutVisitor);
     }
+
 
     public SystemDefParser.SystemContext getSystem(String name) {
         return systems.get(name);
@@ -41,7 +46,11 @@ public final class AutomatonFileScout {
         return automata.get(name);
     }
 
-    public List<String> getChildSystemNames(SystemDefParser.SystemContext ctx) {
+    public List<SystemDefParser.SystemContext> getParents(SystemDefParser.SystemContext ctx) {
+        return parents.get(ctx);
+    }
+
+    List<SystemInfo> getChildSystemInfos(SystemDefParser.SystemContext ctx) {
         return scoutVisitor.getChildSystems(ctx);
     }
 
@@ -50,12 +59,13 @@ public final class AutomatonFileScout {
         @Override
         public Void visitModel(SystemDefParser.ModelContext ctx) {
             ctx.system().forEach(system -> system.accept(this));
+            ctx.system().forEach(this::registerParent);
             ctx.contract().forEach(contract -> contract.accept(this));
             SystemDefParser.DefinesContext defines = ctx.defines();
             if (defines != null) {
                 defines.variable().forEach(variable -> variable.accept(this));
             }
-            rootChildrenIdents.removeAll(foundChildren);
+            foundChildren.stream().map(SystemInfo::type).toList().forEach(rootChildrenIdents::remove);
             rootChildren.addAll(ctx.system()
                 .stream()
                 .filter(system -> rootChildrenIdents.contains(system.ident().Ident().getText()))
@@ -69,6 +79,7 @@ public final class AutomatonFileScout {
             systems.put(sysName, ctx);
             rootChildrenIdents.add(sysName);
             foundChildren.addAll(getChildSystems(ctx));
+            parents.put(ctx, new ArrayList<>());
             return null;
         }
 
@@ -78,16 +89,26 @@ public final class AutomatonFileScout {
             return null;
         }
 
-        public List<String> getChildSystems(SystemDefParser.SystemContext ctx) {
-            List<String> children = new ArrayList<>();
+        private List<SystemInfo> getChildSystems(SystemDefParser.SystemContext ctx) {
+            List<SystemInfo> children = new ArrayList<>();
             ctx.io().stream().filter(io -> io.type.getType() == SystemDefParser.STATE).forEach(io -> {
                 children.addAll(io.variable()
                     .stream()
-                    .map(variable -> variable.t.Ident().getText())
-                    .filter(type -> !Variable.getBuiltinTypes().contains(type))
+                    .filter(var -> !Variable.getBuiltinTypes().contains(var.t.getText()))
+                    .flatMap(var -> var.n.stream().map(n -> new SystemInfo(n.getText(), var.t.getText())))
                     .toList());
             });
             return children;
+        }
+
+        private void registerParent(SystemDefParser.SystemContext systemContext) {
+            for (SystemInfo child : getChildSystems(systemContext)) {
+                SystemDefParser.SystemContext childCtx = systems.get(child.type);
+                if (childCtx == null) {
+                    continue;
+                }
+                parents.get(childCtx).add(systemContext);
+            }
         }
     }
 }

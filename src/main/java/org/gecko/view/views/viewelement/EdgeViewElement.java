@@ -36,21 +36,11 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         constructVisualization();
 
         // Redraw edge when there are changes in the edge list
-        edgeViewModel.getSource()
-            .getIncomingEdges()
-            .addListener((ListChangeListener<? super EdgeViewModel>) c -> maskPathSource());
-
-        edgeViewModel.getSource()
-            .getOutgoingEdges()
-            .addListener((ListChangeListener<? super EdgeViewModel>) c -> maskPathSource());
-
-        edgeViewModel.getDestination()
-            .getIncomingEdges()
-            .addListener((ListChangeListener<? super EdgeViewModel>) c -> maskPathSource());
-
-        edgeViewModel.getDestination()
-            .getOutgoingEdges()
-            .addListener((ListChangeListener<? super EdgeViewModel>) c -> maskPathSource());
+        ListChangeListener<? super EdgeViewModel> updateMaskPathSource = change -> maskPathSource();
+        edgeViewModel.getSource().getIncomingEdges().addListener(updateMaskPathSource);
+        edgeViewModel.getSource().getOutgoingEdges().addListener(updateMaskPathSource);
+        edgeViewModel.getDestination().getIncomingEdges().addListener(updateMaskPathSource);
+        edgeViewModel.getDestination().getOutgoingEdges().addListener(updateMaskPathSource);
 
         edgeViewModel.getSourceProperty().addListener((observable, oldValue, newValue) -> {
             updateMaskPathSourceListeners(oldValue);
@@ -64,7 +54,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     private void updateMaskPathSourceListeners(StateViewModel oldStateViewModel) {
-        // Remove listeners
+        // Remove listeners from old state view model
         if (oldStateViewModel != null) {
             oldStateViewModel.getPositionProperty()
                 .removeListener((observable, oldValue, newValue) -> maskPathSource());
@@ -82,7 +72,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
             .addListener((observable, oldValue, newValue) -> maskPathSource());
     }
 
-    protected void maskPathSource() {
+    private void maskPathSource() {
         double sourceEdgeOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
         getPathSource().getFirst()
             .setValue(maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),

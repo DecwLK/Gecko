@@ -33,7 +33,6 @@ import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
 import org.gecko.view.ResourceHandler;
-import org.gecko.view.contextmenu.AbstractContextMenuBuilder;
 import org.gecko.view.contextmenu.ViewContextMenuBuilder;
 import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.InspectorFactory;
@@ -187,11 +186,31 @@ public class EditorView {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
         });
 
-        AbstractContextMenuBuilder contextMenuBuilder =
-            new ViewContextMenuBuilder(viewModel.getActionManager(), this, viewModel);
+        ViewContextMenuBuilder contextMenuBuilder = new ViewContextMenuBuilder(viewModel.getActionManager());
         this.contextMenu = contextMenuBuilder.build();
         currentViewPane.setOnContextMenuRequested(event -> {
             changeContextMenu(contextMenuBuilder.getContextMenu());
+            this.contextMenu.getItems()
+                .stream()
+                .filter(menuItem -> menuItem.getText().equals("Copy"))
+                .findAny()
+                .ifPresent(copyMenuItem -> copyMenuItem.setDisable(
+                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
+
+            this.contextMenu.getItems()
+                .stream()
+                .filter(menuItem -> menuItem.getText().equals("Cut"))
+                .findAny()
+                .ifPresent(cutMenuItem -> cutMenuItem.setDisable(
+                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
+
+            this.contextMenu.getItems()
+                .stream()
+                .filter(menuItem -> menuItem.getText().equals("Deselect All"))
+                .findAny()
+                .ifPresent(deselectMenuItem -> deselectMenuItem.setDisable(
+                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
+
             this.contextMenu.show(currentViewPane, event.getScreenX(), event.getScreenY());
             event.consume();
         });

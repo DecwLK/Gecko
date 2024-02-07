@@ -12,13 +12,13 @@ public class ActionManager {
     private final ArrayDeque<Action> undoStack;
     private final ArrayDeque<Action> redoStack;
 
-    private final CopiedElementsContainer copyContainer;
+    private final CopyPositionableViewModelElementVisitor copyVisitor;
 
     public ActionManager(GeckoViewModel geckoViewModel) {
         this.actionFactory = new ActionFactory(geckoViewModel);
         undoStack = new ArrayDeque<>();
         redoStack = new ArrayDeque<>();
-        copyContainer = new CopiedElementsContainer();
+        copyVisitor = new CopyPositionableViewModelElementVisitor();
     }
 
     public void undo() {
@@ -58,15 +58,15 @@ public class ActionManager {
 
     public void cut() {
         copy();
-        run(actionFactory.createDeletePositionableViewModelElementAction(copyContainer.getAllElements()));
+        run(actionFactory.createDeletePositionableViewModelElementAction(copyVisitor.getAllElements()));
     }
 
     public void copy() {
-        run(actionFactory.createCopyPositionableViewModelElementAction(copyContainer));
+        run(actionFactory.createCopyPositionableViewModelElementAction(copyVisitor));
     }
 
     public void paste() {
-        run(actionFactory.createPastePositionableViewModelElementAction(copyContainer));
+        run(actionFactory.createPastePositionableViewModelElementAction(copyVisitor));
     }
 
     public void run(Action action) {

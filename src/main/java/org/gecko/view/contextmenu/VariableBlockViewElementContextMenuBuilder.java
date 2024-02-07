@@ -4,16 +4,15 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
-import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.PortViewModel;
 
-public class VariableBlockViewElementContextMenuBuilder extends AbstractContextMenuBuilder {
+public class VariableBlockViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final PortViewModel portViewModel;
 
     public VariableBlockViewElementContextMenuBuilder(
-        ActionManager actionManager, EditorView editorView, PortViewModel portViewModel) {
-        super(actionManager, editorView);
+        ActionManager actionManager, PortViewModel portViewModel) {
+        super(actionManager);
         this.portViewModel = portViewModel;
     }
 

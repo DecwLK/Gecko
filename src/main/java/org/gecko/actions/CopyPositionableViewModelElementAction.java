@@ -1,33 +1,38 @@
 package org.gecko.actions;
 
 import org.gecko.exceptions.GeckoException;
-import org.gecko.viewmodel.EditorViewModel;
-import org.gecko.viewmodel.SystemViewModel;
+import org.gecko.viewmodel.GeckoViewModel;
 
 public class CopyPositionableViewModelElementAction extends Action {
-    EditorViewModel currentEditor;
-    CopiedElementsContainer elementsToCopy;
+    GeckoViewModel geckoViewModel;
+    CopyPositionableViewModelElementVisitor copyVisitor;
 
-    CopyPositionableViewModelElementAction(EditorViewModel editorViewModel, CopiedElementsContainer elementsToCopy) {
-        this.currentEditor = editorViewModel;
-        this.elementsToCopy = elementsToCopy;
+    CopyPositionableViewModelElementAction(
+        GeckoViewModel geckoViewModel, CopyPositionableViewModelElementVisitor copyVisitor) {
+
+        this.geckoViewModel = geckoViewModel;
+        this.copyVisitor = copyVisitor;
     }
 
     @Override
     boolean run() throws GeckoException {
-        CopiedElementsContainer copiedElementsContainer = new CopiedElementsContainer(currentEditor.isAutomatonEditor(),
-            currentEditor.getContainedPositionableViewModelElementsProperty().stream()
-                .filter(element -> element instanceof SystemViewModel).toList(),
-            currentEditor.getSelectionManager().getCurrentSelection());
+        CopyPositionableViewModelElementVisitor visitor = new CopyPositionableViewModelElementVisitor(geckoViewModel);
+        geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
 
-        elementsToCopy.setAutomatonCopy(copiedElementsContainer.isAutomatonCopy());
-        elementsToCopy.setContainedSystemViewModels(copiedElementsContainer.getContainedSystemViewModels());
-        elementsToCopy.setCopiedSystems(copiedElementsContainer.getCopiedSystems());
-        elementsToCopy.setCopiedPorts(copiedElementsContainer.getCopiedPorts());
-        elementsToCopy.setCopiedSystemConnections(copiedElementsContainer.getCopiedSystemConnections());
-        elementsToCopy.setCopiedStates(copiedElementsContainer.getCopiedStates());
-        elementsToCopy.setCopiedRegions(copiedElementsContainer.getCopiedRegions());
-        elementsToCopy.setCopiedEdges(copiedElementsContainer.getCopiedEdges());
+        geckoViewModel.getCurrentEditor()
+            .getSelectionManager()
+            .getCurrentSelection()
+            .forEach(element -> element.accept(visitor));
+        visitor.removeDoubleSelectedStates();
+        visitor.removeDoubleSelectedSystems();
+
+        copyVisitor.setAutomatonCopy(visitor.isAutomatonCopy());
+        copyVisitor.setCopiedSystems(visitor.getCopiedSystems());
+        copyVisitor.setCopiedPorts(visitor.getCopiedPorts());
+        copyVisitor.setCopiedSystemConnections(visitor.getCopiedSystemConnections());
+        copyVisitor.setCopiedStates(visitor.getCopiedStates());
+        copyVisitor.setCopiedRegions(visitor.getCopiedRegions());
+        copyVisitor.setCopiedEdges(visitor.getCopiedEdges());
 
         return true;
     }

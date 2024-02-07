@@ -65,8 +65,8 @@ public class ActionFactory {
     }
 
     public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(
-        CopiedElementsContainer copiedElementsContainer) {
-        return new CopyPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), copiedElementsContainer);
+        CopyPositionableViewModelElementVisitor copyVisitor) {
+        return new CopyPositionableViewModelElementAction(geckoViewModel, copyVisitor);
     }
 
     public CreateContractViewModelElementAction createCreateContractViewModelElementAction(
@@ -105,19 +105,6 @@ public class ActionFactory {
         return new CreateVariableAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
     }
 
-    /*public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction(
-        CopiedElementsContainer copiedElementsContainer) {
-        // Copy Action:
-        CopyPositionableViewModelElementAction copyAction
-            = createCopyPositionableViewModelElementAction(copiedElementsContainer);
-
-        // Delete Actions:
-        ActionGroup deleteActions = new ActionGroup(new ArrayList<>());
-        copiedElementsContainer.getAllElements().forEach(copiedElement -> deleteActions.getActions()
-            .add(createDeletePositionableViewModelElementAction(copiedElement)));
-        return new CutPositionableViewModelElementAction(copyAction, deleteActions);
-    }*/
-
     public DeleteContractViewModelAction createDeleteContractViewModelAction(
         StateViewModel parent, ContractViewModel contractViewModel) {
         return new DeleteContractViewModelAction(geckoViewModel, parent, contractViewModel);
@@ -154,14 +141,9 @@ public class ActionFactory {
     }
 
     public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
-        CopiedElementsContainer elementsToPaste) {
+        CopyPositionableViewModelElementVisitor elementsToPaste) {
         return new PastePositionableViewModelElementAction(geckoViewModel, elementsToPaste);
     }
-
-    /*public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
-        List<PositionableViewModelElement<?>> elements) {
-        return new PastePositionableViewModelElementAction(geckoViewModel, elements);
-    }*/
 
     public RenameViewModelElementAction createRenameViewModelElementAction(Renamable renamable, String name) {
         return new RenameViewModelElementAction(renamable, name);

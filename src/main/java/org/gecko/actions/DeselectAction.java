@@ -11,8 +11,9 @@ public class DeselectAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() {
         selectionManager.deselectAll();
+        return true;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package org.gecko.actions;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
@@ -19,77 +19,82 @@ import org.gecko.viewmodel.ViewModelFactory;
 
 public class PastePositionableViewModelElementAction extends Action {
     private final GeckoViewModel geckoViewModel;
-    private final CopiedElementsContainer elementsToPaste;
+    private final CopyPositionableViewModelElementVisitor copyVisitor;
     private final SystemViewModel currentSystem;
     private final Set<PositionableViewModelElement<?>> pastedElements;
+    private final HashMap<StateViewModel, StateViewModel> states;
+    private final HashMap<SystemViewModel, SystemViewModel> systems;
     private static final Point2D POSITION_OFFSET = new Point2D(20, 20);
 
-    PastePositionableViewModelElementAction(GeckoViewModel geckoViewModel, CopiedElementsContainer elementsToPaste) {
+    PastePositionableViewModelElementAction(
+        GeckoViewModel geckoViewModel, CopyPositionableViewModelElementVisitor copyVisitor) {
         this.geckoViewModel = geckoViewModel;
         this.currentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
-        this.elementsToPaste = elementsToPaste;
+        this.copyVisitor = copyVisitor;
         pastedElements = new HashSet<>();
+        states = new HashMap<>();
+        systems = new HashMap<>();
     }
-
-    /*PastePositionableViewModelElementAction(
-        GeckoViewModel geckoViewModel, List<PositionableViewModelElement<?>> elements) {
-        this.geckoViewModel = geckoViewModel;
-        this.currentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
-        elementsToPaste = null;
-    }*/
 
     @Override
     boolean run() throws GeckoException {
-        if (elementsToPaste != null) {
-            if (elementsToPaste.isWrapperEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Clipboard is empty, so there is nothing to paste.",
-                    ButtonType.OK);
-                alert.showAndWait();
-            } else {
-                if (geckoViewModel.getCurrentEditor().isAutomatonEditor() != elementsToPaste.isAutomatonCopy()) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR,
-                        "Cannot paste here, because copied content " + "is incompatible with opened view.",
-                        ButtonType.OK);
-                    alert.showAndWait();
-                } else {
-                    ViewModelFactory factory = geckoViewModel.getViewModelFactory();
+        if (copyVisitor == null) {
+            throw new GeckoException("Invalid Clipboard. Nothing to paste.");
+        }
 
-                    if (elementsToPaste.isAutomatonCopy()) {
-                        pasteStateViewModels(factory);
-                        pasteRegionViewModels(factory);
-                        pasteEdgeViewModels(factory);
-                    } else {
-                        pasteSystemViewModels(factory);
-                        pastePortViewModels(factory);
-                        pasteSystemConnectionViewModels(factory);
-                    }
-                }
-            }
+        if (copyVisitor.isWrapperEmpty()) {
+            Alert alert =
+                new Alert(Alert.AlertType.ERROR, "Clipboard is empty, so there is nothing to paste.", ButtonType.OK);
+            alert.showAndWait();
+            return false;
+        }
+
+        if (geckoViewModel.getCurrentEditor().isAutomatonEditor() != copyVisitor.isAutomatonCopy()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR,
+                "Cannot paste here, because copied content is incompatible with opened view.", ButtonType.OK);
+            alert.showAndWait();
+            return false;
+        }
+
+        ViewModelFactory factory = geckoViewModel.getViewModelFactory();
+        if (copyVisitor.isAutomatonCopy()) {
+            pasteStateViewModels(factory);
+            pasteRegionViewModels(factory);
+            pasteEdgeViewModels(factory);
+        } else {
+            pasteSystemViewModels(factory);
+            pastePortViewModels(factory);
+            pasteSystemConnectionViewModels(factory);
         }
         return true;
     }
 
     private void pasteStateViewModels(ViewModelFactory factory) throws GeckoException {
-        for (StateViewModel copiedState : elementsToPaste.getCopiedStates()) {
-            pastedElements.add(pasteStateViewModel(factory, copiedState));
+        for (StateViewModel copiedState : copyVisitor.getCopiedStates()) {
+            pasteStateViewModel(factory, copiedState);
         }
     }
 
-    private StateViewModel pasteStateViewModel(ViewModelFactory factory, StateViewModel copiedState)
+    private void pasteStateViewModel(ViewModelFactory factory, StateViewModel copiedState)
         throws GeckoException {
+        if (states.get(copiedState) != null) {
+            return;
+        }
+
         StateViewModel newState = factory.createStateViewModelIn(currentSystem);
         newState.setName(copiedState.getName());
         newState.setStartState(copiedState.getIsStartState());
         newState.setPosition(copiedState.getPosition().add(POSITION_OFFSET));
         newState.setSize(copiedState.getSize());
         newState.updateTarget();
-
-        return newState;
+        states.put(copiedState, newState);
+        pastedElements.add(newState);
     }
 
     private void pasteRegionViewModels(ViewModelFactory factory) throws GeckoException {
-        for (RegionViewModel copiedRegion : elementsToPaste.getCopiedRegions()) {
+        for (RegionViewModel copiedRegion : copyVisitor.getCopiedRegions()) {
             RegionViewModel newRegion = factory.createRegionViewModelIn(currentSystem);
+            // TODO: what happens when state is selected with region at copy? -> update state list in region?
             newRegion.setName(copiedRegion.getName());
             newRegion.setInvariant(copiedRegion.getInvariant());
             newRegion.setColor(copiedRegion.getColor());
@@ -101,36 +106,48 @@ public class PastePositionableViewModelElementAction extends Action {
     }
 
     private void pasteEdgeViewModels(ViewModelFactory factory) throws GeckoException {
-        for (CopiedEdgeWrapper copiedEdgeWrapper : elementsToPaste.getCopiedEdges()) {
-            StateViewModel newSource = pasteStateViewModel(factory, copiedEdgeWrapper.getSource());
-            StateViewModel newDestination = pasteStateViewModel(factory, copiedEdgeWrapper.getDestination());
+        for (CopiedEdgeWrapper copiedEdgeWrapper : copyVisitor.getCopiedEdges()) {
+            if (states.get(copiedEdgeWrapper.getSource()) == null) {
+                pasteStateViewModel(factory, copiedEdgeWrapper.getSource());
+            }
 
-            EdgeViewModel newEdge = factory.createEdgeViewModelIn(currentSystem, newSource, newDestination);
+            if (states.get(copiedEdgeWrapper.getDestination()) == null) {
+                pasteStateViewModel(factory, copiedEdgeWrapper.getDestination());
+            }
+
+            EdgeViewModel newEdge =
+                factory.createEdgeViewModelIn(currentSystem, states.get(copiedEdgeWrapper.getSource()),
+                    states.get(copiedEdgeWrapper.getDestination()));
+
             if (copiedEdgeWrapper.getEdge().getContract() != null) {
                 newEdge.setContract(copiedEdgeWrapper.getEdge().getContract());
             }
+
             newEdge.setKind(copiedEdgeWrapper.getEdge().getKind());
             newEdge.setPriority(copiedEdgeWrapper.getEdge().getPriority());
             newEdge.setPosition(copiedEdgeWrapper.getEdge().getPosition().add(POSITION_OFFSET));
             newEdge.setSize(copiedEdgeWrapper.getEdge().getSize());
             newEdge.updateTarget();
 
-            pastedElements.add(newSource);
-            pastedElements.add(newDestination);
             pastedElements.add(newEdge);
         }
     }
 
     private void pasteSystemViewModels(ViewModelFactory factory) throws GeckoException {
-        for (SystemViewModel copiedSystem : elementsToPaste.getCopiedSystems()) {
-            pastedElements.add(pasteSystemViewModel(factory, copiedSystem));
+        for (SystemViewModel copiedSystem : copyVisitor.getCopiedSystems()) {
+            pasteSystemViewModel(factory, copiedSystem);
         }
     }
 
     private SystemViewModel pasteSystemViewModel(ViewModelFactory factory, SystemViewModel copiedSystem)
         throws GeckoException {
+        if (systems.get(copiedSystem) != null) {
+            return systems.get(copiedSystem);
+        }
+
         SystemViewModel newSystem = factory.createSystemViewModelIn(currentSystem);
         newSystem.setName(copiedSystem.getName());
+
         if (copiedSystem.getCode() != null) {
             newSystem.setCode(copiedSystem.getCode());
         }
@@ -144,11 +161,13 @@ public class PastePositionableViewModelElementAction extends Action {
         newSystem.setSize(copiedSystem.getSize());
         newSystem.updateTarget();
 
+        systems.put(copiedSystem, newSystem);
+        pastedElements.add(newSystem);
         return newSystem;
     }
 
     private void pastePortViewModels(ViewModelFactory factory) throws GeckoException {
-        for (PortViewModel copiedPort : elementsToPaste.getCopiedPorts()) {
+        for (PortViewModel copiedPort : copyVisitor.getCopiedPorts()) {
             PortViewModel port = pastePortViewModel(factory, copiedPort);
             pastedElements.add(pastePortViewModel(factory, port));
         }
@@ -156,53 +175,42 @@ public class PastePositionableViewModelElementAction extends Action {
 
     private PortViewModel pastePortViewModel(ViewModelFactory factory, PortViewModel copiedPort) throws GeckoException {
         PortViewModel newPort = factory.createPortViewModelIn(currentSystem);
+
         newPort.setName(copiedPort.getName());
         newPort.setVisibility(copiedPort.getVisibility());
         newPort.setType(copiedPort.getType());
         newPort.setPosition(copiedPort.getPosition().add(POSITION_OFFSET));
         newPort.setSize(copiedPort.getSize());
         newPort.updateTarget();
+
         return newPort;
     }
 
     private void pasteSystemConnectionViewModels(ViewModelFactory factory) throws GeckoException {
-        for (CopiedSystemConnectionWrapper copiedSystemConnection : elementsToPaste.getCopiedSystemConnections()) {
+        for (CopiedSystemConnectionWrapper copiedSystemConnection : copyVisitor.getCopiedSystemConnections()) {
+            // Copied dependencies:
             PortViewModel copiedSource = copiedSystemConnection.getSource();
             PortViewModel copiedDestination = copiedSystemConnection.getDestination();
 
+            SystemViewModel copiedSourceParent = copiedSystemConnection.getSourceParent();
+            copiedSourceParent.getPorts().remove(copiedSource);
+            // TODO: avoid pasting it, don;t actually remove it
+            SystemViewModel copiedDestinationParent = copiedSystemConnection.getDestinationParent();
+            copiedDestinationParent.getPorts().remove(copiedDestination);
+            // TODO: avoid pasting it, don;t actually remove it
+
+            // New dependencies:
             PortViewModel newSource = pastePortViewModel(factory, copiedSource);
             PortViewModel newDestination = pastePortViewModel(factory, copiedDestination);
 
-            SystemViewModel copiedSourceParent = null;
-            SystemViewModel copiedDestinationParent = null;
+            SystemViewModel newSourceParent = pasteSystemViewModel(factory, copiedSourceParent);
+            newSourceParent.getPorts().add(newSource);
 
-            List<PositionableViewModelElement<?>> children
-                = geckoViewModel.getCurrentEditor().getContainedPositionableViewModelElementsProperty()
-                .stream().filter(element -> element instanceof SystemViewModel).toList();
+            SystemViewModel newDestinationParent = pasteSystemViewModel(factory, copiedDestinationParent);
+            newDestinationParent.getPorts().add(newDestination);
 
-            for (PositionableViewModelElement<?> child : children) {
-                List<PortViewModel> ports = ((SystemViewModel) child).getPorts();
-                for (PortViewModel port : ports) {
-                    if (port.equals(copiedSystemConnection.getSource())) {
-                        copiedSourceParent = (SystemViewModel) child;
-                        copiedSourceParent.getPorts().remove(copiedSource);
-                    } else if (port.equals(copiedSystemConnection.getDestination())) {
-                        copiedDestinationParent = (SystemViewModel) child;
-                        copiedDestinationParent.getPorts().remove(copiedDestination);
-                    }
-                }
-            }
-
-            if (copiedSourceParent != null && copiedDestinationParent != null) {
-                SystemViewModel newSourceParent = pasteSystemViewModel(factory, copiedSourceParent);
-                newSourceParent.getPorts().add(newSource);
-
-                SystemViewModel newDestinationParent = pasteSystemViewModel(factory, copiedDestinationParent);
-                newDestinationParent.getPorts().add(newDestination);
-
-                copiedSourceParent.getPorts().add(copiedSource);
-                copiedDestinationParent.getPorts().add(copiedDestination);
-            }
+            copiedSourceParent.getPorts().add(copiedSource);
+            copiedDestinationParent.getPorts().add(copiedDestination);
 
             SystemConnectionViewModel newSystemConnection
                 = factory.createSystemConnectionViewModelIn(currentSystem, newSource, newDestination);

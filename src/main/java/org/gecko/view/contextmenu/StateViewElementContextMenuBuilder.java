@@ -4,16 +4,15 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
-import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.StateViewModel;
 
-public class StateViewElementContextMenuBuilder extends AbstractContextMenuBuilder {
+public class StateViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final StateViewModel stateViewModel;
 
     public StateViewElementContextMenuBuilder(
-        ActionManager actionManager, EditorView editorView, StateViewModel stateViewModel) {
-        super(actionManager, editorView);
+        ActionManager actionManager, StateViewModel stateViewModel) {
+        super(actionManager);
         this.stateViewModel = stateViewModel;
     }
 

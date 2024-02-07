@@ -6,16 +6,15 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Kind;
-import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EdgeViewModel;
 
-public class EdgeViewElementContextMenuBuilder extends AbstractContextMenuBuilder {
+public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final EdgeViewModel edgeViewModel;
 
     public EdgeViewElementContextMenuBuilder(
-        ActionManager actionManager, EditorView editorView, EdgeViewModel edgeViewModel) {
-        super(actionManager, editorView);
+        ActionManager actionManager, EdgeViewModel edgeViewModel) {
+        super(actionManager);
 
         this.edgeViewModel = edgeViewModel;
     }

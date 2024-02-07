@@ -1,9 +1,9 @@
 package org.gecko.actions;
 
-import org.gecko.exceptions.GeckoException;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -31,10 +31,10 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
-        Property<Point2D> sourcePosition = new SimpleObjectProperty<>(sourceIsPort ?
-            calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
-                source.getSystemPortSizeProperty().getValue(), source.getVisibility()) :
-            calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility()));
+        Property<Point2D> sourcePosition = new SimpleObjectProperty<>(
+            sourceIsPort ? calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
+                source.getSystemPortSizeProperty().getValue(), source.getVisibility())
+                : calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility()));
 
         // position the line at the tip of the port
         if (sourceIsPort) {
@@ -49,10 +49,11 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
             });
         }
 
-        Property<Point2D> destinationPosition = new SimpleObjectProperty<>(destIsPort ?
-            calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
-                destination.getSystemPortSizeProperty().getValue(), destination.getVisibility()) :
-            calculateEndPortPosition(destination.getPosition(), destination.getSize(), destination.getVisibility()));
+        Property<Point2D> destinationPosition = new SimpleObjectProperty<>(
+            destIsPort ? calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
+                destination.getSystemPortSizeProperty().getValue(), destination.getVisibility())
+                : calculateEndPortPosition(destination.getPosition(), destination.getSize(),
+                    destination.getVisibility()));
 
         if (destIsPort) {
             destination.getSystemPortPositionProperty()

@@ -1,7 +1,6 @@
 package org.gecko.view.views.viewelement;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;

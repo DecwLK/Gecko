@@ -19,7 +19,8 @@ public class DeleteEdgeViewModelElementAction extends AbstractPositionableViewMo
 
     @Override
     boolean run() throws GeckoException {
-        //TODO: remove edges from source and destination states
+        edgeViewModel.getSource().getOutgoingEdges().remove(edgeViewModel);
+        edgeViewModel.getDestination().getIncomingEdges().remove(edgeViewModel);
         automaton.removeEdge(edgeViewModel.getTarget());
         geckoViewModel.deleteViewModelElement(edgeViewModel);
         return true;

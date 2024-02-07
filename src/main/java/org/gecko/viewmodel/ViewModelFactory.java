@@ -62,16 +62,6 @@ public class ViewModelFactory {
         Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), source.getTarget(),
             destination.getTarget());
         EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
-        if (edge.getContract() != null) {
-            //This should never be null because the Edge Model Element has a contract that should be coming
-            //from its source
-            ContractViewModel contract = source.getContractsProperty()
-                .stream()
-                .filter(contractViewModel -> contractViewModel.getTarget().equals(edge.getContract()))
-                .findFirst()
-                .orElse(null);
-            result.setContract(contract);
-        }
         geckoViewModel.addViewModelElement(result);
         return result;
     }

@@ -31,6 +31,11 @@ dependencies {
 
     implementation("org.antlr:antlr4-runtime:4.13.1")
     antlr("org.antlr:antlr4:4.13.1")
+
+    implementation("org.eclipse.elk:org.eclipse.elk.core:0.8.1")
+    implementation("org.eclipse.elk:org.eclipse.elk.alg.common:0.8.1")
+    implementation("org.eclipse.elk:org.eclipse.elk.alg.force:0.8.1")
+    implementation("org.eclipse.elk:org.eclipse.elk.alg.layered:0.8.1")
 }
 
 tasks.withType<JavaCompile>().configureEach {

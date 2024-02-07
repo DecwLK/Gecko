@@ -90,7 +90,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                 return result;
             }
         }
-        if (ctx.use_contracts() != null) {
+        if (!ctx.use_contracts().isEmpty()) {
             if (ctx.use_contracts().size() > 1 || ctx.use_contracts().getFirst().use_contract().size() > 1) {
                 return "Multiple automata in one system not supported";
             }

@@ -17,6 +17,7 @@ import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
 import org.gecko.viewmodel.EdgeViewModel;
+import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.RegionViewModel;
@@ -33,12 +34,14 @@ import org.gecko.viewmodel.ViewModelFactory;
 public class ViewModelElementCreatorVisitor implements ElementVisitor {
     @Getter
     private final List<PositionableViewModelElement<?>> generatedViewModelElements;
-    ViewModelFactory viewModelFactory;
-    HashMap<Integer, ViewModelPropertiesContainer> viewModelProperties;
+    private final GeckoViewModel viewModel;
+    private final ViewModelFactory viewModelFactory;
+    private final HashMap<Integer, ViewModelPropertiesContainer> viewModelProperties;
 
     ViewModelElementCreatorVisitor(
-        ViewModelFactory viewModelFactory, List<ViewModelPropertiesContainer> viewModelProperties) {
-        this.viewModelFactory = viewModelFactory;
+        GeckoViewModel viewModel, List<ViewModelPropertiesContainer> viewModelProperties) {
+        this.viewModel = viewModel;
+        this.viewModelFactory = viewModel.getViewModelFactory();
         this.viewModelProperties = new HashMap<>();
         for (ViewModelPropertiesContainer container : viewModelProperties) {
             this.viewModelProperties.put(container.getElementId(), container);
@@ -96,8 +99,15 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         try {
             systemConnectionViewModel = viewModelFactory.createSystemConnectionViewModelFrom(systemConnection);
         } catch (MissingViewModelElementException e) {
-            PortViewModel source = viewModelFactory.createPortViewModelFrom(systemConnection.getSource());
-            PortViewModel destination = viewModelFactory.createPortViewModelFrom(systemConnection.getDestination());
+            PortViewModel source = (PortViewModel) viewModel.getViewModelElement(systemConnection.getSource());
+            if (source == null) {
+                source = viewModelFactory.createPortViewModelFrom(systemConnection.getSource());
+            }
+            PortViewModel destination =
+                (PortViewModel) viewModel.getViewModelElement(systemConnection.getDestination());
+            if (destination == null) {
+                destination = viewModelFactory.createPortViewModelFrom(systemConnection.getDestination());
+            }
             generatedViewModelElements.add(source);
             generatedViewModelElements.add(destination);
             visit(systemConnection);

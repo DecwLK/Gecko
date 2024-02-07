@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.gecko.util.graphlayouting.Graphlayouter;
 import org.gecko.viewmodel.GeckoViewModel;
 
 public class AutomatonFileParser implements FileParser {
@@ -31,8 +32,10 @@ public class AutomatonFileParser implements FileParser {
 
         GeckoViewModel gvm = new GeckoViewModel(visitor.getModel());
         ViewModelElementCreatorVisitor vmVisitor =
-            new ViewModelElementCreatorVisitor(gvm.getViewModelFactory(), List.of());
+            new ViewModelElementCreatorVisitor(gvm, List.of());
         vmVisitor.visitModel(gvm.getGeckoModel().getRoot());
+        Graphlayouter graphlayouter = new Graphlayouter(gvm);
+        graphlayouter.layout();
         return gvm;
     }
 

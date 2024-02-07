@@ -124,8 +124,8 @@ public class CursorTool extends Tool {
             }
             Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
             scaler.setPoint(scaler.getPoint().add(startDragPosition.subtract(endWorldPos)));
-//            Action resizeAction = actionManager.getActionFactory();
-//            actionManager.run(resizeAction);
+            //            Action resizeAction = actionManager.getActionFactory();
+            //            actionManager.run(resizeAction);
             startDragPosition = null;
             draggedElement = null;
             scaler.setDragging(false);
@@ -156,12 +156,11 @@ public class CursorTool extends Tool {
 
             if (editorViewModel.isAutomatonEditor()) {
                 moveAction = actionManager.getActionFactory()
-                    .createMoveConnectionScalerBlockViewElementAction(
-                        (EdgeViewModel) scaler.getDecoratorTarget().getTarget(), scaler,
-                        endWorldPos.subtract(startDragPosition));
+                    .createMoveEdgeViewModelElementAction((EdgeViewModel) scaler.getDecoratorTarget().getTarget(),
+                        scaler, endWorldPos.subtract(startDragPosition));
             } else {
                 moveAction = actionManager.getActionFactory()
-                    .createMoveConnectionScalerBlockViewElementAction(
+                    .createMoveSystemConnectionViewModelElementAction(
                         (SystemConnectionViewModel) scaler.getDecoratorTarget().getTarget(), scaler,
                         endWorldPos.subtract(startDragPosition));
             }

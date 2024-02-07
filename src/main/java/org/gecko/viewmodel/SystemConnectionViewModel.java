@@ -34,7 +34,6 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
 
     public void setSource(@NonNull PortViewModel source) {
         sourceProperty.setValue(source);
-        updateTarget();
     }
 
     public PortViewModel getSource() {
@@ -43,7 +42,6 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
 
     public void setDestination(@NonNull PortViewModel destination) {
         destinationProperty.setValue(destination);
-        updateTarget();
     }
 
     public PortViewModel getDestination() {

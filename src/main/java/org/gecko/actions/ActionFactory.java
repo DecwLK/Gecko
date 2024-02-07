@@ -135,21 +135,15 @@ public class ActionFactory {
         return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), elementsToMove, delta);
     }
 
-    public MoveConnectionScalerBlockViewElementAction createMoveConnectionScalerBlockViewElementAction(
-        EdgeViewModel edgeViewModel, ElementScalerBlock scalerBlock, Point2D delta) {
-        return new MoveConnectionScalerBlockViewElementAction(geckoViewModel, edgeViewModel, scalerBlock, delta);
-    }
-
-    public MoveConnectionScalerBlockViewElementAction createMoveConnectionScalerBlockViewElementAction(
-        SystemConnectionViewModel systemConnectionViewModel, ElementScalerBlock scalerBlock, Point2D delta) {
-        return new MoveConnectionScalerBlockViewElementAction(geckoViewModel, systemConnectionViewModel, scalerBlock,
-            delta);
+    public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(
+        EdgeViewModel edgeViewModel, ElementScalerBlock elementScalerBlock, Point2D delta) {
+        return new MoveEdgeViewModelElementAction(geckoViewModel, edgeViewModel, elementScalerBlock, delta);
     }
 
     public MoveSystemConnectionViewModelElementAction createMoveSystemConnectionViewModelElementAction(
-        SystemConnectionViewModel systemConnectionViewModel, PortViewModel systemViewModel, boolean isSource) {
+        SystemConnectionViewModel systemConnectionViewModel, ElementScalerBlock elementScalerBlock, Point2D delta) {
         return new MoveSystemConnectionViewModelElementAction(geckoViewModel, systemConnectionViewModel,
-            systemViewModel, isSource);
+            elementScalerBlock, delta);
     }
 
     public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction() {

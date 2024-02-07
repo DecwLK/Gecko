@@ -5,7 +5,7 @@ import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import lombok.Getter;
-import org.gecko.exceptions.MissingViewModelElement;
+import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.model.Automaton;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
@@ -103,7 +103,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         SystemConnectionViewModel systemConnectionViewModel = null;
         try {
             systemConnectionViewModel = viewModelFactory.createSystemConnectionViewModelFrom(systemConnection);
-        } catch (MissingViewModelElement e) {
+        } catch (MissingViewModelElementException e) {
             PortViewModel source = viewModelFactory.createPortViewModelFrom(systemConnection.getSource());
             PortViewModel destination = viewModelFactory.createPortViewModelFrom(systemConnection.getDestination());
             generatedViewModelElements.add(source);
@@ -148,7 +148,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         RegionViewModel regionViewModel = null;
         try {
             regionViewModel = viewModelFactory.createRegionViewModelFrom(region);
-        } catch (MissingViewModelElement e) {
+        } catch (MissingViewModelElementException e) {
             for (State state : region.getStates()) {
                 StateViewModel stateViewModel = viewModelFactory.createStateViewModelFrom(state);
                 generatedViewModelElements.add(stateViewModel);
@@ -172,7 +172,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         EdgeViewModel edgeViewModel = null;
         try {
             edgeViewModel = viewModelFactory.createEdgeViewModelFrom(edge);
-        } catch (MissingViewModelElement e) {
+        } catch (MissingViewModelElementException e) {
             StateViewModel source = viewModelFactory.createStateViewModelFrom(edge.getSource());
             StateViewModel destination = viewModelFactory.createStateViewModelFrom(edge.getDestination());
             generatedViewModelElements.add(source);

@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -19,11 +20,13 @@ public class CreateEdgeViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdEdgeViewModel =
             geckoViewModel.getViewModelFactory().createEdgeViewModelIn(currentParentSystem, source, destination);
-        createdEdgeViewModel.updateTarget();
+        ActionManager actionManager = geckoViewModel.getActionManager();
+        actionManager.run(actionManager.getActionFactory().createSelectAction(createdEdgeViewModel, true));
+        return true;
     }
 
     @Override

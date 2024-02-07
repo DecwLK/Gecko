@@ -15,6 +15,7 @@ public class Variable extends Element implements Renamable {
     private String name;
     private String type;
     private Visibility visibility;
+    private boolean hasIncomingConnection;
 
     @JsonCreator
     public Variable(

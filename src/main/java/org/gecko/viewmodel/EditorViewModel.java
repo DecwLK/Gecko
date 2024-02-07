@@ -47,10 +47,10 @@ public class EditorViewModel {
     private final boolean isAutomatonEditor;
 
     public EditorViewModel(
-        ActionManager actionManager, SystemViewModel systemViewModel, SystemViewModel parentSystem,
+        ActionManager actionManager, SystemViewModel currentSystem, SystemViewModel parentSystem,
         boolean isAutomatonEditor) {
         this.actionManager = actionManager;
-        this.currentSystem = systemViewModel;
+        this.currentSystem = currentSystem;
         this.parentSystem = parentSystem;
         this.containedPositionableViewModelElementsProperty = FXCollections.observableSet();
         this.isAutomatonEditor = isAutomatonEditor;
@@ -154,17 +154,17 @@ public class EditorViewModel {
         focusedElementProperty.setValue(focusedElement);
     }
 
-    public void addPositionableViewModelElement(PositionableViewModelElement<?> element, boolean select) {
-        addPositionableViewModelElements(Set.of(element), select);
+    public void addPositionableViewModelElement(PositionableViewModelElement<?> element) {
+        addPositionableViewModelElements(Set.of(element));
     }
 
-    public void addPositionableViewModelElements(Set<PositionableViewModelElement<?>> elements, boolean select) {
+    public void addPositionableViewModelElements(Set<PositionableViewModelElement<?>> elements) {
         elements.removeAll(containedPositionableViewModelElementsProperty);
         containedPositionableViewModelElementsProperty.addAll(elements);
         //don't select elements if no elements are added to the current view
-        if (!elements.isEmpty() && select) {
+        /*if (!elements.isEmpty()) {
             actionManager.run(actionManager.getActionFactory().createSelectAction(elements, true));
-        }
+        }*/
     }
 
     public void removePositionableViewModelElement(PositionableViewModelElement<?> element) {

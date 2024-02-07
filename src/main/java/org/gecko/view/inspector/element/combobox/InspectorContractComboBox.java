@@ -29,7 +29,9 @@ public class InspectorContractComboBox extends ComboBox<String> implements Inspe
                 return;
             }
             ContractViewModel newContract = viewModel.getSource()
-                .getContracts().stream().filter(contract -> contract.getName().equals(getValue()))
+                .getContracts()
+                .stream()
+                .filter(contract -> contract.getName().equals(getValue()))
                 .findFirst()
                 .orElseThrow();
             actionManager.run(

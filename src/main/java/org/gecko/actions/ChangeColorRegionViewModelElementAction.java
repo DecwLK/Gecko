@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import javafx.scene.paint.Color;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.RegionViewModel;
 
 public class ChangeColorRegionViewModelElementAction extends Action {
@@ -17,8 +18,9 @@ public class ChangeColorRegionViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         regionViewModel.setColor(newColor);
+        return true;
     }
 
     @Override

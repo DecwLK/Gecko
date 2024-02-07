@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import javafx.geometry.Point2D;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.model.State;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.EdgeViewModel;
@@ -29,7 +30,7 @@ public class MoveEdgeScalerBlockViewElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         if (elementScalerBlock.getIndex() == 0) {
             StateViewModel newStateViewModel = attemptRelocation();
             if (newStateViewModel != null) {
@@ -43,6 +44,7 @@ public class MoveEdgeScalerBlockViewElementAction extends Action {
         } else {
             elementScalerBlock.setPoint(elementScalerBlock.getPoint().add(delta));
         }
+        return true;
     }
 
     private StateViewModel attemptRelocation() {

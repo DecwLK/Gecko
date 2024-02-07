@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.SystemConnection;
 
 /**
@@ -53,7 +54,7 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     }
 
     @Override
-    public void updateTarget() {
+    public void updateTarget() throws ModelException {
         target.setSource(getSource().getTarget());
         target.setDestination(getDestination().getTarget());
     }

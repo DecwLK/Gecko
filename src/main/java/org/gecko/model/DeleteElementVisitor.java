@@ -1,5 +1,7 @@
 package org.gecko.model;
 
+import org.gecko.exceptions.ModelException;
+
 /**
  * Concrete implementation of an {@link ElementVisitor}. A {@link DeleteElementVisitor} focuses on removing
  * {@link Element}s from a given parent-{@link System}.
@@ -14,7 +16,11 @@ public class DeleteElementVisitor implements ElementVisitor {
 
     @Override
     public void visit(State state) {
-        parentSystem.getAutomaton().removeState(state);
+        try {
+            parentSystem.getAutomaton().removeState(state);
+        } catch (ModelException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.State;
 
 /**
@@ -39,7 +40,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
     }
 
     @Override
-    public void updateTarget() {
+    public void updateTarget() throws ModelException {
         super.updateTarget();
         // TODO: not possible because of missing reference to parent system
         /*Automaton automaton = parentSystem.getAutomaton();

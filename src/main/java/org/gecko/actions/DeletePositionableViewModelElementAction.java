@@ -2,6 +2,8 @@ package org.gecko.actions;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
@@ -9,6 +11,8 @@ public class DeletePositionableViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;
     private final Set<PositionableViewModelElement<?>> elementsToDelete;
+    private ActionGroup deleteActionGroup;
+    private Set<PositionableViewModelElement<?>> deletedElements;
 
     DeletePositionableViewModelElementAction(GeckoViewModel geckoViewModel, PositionableViewModelElement<?> element) {
         this.geckoViewModel = geckoViewModel;
@@ -22,28 +26,30 @@ public class DeletePositionableViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
-        //SelectionManager selectionManager = geckoViewModel.getCurrentEditor().getSelectionManager();
-        // Find all dependencies
-        /*PositionableViewModelElementVisitor visitor = new ViewModelElementDependencyFinderVisitor(geckoViewModel,
-            geckoViewModel.getCurrentEditor().getCurrentSystem());
-
+    boolean run() throws GeckoException {
+        Set<AbstractPositionableViewModelElementAction> allDeleteActions = new HashSet<>();
         for (PositionableViewModelElement<?> element : elementsToDelete) {
-            for (PositionableViewModelElement<?> dependency : (Set<PositionableViewModelElement<?>>) element.accept(
-                visitor)) {
-                selectionManager.deselect(dependency);
-                selectionManager.updateSelections(dependency);
-                geckoViewModel.deleteViewModelElement(dependency);
+            DeleteActionsCreatorVisitor visitor =
+                new DeleteActionsCreatorVisitor(geckoViewModel, geckoViewModel.getCurrentEditor().getCurrentSystem());
+            Set<AbstractPositionableViewModelElementAction> foundDeleteActions;
+            try {
+                foundDeleteActions = (Set<AbstractPositionableViewModelElementAction>) element.accept(visitor);
+            } catch (ClassCastException e) {
+                throw new GeckoException("Error while deleting element");
             }
-            selectionManager.deselect(element);
-            selectionManager.updateSelections(element);
-            geckoViewModel.deleteViewModelElement(element);
-        }*/
-        elementsToDelete.forEach(geckoViewModel::deleteViewModelElement);
+            allDeleteActions.addAll(foundDeleteActions);
+        }
+
+        deletedElements = allDeleteActions.stream()
+            .map(AbstractPositionableViewModelElementAction::getTarget)
+            .collect(Collectors.toSet());
+        geckoViewModel.getCurrentEditor().getSelectionManager().deselect(deletedElements);
+        deleteActionGroup = new ActionGroup(allDeleteActions.stream().map(action -> (Action) action).toList());
+        return deleteActionGroup.run();
     }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createRestorePositionableViewModelElementAction(elementsToDelete);
+        return new RestorePositionableViewModelElementAction(geckoViewModel, deleteActionGroup, deletedElements);
     }
 }

@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
@@ -14,9 +15,10 @@ public class RestoreContractViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
-        parent.getContractsProperty().add(contractViewModel);
+    boolean run() throws GeckoException {
+        parent.addContract(contractViewModel);
         parent.updateTarget();
+        return true;
     }
 
     @Override

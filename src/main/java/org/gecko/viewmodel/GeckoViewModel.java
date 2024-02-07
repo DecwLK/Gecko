@@ -14,8 +14,6 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
-import org.gecko.model.CreateElementVisitor;
-import org.gecko.model.DeleteElementVisitor;
 import org.gecko.model.Element;
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
@@ -92,49 +90,36 @@ public class GeckoViewModel {
 
     public void addViewModelElement(PositionableViewModelElement<?> element) {
         modelToViewModel.put(element.getTarget(), element);
-        updateCurrentEditor();
-    }
-
-    /**
-     * In addition to adding the positionable view model element to the view model, this method also adds the
-     * positionable view model element to the model.
-     *
-     * @param element The element to add.
-     */
-    public void restoreViewModelElement(PositionableViewModelElement<?> element) {
-        // Add to model
-        CreateElementVisitor createElementVisitor =
-            new CreateElementVisitor(getCurrentEditor().getCurrentSystem().getTarget());
-        element.getTarget().accept(createElementVisitor);
-
-        addViewModelElement(element);
+        updateEditors();
     }
 
     public void deleteViewModelElement(PositionableViewModelElement<?> element) {
-        // Remove from view model hashmap
         modelToViewModel.remove(element.getTarget());
-
-        // Remove from model
-        DeleteElementVisitor deleteElementVisitor =
-            new DeleteElementVisitor(getCurrentEditor().getCurrentSystem().getTarget());
-        element.getTarget().accept(deleteElementVisitor);
-
-        updateCurrentEditor();
+        updateSelectionManagers(element);
+        updateEditors();
     }
 
-    private void updateCurrentEditor() {
-        EditorViewModel currentEditor = getCurrentEditor();
-        if (currentEditor == null) {
-            return;
-        }
+    private void updateSelectionManagers(PositionableViewModelElement<?> removedElement) {
+        openedEditorsProperty.forEach(
+            editorViewModel -> editorViewModel.getSelectionManager().updateSelections(removedElement));
+    }
 
-        currentEditor.removePositionableViewModelElements(
-            currentEditor.getContainedPositionableViewModelElementsProperty()
+    private void updateEditors() {
+        openedEditorsProperty.forEach(this::updateEditor);
+        Set<EditorViewModel> editorViewModelsToDelete = openedEditorsProperty.stream()
+            .filter(editorViewModel -> !modelToViewModel.containsValue(editorViewModel.getCurrentSystem()))
+            .collect(Collectors.toSet());
+        openedEditorsProperty.removeAll(editorViewModelsToDelete);
+    }
+
+    private void updateEditor(EditorViewModel editorViewModel) {
+        editorViewModel.removePositionableViewModelElements(
+            editorViewModel.getContainedPositionableViewModelElementsProperty()
                 .stream()
                 .filter(element -> !modelToViewModel.containsKey(element.getTarget()))
                 .collect(Collectors.toSet()));
 
-        addPositionableViewModelElementsToEditor(currentEditor);
+        addPositionableViewModelElementsToEditor(editorViewModel);
     }
 
     public EditorViewModel getCurrentEditor() {
@@ -143,18 +128,16 @@ public class GeckoViewModel {
 
     private void setCurrentEditor(EditorViewModel editorViewModel) {
         currentEditorProperty.setValue(editorViewModel);
-        updateCurrentEditor();
+        updateEditors();
     }
 
     private void addPositionableViewModelElementsToEditor(EditorViewModel editorViewModel) {
         System currentSystem = editorViewModel.getCurrentSystem().getTarget();
         if (editorViewModel.isAutomatonEditor()) {
             editorViewModel.addPositionableViewModelElements(
-                getViewModelElements(currentSystem.getAutomaton().getAllElements()),
-                editorViewModel.equals(getCurrentEditor()));
+                getViewModelElements(currentSystem.getAutomaton().getAllElements()));
         } else {
-            editorViewModel.addPositionableViewModelElements(getViewModelElements(currentSystem.getAllElements()),
-                editorViewModel.equals(getCurrentEditor()));
+            editorViewModel.addPositionableViewModelElements(getViewModelElements(currentSystem.getAllElements()));
         }
     }
 

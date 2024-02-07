@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.util.Pair;
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;

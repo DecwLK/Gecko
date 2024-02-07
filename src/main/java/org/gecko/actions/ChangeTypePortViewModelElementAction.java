@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.PortViewModel;
 
 public class ChangeTypePortViewModelElementAction extends Action {
@@ -15,9 +16,10 @@ public class ChangeTypePortViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         portViewModel.setType(newType);
         portViewModel.updateTarget();
+        return true;
     }
 
     @Override

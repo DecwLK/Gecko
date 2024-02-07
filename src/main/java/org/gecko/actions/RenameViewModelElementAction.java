@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.AbstractViewModelElement;
 import org.gecko.viewmodel.Renamable;
 
@@ -15,10 +16,11 @@ public class RenameViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         renamable.setName(newName);
         AbstractViewModelElement<?> abstractViewModelElement = (AbstractViewModelElement<?>) renamable;
         abstractViewModelElement.updateTarget();
+        return true;
     }
 
     @Override

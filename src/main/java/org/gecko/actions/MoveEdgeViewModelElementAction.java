@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
@@ -16,13 +17,14 @@ public class MoveEdgeViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         if (isSource) {
             edgeViewModel.setSource(stateViewModel);
         } else {
             edgeViewModel.setDestination(stateViewModel);
         }
         edgeViewModel.updateTarget();
+        return true;
     }
 
     @Override

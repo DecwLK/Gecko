@@ -10,6 +10,7 @@ import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Edge;
 import org.gecko.model.Kind;
 
@@ -78,7 +79,6 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         clearConnectionListener();
         sourceProperty.setValue(source);
         updateConnectionListener();
-        updateTarget();
     }
 
     public StateViewModel getSource() {
@@ -89,7 +89,6 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         clearConnectionListener();
         destinationProperty.setValue(destination);
         updateConnectionListener();
-        updateTarget();
     }
 
     public StateViewModel getDestination() {
@@ -120,7 +119,7 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     }
 
     @Override
-    public void updateTarget() {
+    public void updateTarget() throws ModelException {
         target.setKind(getKind());
         target.setPriority(getPriority());
         if (contractProperty.getValue() != null) {

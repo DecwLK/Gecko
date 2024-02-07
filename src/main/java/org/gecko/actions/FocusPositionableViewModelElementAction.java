@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
@@ -15,9 +16,10 @@ public class FocusPositionableViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         editorViewModel.getSelectionManager().select(element);
         editorViewModel.moveToFocusedElement();
+        return true;
     }
 
     @Override

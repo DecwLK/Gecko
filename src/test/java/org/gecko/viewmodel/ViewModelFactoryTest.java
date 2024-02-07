@@ -1,13 +1,7 @@
 package org.gecko.viewmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.Set;
-import org.gecko.exceptions.MissingViewModelElement;
+import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.GeckoModel;
@@ -19,6 +13,12 @@ import org.gecko.model.Variable;
 import org.gecko.util.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class ViewModelFactoryTest {
     GeckoViewModel geckoViewModel;
@@ -129,7 +129,7 @@ class ViewModelFactoryTest {
         State source = modelFactory.createState(systemViewModel1.getTarget().getAutomaton());
         State destination = modelFactory.createState(systemViewModel1.getTarget().getAutomaton());
         Edge edge = modelFactory.createEdge(systemViewModel1.getTarget().getAutomaton(), source, destination);
-        assertThrows(MissingViewModelElement.class, () -> viewModelFactory.createEdgeViewModelFrom(edge));
+        assertThrows(MissingViewModelElementException.class, () -> viewModelFactory.createEdgeViewModelFrom(edge));
     }
 
     @Test
@@ -141,7 +141,7 @@ class ViewModelFactoryTest {
             assertEquals(edge, edgeViewModel.getTarget());
             assertEquals(stateViewModel1, edgeViewModel.getSource());
             assertEquals(stateViewModel2, edgeViewModel.getDestination());
-        } catch (MissingViewModelElement e) {
+        } catch (MissingViewModelElementException e) {
             fail();
         }
     }
@@ -157,7 +157,7 @@ class ViewModelFactoryTest {
             assertEquals(2, regionViewModel.getStatesProperty().size());
             assertTrue(regionViewModel.getStatesProperty().contains(stateViewModel1));
             assertTrue(regionViewModel.getStatesProperty().contains(stateViewModel2));
-        } catch (MissingViewModelElement e) {
+        } catch (MissingViewModelElementException e) {
             fail();
         }
     }

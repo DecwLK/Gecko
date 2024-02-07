@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.model.Kind;
 import org.gecko.viewmodel.EdgeViewModel;
 
@@ -14,9 +15,10 @@ public class ChangeKindEdgeViewModelAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         edgeViewModel.setKind(kind);
         edgeViewModel.updateTarget();
+        return true;
     }
 
     @Override

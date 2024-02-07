@@ -94,12 +94,30 @@ public class GeckoView {
                     constructTab(newEditorView, editorViewModel);
                 }
             }
+
+            List<EditorViewModel> editorViewModelsToRemove = openedViews.stream()
+                .map(EditorView::getViewModel)
+                .filter(editorViewModel -> !newValue.contains(editorViewModel))
+                .toList();
+            if (!editorViewModelsToRemove.isEmpty()) {
+                removeEditorViews(editorViewModelsToRemove);
+            }
         }
         if (openedViews.size() == 1) {
             centerPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         } else {
             centerPane.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
         }
+    }
+
+    private void removeEditorViews(List<EditorViewModel> editorViewModelsToRemove) {
+        List<EditorView> editorViewsToRemove = openedViews.stream()
+            .filter(editorView -> editorViewModelsToRemove.contains(editorView.getViewModel()))
+            .toList();
+        editorViewsToRemove.forEach(editorView -> {
+            centerPane.getTabs().remove(editorView.getCurrentView());
+        });
+        openedViews.removeAll(editorViewsToRemove);
     }
 
     private void constructTab(EditorView editorView, EditorViewModel editorViewModel) {
@@ -119,7 +137,7 @@ public class GeckoView {
         centerPane.getSelectionModel().select(currentView.getCurrentView());
 
         mainPane.setLeft(currentView.drawToolbar());
-        mainPane.setRight(currentView.getCurrentInspector().get());
+        mainPane.setRight(currentView.drawInspector());
         currentView.getCurrentInspector().addListener((Observable observable) -> {
             mainPane.setRight(currentView.drawInspector());
         });

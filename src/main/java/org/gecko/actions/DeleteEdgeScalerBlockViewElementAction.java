@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import javafx.geometry.Point2D;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 
@@ -18,9 +19,10 @@ public class DeleteEdgeScalerBlockViewElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         lastPosition = scalerBlock.getPoint();
         decorator.deletePoint(scalerBlock);
+        return true;
     }
 
     @Override

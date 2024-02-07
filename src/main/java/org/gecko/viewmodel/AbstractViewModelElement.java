@@ -2,6 +2,7 @@ package org.gecko.viewmodel;
 
 import lombok.Getter;
 import lombok.NonNull;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Element;
 
 /**
@@ -18,5 +19,5 @@ public abstract class AbstractViewModelElement<T extends Element> {
         this.target = target;
     }
 
-    public abstract void updateTarget();
+    public abstract void updateTarget() throws ModelException;
 }

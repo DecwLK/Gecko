@@ -1,7 +1,9 @@
 package org.gecko.actions;
 
 import java.util.ArrayDeque;
+import javafx.scene.control.Alert;
 import lombok.Getter;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.GeckoViewModel;
 
 public class ActionManager {
@@ -21,7 +23,14 @@ public class ActionManager {
             return;
         }
         Action action = undoStack.removeFirst();
-        action.run();
+        try {
+            if (!action.run()) {
+                return;
+            }
+        } catch (GeckoException e) {
+            showExceptionAlert(e.getMessage());
+            return;
+        }
         redoStack.addFirst(action.getUndoAction(actionFactory));
     }
 
@@ -30,7 +39,14 @@ public class ActionManager {
             return;
         }
         Action action = redoStack.removeFirst();
-        action.run();
+        try {
+            if (!action.run()) {
+                return;
+            }
+        } catch (GeckoException e) {
+            showExceptionAlert(e.getMessage());
+            return;
+        }
         Action undoAction = action.getUndoAction(actionFactory);
         if (undoAction != null) {
             undoStack.addFirst(undoAction);
@@ -38,11 +54,37 @@ public class ActionManager {
     }
 
     public void run(Action action) {
-        action.run();
+        try {
+            if (!action.run()) {
+                return;
+            }
+        } catch (GeckoException e) {
+            showExceptionAlert(e.getMessage());
+            return;
+        }
         Action undoAction = action.getUndoAction(actionFactory);
         if (undoAction != null) {
             undoStack.addFirst(undoAction);
+            redoStack.clear();
         }
-        redoStack.clear();
+    }
+
+    private void showExceptionAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("An error occurred");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void printStacks() {
+        System.out.println("Undo stack:");
+        for (Action action : undoStack) {
+            System.out.println(action);
+        }
+        System.out.println("Redo stack:");
+        for (Action action : redoStack) {
+            System.out.println(action);
+        }
     }
 }

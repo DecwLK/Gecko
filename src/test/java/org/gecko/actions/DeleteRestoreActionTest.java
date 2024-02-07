@@ -1,7 +1,5 @@
 package org.gecko.actions;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Set;
 import org.gecko.model.GeckoModel;
 import org.gecko.viewmodel.GeckoViewModel;
@@ -10,6 +8,8 @@ import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DeleteRestoreActionTest {
     private static ActionManager actionManager;

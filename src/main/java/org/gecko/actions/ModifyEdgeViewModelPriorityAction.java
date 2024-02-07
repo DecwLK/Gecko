@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EdgeViewModel;
 
 public class ModifyEdgeViewModelPriorityAction extends Action {
@@ -16,9 +17,10 @@ public class ModifyEdgeViewModelPriorityAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         edgeViewModel.setPriority(newPriority);
         edgeViewModel.updateTarget();
+        return true;
     }
 
     @Override

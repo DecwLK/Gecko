@@ -11,6 +11,7 @@ public class InspectorRemoveContractButton extends AbstractInspectorButton {
         ActionManager actionManager, StateViewModel stateViewModel, ContractViewModel contractViewModel) {
         getStyleClass().add(ICON_STYLE_NAME);
         setOnAction(event -> {
+            getParent().requestFocus();
             actionManager.run(actionManager.getActionFactory()
                 .createDeleteContractViewModelAction(stateViewModel, contractViewModel));
         });

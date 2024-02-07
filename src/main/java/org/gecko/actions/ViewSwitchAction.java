@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.SystemViewModel;
@@ -18,8 +19,9 @@ public class ViewSwitchAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         geckoViewModel.switchEditor(systemViewModel, isAutomaton);
+        return true;
     }
 
     @Override

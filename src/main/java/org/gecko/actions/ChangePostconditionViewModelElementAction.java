@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.ContractViewModel;
 
 public class ChangePostconditionViewModelElementAction extends Action {
@@ -15,9 +16,10 @@ public class ChangePostconditionViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         contractViewModel.setPostcondition(newPostcondition);
         contractViewModel.updateTarget();
+        return true;
     }
 
     @Override

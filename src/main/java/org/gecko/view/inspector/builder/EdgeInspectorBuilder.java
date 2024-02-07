@@ -22,7 +22,7 @@ public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel
         // Connected states
         addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getSource(),
             ResourceHandler.getString("Inspector", "source")));
-        addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getSource(),
+        addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getDestination(),
             ResourceHandler.getString("Inspector", "target")));
         addInspectorElement(new InspectorSeparator());
 

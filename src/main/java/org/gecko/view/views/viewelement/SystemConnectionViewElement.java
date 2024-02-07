@@ -29,6 +29,7 @@ public class SystemConnectionViewElement extends ConnectionViewElement
         this.visibilityProperty = new SimpleObjectProperty<>();
         this.typeProperty = new SimpleStringProperty();
         this.systemConnectionViewModel = systemConnectionViewModel;
+
         constructVisualization();
     }
 

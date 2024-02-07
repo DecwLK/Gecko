@@ -102,13 +102,10 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
 
         // State name:
         Pane stateName = new Pane();
+        colorStateName(stateName);
         // Color the state name according to its type
         isStartStateProperty.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                stateName.setStyle("-fx-background-color: lightgray;");
-            } else {
-                stateName.setStyle("-fx-background-color: green;");
-            }
+            colorStateName(stateName);
         });
         stateName.getStyleClass().add(INNER_STYLE);
 
@@ -174,6 +171,14 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
             }
 
             contractsPane.getChildren().add(contractBox);
+        }
+    }
+
+    private void colorStateName(Pane stateName) {
+        if (isStartStateProperty.getValue()) {
+            stateName.setStyle("-fx-background-color: green;");
+        } else {
+            stateName.setStyle("-fx-background-color: lightgray;");
         }
     }
 }

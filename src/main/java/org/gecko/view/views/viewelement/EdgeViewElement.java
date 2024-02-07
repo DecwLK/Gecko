@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -23,33 +24,55 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     @Getter(AccessLevel.NONE)
     private final EdgeViewModel edgeViewModel;
     private final Property<ContractViewModel> contractProperty;
-    private final Property<StateViewModel> sourceProperty;
-    private final Property<StateViewModel> destinationProperty;
     private final IntegerProperty priorityProperty;
     private final Property<Kind> kindProperty;
 
     public EdgeViewElement(EdgeViewModel edgeViewModel) {
         super(edgeViewModel.getEdgePoints());
         this.contractProperty = new SimpleObjectProperty<>();
-        this.sourceProperty = new SimpleObjectProperty<>();
-        this.destinationProperty = new SimpleObjectProperty<>();
         this.priorityProperty = new SimpleIntegerProperty();
         this.kindProperty = new SimpleObjectProperty<>();
         this.edgeViewModel = edgeViewModel;
         constructVisualization();
 
+        // Redraw edge when there are changes in the edge list
+        edgeViewModel.getSource()
+            .getIncomingEdges()
+            .addListener((ListChangeListener<? super EdgeViewModel>) c -> maskPathSource());
+
+        edgeViewModel.getSource()
+            .getOutgoingEdges()
+            .addListener((ListChangeListener<? super EdgeViewModel>) c -> maskPathSource());
+
+        edgeViewModel.getDestination()
+            .getIncomingEdges()
+            .addListener((ListChangeListener<? super EdgeViewModel>) c -> maskPathSource());
+
+        edgeViewModel.getDestination()
+            .getOutgoingEdges()
+            .addListener((ListChangeListener<? super EdgeViewModel>) c -> maskPathSource());
+
         edgeViewModel.getSourceProperty().addListener((observable, oldValue, newValue) -> {
-            updateMaskPathSourceListeners();
+            updateMaskPathSourceListeners(oldValue);
         });
 
         edgeViewModel.getDestinationProperty().addListener((observable, oldValue, newValue) -> {
-            updateMaskPathSourceListeners();
+            updateMaskPathSourceListeners(oldValue);
         });
 
-        updateMaskPathSourceListeners();
+        updateMaskPathSourceListeners(null);
     }
 
-    public void updateMaskPathSourceListeners() {
+    private void updateMaskPathSourceListeners(StateViewModel oldStateViewModel) {
+        // Remove listeners
+        if (oldStateViewModel != null) {
+            oldStateViewModel.getPositionProperty()
+                .removeListener((observable, oldValue, newValue) -> maskPathSource());
+            oldStateViewModel.getSizeProperty().removeListener((observable, oldValue, newValue) -> maskPathSource());
+        }
+
+        maskPathSource();
+
         edgeViewModel.getSource()
             .getPositionProperty()
             .addListener((observable, oldValue, newValue) -> maskPathSource());
@@ -57,24 +80,19 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         edgeViewModel.getDestination()
             .getPositionProperty()
             .addListener((observable, oldValue, newValue) -> maskPathSource());
-
-        maskPathSource();
     }
 
-    private void maskPathSource() {
-        double destinationPointOffset = edgeViewModel.getDestination().getEdgeOffset(edgeViewModel);
-
+    protected void maskPathSource() {
+        double sourceEdgeOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
         getPathSource().getFirst()
             .setValue(maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
-                edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(),
-                destinationPointOffset));
+                edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(), sourceEdgeOffset));
 
-        double sourcePointOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
-
+        double destinationEdgeOffset = edgeViewModel.getDestination().getEdgeOffset(edgeViewModel);
         getPathSource().getLast()
             .setValue(maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
                 edgeViewModel.getSource().getCenter(), edgeViewModel.getDestination().getCenter(),
-                sourcePointOffset));
+                destinationEdgeOffset));
     }
 
     @Override

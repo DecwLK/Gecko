@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.views.viewelement.SystemViewElement;
 
 public class PanTool extends Tool {
 

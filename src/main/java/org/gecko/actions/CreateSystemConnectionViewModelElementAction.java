@@ -34,7 +34,7 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
         Property<Point2D> sourcePosition = new SimpleObjectProperty<>(sourceIsPort ?
             calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
                 source.getSystemPortSizeProperty().getValue(), source.getVisibility()) :
-            source.getPositionProperty().getValue());
+            calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility()));
 
         // position the line at the tip of the port
         if (sourceIsPort) {
@@ -43,15 +43,16 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
                     calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
                         source.getSystemPortSizeProperty().getValue(), source.getVisibility())));
         } else {
-            source.getPositionProperty()
-                .addListener((observable, oldValue, newValue) -> sourcePosition.setValue(
-                    source.getPositionProperty().getValue().add(source.getSizeProperty().getValue().multiply(0.5))));
+            source.getPositionProperty().addListener((observable, oldValue, newValue) -> {
+                sourcePosition.setValue(
+                    calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility()));
+            });
         }
 
         Property<Point2D> destinationPosition = new SimpleObjectProperty<>(destIsPort ?
             calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
                 destination.getSystemPortSizeProperty().getValue(), destination.getVisibility()) :
-            destination.getPositionProperty().getValue());
+            calculateEndPortPosition(destination.getPosition(), destination.getSize(), destination.getVisibility()));
 
         if (destIsPort) {
             destination.getSystemPortPositionProperty()
@@ -59,11 +60,10 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
                     calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
                         destination.getSystemPortSizeProperty().getValue(), destination.getVisibility())));
         } else {
-            destination.getPositionProperty()
-                .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
-                    destination.getPositionProperty()
-                        .getValue()
-                        .add(destination.getSizeProperty().getValue().multiply(0.5))));
+            destination.getPositionProperty().addListener((observable, oldValue, newValue) -> {
+                destinationPosition.setValue(calculateEndPortPosition(destination.getPosition(), destination.getSize(),
+                    destination.getVisibility()));
+            });
         }
 
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();

@@ -1,6 +1,7 @@
 package org.gecko.view.views.viewelement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
@@ -17,6 +18,7 @@ import lombok.Getter;
 @Getter
 public abstract class ConnectionViewElement extends Path {
 
+    private static final double EDGE_DIST_OFFSET = 20;
     private static final double ARROW_HEAD_LENGTH = 25;
     private static final double ARROW_HEAD_ANGLE = 10;
 
@@ -46,9 +48,11 @@ public abstract class ConnectionViewElement extends Path {
      * @param blockSize     The size of the block
      * @param start         The start point of the line
      * @param end           The end point of the line
+     * @param edgeOffset    The offset to apply to the intersection point
      * @return The masked position of the block (end point)
      */
-    protected Point2D maskBlock(Point2D blockPosition, Point2D blockSize, Point2D start, Point2D end, double offset) {
+    protected Point2D maskBlock(
+        Point2D blockPosition, Point2D blockSize, Point2D start, Point2D end, double edgeOffset) {
         List<Point2D> blockCorners = new ArrayList<>();
         blockCorners.add(blockPosition);
         blockCorners.add(blockPosition.add(new Point2D(blockSize.getX(), 0)));
@@ -68,12 +72,20 @@ public abstract class ConnectionViewElement extends Path {
 
             if (intersectionShape.getBoundsInLocal().getMaxX() <= 0
                 || intersectionShape.getBoundsInLocal().getMaxY() <= 0) {
+                // No intersection
                 continue;
             }
             Point2D vector = corner.subtract(nextCorner).normalize();
 
-            intersection = new Point2D(intersectionShape.getBoundsInLocal().getMinX(),
-                intersectionShape.getBoundsInLocal().getMinY()).add(vector.multiply(offset));
+            Point2D edgePosition = new Point2D(intersectionShape.getBoundsInLocal().getMinX(),
+                intersectionShape.getBoundsInLocal().getMinY());
+
+            if (edgeOffset <= -1) {
+                intersection = edgePosition;
+            } else {
+                intersection = corner.interpolate(nextCorner, edgeOffset);
+            }
+            break;
         }
 
         return intersection;

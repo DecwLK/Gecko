@@ -45,10 +45,10 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
         Property<Point2D> startPoint = new SimpleObjectProperty<>(getSource().getCenter());
         Property<Point2D> endPoint = new SimpleObjectProperty<>(getDestination().getCenter());
 
+        updateConnectionListener();
+
         getSource().getOutgoingEdges().add(this);
         getDestination().getIncomingEdges().add(this);
-
-        updateConnectionListener();
 
         edgePoints.add(startPoint);
         edgePoints.add(endPoint);
@@ -79,8 +79,8 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
     }
 
     public void setSource(@NonNull StateViewModel source) {
-        getSource().getOutgoingEdges().remove(this);
         clearConnectionListener();
+        getSource().getOutgoingEdges().remove(this);
         sourceProperty.setValue(source);
         getSource().getOutgoingEdges().add(this);
         updateConnectionListener();
@@ -91,8 +91,8 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
     }
 
     public void setDestination(@NonNull StateViewModel destination) {
-        getDestination().getIncomingEdges().remove(this);
         clearConnectionListener();
+        getDestination().getIncomingEdges().remove(this);
         destinationProperty.setValue(destination);
         getDestination().getIncomingEdges().add(this);
         updateConnectionListener();

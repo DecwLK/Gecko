@@ -1,7 +1,8 @@
 package org.gecko.viewmodel;
 
 import org.gecko.actions.ActionManager;
-import org.gecko.exceptions.MissingViewModelElement;
+import org.gecko.exceptions.MissingViewModelElementException;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.ModelFactory;
@@ -32,7 +33,7 @@ public class ViewModelFactory {
         return new EditorViewModel(actionManager, systemViewModel, parentSystem, isAutomatonEditor);
     }
 
-    public StateViewModel createStateViewModelIn(SystemViewModel parentSystem) {
+    public StateViewModel createStateViewModelIn(SystemViewModel parentSystem) throws ModelException {
         State state = modelFactory.createState(parentSystem.getTarget().getAutomaton());
         StateViewModel result = new StateViewModel(getNewViewModelElementId(), state);
         geckoViewModel.addViewModelElement(result);
@@ -66,11 +67,11 @@ public class ViewModelFactory {
         return result;
     }
 
-    public EdgeViewModel createEdgeViewModelFrom(Edge edge) throws MissingViewModelElement {
+    public EdgeViewModel createEdgeViewModelFrom(Edge edge) throws MissingViewModelElementException {
         StateViewModel source = (StateViewModel) geckoViewModel.getViewModelElement(edge.getSource());
         StateViewModel destination = (StateViewModel) geckoViewModel.getViewModelElement(edge.getDestination());
         if (source == null || destination == null) {
-            throw new MissingViewModelElement("Missing source or destination for edge.");
+            throw new MissingViewModelElementException("Missing source or destination for edge.");
         }
         EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
         geckoViewModel.addViewModelElement(result);
@@ -88,12 +89,12 @@ public class ViewModelFactory {
     }
 
     public SystemConnectionViewModel createSystemConnectionViewModelFrom(SystemConnection systemConnection)
-        throws MissingViewModelElement {
+        throws MissingViewModelElementException {
         PortViewModel source = (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getSource());
         PortViewModel destination =
             (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getDestination());
         if (source == null || destination == null) {
-            throw new MissingViewModelElement("Missing source or destination for system connection.");
+            throw new MissingViewModelElementException("Missing source or destination for system connection.");
         }
         SystemConnectionViewModel result =
             new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
@@ -129,13 +130,13 @@ public class ViewModelFactory {
         return result;
     }
 
-    public RegionViewModel createRegionViewModelFrom(Region region) throws MissingViewModelElement {
+    public RegionViewModel createRegionViewModelFrom(Region region) throws MissingViewModelElementException {
         RegionViewModel result = new RegionViewModel(getNewViewModelElementId(), region,
             createContractViewModelFrom(region.getPreAndPostCondition()));
         for (State state : region.getStates()) {
             StateViewModel stateViewModel = (StateViewModel) geckoViewModel.getViewModelElement(state);
             if (stateViewModel == null) {
-                throw new MissingViewModelElement("Region contains invalid state.");
+                throw new MissingViewModelElementException("Region contains invalid state.");
             }
             result.addState(stateViewModel);
         }
@@ -181,7 +182,7 @@ public class ViewModelFactory {
     private void updateStartState(State state) {
         System root = geckoViewModel.getGeckoModel().getRoot();
         System parentSystem = findSystemWithState(root, state);
-        if (parentSystem != null) {
+        if (parentSystem != null && state.equals(parentSystem.getAutomaton().getStartState())) {
             SystemViewModel parentSystemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(parentSystem);
             parentSystemViewModel.setStartState((StateViewModel) geckoViewModel.getViewModelElement(state));
         }

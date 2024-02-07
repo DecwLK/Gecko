@@ -64,11 +64,12 @@ public class System extends Element implements Renamable {
     }
 
     public void removeConnection(SystemConnection connection) {
+        connection.getDestination().setHasIncomingConnection(false);
         connections.remove(connection);
     }
 
     public void removeConnections(Set<SystemConnection> connections) {
-        this.connections.removeAll(connections);
+        connections.forEach(this::removeConnection);
     }
 
     public void addVariable(Variable variable) {
@@ -99,5 +100,10 @@ public class System extends Element implements Renamable {
         allElements.addAll(variables);
         allElements.addAll(connections);
         return allElements;
+    }
+
+    @JsonIgnore
+    public System getChildSystemWithVariable(Variable variable) {
+        return children.stream().filter(child -> child.getVariables().contains(variable)).findFirst().orElse(null);
     }
 }

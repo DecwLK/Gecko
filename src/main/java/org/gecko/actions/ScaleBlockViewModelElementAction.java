@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.BlockViewModelElement;
 
 public class ScaleBlockViewModelElementAction extends Action {
@@ -7,7 +8,8 @@ public class ScaleBlockViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
+        return true;
     }
 
     @Override

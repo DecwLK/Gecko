@@ -7,6 +7,7 @@ import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Variable;
 import org.gecko.model.Visibility;
 
@@ -43,7 +44,7 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
     }
 
     @Override
-    public void updateTarget() {
+    public void updateTarget() throws ModelException {
         super.updateTarget();
         target.setVisibility(getVisibility());
         target.setType(getType());

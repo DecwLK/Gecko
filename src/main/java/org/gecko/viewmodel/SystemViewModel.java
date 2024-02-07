@@ -12,6 +12,7 @@ import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.System;
 
 /**
@@ -46,12 +47,12 @@ public class SystemViewModel extends BlockViewModelElement<System> {
     }
 
     @Override
-    public void updateTarget() {
+    public void updateTarget() throws ModelException {
         super.updateTarget();
         target.setCode(getCode());
         target.getVariables().clear();
         target.addVariables(portsProperty.stream().map(PortViewModel::getTarget).collect(Collectors.toSet()));
-        target.getAutomaton().setStartState(startState.getTarget());
+        target.getAutomaton().setStartState(startState != null ? startState.getTarget() : null);
     }
 
     public void addPort(@NonNull PortViewModel port) {

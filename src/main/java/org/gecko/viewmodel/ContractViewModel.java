@@ -5,6 +5,7 @@ import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Contract;
 
 /**
@@ -44,7 +45,7 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
     }
 
     @Override
-    public void updateTarget() {
+    public void updateTarget() throws ModelException {
         target.setName(getName());
         target.getPreCondition().setCondition(getPrecondition());
         target.getPostCondition().setCondition(getPostcondition());

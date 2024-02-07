@@ -182,6 +182,7 @@ public class EditorView {
         });
 
         initializeViewElements();
+        acceptTool(viewModel.getCurrentTool());
         focus();
     }
 
@@ -189,6 +190,9 @@ public class EditorView {
         this.shortcutHandler = shortcutHandler;
         currentViewPane.addEventHandler(KeyEvent.ANY, shortcutHandler);
         toolBar.addEventHandler(KeyEvent.ANY, shortcutHandler);
+        if (currentInspector.get() != null) {
+            currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
+        }
     }
 
     public void focus() {
@@ -227,10 +231,12 @@ public class EditorView {
     }
 
     public Node drawToolbar() {
+        toolBar.addEventHandler(KeyEvent.ANY, shortcutHandler);
         return toolBar;
     }
 
     public Node drawInspector() {
+        currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
         return currentInspector.get();
     }
 
@@ -287,9 +293,13 @@ public class EditorView {
     }
 
     private void onToolChanged(ObservableValue<? extends Tool> observable, Tool oldValue, Tool newValue) {
-        newValue.visitView(viewElementsVBoxContainer, viewElementsScrollPane, viewElementsGroup,
+        acceptTool(newValue);
+    }
+
+    private void acceptTool(Tool tool) {
+        tool.visitView(viewElementsVBoxContainer, viewElementsScrollPane, viewElementsGroup,
             viewElementsGroupContainer);
-        currentViewElements.forEach(viewElement -> viewElement.accept(newValue));
+        currentViewElements.forEach(viewElement -> viewElement.accept(tool));
     }
 
     private void focusedElementChanged(

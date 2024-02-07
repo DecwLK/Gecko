@@ -2,23 +2,39 @@ package org.gecko.actions;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
 public class RestorePositionableViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;
+    private final ActionGroup actionGroup;
     private final Set<PositionableViewModelElement<?>> deletedElements;
 
     RestorePositionableViewModelElementAction(
-        GeckoViewModel geckoViewModel, Set<PositionableViewModelElement<?>> elements) {
+        GeckoViewModel geckoViewModel, ActionGroup actionGroup, Set<PositionableViewModelElement<?>> deletedElements) {
         this.geckoViewModel = geckoViewModel;
-        this.deletedElements = new HashSet<>(elements);
+        this.actionGroup = actionGroup;
+        this.deletedElements = new HashSet<>(deletedElements);
     }
 
     @Override
-    void run() {
-        deletedElements.forEach(geckoViewModel::restoreViewModelElement);
+    boolean run() throws GeckoException {
+        Action undoAction = actionGroup.getUndoAction(geckoViewModel.getActionManager().getActionFactory());
+        if (!undoAction.run()) {
+            return false;
+        }
+        Set<PositionableViewModelElement<?>> elementsToRestoreFromCurrentEditor = geckoViewModel.getCurrentEditor()
+            .getContainedPositionableViewModelElementsProperty()
+            .stream()
+            .filter(deletedElements::contains)
+            .collect(Collectors.toSet());
+        ActionManager actionManager = geckoViewModel.getActionManager();
+        actionManager.run(
+            actionManager.getActionFactory().createSelectAction(elementsToRestoreFromCurrentEditor, true));
+        return true;
     }
 
     @Override

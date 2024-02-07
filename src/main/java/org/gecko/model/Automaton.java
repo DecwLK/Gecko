@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
+import org.gecko.exceptions.ModelException;
 
 /**
  * Represents an automaton in the domain model of a Gecko project. An {@link Automaton} is described by a set of
@@ -54,12 +55,22 @@ public class Automaton {
         this.states.addAll(states);
     }
 
-    public void removeState(State state) {
+    public void removeState(State state) throws ModelException {
+        if (states.size() <= 1 && states.contains(state)) {
+            setStartState(null);
+            states.remove(state);
+            return;
+        }
+        if (state.equals(startState) && states.size() > 1) {
+            throw new ModelException("Cannot remove the start state of an automaton.");
+        }
         states.remove(state);
     }
 
-    public void removeStates(Set<State> states) {
-        this.states.removeAll(states);
+    public void removeStates(Set<State> states) throws ModelException {
+        for (State state : states) {
+            removeState(state);
+        }
     }
 
     public void addEdge(Edge edge) {

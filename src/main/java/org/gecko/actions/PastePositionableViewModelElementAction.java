@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import java.util.List;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
@@ -13,7 +14,8 @@ public class PastePositionableViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
+        return true;
     }
 
     @Override

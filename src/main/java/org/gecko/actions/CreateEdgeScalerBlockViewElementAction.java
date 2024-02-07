@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import javafx.geometry.Point2D;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.EditorViewModel;
@@ -21,8 +22,9 @@ public class CreateEdgeScalerBlockViewElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         newScalerBlock = decorator.createNewPoint(position);
+        return true;
     }
 
     @Override

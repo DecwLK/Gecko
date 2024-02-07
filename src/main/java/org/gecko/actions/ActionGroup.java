@@ -3,6 +3,7 @@ package org.gecko.actions;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.gecko.exceptions.GeckoException;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -14,8 +15,13 @@ public class ActionGroup extends Action {
     }
 
     @Override
-    void run() {
-        actions.forEach(Action::run);
+    boolean run() throws GeckoException {
+        for (Action action : actions) {
+            if (!action.run()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

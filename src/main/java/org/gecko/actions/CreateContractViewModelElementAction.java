@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
@@ -16,8 +17,9 @@ public class CreateContractViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         createdContractViewModel = viewModelFactory.createContractViewModelIn(stateViewModel);
+        return true;
     }
 
     @Override

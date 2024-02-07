@@ -1,7 +1,6 @@
 package org.gecko.actions;
 
-import org.gecko.model.DeleteElementVisitor;
-import org.gecko.model.ElementVisitor;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -19,11 +18,10 @@ public class DeleteContractViewModelAction extends Action {
     }
 
     @Override
-    void run() {
-        parent.getContractsProperty().remove(contractViewModel);
-        ElementVisitor deleteElementVisitor =
-            new DeleteElementVisitor(geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget());
-        contractViewModel.getTarget().accept(deleteElementVisitor);
+    boolean run() throws GeckoException {
+        parent.removeContract(contractViewModel);
+        parent.updateTarget();
+        return true;
     }
 
     @Override

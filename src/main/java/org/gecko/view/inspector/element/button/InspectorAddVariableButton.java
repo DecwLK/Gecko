@@ -20,7 +20,11 @@ public class InspectorAddVariableButton extends AbstractInspectorButton {
             PortViewModel addedPort = systemViewModel.getPortsProperty().getLast();
             //This is not an action because it should not be undoable.
             addedPort.setVisibility(visibility);
-            addedPort.updateTarget();
+            try {
+                addedPort.updateTarget();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 }

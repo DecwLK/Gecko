@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class ZoomCenterAction extends Action {
@@ -13,8 +14,9 @@ public class ZoomCenterAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         editorViewModel.zoomCenter(factor);
+        return true;
     }
 
     @Override

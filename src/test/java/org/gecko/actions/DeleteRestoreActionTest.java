@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Set;
 import org.gecko.model.GeckoModel;
@@ -28,8 +29,12 @@ class DeleteRestoreActionTest {
         actionManager = new ActionManager(geckoViewModel);
         rootSystemViewModel = geckoViewModel.getCurrentEditor().getCurrentSystem();
         childSystemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
-        stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
-        stateViewModel2 = viewModelFactory.createStateViewModelIn(childSystemViewModel1);
+        try {
+            stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+            stateViewModel2 = viewModelFactory.createStateViewModelIn(childSystemViewModel1);
+        } catch (Exception e) {
+            fail();
+        }
     }
 
     @Test

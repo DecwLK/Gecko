@@ -158,7 +158,8 @@ public class ActionFactory {
 
     public MoveSystemConnectionViewModelElementAction createMoveSystemConnectionViewModelElementAction(
         SystemConnectionViewModel systemConnectionViewModel, PortViewModel systemViewModel, boolean isSource) {
-        return new MoveSystemConnectionViewModelElementAction(systemConnectionViewModel, systemViewModel, isSource);
+        return new MoveSystemConnectionViewModelElementAction(geckoViewModel, systemConnectionViewModel,
+            systemViewModel, isSource);
     }
 
     public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction() {
@@ -172,11 +173,6 @@ public class ActionFactory {
 
     public RenameViewModelElementAction createRenameViewModelElementAction(Renamable renamable, String name) {
         return new RenameViewModelElementAction(renamable, name);
-    }
-
-    public RestorePositionableViewModelElementAction createRestorePositionableViewModelElementAction(
-        Set<PositionableViewModelElement<?>> elements) {
-        return new RestorePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
     public RestoreContractViewModelElementAction createRestoreContractViewModelElementAction(

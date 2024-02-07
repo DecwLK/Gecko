@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import javafx.geometry.Point2D;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -21,10 +22,13 @@ public class CreateStateViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdStateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelIn(currentParentSystem);
         createdStateViewModel.setCenter(editorViewModel.transformScreenToWorldCoordinates(position));
+        ActionManager actionManager = geckoViewModel.getActionManager();
+        actionManager.run(actionManager.getActionFactory().createSelectAction(createdStateViewModel, true));
+        return true;
     }
 
     @Override

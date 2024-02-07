@@ -3,6 +3,7 @@ package org.gecko.actions;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.geometry.Point2D;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
@@ -26,13 +27,17 @@ public class MoveBlockViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
+        if (delta.equals(Point2D.ZERO)) {
+            return false;
+        }
         if (elementsToMove == null) {
             elementsToMove = new HashSet<>(editorViewModel.getSelectionManager().getCurrentSelection());
         }
         for (PositionableViewModelElement<?> element : elementsToMove) {
             element.setPosition(element.getPosition().add(delta));
         }
+        return true;
     }
 
     @Override

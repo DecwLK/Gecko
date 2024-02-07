@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Region;
 
 /**
@@ -42,7 +43,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     }
 
     @Override
-    public void updateTarget() {
+    public void updateTarget() throws ModelException {
         super.updateTarget();
         target.getInvariant().setCondition(invariantProperty.getValue());
         target.getPreAndPostCondition().getPreCondition().setCondition(contract.getPrecondition());

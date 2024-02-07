@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
 
@@ -16,9 +17,10 @@ public class ChangeVisibilityPortViewModelAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         portViewModel.setVisibility(visibility);
         portViewModel.updateTarget();
+        return true;
     }
 
     @Override

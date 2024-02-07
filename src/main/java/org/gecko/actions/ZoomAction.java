@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import javafx.geometry.Point2D;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class ZoomAction extends Action {
@@ -16,8 +17,9 @@ public class ZoomAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         editorViewModel.zoom(pivot, factor);
+        return true;
     }
 
     @Override

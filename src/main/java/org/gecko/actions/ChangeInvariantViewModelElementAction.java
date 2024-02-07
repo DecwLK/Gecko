@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.RegionViewModel;
 
 public class ChangeInvariantViewModelElementAction extends Action {
@@ -15,9 +16,10 @@ public class ChangeInvariantViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         regionViewModel.setInvariant(newInvariant);
         regionViewModel.updateTarget();
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.gecko.actions;
 
 import javafx.geometry.Point2D;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -19,10 +20,13 @@ public class CreateVariableAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         createdPortViewModel = geckoViewModel.getViewModelFactory()
             .createPortViewModelIn(geckoViewModel.getCurrentEditor().getCurrentSystem());
         createdPortViewModel.setCenter(editorViewModel.transformScreenToWorldCoordinates(position));
+        ActionManager actionManager = geckoViewModel.getActionManager();
+        actionManager.run(actionManager.getActionFactory().createSelectAction(createdPortViewModel, true));
+        return true;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
@@ -15,11 +16,12 @@ public class SetStartStateViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         SystemViewModel systemViewModel = geckoViewModel.getCurrentEditor().getCurrentSystem();
         previousStartState = systemViewModel.getStartState();
         systemViewModel.setStartState(stateViewModel);
         systemViewModel.updateTarget();
+        return true;
     }
 
     @Override

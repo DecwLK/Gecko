@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.SelectionManager;
 
 public class SelectionHistoryBackAction extends Action {
@@ -10,8 +11,9 @@ public class SelectionHistoryBackAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         this.selectionManager.goBack();
+        return true;
     }
 
     @Override

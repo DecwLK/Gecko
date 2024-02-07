@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.tools.ToolType;
 import org.gecko.viewmodel.EditorViewModel;
 
@@ -13,8 +14,9 @@ public class SelectToolAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         editorViewModel.setCurrentTool(tool);
+        return true;
     }
 
     @Override

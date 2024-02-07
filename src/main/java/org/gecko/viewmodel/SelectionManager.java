@@ -72,14 +72,21 @@ public class SelectionManager {
     }
 
     public void updateSelections(Set<PositionableViewModelElement<?>> removedElements) {
-        redoSelectionStack.clear();
         ArrayDeque<Set<PositionableViewModelElement<?>>> selectionToBeRemoved = new ArrayDeque<>();
-        Set<PositionableViewModelElement<?>> lastSelection = null;
+        if (removedElements.stream().anyMatch(currentSelectionProperty.getValue()::contains)) {
+            Set<PositionableViewModelElement<?>> newSelection = new HashSet<>(currentSelectionProperty.getValue());
+            newSelection.removeAll(removedElements);
+            currentSelectionProperty.set(newSelection);
+            redoSelectionStack.clear();
+        }
+        Set<PositionableViewModelElement<?>> lastSelection = getCurrentSelection();
         for (Set<PositionableViewModelElement<?>> selection : undoSelectionStack) {
             if (selection.isEmpty()) {
                 continue;
             }
-            selection.removeAll(removedElements);
+            if (selection.removeAll(removedElements)) {
+                redoSelectionStack.clear();
+            }
             if (selection.isEmpty() || selection.equals(lastSelection)) {
                 selectionToBeRemoved.push(selection);
             }

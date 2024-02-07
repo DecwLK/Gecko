@@ -2,6 +2,7 @@ package org.gecko.actions;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SelectionManager;
@@ -18,7 +19,7 @@ public class SelectAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         if (elementsToSelect.isEmpty()) {
             selectionManager.deselectAll();
         }
@@ -26,6 +27,7 @@ public class SelectAction extends Action {
             elementsToSelect.addAll(selectionManager.getCurrentSelection());
         }
         selectionManager.select(elementsToSelect);
+        return true;
     }
 
     @Override

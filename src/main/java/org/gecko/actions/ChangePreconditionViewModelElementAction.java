@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.ContractViewModel;
 
 public class ChangePreconditionViewModelElementAction extends Action {
@@ -15,9 +16,10 @@ public class ChangePreconditionViewModelElementAction extends Action {
     }
 
     @Override
-    void run() {
+    boolean run() throws GeckoException {
         contractViewModel.setPrecondition(newPrecondition);
         contractViewModel.updateTarget();
+        return true;
     }
 
     @Override

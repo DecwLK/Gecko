@@ -1,7 +1,14 @@
 package org.gecko.viewmodel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.Set;
 import org.gecko.exceptions.MissingViewModelElementException;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.GeckoModel;
@@ -13,12 +20,6 @@ import org.gecko.model.Variable;
 import org.gecko.util.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class ViewModelFactoryTest {
     GeckoViewModel geckoViewModel;
@@ -42,8 +43,12 @@ class ViewModelFactoryTest {
         systemViewModel1 = viewModelFactory.createSystemViewModelIn(root);
         systemViewModel2 = viewModelFactory.createSystemViewModelIn(root);
         systemViewModel11 = viewModelFactory.createSystemViewModelIn(systemViewModel1);
-        stateViewModel1 = viewModelFactory.createStateViewModelIn(systemViewModel1);
-        stateViewModel2 = viewModelFactory.createStateViewModelIn(systemViewModel1);
+        try {
+            stateViewModel1 = viewModelFactory.createStateViewModelIn(systemViewModel1);
+            stateViewModel2 = viewModelFactory.createStateViewModelIn(systemViewModel1);
+        } catch (ModelException e) {
+            fail();
+        }
     }
 
     @Test

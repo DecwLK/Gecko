@@ -1,11 +1,13 @@
 package org.gecko.viewmodel;
 
-import java.util.List;
-import org.gecko.model.GeckoModel;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.List;
+import org.gecko.exceptions.ModelException;
+import org.gecko.model.GeckoModel;
+import org.junit.jupiter.api.Test;
 
 class EditorViewModelTest {
 
@@ -17,7 +19,12 @@ class EditorViewModelTest {
         SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
         RegionViewModel regionViewModel2 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         RegionViewModel regionViewModel1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
-        StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        StateViewModel stateViewModel = null;
+        try {
+            stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        } catch (ModelException e) {
+            fail();
+        }
         geckoViewModel.switchEditor(rootSystemViewModel, true);
         EditorViewModel editorViewModel = geckoViewModel.getCurrentEditor();
 

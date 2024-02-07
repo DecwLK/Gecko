@@ -1,5 +1,7 @@
 package org.gecko.actions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -7,8 +9,6 @@ import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ChangeTypePortViewModelElementActionTest {
 

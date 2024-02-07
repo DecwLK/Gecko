@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class DeletePositionableViewModelElementAction extends Action {
             .map(AbstractPositionableViewModelElementAction::getTarget)
             .collect(Collectors.toSet());
         geckoViewModel.getCurrentEditor().getSelectionManager().deselect(deletedElements);
-        deleteActionGroup = new ActionGroup(allDeleteActions.stream().map(action -> (Action) action).toList());
+        deleteActionGroup = new ActionGroup(new ArrayList<>(allDeleteActions));
         return deleteActionGroup.run();
     }
 

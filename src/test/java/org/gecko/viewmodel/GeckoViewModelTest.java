@@ -1,14 +1,15 @@
 package org.gecko.viewmodel;
 
-import java.util.List;
-import org.gecko.model.GeckoModel;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.List;
+import org.gecko.model.GeckoModel;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 class GeckoViewModelTest {
     private static GeckoModel geckoModel;
@@ -26,7 +27,11 @@ class GeckoViewModelTest {
         rootSystemViewModel = geckoViewModel.getCurrentEditor().getCurrentSystem();
         childSystemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         childSystemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
-        stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        try {
+            stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        } catch (Exception e) {
+            fail();
+        }
     }
 
     @Test

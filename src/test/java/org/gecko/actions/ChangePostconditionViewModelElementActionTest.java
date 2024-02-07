@@ -1,5 +1,8 @@
 package org.gecko.actions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.RegionViewModel;
@@ -8,8 +11,6 @@ import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ChangePostconditionViewModelElementActionTest {
 
@@ -26,7 +27,12 @@ class ChangePostconditionViewModelElementActionTest {
         SystemViewModel rootSystemViewModel =
             viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
         region1 = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
-        StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        StateViewModel stateViewModel = null;
+        try {
+            stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        } catch (Exception e) {
+            fail();
+        }
         viewModelFactory.createContractViewModelIn(stateViewModel);
         String preCondition = stateViewModel.getContractsProperty().getFirst().getPrecondition();
         String postCondition = stateViewModel.getContractsProperty().getFirst().getPostcondition();

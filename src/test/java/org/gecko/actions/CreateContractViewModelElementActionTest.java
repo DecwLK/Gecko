@@ -1,5 +1,8 @@
 package org.gecko.actions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -7,8 +10,6 @@ import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CreateContractViewModelElementActionTest {
 
@@ -24,7 +25,11 @@ class CreateContractViewModelElementActionTest {
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
         SystemViewModel rootSystemViewModel =
             viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
-        state = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        try {
+            state = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        } catch (Exception e) {
+            fail();
+        }
         geckoViewModel.switchEditor(rootSystemViewModel, true);
     }
 

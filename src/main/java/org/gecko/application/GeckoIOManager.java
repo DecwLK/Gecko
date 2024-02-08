@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.exceptions.GeckoException;
 import org.gecko.io.FileTypes;
 import org.gecko.io.ProjectFileParser;
 import org.gecko.io.ProjectFileSerializer;
@@ -36,7 +37,13 @@ public class GeckoIOManager {
 
     public void setStage(Stage stage) {
         this.stage = stage;
-        stage.setOnCloseRequest(e -> launchSaveChangesAlert());
+        stage.setOnCloseRequest(e -> {
+            try {
+                launchSaveChangesAlert();
+            } catch (GeckoException ex) {
+                e.consume();
+            }
+        });
     }
 
     public void createNewProject() {
@@ -127,7 +134,7 @@ public class GeckoIOManager {
         return fileChooser;
     }
 
-    private void launchSaveChangesAlert() {
+    private void launchSaveChangesAlert() throws GeckoException {
         Alert saveChangesAlert
             = new Alert(Alert.AlertType.NONE, "Do you want to save changes?", ButtonType.YES, ButtonType.NO);
         saveChangesAlert.setTitle("Confirm Exit");
@@ -138,11 +145,12 @@ public class GeckoIOManager {
         }
 
         if (file == null) {
-            File newFile = saveFileChooser(FileTypes.JSON);
-            if (newFile != null) {
-                file = newFile;
+            File fileToSaveTo = saveFileChooser(FileTypes.JSON);
+            if (fileToSaveTo == null) {
+                throw new GeckoException("No file chosen.");
             }
+            file = fileToSaveTo;
         }
-        saveGeckoProject(this.file);
+        saveGeckoProject(file);
     }
 }

@@ -22,6 +22,9 @@ public class InspectorRegionList extends AbstractInspectorList<InspectorLabel> {
         while (c.next()) {
             if (c.wasAdded()) {
                 for (RegionViewModel regionViewModel : c.getAddedSubList()) {
+                    if (findRegionLabel(regionViewModel.getName()) != null) {
+                        continue;
+                    }
                     InspectorLabel regionLabel = new InspectorLabel(regionViewModel.getName());
                     getItems().add(regionLabel);
                 }
@@ -35,11 +38,6 @@ public class InspectorRegionList extends AbstractInspectorList<InspectorLabel> {
     }
 
     private InspectorLabel findRegionLabel(String name) {
-        for (InspectorLabel regionLabel : getItems()) {
-            if (regionLabel.getText().equals(name)) {
-                return regionLabel;
-            }
-        }
-        return null;
+        return getItems().stream().filter(regionLabel -> regionLabel.getText().equals(name)).findFirst().orElse(null);
     }
 }

@@ -14,12 +14,8 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
-import org.gecko.exceptions.ModelException;
-import org.gecko.model.Automaton;
 import org.gecko.model.Element;
 import org.gecko.model.GeckoModel;
-import org.gecko.model.Region;
-import org.gecko.model.State;
 import org.gecko.model.System;
 
 /**

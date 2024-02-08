@@ -1,7 +1,6 @@
 package org.gecko.view.inspector.builder;
 
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;

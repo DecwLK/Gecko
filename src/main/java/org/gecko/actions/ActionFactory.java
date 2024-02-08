@@ -166,7 +166,8 @@ public class ActionFactory {
 
     public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(
         BlockViewModelElement<?> blockViewModelElement, ElementScalerBlock elementScalerBlock, Point2D delta) {
-        return new ScaleBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), blockViewModelElement, elementScalerBlock, delta);
+        return new ScaleBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), blockViewModelElement,
+            elementScalerBlock, delta);
     }
 
     public FocusPositionableViewModelElementAction createFocusPositionableViewModelElementAction(

@@ -2,10 +2,8 @@ package org.gecko.view.inspector.builder;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.gecko.actions.ActionManager;
-import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.button.InspectorSetStartStateButton;
 import org.gecko.view.inspector.element.container.InspectorContractLabel;

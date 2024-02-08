@@ -2,20 +2,10 @@ package org.gecko.actions;
 
 import java.util.HashSet;
 import java.util.Set;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.gecko.exceptions.GeckoException;
-import org.gecko.exceptions.ModelException;
-import org.gecko.model.Automaton;
-import org.gecko.model.Region;
-import org.gecko.model.State;
-import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
-import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
-import org.gecko.viewmodel.RegionViewModel;
-import org.gecko.viewmodel.StateViewModel;
 
 public class MoveBlockViewModelElementAction extends Action {
 

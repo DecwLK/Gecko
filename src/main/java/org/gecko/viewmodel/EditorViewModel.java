@@ -18,7 +18,6 @@ import org.gecko.actions.ActionManager;
 import org.gecko.exceptions.ModelException;
 import org.gecko.model.Automaton;
 import org.gecko.model.Region;
-import org.gecko.model.State;
 import org.gecko.tools.CursorTool;
 import org.gecko.tools.EdgeCreatorTool;
 import org.gecko.tools.MarqueeTool;

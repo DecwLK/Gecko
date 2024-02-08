@@ -3,7 +3,6 @@ package org.gecko.viewmodel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
-import javafx.scene.transform.Scale;
 import lombok.Getter;
 import lombok.NonNull;
 import org.gecko.exceptions.ModelException;

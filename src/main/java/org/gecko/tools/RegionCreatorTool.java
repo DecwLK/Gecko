@@ -1,41 +1,36 @@
 package org.gecko.tools;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.gecko.actions.ActionManager;
 
-public class RegionCreatorTool extends Tool {
-    private Point2D startPosition;
+public class RegionCreatorTool extends AreaTool {
+    private Color color;
 
     public RegionCreatorTool(ActionManager actionManager) {
         super(actionManager, ToolType.REGION_CREATOR);
     }
 
     @Override
-    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
-        super.visitView(vbox, view, worldGroup, containerGroup);
-        startPosition = null;
-        view.setOnMousePressed(event -> {
-            startPosition = new Point2D(event.getX(), event.getY());
-        });
-        view.setOnMouseReleased(event -> {
-            if (startPosition == null) {
-                return;
-            }
-            Point2D topLeft =
-                new Point2D(Math.min(startPosition.getX(), event.getX()), Math.min(startPosition.getY(), event.getY()));
-            Point2D bottomRight =
-                new Point2D(Math.max(startPosition.getX(), event.getX()), Math.max(startPosition.getY(), event.getY()));
-            Point2D size = bottomRight.subtract(topLeft);
-            //prevent negative size and too small regions TODO properly
-            if (size.getX() < 0 || size.getY() < 0 || size.getX() * size.getY() < 100) {
-                startPosition = null;
-                return;
-            }
-            actionManager.run(actionManager.getActionFactory().createCreateRegionViewModelElementAction(topLeft, size));
-            startPosition = null;
-        });
+    Rectangle createNewArea() {
+        Rectangle region = new Rectangle();
+        color = Color.color(Math.random(), Math.random(), Math.random());
+        region.setFill(color);
+        region.setOpacity(0.5);
+        return region;
+    }
+
+    @Override
+    void onAreaCreated(MouseEvent event, Bounds worldAreaBounds) {
+        if (worldAreaBounds.getWidth() * worldAreaBounds.getHeight() < 500) {
+            return;
+        }
+        actionManager.run(actionManager.getActionFactory()
+            .createCreateRegionViewModelElementAction(new Point2D(worldAreaBounds.getMinX(), worldAreaBounds.getMinY()),
+                new Point2D(worldAreaBounds.getWidth(), worldAreaBounds.getHeight()), color));
+
     }
 }

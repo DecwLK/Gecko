@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
 import javafx.scene.paint.Color;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.GeckoModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.RegionViewModel;
@@ -23,7 +24,7 @@ class ActionGroupTest {
 
     //These tests could fail because of an error in the ChangeColorAction but some Action had to be used for the tests
     @BeforeEach
-    void setUp() {
+    void setUp() throws ModelException {
         GeckoModel geckoModel = new GeckoModel();
         GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
         actionManager = new ActionManager(geckoViewModel);

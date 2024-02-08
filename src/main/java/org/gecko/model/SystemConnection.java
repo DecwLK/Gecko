@@ -18,10 +18,10 @@ public class SystemConnection extends Element {
     @JsonCreator
     public SystemConnection(
         @JsonProperty("id") int id, @JsonProperty("source") Variable source,
-        @JsonProperty("destination") Variable destination) {
+        @JsonProperty("destination") Variable destination) throws ModelException {
         super(id);
-        this.source = source;
-        this.destination = destination;
+        setSource(source);
+        setDestination(destination);
     }
 
     public void setSource(@NonNull Variable source) throws ModelException {
@@ -38,13 +38,16 @@ public class SystemConnection extends Element {
         if (destination.equals(source)) {
             throw new ModelException("The source and the destination of a connection cannot be the same.");
         }
-        this.destination.setHasIncomingConnection(false);
+
+        if (this.destination != null) {
+            this.destination.setHasIncomingConnection(false);
+        }
         this.destination = destination;
         this.destination.setHasIncomingConnection(true);
     }
 
     @Override
-    public void accept(ElementVisitor visitor) {
+    public void accept(ElementVisitor visitor) throws ModelException {
         visitor.visit(this);
     }
 }

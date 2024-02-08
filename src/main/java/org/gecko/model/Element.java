@@ -2,6 +2,7 @@ package org.gecko.model;
 
 import java.util.Objects;
 import lombok.Getter;
+import org.gecko.exceptions.ModelException;
 
 /**
  * Represents an abstraction of an element in the domain model of a Gecko project. An {@link Element} has an id and
@@ -11,11 +12,14 @@ import lombok.Getter;
 public abstract class Element {
     protected final int id;
 
-    protected Element(int id) {
+    protected Element(int id) throws ModelException {
+        if (id < 0) {
+            throw new ModelException("Negative IDs are not allowed.");
+        }
         this.id = id;
     }
 
-    public abstract void accept(ElementVisitor visitor);
+    public abstract void accept(ElementVisitor visitor) throws ModelException;
 
     @Override
     public int hashCode() {

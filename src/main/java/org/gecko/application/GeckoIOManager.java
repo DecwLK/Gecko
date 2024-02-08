@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.exceptions.GeckoException;
+import org.gecko.exceptions.ModelException;
 import org.gecko.io.FileTypes;
 import org.gecko.io.ProjectFileParser;
 import org.gecko.io.ProjectFileSerializer;
@@ -50,7 +51,13 @@ public class GeckoIOManager {
         File newFile = saveFileChooser(FileTypes.JSON);
         if (newFile != null) {
             file = newFile;
-            Gecko newGecko = new Gecko();
+            Gecko newGecko;
+            try {
+                newGecko = new Gecko();
+            } catch (ModelException e) {
+                geckoManager.getGecko().getViewModel().getActionManager().showExceptionAlert(e.getMessage());
+                return;
+            }
             geckoManager.setGecko(newGecko);
             saveGeckoProject(file);
         }

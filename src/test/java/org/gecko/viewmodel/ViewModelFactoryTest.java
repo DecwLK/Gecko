@@ -34,7 +34,7 @@ class ViewModelFactoryTest {
     StateViewModel stateViewModel2;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws ModelException {
         geckoViewModel = TestHelper.createGeckoViewModel();
         geckoModel = geckoViewModel.getGeckoModel();
         viewModelFactory = geckoViewModel.getViewModelFactory();
@@ -58,7 +58,7 @@ class ViewModelFactoryTest {
     }
 
     @Test
-    void testAddPorts() {
+    void testAddPorts() throws ModelException {
         PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
         PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel1);
         assertTrue(systemViewModel1.getTarget().getVariables().contains(portViewModel1.getTarget()));
@@ -74,7 +74,7 @@ class ViewModelFactoryTest {
     }
 
     @Test
-    void testAddSystemConnectionBetweenPorts() {
+    void testAddSystemConnectionBetweenPorts() throws ModelException {
         PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
         PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
         SystemConnectionViewModel systemConnectionViewModel =
@@ -95,7 +95,7 @@ class ViewModelFactoryTest {
     }
 
     @Test
-    void testAddContractsToState() {
+    void testAddContractsToState() throws ModelException {
         ContractViewModel contractViewModel1 = viewModelFactory.createContractViewModelIn(stateViewModel1);
         ContractViewModel contractViewModel2 = viewModelFactory.createContractViewModelIn(stateViewModel1);
         assertTrue(stateViewModel1.getTarget().getContracts().contains(contractViewModel1.getTarget()));
@@ -105,7 +105,7 @@ class ViewModelFactoryTest {
     }
 
     @Test
-    void testAddEdgesToSystem() {
+    void testAddEdgesToSystem() throws ModelException {
         EdgeViewModel edgeViewModel1 = viewModelFactory.createEdgeViewModelIn(root, stateViewModel1, stateViewModel2);
         EdgeViewModel edgeViewModel2 = viewModelFactory.createEdgeViewModelIn(root, stateViewModel1, stateViewModel1);
         assertTrue(root.getTarget().getAutomaton().getEdges().contains(edgeViewModel1.getTarget()));
@@ -117,7 +117,7 @@ class ViewModelFactoryTest {
     }
 
     @Test
-    void testCreateStateFromModelWithContracts() {
+    void testCreateStateFromModelWithContracts() throws ModelException {
         State state = modelFactory.createState(systemViewModel1.getTarget().getAutomaton());
         Contract contract1 = modelFactory.createContract(state);
         contract1.setName("contract1");
@@ -130,7 +130,7 @@ class ViewModelFactoryTest {
     }
 
     @Test
-    void testCreateEdgeFromModelFail() {
+    void testCreateEdgeFromModelFail() throws ModelException {
         State source = modelFactory.createState(systemViewModel1.getTarget().getAutomaton());
         State destination = modelFactory.createState(systemViewModel1.getTarget().getAutomaton());
         Edge edge = modelFactory.createEdge(systemViewModel1.getTarget().getAutomaton(), source, destination);
@@ -138,7 +138,7 @@ class ViewModelFactoryTest {
     }
 
     @Test
-    void testCreateEdgeFromModel() {
+    void testCreateEdgeFromModel() throws ModelException {
         Edge edge = modelFactory.createEdge(systemViewModel1.getTarget().getAutomaton(), stateViewModel1.getTarget(),
             stateViewModel2.getTarget());
         try {
@@ -152,7 +152,7 @@ class ViewModelFactoryTest {
     }
 
     @Test
-    void testCreateRegionFromModel() {
+    void testCreateRegionFromModel() throws ModelException {
         Region region = modelFactory.createRegion(systemViewModel1.getTarget().getAutomaton());
         region.addState(stateViewModel1.getTarget());
         region.addState(stateViewModel2.getTarget());
@@ -168,11 +168,11 @@ class ViewModelFactoryTest {
     }
 
     @Test
-    void testCreateSystemFromModel() {
+    void testCreateSystemFromModel() throws ModelException {
         System system = modelFactory.createSystem(root.getTarget());
         Variable variable1 = modelFactory.createVariable(system);
         Variable variable2 = modelFactory.createVariable(system);
-        system.addVariables(Set.of(variable1, variable2));
+        // system.addVariables(Set.of(variable1, variable2));
         SystemViewModel systemViewModel = viewModelFactory.createSystemViewModelFrom(system);
         assertNotNull(geckoViewModel.getViewModelElement(variable1));
         assertNotNull(geckoViewModel.getViewModelElement(variable2));

@@ -127,12 +127,12 @@ public class ActionFactory {
     }
 
     public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(Point2D delta) {
-        return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), delta);
+        return new MoveBlockViewModelElementAction(geckoViewModel, delta);
     }
 
     public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(
         Set<PositionableViewModelElement<?>> elementsToMove, Point2D delta) {
-        return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), elementsToMove, delta);
+        return new MoveBlockViewModelElementAction(geckoViewModel, elementsToMove, delta);
     }
 
     public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(
@@ -165,8 +165,8 @@ public class ActionFactory {
     }
 
     public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(
-        BlockViewModelElement<?> element, double scaleFactor) {
-        return new ScaleBlockViewModelElementAction(element, scaleFactor);
+        BlockViewModelElement<?> blockViewModelElement, ElementScalerBlock elementScalerBlock, Point2D delta) {
+        return new ScaleBlockViewModelElementAction(geckoViewModel, blockViewModelElement, elementScalerBlock, delta);
     }
 
     public FocusPositionableViewModelElementAction createFocusPositionableViewModelElementAction(

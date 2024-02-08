@@ -13,16 +13,17 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public abstract class ConnectionViewElement extends Path {
-
-    private static final double EDGE_DIST_OFFSET = 20;
     private static final double ARROW_HEAD_LENGTH = 25;
     private static final double ARROW_HEAD_ANGLE = 10;
 
     private final ObservableList<Property<Point2D>> pathSource;
     private MoveTo startElement;
+    @Setter
+    private boolean isLoop;
 
     protected ConnectionViewElement(ObservableList<Property<Point2D>> path) {
         this.pathSource = path;
@@ -106,12 +107,49 @@ public abstract class ConnectionViewElement extends Path {
             .bind(Bindings.createDoubleBinding(() -> pathSource.getFirst().getValue().getY(), pathSource.getFirst()));
         getElements().add(startElement);
 
-        // Elements in the middle
-        for (Property<Point2D> point : pathSource) {
-            LineTo lineTo = new LineTo(point.getValue().getX(), point.getValue().getY());
-            lineTo.xProperty().bind(Bindings.createDoubleBinding(() -> point.getValue().getX(), point));
-            lineTo.yProperty().bind(Bindings.createDoubleBinding(() -> point.getValue().getY(), point));
+
+        System.out.println("redraw");
+
+        if (isLoop) {
+            // If source and destination are the same, draw a loop
+            double radius = Math.abs(pathSource.getFirst().getValue().subtract(pathSource.getLast().getValue()).getY());
+            System.out.println(pathSource.getFirst().getValue().subtract(pathSource.getLast().getValue()));
+
+            LineTo lineTo =
+                new LineTo(pathSource.getFirst().getValue().getX() - radius, pathSource.getFirst().getValue().getY());
+            lineTo.xProperty()
+                .bind(Bindings.createDoubleBinding(() -> pathSource.getFirst().getValue().getX() - radius,
+                    pathSource.getFirst()));
+            lineTo.yProperty()
+                .bind(
+                    Bindings.createDoubleBinding(() -> pathSource.getFirst().getValue().getY(), pathSource.getFirst()));
             getElements().add(lineTo);
+
+            LineTo lineTo2 =
+                new LineTo(pathSource.getFirst().getValue().getX(), pathSource.getFirst().getValue().getY() + radius);
+            lineTo2.xProperty()
+                .bind(
+                    Bindings.createDoubleBinding(() -> pathSource.getFirst().getValue().getX(), pathSource.getFirst()));
+            lineTo2.yProperty()
+                .bind(Bindings.createDoubleBinding(() -> pathSource.getFirst().getValue().getY() + radius,
+                    pathSource.getFirst()));
+            getElements().add(lineTo2);
+
+            LineTo endPoint =
+                new LineTo(pathSource.getLast().getValue().getX(), pathSource.getLast().getValue().getY());
+            endPoint.xProperty()
+                .bind(Bindings.createDoubleBinding(() -> pathSource.getLast().getValue().getX(), pathSource.getLast()));
+            endPoint.yProperty()
+                .bind(Bindings.createDoubleBinding(() -> pathSource.getLast().getValue().getY(), pathSource.getLast()));
+            getElements().add(endPoint);
+        } else {
+            // Elements in the middle
+            for (Property<Point2D> point : pathSource) {
+                LineTo lineTo = new LineTo(point.getValue().getX(), point.getValue().getY());
+                lineTo.xProperty().bind(Bindings.createDoubleBinding(() -> point.getValue().getX(), point));
+                lineTo.yProperty().bind(Bindings.createDoubleBinding(() -> point.getValue().getY(), point));
+                getElements().add(lineTo);
+            }
         }
 
         // Arrow head

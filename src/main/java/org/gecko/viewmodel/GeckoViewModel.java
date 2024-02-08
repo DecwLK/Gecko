@@ -14,8 +14,12 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
+import org.gecko.exceptions.ModelException;
+import org.gecko.model.Automaton;
 import org.gecko.model.Element;
 import org.gecko.model.GeckoModel;
+import org.gecko.model.Region;
+import org.gecko.model.State;
 import org.gecko.model.System;
 
 /**
@@ -99,6 +103,28 @@ public class GeckoViewModel {
         updateEditors();
     }
 
+    public void updateRegions() throws ModelException {
+        Automaton automaton = getCurrentEditor().getCurrentSystem().getTarget().getAutomaton();
+        for (Region region : automaton.getRegions()) {
+            RegionViewModel regionViewModel = (RegionViewModel) getViewModelElement(region);
+
+            if (regionViewModel == null) {
+                continue;
+            }
+            for (State state : automaton.getStates()) {
+                StateViewModel stateViewModel = (StateViewModel) getViewModelElement(state);
+
+                if (RegionViewModel.checkStateInRegion(regionViewModel, stateViewModel)) {
+                    regionViewModel.addState(stateViewModel);
+                } else {
+                    regionViewModel.removeState(stateViewModel);
+                }
+
+                regionViewModel.updateTarget();
+            }
+        }
+    }
+
     private void updateSelectionManagers(PositionableViewModelElement<?> removedElement) {
         openedEditorsProperty.forEach(
             editorViewModel -> editorViewModel.getSelectionManager().updateSelections(removedElement));
@@ -140,5 +166,4 @@ public class GeckoViewModel {
             editorViewModel.addPositionableViewModelElements(getViewModelElements(currentSystem.getAllElements()));
         }
     }
-
 }

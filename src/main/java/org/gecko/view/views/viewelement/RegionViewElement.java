@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
+import javafx.collections.SetChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -52,7 +53,7 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
 
     @Override
     public void setEdgePoint(int index, Point2D point) {
-
+        regionViewModel.scale(getEdgePoints().get(index).getValue(), point);
     }
 
     @Override

@@ -93,6 +93,12 @@ public class StateViewModel extends BlockViewModelElement<State> {
         return (edgeCount <= 1) ? -1 : edgeIndex / edgeCount;
     }
 
+    public int getLoopCount() {
+        return (int) incomingEdges.stream()
+            .filter(edge -> edge.getSource() == this && edge.getDestination() == this)
+            .count();
+    }
+
     @Override
     public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);

@@ -141,7 +141,6 @@ public class EditorView {
         // View element creator listener
         viewModel.getContainedPositionableViewModelElementsProperty().addListener(this::onUpdateViewElements);
 
-
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
         viewModel.getSelectionManager().getCurrentSelectionProperty().addListener(this::selectionChanged);

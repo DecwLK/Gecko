@@ -91,7 +91,7 @@ public abstract class ConnectionViewElement extends Path {
         return intersection;
     }
 
-    private void updatePathVisualization() {
+    protected void updatePathVisualization() {
         getElements().clear();
 
         // If there are less than two points, there is no path to draw
@@ -108,13 +108,9 @@ public abstract class ConnectionViewElement extends Path {
         getElements().add(startElement);
 
 
-        System.out.println("redraw");
-
         if (isLoop) {
             // If source and destination are the same, draw a loop
             double radius = Math.abs(pathSource.getFirst().getValue().subtract(pathSource.getLast().getValue()).getY());
-            System.out.println(pathSource.getFirst().getValue().subtract(pathSource.getLast().getValue()));
-
             LineTo lineTo =
                 new LineTo(pathSource.getFirst().getValue().getX() - radius, pathSource.getFirst().getValue().getY());
             lineTo.xProperty()

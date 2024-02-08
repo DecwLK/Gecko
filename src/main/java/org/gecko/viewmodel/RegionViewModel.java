@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.NonNull;
@@ -89,6 +90,9 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         Bounds regionBound =
             new BoundingBox(region.getPosition().getX(), region.getPosition().getY(), region.getSize().getX(),
                 region.getSize().getY());
-        return regionBound.contains(state.getCenter());
+        return regionBound.contains(state.getPosition()) || regionBound.contains(
+            state.getPosition().add(new Point2D(0, state.getSize().getY()))) || regionBound.contains(
+            state.getPosition().add(new Point2D(state.getSize().getX(), 0))) || regionBound.contains(
+            state.getPosition().add(state.getSize()));
     }
 }

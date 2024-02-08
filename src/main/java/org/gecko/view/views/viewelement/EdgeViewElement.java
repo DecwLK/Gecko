@@ -80,6 +80,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
             getEdgePoints().getFirst().setValue(edgeViewModel.getSource().getPosition());
             getEdgePoints().getLast()
                 .setValue(edgeViewModel.getSource().getPosition().add(new Point2D(0, LOOP_RADIUS)));
+            updatePathVisualization();
             return;
         }
 

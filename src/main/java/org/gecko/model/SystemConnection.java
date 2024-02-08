@@ -32,6 +32,9 @@ public class SystemConnection extends Element {
     }
 
     public void setDestination(@NonNull Variable destination) throws ModelException {
+        if (this.destination.equals(destination)) {
+            return;
+        }
         if (destination.isHasIncomingConnection()) {
             throw new ModelException("The destination already has an incoming connection.");
         }

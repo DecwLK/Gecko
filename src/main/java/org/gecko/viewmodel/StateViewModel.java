@@ -71,7 +71,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
     }
 
     public double getEdgeOffset(EdgeViewModel edgeViewModel) {
-        List<EdgeViewModel> edges = new ArrayList<>(incomingEdges);
+        List<EdgeViewModel> edges = new ArrayList<>(incomingEdges.reversed());
         edges.addAll(outgoingEdges);
 
         double edgeCount = 0;

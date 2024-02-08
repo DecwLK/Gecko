@@ -1,6 +1,7 @@
 package org.gecko.model;
 
 import lombok.NonNull;
+import org.gecko.exceptions.ModelException;
 
 /**
  * Represents a factory for the model elements of a Gecko project. Provides a method for the creation of each element.
@@ -65,7 +66,7 @@ public class ModelFactory {
     }
 
     public SystemConnection createSystemConnection(
-        @NonNull System system, @NonNull Variable source, @NonNull Variable destination) {
+        @NonNull System system, @NonNull Variable source, @NonNull Variable destination) throws ModelException {
         int id = getNewElementId();
         SystemConnection connection = new SystemConnection(id, source, destination);
         system.addConnection(connection);

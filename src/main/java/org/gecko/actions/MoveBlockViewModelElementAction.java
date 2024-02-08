@@ -10,6 +10,7 @@ import org.gecko.exceptions.ModelException;
 import org.gecko.model.Automaton;
 import org.gecko.model.Region;
 import org.gecko.model.State;
+import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
@@ -18,22 +19,19 @@ import org.gecko.viewmodel.StateViewModel;
 
 public class MoveBlockViewModelElementAction extends Action {
 
-    private final GeckoViewModel geckoViewModel;
     private final EditorViewModel editorViewModel;
     private Set<PositionableViewModelElement<?>> elementsToMove;
     private final Point2D delta;
 
-    MoveBlockViewModelElementAction(GeckoViewModel geckoViewModel, Point2D delta) {
-        this.geckoViewModel = geckoViewModel;
-        this.editorViewModel = geckoViewModel.getCurrentEditor();
+    MoveBlockViewModelElementAction(EditorViewModel editorViewModel, Point2D delta) {
+        this.editorViewModel = editorViewModel;
         this.elementsToMove = null;
         this.delta = delta;
     }
 
     MoveBlockViewModelElementAction(
-        GeckoViewModel geckoViewModel, Set<PositionableViewModelElement<?>> elementsToMove, Point2D delta) {
-        this.geckoViewModel = geckoViewModel;
-        this.editorViewModel = geckoViewModel.getCurrentEditor();
+        EditorViewModel editorViewModel, Set<PositionableViewModelElement<?>> elementsToMove, Point2D delta) {
+        this.editorViewModel = editorViewModel;
         this.elementsToMove = elementsToMove;
         this.delta = delta;
     }
@@ -50,7 +48,7 @@ public class MoveBlockViewModelElementAction extends Action {
             element.setPosition(element.getPosition().add(delta));
         }
 
-        geckoViewModel.updateRegions();
+        editorViewModel.updateRegions();
         return true;
     }
 

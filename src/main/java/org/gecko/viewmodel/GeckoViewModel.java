@@ -103,28 +103,6 @@ public class GeckoViewModel {
         updateEditors();
     }
 
-    public void updateRegions() throws ModelException {
-        Automaton automaton = getCurrentEditor().getCurrentSystem().getTarget().getAutomaton();
-        for (Region region : automaton.getRegions()) {
-            RegionViewModel regionViewModel = (RegionViewModel) getViewModelElement(region);
-
-            if (regionViewModel == null) {
-                continue;
-            }
-            for (State state : automaton.getStates()) {
-                StateViewModel stateViewModel = (StateViewModel) getViewModelElement(state);
-
-                if (RegionViewModel.checkStateInRegion(regionViewModel, stateViewModel)) {
-                    regionViewModel.addState(stateViewModel);
-                } else {
-                    regionViewModel.removeState(stateViewModel);
-                }
-
-                regionViewModel.updateTarget();
-            }
-        }
-    }
-
     private void updateSelectionManagers(PositionableViewModelElement<?> removedElement) {
         openedEditorsProperty.forEach(
             editorViewModel -> editorViewModel.getSelectionManager().updateSelections(removedElement));

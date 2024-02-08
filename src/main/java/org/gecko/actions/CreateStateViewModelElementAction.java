@@ -26,7 +26,7 @@ public class CreateStateViewModelElementAction extends Action {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdStateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelIn(currentParentSystem);
         createdStateViewModel.setCenter(editorViewModel.transformScreenToWorldCoordinates(position));
-        geckoViewModel.updateRegions();
+        editorViewModel.updateRegions();
         ActionManager actionManager = geckoViewModel.getActionManager();
         actionManager.run(actionManager.getActionFactory().createSelectAction(createdStateViewModel, true));
         return true;

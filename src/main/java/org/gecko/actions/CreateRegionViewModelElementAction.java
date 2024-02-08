@@ -29,7 +29,7 @@ public class CreateRegionViewModelElementAction extends Action {
         createdRegionViewModel = geckoViewModel.getViewModelFactory().createRegionViewModelIn(currentParentSystem);
         createdRegionViewModel.setPosition(editorViewModel.transformScreenToWorldCoordinates(position));
         createdRegionViewModel.setSize(size.multiply(1 / editorViewModel.getZoomScaleProperty().get()));
-        geckoViewModel.updateRegions();
+        editorViewModel.updateRegions();
         ActionManager actionManager = geckoViewModel.getActionManager();
         actionManager.run(actionManager.getActionFactory().createSelectAction(createdRegionViewModel, true));
         return true;

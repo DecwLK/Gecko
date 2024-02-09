@@ -18,8 +18,10 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -32,6 +34,7 @@ import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
 import org.gecko.view.ResourceHandler;
+import org.gecko.view.contextmenu.ViewContextMenuBuilder;
 import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.InspectorFactory;
 import org.gecko.view.toolbar.ToolBarBuilder;
@@ -55,6 +58,7 @@ public class EditorView {
     @Getter
     private final Tab currentView;
     private final StackPane currentViewPane;
+    @Getter
     private final ToolBar toolBar;
     private final ToolBarBuilder toolBarBuilder;
     private final InspectorFactory inspectorFactory;
@@ -72,6 +76,7 @@ public class EditorView {
     private ObjectProperty<Inspector> currentInspector;
 
     private ShortcutHandler shortcutHandler;
+    private ContextMenu contextMenu;
 
     public EditorView(
         ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel) {
@@ -180,6 +185,35 @@ public class EditorView {
 
         viewElementsGroup.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
+        });
+
+        ViewContextMenuBuilder contextMenuBuilder = new ViewContextMenuBuilder(viewModel.getActionManager());
+        this.contextMenu = contextMenuBuilder.build();
+        currentViewPane.setOnContextMenuRequested(event -> {
+            changeContextMenu(contextMenuBuilder.getContextMenu());
+            this.contextMenu.getItems()
+                .stream()
+                .filter(menuItem -> menuItem.getText().equals("Copy"))
+                .findAny()
+                .ifPresent(copyMenuItem -> copyMenuItem.setDisable(
+                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
+
+            this.contextMenu.getItems()
+                .stream()
+                .filter(menuItem -> menuItem.getText().equals("Cut"))
+                .findAny()
+                .ifPresent(cutMenuItem -> cutMenuItem.setDisable(
+                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
+
+            this.contextMenu.getItems()
+                .stream()
+                .filter(menuItem -> menuItem.getText().equals("Deselect All"))
+                .findAny()
+                .ifPresent(deselectMenuItem -> deselectMenuItem.setDisable(
+                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
+
+            this.contextMenu.show(currentViewPane, event.getScreenX(), event.getScreenY());
+            event.consume();
         });
 
         initializeViewElements();
@@ -444,5 +478,20 @@ public class EditorView {
             || position.getX() + size.getX() >= maxPoint.getX() - borderSize.getX()
             || position.getY() <= minPoint.getY() + borderSize.getY()
             || position.getY() + size.getY() >= maxPoint.getY() - borderSize.getY();
+    }
+
+    protected void switchToCursorTool() {
+        toolBar.getItems()
+            .stream()
+            .filter(button -> ((ToggleButton) button).getText().equals("Cursor Tool"))
+            .findFirst()
+            .ifPresent(cursorButton -> ((ToggleButton) cursorButton).fire());
+    }
+
+    public void changeContextMenu(ContextMenu contextMenu) {
+        if (this.contextMenu != null) {
+            this.contextMenu.hide();
+        }
+        this.contextMenu = contextMenu;
     }
 }

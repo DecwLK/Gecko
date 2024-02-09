@@ -1,6 +1,5 @@
 package org.gecko.actions;
 
-import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -66,8 +65,8 @@ public class ActionFactory {
     }
 
     public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(
-        List<PositionableViewModelElement<?>> elements) {
-        return new CopyPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), elements);
+        CopyPositionableViewModelElementVisitor copyVisitor) {
+        return new CopyPositionableViewModelElementAction(geckoViewModel, copyVisitor);
     }
 
     public CreateContractViewModelElementAction createCreateContractViewModelElementAction(
@@ -106,11 +105,6 @@ public class ActionFactory {
         return new CreateVariableAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
     }
 
-    public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction(
-        List<PositionableViewModelElement<?>> elements) {
-        return new CutPositionableViewModelElementAction(geckoViewModel.getCurrentEditor(), elements);
-    }
-
     public DeleteContractViewModelAction createDeleteContractViewModelAction(
         StateViewModel parent, ContractViewModel contractViewModel) {
         return new DeleteContractViewModelAction(geckoViewModel, parent, contractViewModel);
@@ -146,13 +140,9 @@ public class ActionFactory {
             elementScalerBlock, delta);
     }
 
-    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction() {
-        return new PastePositionableViewModelElementAction(geckoViewModel);
-    }
-
     public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
-        List<PositionableViewModelElement<?>> elements) {
-        return new PastePositionableViewModelElementAction(geckoViewModel, elements);
+        CopyPositionableViewModelElementVisitor elementsToPaste) {
+        return new PastePositionableViewModelElementAction(geckoViewModel, elementsToPaste);
     }
 
     public RenameViewModelElementAction createRenameViewModelElementAction(Renamable renamable, String name) {
@@ -186,6 +176,10 @@ public class ActionFactory {
 
     public SelectAction createSelectAction(Set<PositionableViewModelElement<?>> elements, boolean newSelection) {
         return new SelectAction(geckoViewModel.getCurrentEditor(), elements, newSelection);
+    }
+
+    public DeselectAction createDeselectAction() {
+        return new DeselectAction(geckoViewModel.getCurrentEditor());
     }
 
     public SelectionHistoryBackAction createSelectionHistoryBackAction() {

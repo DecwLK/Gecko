@@ -19,6 +19,7 @@ import org.gecko.view.views.EditorView;
 import org.gecko.view.views.ViewFactory;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
+import org.gecko.viewmodel.PositionableViewModelElement;
 
 /**
  * Represents the View component of a Gecko project. Holds a {@link ViewFactory}, a current {@link EditorView} and a
@@ -58,7 +59,8 @@ public class GeckoView {
         centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
 
         // Menubar
-        mainPane.setTop(new MenuBarBuilder(this, viewModel.getActionManager()).build());
+        menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
+        mainPane.setTop(menuBar);
 
         // Initial view
         currentView = viewFactory.createEditorView(viewModel.getCurrentEditor(),
@@ -66,6 +68,9 @@ public class GeckoView {
         constructTab(currentView, viewModel.getCurrentEditor());
         centerPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
+        centerPane.setPickOnBounds(false);
+        centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
+      
         // Menubar
         menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
         mainPane.setTop(menuBar);
@@ -155,6 +160,8 @@ public class GeckoView {
 
         currentView.updateWorldSize();
         currentView.focus();
+
+        MenuBarBuilder.updateToolsMenu(menuBar, currentView.getViewModel().getTools());
     }
 
     private void onUpdateCurrentEditorToViewModel(
@@ -166,5 +173,14 @@ public class GeckoView {
                 .orElse(null);
             refreshView();
         }
+    }
+
+    public Set<PositionableViewModelElement<?>> getAllDisplayedElements() {
+        if (!viewModel.getCurrentEditor().isAutomatonEditor()) {
+            return viewModel.getViewModelElements(currentView.getViewModel().getCurrentSystem().getTarget()
+                .getAllElements());
+        }
+        return viewModel.getViewModelElements(currentView.getViewModel().getCurrentSystem().getTarget().getAutomaton()
+            .getAllElements());
     }
 }

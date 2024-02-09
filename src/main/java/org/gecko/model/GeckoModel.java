@@ -1,6 +1,9 @@
 package org.gecko.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -12,6 +15,11 @@ import org.gecko.exceptions.ModelException;
 public class GeckoModel {
     private final System root;
     private final ModelFactory modelFactory;
+    @Setter
+    private String globalCode;
+    @Setter
+    private String globalDefines;
+
 
     public GeckoModel() throws ModelException {
         this.modelFactory = new ModelFactory();
@@ -22,5 +30,12 @@ public class GeckoModel {
     public GeckoModel(System root) {
         this.modelFactory = new ModelFactory();
         this.root = root;
+    }
+
+    public List<System> getAllSystems() {
+        List<System> result = new ArrayList<>();
+        result.add(root);
+        result.addAll(root.getAllChildren());
+        return result;
     }
 }

@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;
 
@@ -15,12 +14,18 @@ import org.gecko.viewmodel.GeckoViewModel;
  * JSON file.
  */
 public class ProjectFileSerializer implements FileSerializer {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+    private final GeckoViewModel viewModel;
+
+    public ProjectFileSerializer(GeckoViewModel viewModel) {
+        this.objectMapper = new ObjectMapper();
+        this.viewModel = viewModel;
+    }
 
     @Override
-    public void createFile(GeckoModel model, GeckoViewModel viewModel, File file) throws IOException {
+    public void writeToFile(File file) throws IOException {
         GeckoJsonWrapper geckoJsonWrapper = new GeckoJsonWrapper();
-        System root = model.getRoot();
+        System root = viewModel.getGeckoModel().getRoot();
 
         String rootInJson = this.getRootInJson(root);
         geckoJsonWrapper.setModel(rootInJson);

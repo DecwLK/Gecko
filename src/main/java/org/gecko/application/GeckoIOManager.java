@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.io.AutomatonFileSerializer;
+import org.gecko.io.FileSerializer;
 import org.gecko.io.AutomatonFileParser;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.exceptions.ModelException;
@@ -117,10 +119,9 @@ public class GeckoIOManager {
     }
 
     public void saveGeckoProject(File file) {
-        ProjectFileSerializer projectFileSerializer = new ProjectFileSerializer();
+        ProjectFileSerializer projectFileSerializer = new ProjectFileSerializer(geckoManager.getGecko().getViewModel());
         try {
-            projectFileSerializer.createFile(geckoManager.getGecko().getModel(), geckoManager.getGecko().getViewModel(),
-                file);
+            projectFileSerializer.writeToFile(file);
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Designated file could not be created.", ButtonType.OK);
             alert.showAndWait();
@@ -128,7 +129,13 @@ public class GeckoIOManager {
     }
 
     public void exportAutomatonFile(File file) {
-
+        FileSerializer fileSerializer = new AutomatonFileSerializer(geckoManager.getGecko().getModel());
+        try {
+            fileSerializer.writeToFile(file);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Designated file could not be created.", ButtonType.OK);
+            alert.showAndWait();
+        }
     }
 
     public File openFileChooser(FileTypes fileType) {

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
@@ -139,6 +141,17 @@ public class System extends Element implements Renamable {
 
     public Variable getVariableByName(String name) {
         return variables.stream().filter(variable -> variable.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    /**
+     * Returns all children of this system, including the children of the children, and so on.
+     *
+     * @return a list of all children of this system
+     */
+    public List<System> getAllChildren() {
+        return children.stream()
+            .flatMap(child -> Stream.concat(Stream.of(child), child.getAllChildren().stream()))
+            .toList();
     }
 
     @Override

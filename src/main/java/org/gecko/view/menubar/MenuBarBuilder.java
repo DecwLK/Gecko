@@ -92,6 +92,12 @@ public class MenuBarBuilder {
 
         MenuItem exportFileItem = new MenuItem("Export");
         exportFileItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));
+        exportFileItem.setOnAction(e -> {
+            File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.SYS);
+            if (fileToSaveTo != null) {
+                GeckoIOManager.getInstance().exportAutomatonFile(fileToSaveTo);
+            }
+        });
 
         fileMenu.getItems()
             .addAll(newFileItem, openFileItem, saveFileItem, saveAsFileItem, importFileItem, exportFileItem);

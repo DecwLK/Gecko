@@ -83,6 +83,12 @@ public class MenuBarBuilder {
 
         MenuItem importFileItem = new MenuItem("Import");
         importFileItem.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN));
+        importFileItem.setOnAction(e -> {
+            File fileToImport = GeckoIOManager.getInstance().openFileChooser(FileTypes.SYS);
+            if (fileToImport != null) {
+                GeckoIOManager.getInstance().importAutomatonFile(fileToImport);
+            }
+        });
 
         MenuItem exportFileItem = new MenuItem("Export");
         exportFileItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));

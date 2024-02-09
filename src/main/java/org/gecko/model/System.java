@@ -133,6 +133,14 @@ public class System extends Element implements Renamable {
         }
     }
 
+    public System getChildByName(String name) {
+        return children.stream().filter(child -> child.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public Variable getVariableByName(String name) {
+        return variables.stream().filter(variable -> variable.getName().equals(name)).findFirst().orElse(null);
+    }
+
     @Override
     public void accept(ElementVisitor visitor) throws ModelException {
         visitor.visit(this);

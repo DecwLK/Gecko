@@ -253,6 +253,7 @@ public class AutomatonFileSerializer implements FileSerializer {
             case INPUT -> "input";
             case OUTPUT -> "output";
             case STATE -> "state";
+            default -> throw new IllegalArgumentException("Unknown visibility: " + variable.getVisibility());
         };
         output += " %s: %s".formatted(variable.getName(), variable.getType());
         //TODO append variable value

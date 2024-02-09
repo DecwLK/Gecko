@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Data;
 import org.gecko.exceptions.ModelException;
 
@@ -126,11 +127,11 @@ public class Automaton {
     }
 
     public List<Edge> getOutgoingEdges(State state) {
-        return edges.stream().filter(edge -> edge.getSource().equals(state)).toList();
+        return edges.stream().filter(edge -> edge.getSource().equals(state)).collect(Collectors.toList());
     }
 
     public List<Region> getRegionsWithState(State state) {
-        return regions.stream().filter(region -> region.getStates().contains(state)).toList();
+        return regions.stream().filter(region -> region.getStates().contains(state)).collect(Collectors.toList());
     }
 
     public boolean isEmpty() {

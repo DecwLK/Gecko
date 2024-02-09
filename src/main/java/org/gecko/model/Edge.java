@@ -48,9 +48,6 @@ public class Edge extends Element {
     }
 
     public void setContract(Contract contract) throws ModelException {
-        if (contract == null) {
-            throw new ModelException("Edge's contract is null.");
-        }
         this.contract = contract;
     }
 

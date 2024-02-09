@@ -21,6 +21,7 @@ import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.view.views.viewelement.decorator.BlockElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
+import org.gecko.viewmodel.BlockViewModelElement;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.SelectionManager;
@@ -128,8 +129,11 @@ public class CursorTool extends Tool {
             }
             Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
             scaler.setPoint(scaler.getPoint().add(startDragPosition.subtract(endWorldPos)));
-            //            Action resizeAction = actionManager.getActionFactory();
-            //            actionManager.run(resizeAction);
+            Action resizeAction = actionManager.getActionFactory()
+                .createScaleBlockViewModelElementAction(
+                    (BlockViewModelElement<?>) scaler.getDecoratorTarget().getTarget(), scaler,
+                    endWorldPos.subtract(startDragPosition));
+            actionManager.run(resizeAction);
             startDragPosition = null;
             draggedElement = null;
             scaler.setDragging(false);

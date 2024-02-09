@@ -140,5 +140,4 @@ public class GeckoViewModel {
             editorViewModel.addPositionableViewModelElements(getViewModelElements(currentSystem.getAllElements()));
         }
     }
-
 }

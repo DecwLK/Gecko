@@ -70,7 +70,10 @@ public class GeckoView {
 
         centerPane.setPickOnBounds(false);
         centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
-
+      
+        // Menubar
+        menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
+        mainPane.setTop(menuBar);
         refreshView();
     }
 

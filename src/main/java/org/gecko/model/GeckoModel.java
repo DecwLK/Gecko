@@ -1,6 +1,9 @@
 package org.gecko.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Represents the Model component of a Gecko project. Holds the root-{@link System} and a {@link ModelFactory}, which
@@ -11,6 +14,11 @@ import lombok.Getter;
 public class GeckoModel {
     private final System root;
     private final ModelFactory modelFactory;
+    @Setter
+    private String globalCode;
+    @Setter
+    private String globalDefines;
+
 
     public GeckoModel() {
         this.modelFactory = new ModelFactory();
@@ -21,5 +29,12 @@ public class GeckoModel {
     public GeckoModel(System root) {
         this.modelFactory = new ModelFactory();
         this.root = root;
+    }
+
+    public List<System> getAllSystems() {
+        List<System> result = new ArrayList<>();
+        result.add(root);
+        result.addAll(root.getAllChildren());
+        return result;
     }
 }

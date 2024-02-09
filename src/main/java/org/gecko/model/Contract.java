@@ -30,4 +30,9 @@ public class Contract extends Element implements Renamable {
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

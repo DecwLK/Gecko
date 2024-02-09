@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -86,6 +88,17 @@ public class System extends Element implements Renamable {
 
     public void removeVariables(Set<Variable> variables) {
         this.variables.removeAll(variables);
+    }
+
+    /**
+     * Returns all children of this system, including the children of the children, and so on.
+     *
+     * @return a list of all children of this system
+     */
+    public List<System> getAllChildren() {
+        return children.stream()
+            .flatMap(child -> Stream.concat(Stream.of(child), child.getAllChildren().stream()))
+            .toList();
     }
 
     @Override

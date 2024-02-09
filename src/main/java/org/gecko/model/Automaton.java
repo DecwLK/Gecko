@@ -3,6 +3,7 @@ package org.gecko.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Data;
 import org.gecko.exceptions.ModelException;
@@ -87,6 +88,18 @@ public class Automaton {
 
     public void removeEdges(Set<Edge> edges) {
         this.edges.removeAll(edges);
+    }
+
+    public List<Edge> getOutgoingEdges(State state) {
+        return edges.stream().filter(edge -> edge.getSource().equals(state)).toList();
+    }
+
+    public List<Region> getRegionsWithState(State state) {
+        return regions.stream().filter(region -> region.getStates().contains(state)).toList();
+    }
+
+    public boolean isEmpty() {
+        return states.isEmpty() && edges.isEmpty() && regions.isEmpty();
     }
 
     @JsonIgnore

@@ -30,54 +30,17 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
 
     @Override
     public void setName(@NonNull String name) {
-        // TODO: further checks before updating?
         nameProperty.setValue(name);
     }
 
-    private void resize(@NonNull Point2D delta) {
-        sizeProperty.getValue().add(delta);
-    }
+    public void scale(@NonNull Point2D startPoint, @NonNull Point2D newPoint) {
+        Point2D newPosition = new Point2D(Math.min(Math.min(startPoint.getX(), newPoint.getX()), getSize().getX()),
+            Math.min(Math.min(startPoint.getY(), newPoint.getY()), getSize().getY()));
+        Point2D newSize = new Point2D(Math.max(Math.max(startPoint.getX(), newPoint.getX()), getSize().getX()),
+            Math.max(Math.max(startPoint.getY(), newPoint.getY()), getSize().getY()));
 
-    public void move(@NonNull Point2D delta) {
-        // TODO: Check movement availability.
-        positionProperty.getValue().add(delta);
-    }
-
-    public void scale(@NonNull Point2D startPoint, @NonNull Point2D delta) {
-        Point2D topLeftCorner = super.positionProperty.getValue();
-        Point2D bottomRightCorner = topLeftCorner.add(super.sizeProperty.getValue());
-        Point2D topRightCorner = new Point2D(bottomRightCorner.getX(), topLeftCorner.getY());
-        Point2D bottomLeftCorner = new Point2D(topLeftCorner.getX(), bottomRightCorner.getY());
-
-        if (startPoint.equals(topLeftCorner) || startPoint.equals(bottomRightCorner)) {
-            if (startPoint.equals(topLeftCorner)) {
-                this.move(delta);
-            }
-            this.resize(delta);
-        } else {
-            Point2D newTopLeftCorner = super.positionProperty.getValue();
-            Point2D newBottomRightCorner = newTopLeftCorner.add(super.sizeProperty.getValue());
-
-            double coordinateX;
-            double coordinateY;
-
-            if (startPoint.equals(topRightCorner)) {
-                coordinateX = bottomRightCorner.getX() + delta.getX();
-                coordinateY = topLeftCorner.getY() + delta.getY();
-
-                newTopLeftCorner = new Point2D(topLeftCorner.getX(), coordinateY);
-                newBottomRightCorner = new Point2D(coordinateX, bottomRightCorner.getY());
-            } else if (startPoint.equals(bottomLeftCorner)) {
-                coordinateX = topLeftCorner.getX() + delta.getX();
-                coordinateY = bottomRightCorner.getY() + delta.getY();
-
-                newTopLeftCorner = new Point2D(coordinateX, topLeftCorner.getY());
-                newBottomRightCorner = new Point2D(bottomRightCorner.getX(), coordinateY);
-            }
-
-            setPosition(newTopLeftCorner);
-            setSize(newBottomRightCorner.subtract(newTopLeftCorner));
-        }
+        setPosition(newPosition);
+        setSize(newSize);
     }
 
     @Override

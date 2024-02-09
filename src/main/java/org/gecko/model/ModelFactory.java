@@ -1,6 +1,7 @@
 package org.gecko.model;
 
 import lombok.NonNull;
+import org.gecko.exceptions.ModelException;
 
 /**
  * Represents a factory for the model elements of a Gecko project. Provides a method for the creation of each element.
@@ -21,7 +22,7 @@ public class ModelFactory {
         return DEFAULT_NAME.formatted(id);
     }
 
-    private static Contract getDefaultContract() {
+    private static Contract getDefaultContract() throws ModelException {
         int id = getNewElementId();
         return new Contract(id, getDefaultName(id), new Condition(DEFAULT_CONDITION), new Condition(DEFAULT_CONDITION));
     }
@@ -30,21 +31,22 @@ public class ModelFactory {
         return elementId++;
     }
 
-    public State createState(@NonNull Automaton automaton) {
+    public State createState(@NonNull Automaton automaton) throws ModelException {
         int id = getNewElementId();
         State state = new State(id, DEFAULT_NAME.formatted(id));
         automaton.addState(state);
         return state;
     }
 
-    public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull State destination) {
+    public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull State destination)
+        throws ModelException {
         int id = getNewElementId();
         Edge edge = new Edge(id, source, destination, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
         automaton.addEdge(edge);
         return edge;
     }
 
-    public System createSystem(@NonNull System parentSystem) {
+    public System createSystem(@NonNull System parentSystem) throws ModelException {
         int id = getNewElementId();
         System system = new System(id, getDefaultName(id), DEFAULT_CODE, new Automaton());
         parentSystem.addChild(system);
@@ -52,12 +54,12 @@ public class ModelFactory {
         return system;
     }
 
-    public System createRoot() {
+    public System createRoot() throws ModelException {
         int id = getNewElementId();
         return new System(id, getDefaultName(id), DEFAULT_CODE, new Automaton());
     }
 
-    public Variable createVariable(@NonNull System system) {
+    public Variable createVariable(@NonNull System system) throws ModelException {
         int id = getNewElementId();
         Variable variable = new Variable(id, getDefaultName(id), DEFAULT_TYPE, DEFAULT_VISIBILITY);
         system.addVariable(variable);
@@ -65,14 +67,14 @@ public class ModelFactory {
     }
 
     public SystemConnection createSystemConnection(
-        @NonNull System system, @NonNull Variable source, @NonNull Variable destination) {
+        @NonNull System system, @NonNull Variable source, @NonNull Variable destination) throws ModelException {
         int id = getNewElementId();
         SystemConnection connection = new SystemConnection(id, source, destination);
         system.addConnection(connection);
         return connection;
     }
 
-    public Contract createContract(@NonNull State state) {
+    public Contract createContract(@NonNull State state) throws ModelException {
         int id = getNewElementId();
         Contract contract =
             new Contract(id, getDefaultName(id), new Condition(DEFAULT_CONDITION), new Condition(DEFAULT_CONDITION));
@@ -80,16 +82,20 @@ public class ModelFactory {
         return contract;
     }
 
-    public Region createRegion(@NonNull Automaton automaton) {
+    public Region createRegion(@NonNull Automaton automaton) throws ModelException {
         int id = getNewElementId();
         Region region = new Region(id, getDefaultName(id), new Condition(DEFAULT_CONDITION), getDefaultContract());
         automaton.addRegion(region);
         return region;
     }
 
-    public Automaton createAutomaton(@NonNull System system) {
+    public Automaton createAutomaton(@NonNull System system) throws ModelException {
         Automaton automaton = new Automaton();
         system.setAutomaton(automaton);
         return automaton;
+    }
+
+    public Condition createCondition(@NonNull String init) {
+        return new Condition(init);
     }
 }

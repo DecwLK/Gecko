@@ -3,6 +3,7 @@ import net.ltgt.gradle.errorprone.errorprone
 plugins {
     id("java")
     id("application")
+    id("antlr")
     id("org.openjfx.javafxplugin") version "0.1.0"
     id("net.ltgt.errorprone") version "3.1.0"
     id("io.freefair.lombok") version "8.4"
@@ -27,12 +28,28 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     errorprone("com.google.errorprone:error_prone_core:2.23.0")
+
+    implementation("org.antlr:antlr4-runtime:4.13.1")
+    antlr("org.antlr:antlr4:4.13.1")
+
+    implementation("org.eclipse.elk:org.eclipse.elk.core:0.8.1")
+    implementation("org.eclipse.elk:org.eclipse.elk.alg.common:0.8.1")
+    implementation("org.eclipse.elk:org.eclipse.elk.alg.force:0.8.1")
+    implementation("org.eclipse.elk:org.eclipse.elk.alg.layered:0.8.1")
 }
 
 tasks.withType<JavaCompile>().configureEach {
     options.errorprone.disable("SameNameButDifferent")
     options.errorprone.disableWarningsInGeneratedCode.set(true)
 }
+
+val generateGrammarSource by tasks.existing(AntlrTask::class) {
+    arguments.add("-visitor")
+    arguments.add("-package")
+    arguments.add("gecko.parser")
+}
+
+tasks.getByName("compileJava").dependsOn(generateGrammarSource)
 
 tasks.test {
     useJUnitPlatform()

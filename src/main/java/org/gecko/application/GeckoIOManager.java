@@ -12,6 +12,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gecko.io.AutomatonFileSerializer;
 import org.gecko.io.FileSerializer;
+import org.gecko.io.AutomatonFileParser;
+import org.gecko.exceptions.GeckoException;
+import org.gecko.exceptions.ModelException;
 import org.gecko.io.FileTypes;
 import org.gecko.io.ProjectFileParser;
 import org.gecko.io.ProjectFileSerializer;
@@ -36,11 +39,28 @@ public class GeckoIOManager {
         return instance;
     }
 
+    public void setStage(Stage stage) {
+        this.stage = stage;
+        stage.setOnCloseRequest(e -> {
+            try {
+                launchSaveChangesAlert();
+            } catch (GeckoException ex) {
+                e.consume();
+            }
+        });
+    }
+
     public void createNewProject() {
         File newFile = saveFileChooser(FileTypes.JSON);
         if (newFile != null) {
             file = newFile;
-            Gecko newGecko = new Gecko();
+            Gecko newGecko;
+            try {
+                newGecko = new Gecko();
+            } catch (ModelException e) {
+                geckoManager.getGecko().getViewModel().getActionManager().showExceptionAlert(e.getMessage());
+                return;
+            }
             geckoManager.setGecko(newGecko);
             saveGeckoProject(file);
         }
@@ -82,7 +102,20 @@ public class GeckoIOManager {
     }
 
     public void importAutomatonFile(File file) {
-
+        AutomatonFileParser automatonFileParser = new AutomatonFileParser();
+        GeckoViewModel gvm;
+        try {
+            gvm = automatonFileParser.parse(file);
+        } catch (IOException e) {
+            String message =
+                "Could not read file: %s.%s%s".formatted(file.getPath(), System.lineSeparator(),
+                    e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+        Gecko newGecko = new Gecko(gvm);
+        geckoManager.setGecko(newGecko);
     }
 
     public void saveGeckoProject(File file) {
@@ -127,5 +160,25 @@ public class GeckoIOManager {
         fileChooser.getExtensionFilters()
             .addAll(new FileChooser.ExtensionFilter(fileType.getFileDescription(), fileType.getFileNameRegex()));
         return fileChooser;
+    }
+
+    private void launchSaveChangesAlert() throws GeckoException {
+        Alert saveChangesAlert
+            = new Alert(Alert.AlertType.NONE, "Do you want to save changes?", ButtonType.YES, ButtonType.NO);
+        saveChangesAlert.setTitle("Confirm Exit");
+        saveChangesAlert.showAndWait();
+
+        if (saveChangesAlert.getResult().equals(ButtonType.NO)) {
+            return;
+        }
+
+        if (file == null) {
+            File fileToSaveTo = saveFileChooser(FileTypes.JSON);
+            if (fileToSaveTo == null) {
+                throw new GeckoException("No file chosen.");
+            }
+            file = fileToSaveTo;
+        }
+        saveGeckoProject(file);
     }
 }

@@ -8,7 +8,7 @@ import org.gecko.viewmodel.EdgeViewModel;
 
 public class InspectorPriorityField extends Spinner<Integer> implements InspectorElement<Spinner<Integer>> {
     private static final int MAX_PRIORITY = 100;
-    private static final int MIN_PRIORITY = -100;
+    private static final int MIN_PRIORITY = 0;
     private final ActionManager actionManager;
     private final EdgeViewModel edgeViewModel;
 

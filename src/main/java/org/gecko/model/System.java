@@ -9,11 +9,12 @@ import java.util.Set;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 
 /**
  * Represents a system in the domain model of a Gecko project. A {@link System} has a name, a parent-{@link System}, a
- * set of children-{@link System}s and an {@link Automaton}. It is also described by a code snippet (?), a set of
- * {@link Variable}s, a set of {@link SystemConnection}s connecting the variables. Contains methods for managing the
+ * set of children-{@link System}s and an {@link Automaton}. It is also described by a code snippet, a set of
+ * {@link Variable}s and a set of {@link SystemConnection}s connecting the variables. Contains methods for managing the
  * afferent data.
  */
 @Getter
@@ -31,63 +32,115 @@ public class System extends Element implements Renamable {
     @JsonCreator
     public System(
         @JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("code") String code,
-        @JsonProperty("automaton") Automaton automaton) {
+        @JsonProperty("automaton") Automaton automaton) throws ModelException {
         super(id);
-        this.name = name;
-        this.code = code;
-        this.automaton = automaton;
+        setName(name);
+        setCode(code);
+        setAutomaton(automaton);
         this.children = new HashSet<>();
         this.connections = new HashSet<>();
         this.variables = new HashSet<>();
     }
 
-    public void addChild(System child) {
+    public void setName(String name) throws ModelException {
+        if (name == null || name.isEmpty()) {
+            throw new ModelException("System's name is invalid.");
+        }
+        this.name = name;
+    }
+
+    public void setAutomaton(Automaton automaton) throws ModelException {
+        if (automaton == null) {
+            throw new ModelException("Automaton is null.");
+        }
+        this.automaton = automaton;
+    }
+
+    public void addChild(System child) throws ModelException {
+        if (child == null || children.contains(child)) {
+            throw new ModelException("Cannot add child to system.");
+        }
         children.add(child);
     }
 
-    public void addChildren(Set<System> children) {
-        this.children.addAll(children);
+    public void addChildren(Set<System> children) throws ModelException {
+        for (System child : children) {
+            addChild(child);
+        }
     }
 
-    public void removeChild(System child) {
+    public void removeChild(System child) throws ModelException {
+        if (child == null || !children.contains(child)) {
+            throw new ModelException("Cannot remove child from system.");
+        }
         children.remove(child);
     }
 
-    public void removeChildren(Set<System> children) {
-        this.children.removeAll(children);
+    public void removeChildren(Set<System> children) throws ModelException {
+        for (System child : children) {
+            removeChild(child);
+        }
     }
 
-    public void addConnection(SystemConnection connection) {
+    public void addConnection(SystemConnection connection) throws ModelException {
+        if (connection == null || connections.contains(connection)) {
+            throw new ModelException("Cannot add connection to system.");
+        }
         connections.add(connection);
     }
 
-    public void addConnections(Set<SystemConnection> connections) {
-        this.connections.addAll(connections);
+    public void addConnections(Set<SystemConnection> connections) throws ModelException {
+        for (SystemConnection connection : connections) {
+            addConnection(connection);
+        }
     }
 
-    public void removeConnection(SystemConnection connection) {
+    public void removeConnection(SystemConnection connection) throws ModelException {
+        if (connection == null || !connections.contains(connection)) {
+            throw new ModelException("Cannot remove connection from system.");
+        }
         connection.getDestination().setHasIncomingConnection(false);
         connections.remove(connection);
     }
 
-    public void removeConnections(Set<SystemConnection> connections) {
-        connections.forEach(this::removeConnection);
+    public void removeConnections(Set<SystemConnection> connections) throws ModelException {
+        for (SystemConnection connection : connections) {
+            removeConnection(connection);
+        }
     }
 
-    public void addVariable(Variable variable) {
+    public void addVariable(Variable variable) throws ModelException {
+        if (variable == null || variables.contains(variable)) {
+            throw new ModelException("Cannot add variable to system.");
+        }
         variables.add(variable);
     }
 
-    public void addVariables(Set<Variable> variables) {
-        this.variables.addAll(variables);
+    public void addVariables(Set<Variable> variables) throws ModelException {
+        for (Variable variable : variables) {
+            addVariable(variable);
+        }
     }
 
-    public void removeVariable(Variable variable) {
+    public void removeVariable(Variable variable) throws ModelException {
+        if (variable == null || !variables.contains(variable)) {
+            throw new ModelException("Cannot remove variable from system.");
+        }
         variables.remove(variable);
     }
 
-    public void removeVariables(Set<Variable> variables) {
-        this.variables.removeAll(variables);
+    public void removeVariables(Set<Variable> variables) throws ModelException {
+        for (Variable variable : variables) {
+            removeVariable(variable);
+        }
+    }
+
+    public System getChildByName(String name) {
+        return children.stream().filter(child -> child.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public Variable getVariableByName(String name) {
+        return variables.stream().filter(variable -> variable.getName().equals(name)).findFirst().orElse(null);
     }
 
     /**
@@ -102,7 +155,7 @@ public class System extends Element implements Renamable {
     }
 
     @Override
-    public void accept(ElementVisitor visitor) {
+    public void accept(ElementVisitor visitor) throws ModelException {
         visitor.visit(this);
     }
 

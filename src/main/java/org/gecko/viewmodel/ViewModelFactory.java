@@ -58,11 +58,10 @@ public class ViewModelFactory {
     }
 
     public EdgeViewModel createEdgeViewModelIn(
-        SystemViewModel parentSystem, StateViewModel source, StateViewModel destination) {
+        SystemViewModel parentSystem, StateViewModel source, StateViewModel destination) throws ModelException {
         Edge edge = modelFactory.createEdge(parentSystem.getTarget().getAutomaton(), source.getTarget(),
             destination.getTarget());
         EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
-        actionManager.getActionFactory().createDeletePositionableViewModelElementAction(result);
         geckoViewModel.addViewModelElement(result);
         return result;
     }
@@ -74,12 +73,22 @@ public class ViewModelFactory {
             throw new MissingViewModelElementException("Missing source or destination for edge.");
         }
         EdgeViewModel result = new EdgeViewModel(getNewViewModelElementId(), edge, source, destination);
+        if (edge.getContract() != null) {
+            //This should never be null because the Edge Model Element has a contract that should be coming
+            //from its source
+            ContractViewModel contract = source.getContractsProperty()
+                .stream()
+                .filter(contractViewModel -> contractViewModel.getTarget().equals(edge.getContract()))
+                .findFirst()
+                .orElse(null);
+            result.setContract(contract);
+        }
         geckoViewModel.addViewModelElement(result);
         return result;
     }
 
     public SystemConnectionViewModel createSystemConnectionViewModelIn(
-        SystemViewModel parentSystem, PortViewModel source, PortViewModel destination) {
+        SystemViewModel parentSystem, PortViewModel source, PortViewModel destination) throws ModelException {
         SystemConnection systemConnection =
             modelFactory.createSystemConnection(parentSystem.getTarget(), source.getTarget(), destination.getTarget());
         SystemConnectionViewModel result =
@@ -102,7 +111,7 @@ public class ViewModelFactory {
         return result;
     }
 
-    public SystemViewModel createSystemViewModelIn(SystemViewModel parentSystem) {
+    public SystemViewModel createSystemViewModelIn(SystemViewModel parentSystem) throws ModelException {
         System system = modelFactory.createSystem(parentSystem.getTarget());
         SystemViewModel result = new SystemViewModel(getNewViewModelElementId(), system);
         geckoViewModel.addViewModelElement(result);
@@ -122,10 +131,19 @@ public class ViewModelFactory {
         return result;
     }
 
-    public RegionViewModel createRegionViewModelIn(SystemViewModel parentSystem) {
+    public RegionViewModel createRegionViewModelIn(SystemViewModel parentSystem) throws ModelException {
         Region region = modelFactory.createRegion(parentSystem.getTarget().getAutomaton());
         RegionViewModel result = new RegionViewModel(getNewViewModelElementId(), region,
             createContractViewModelFrom(region.getPreAndPostCondition()));
+
+        // Check for states in the region
+        for (State state : parentSystem.getTarget().getAutomaton().getStates()) {
+            StateViewModel stateViewModel = (StateViewModel) geckoViewModel.getViewModelElement(state);
+            if (RegionViewModel.checkStateInRegion(result, stateViewModel)) {
+                result.addState(stateViewModel);
+            }
+        }
+
         geckoViewModel.addViewModelElement(result);
         return result;
     }
@@ -144,7 +162,7 @@ public class ViewModelFactory {
         return result;
     }
 
-    public PortViewModel createPortViewModelIn(SystemViewModel systemViewModel) {
+    public PortViewModel createPortViewModelIn(SystemViewModel systemViewModel) throws ModelException {
         Variable variable = modelFactory.createVariable(systemViewModel.getTarget());
         PortViewModel result = new PortViewModel(getNewViewModelElementId(), variable);
         systemViewModel.addPort(result);
@@ -161,7 +179,7 @@ public class ViewModelFactory {
         return result;
     }
 
-    public ContractViewModel createContractViewModelIn(StateViewModel stateViewModel) {
+    public ContractViewModel createContractViewModelIn(StateViewModel stateViewModel) throws ModelException {
         Contract contract = modelFactory.createContract(stateViewModel.getTarget());
         ContractViewModel result = new ContractViewModel(getNewViewModelElementId(), contract);
         stateViewModel.addContract(result);

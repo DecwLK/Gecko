@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 
 /**
- * Represents the Model component of a Gecko project. Holds the root-{@link System} and a {@link ModelFactory}, which
- * allow the creation of and access to Gecko's elements, the data and dependencies of which are required for their
- * eventual graphic representation.
+ * Represents the Model component of a {@link org.gecko.application.Gecko Gecko}.
+ * Holds the root-{@link System} and a {@link ModelFactory}, which allow the creation of and access to Gecko's elements,
+ * the data and dependencies of which are required for their eventual graphic representation.
  */
 @Getter
 public class GeckoModel {
@@ -20,7 +21,7 @@ public class GeckoModel {
     private String globalDefines;
 
 
-    public GeckoModel() {
+    public GeckoModel() throws ModelException {
         this.modelFactory = new ModelFactory();
         this.root = modelFactory.createRoot();
         this.root.setName("root");

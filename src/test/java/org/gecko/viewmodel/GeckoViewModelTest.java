@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.GeckoModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class GeckoViewModelTest {
     private static StateViewModel stateViewModel;
 
     @BeforeAll
-    static void setUp() {
+    static void setUp() throws ModelException {
         geckoModel = new GeckoModel();
         geckoViewModel = new GeckoViewModel(geckoModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();

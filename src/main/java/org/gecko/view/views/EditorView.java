@@ -96,8 +96,8 @@ public class EditorView {
         this.currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
         this.currentView = new Tab(
-            baseName + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
-                : " (" + ResourceHandler.getString("View", "system") + ")"), currentViewPane);
+            baseName + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")" :
+                " (" + ResourceHandler.getString("View", "system") + ")"), currentViewPane);
 
         this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
             updateWorldSize();

@@ -20,39 +20,60 @@ public class Automaton {
     private final Set<Edge> edges;
 
     @JsonCreator
-    public Automaton() {
-        this.startState = null;
+    public Automaton() throws ModelException {
+        setStartState(null);
         this.regions = new HashSet<>();
         this.states = new HashSet<>();
         this.edges = new HashSet<>();
+    }
+
+    public void setStartState(State state) throws ModelException {
+        if (state != null && !states.contains(state)) {
+            throw new ModelException("State cannot be set as start-state.");
+        }
     }
 
     public State getStateWithContract(Contract contract) {
         return states.stream().filter(state -> state.getContracts().contains(contract)).findFirst().orElse(null);
     }
 
-    public void addRegion(Region region) {
+    public void addRegion(Region region) throws ModelException {
+        if (region == null || regions.contains(region)) {
+            throw new ModelException("Cannot add region to automaton.");
+        }
         regions.add(region);
     }
 
-    public void addRegions(Set<Region> regions) {
-        this.regions.addAll(regions);
+    public void addRegions(Set<Region> regions) throws ModelException {
+        for (Region region : regions) {
+            addRegion(region);
+        }
     }
 
-    public void removeRegion(Region region) {
+    public void removeRegion(Region region) throws ModelException {
+        if (region == null || !regions.contains(region)) {
+            throw new ModelException("Cannot remove region from automaton.");
+        }
         regions.remove(region);
     }
 
-    public void removeRegions(Set<Region> regions) {
-        this.regions.removeAll(regions);
+    public void removeRegions(Set<Region> regions) throws ModelException {
+        for (Region region : regions) {
+            removeRegion(region);
+        }
     }
 
-    public void addState(State state) {
+    public void addState(State state) throws ModelException {
+        if (state == null || states.contains(state)) {
+            throw new ModelException("Cannot add state to automaton.");
+        }
         states.add(state);
     }
 
-    public void addStates(Set<State> states) {
-        this.states.addAll(states);
+    public void addStates(Set<State> states) throws ModelException {
+        for (State state : states) {
+            addState(state);
+        }
     }
 
     public void removeState(State state) throws ModelException {
@@ -73,20 +94,30 @@ public class Automaton {
         }
     }
 
-    public void addEdge(Edge edge) {
+    public void addEdge(Edge edge) throws ModelException {
+        if (edge == null || edges.contains(edge)) {
+            throw new ModelException("Cannot add edge to automaton.");
+        }
         edges.add(edge);
     }
 
-    public void addEdges(Set<Edge> edges) {
-        this.edges.addAll(edges);
+    public void addEdges(Set<Edge> edges) throws ModelException {
+        for (Edge edge : edges) {
+            addEdge(edge);
+        }
     }
 
-    public void removeEdge(Edge edge) {
+    public void removeEdge(Edge edge) throws ModelException {
+        if (edge == null || !edges.contains(edge)) {
+            throw new ModelException("Cannot remove edge to automaton.");
+        }
         edges.remove(edge);
     }
 
-    public void removeEdges(Set<Edge> edges) {
-        this.edges.removeAll(edges);
+    public void removeEdges(Set<Edge> edges) throws ModelException {
+        for (Edge edge : edges) {
+            removeEdge(edge);
+        }
     }
 
     @JsonIgnore

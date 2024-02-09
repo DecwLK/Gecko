@@ -2,6 +2,7 @@ package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.gecko.exceptions.ModelException;
 import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -19,7 +20,7 @@ class CreateSystemConnectionViewModelElementActionTest {
     private static PortViewModel port2;
 
     @BeforeAll
-    static void setUp() {
+    static void setUp() throws ModelException {
         GeckoViewModel geckoViewModel = TestHelper.createGeckoViewModel();
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);

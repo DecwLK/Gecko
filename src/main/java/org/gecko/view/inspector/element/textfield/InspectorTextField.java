@@ -12,6 +12,9 @@ public abstract class InspectorTextField extends TextField implements InspectorE
         setText(stringProperty.get());
         stringProperty.addListener((observable, oldValue, newValue) -> setText(newValue));
         setOnAction(event -> {
+            if (getText().isEmpty()) {
+                setText(stringProperty.get());
+            }
             getParent().requestFocus();
             if (getText().equals(stringProperty.get())) {
                 return;

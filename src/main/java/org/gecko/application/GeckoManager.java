@@ -3,13 +3,14 @@ package org.gecko.application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Getter;
+import org.gecko.exceptions.ModelException;
 
 public class GeckoManager {
     @Getter
     private Gecko gecko;
     private final Stage stage;
 
-    public GeckoManager(Stage stage) {
+    public GeckoManager(Stage stage) throws ModelException {
         this.stage = stage;
         setGecko(new Gecko());
     }

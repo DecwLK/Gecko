@@ -7,12 +7,16 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import lombok.Data;
 import org.gecko.actions.ActionManager;
+import org.gecko.exceptions.ModelException;
+import org.gecko.model.Automaton;
 import org.gecko.model.Region;
 import org.gecko.tools.CursorTool;
 import org.gecko.tools.EdgeCreatorTool;
@@ -76,17 +80,67 @@ public class EditorViewModel {
         setCurrentTool(ToolType.CURSOR);
     }
 
-    public List<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
-        List<Region> regions = currentSystem.getTarget()
-            .getAutomaton()
-            .getRegions()
-            .stream()
-            .filter(region -> region.getStates().contains(stateViewModel.getTarget()))
-            .toList();
-        return containedPositionableViewModelElementsProperty.stream()
-            .filter(element -> regions.contains(element.getTarget()))
+    public void updateRegions() throws ModelException {
+        Automaton automaton = getCurrentSystem().getTarget().getAutomaton();
+        Set<RegionViewModel> regionViewModels = containedPositionableViewModelElementsProperty.stream()
+            .filter(element -> automaton.getRegions().contains(element.getTarget()))
+            .map(element -> (RegionViewModel) element)
+            .collect(Collectors.toSet());
+        Set<StateViewModel> stateViewModels = containedPositionableViewModelElementsProperty.stream()
+            .filter(element -> automaton.getStates().contains(element.getTarget()))
+            .map(element -> (StateViewModel) element)
+            .collect(Collectors.toSet());
+        for (RegionViewModel regionViewModel : regionViewModels) {
+            for (StateViewModel stateViewModel : stateViewModels) {
+                if (RegionViewModel.checkStateInRegion(regionViewModel, stateViewModel)) {
+                    regionViewModel.addState(stateViewModel);
+                } else {
+                    regionViewModel.removeState(stateViewModel);
+                }
+
+                regionViewModel.updateTarget();
+            }
+        }
+    }
+
+    public ObservableList<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
+        ObservableList<RegionViewModel> regionViewModels = FXCollections.observableArrayList();
+        Set<Region> regions = currentSystem.getTarget().getAutomaton().getRegions();
+        List<Region> containingStateRegions =
+            regions.stream().filter(region -> region.getStates().contains(stateViewModel.getTarget())).toList();
+        List<RegionViewModel> containedRegionViewModels = containedPositionableViewModelElementsProperty.stream()
+            .filter(element -> containingStateRegions.contains(element.getTarget()))
             .map(element -> (RegionViewModel) element)
             .toList();
+        regionViewModels.addAll(containedRegionViewModels);
+
+        for (RegionViewModel region : containedPositionableViewModelElementsProperty.stream()
+            .filter(element -> regions.contains(element.getTarget()))
+            .map(element -> (RegionViewModel) element)
+            .toList()) {
+            region.getStatesProperty().addListener((ListChangeListener<StateViewModel>) change -> {
+                updateStateRegionList(stateViewModel, region, change, regionViewModels);
+            });
+        }
+
+        return regionViewModels;
+    }
+
+    private static void updateStateRegionList(
+        StateViewModel stateViewModel, RegionViewModel region,
+        ListChangeListener.Change<? extends StateViewModel> change, ObservableList<RegionViewModel> regionViewModels) {
+        while (change.next()) {
+            if (change.wasAdded()) {
+                if (change.getAddedSubList().contains(stateViewModel)) {
+                    regionViewModels.add(region);
+                }
+            }
+            if (change.wasRemoved()) {
+                if (change.getRemoved().contains(stateViewModel)) {
+                    regionViewModels.remove(region);
+                }
+            }
+        }
     }
 
     public Point2D transformScreenToWorldCoordinates(Point2D screenCoordinates) {

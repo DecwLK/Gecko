@@ -20,6 +20,7 @@ import org.gecko.viewmodel.StateViewModel;
 public class EdgeViewElement extends ConnectionViewElement implements ViewElement<EdgeViewModel> {
 
     private static final int Z_PRIORITY = 20;
+    private static final double LOOP_RADIUS = 40;
 
     @Getter(AccessLevel.NONE)
     private final EdgeViewModel edgeViewModel;
@@ -73,16 +74,27 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     private void maskPathSource() {
+        // If source and destination are the same, draw a loop
+        if (edgeViewModel.getSource() == edgeViewModel.getDestination() && getEdgePoints().size() == 2) {
+            setLoop(true);
+            getEdgePoints().getFirst().setValue(edgeViewModel.getSource().getPosition());
+            getEdgePoints().getLast()
+                .setValue(edgeViewModel.getSource().getPosition().add(new Point2D(0, LOOP_RADIUS)));
+            updatePathVisualization();
+            return;
+        }
+
         double sourceEdgeOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
-        getPathSource().getFirst()
+        getEdgePoints().getFirst()
             .setValue(maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
                 edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(), sourceEdgeOffset));
 
         double destinationEdgeOffset = edgeViewModel.getDestination().getEdgeOffset(edgeViewModel);
-        getPathSource().getLast()
+        getEdgePoints().getLast()
             .setValue(maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
                 edgeViewModel.getSource().getCenter(), edgeViewModel.getDestination().getCenter(),
                 destinationEdgeOffset));
+        setLoop(false);
     }
 
     @Override

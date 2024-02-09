@@ -1,8 +1,10 @@
 package org.gecko.view.inspector;
 
 
+import javafx.scene.control.ScrollPane;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.builder.AbstractInspectorBuilder;
+import org.gecko.view.inspector.builder.AutomatonVariablePaneBuilder;
 import org.gecko.view.inspector.builder.EdgeInspectorBuilder;
 import org.gecko.view.inspector.builder.RegionInspectorBuilder;
 import org.gecko.view.inspector.builder.StateInspectorBuilder;
@@ -53,6 +55,10 @@ public class InspectorFactory {
 
     public Inspector createVariableBlockInspector(PortViewModel portviewModel) {
         return buildInspector(new VariableBlockInspectorBuilder(actionManager, portviewModel));
+    }
+
+    public ScrollPane createAutomatonVariablePane() {
+        return new AutomatonVariablePaneBuilder(actionManager, editorViewModel.getCurrentSystem()).build();
     }
 
     private Inspector buildInspector(AbstractInspectorBuilder<?> builder) {

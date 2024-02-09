@@ -24,6 +24,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
@@ -44,6 +45,7 @@ public class EditorView {
     private static final double RELATIVE_BORDER_SIZE = 0.25;
     private static final double MIN_WORLD_SIZE = 1000;
     private static final double WORLD_SIZE_DELTA = 1000;
+    private static final double AUTOMATON_INSPECTOR_HEIGHT = 680;
 
     @Getter
     private final Collection<ViewElement<?>> currentViewElements;
@@ -141,7 +143,6 @@ public class EditorView {
         // View element creator listener
         viewModel.getContainedPositionableViewModelElementsProperty().addListener(this::onUpdateViewElements);
 
-
         // Inspector creator listener
         viewModel.getFocusedElementProperty().addListener(this::focusedElementChanged);
         viewModel.getSelectionManager().getCurrentSelectionProperty().addListener(this::selectionChanged);
@@ -236,8 +237,19 @@ public class EditorView {
     }
 
     public Node drawInspector() {
-        currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
-        return currentInspector.get();
+        if (!viewModel.isAutomatonEditor()) {
+            currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
+            return currentInspector.get();
+        } else {
+            VBox vbox = new VBox();
+            vbox.addEventHandler(KeyEvent.ANY, shortcutHandler);
+            Inspector currentInspectorNode = currentInspector.get();
+            currentInspectorNode.setPrefHeight(AUTOMATON_INSPECTOR_HEIGHT);
+            ScrollPane automatonVariablePane = inspectorFactory.createAutomatonVariablePane();
+            VBox.setVgrow(automatonVariablePane, Priority.ALWAYS);
+            vbox.getChildren().addAll(currentInspectorNode, automatonVariablePane);
+            return vbox;
+        }
     }
 
     private void onUpdateViewElements(SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {

@@ -279,9 +279,11 @@ public class EditorView {
             vbox.addEventHandler(KeyEvent.ANY, shortcutHandler);
             Inspector currentInspectorNode = currentInspector.get();
             currentInspectorNode.setPrefHeight(AUTOMATON_INSPECTOR_HEIGHT);
+            VBox inspectorBox = new VBox(currentInspectorNode);
+            VBox.setVgrow(inspectorBox, Priority.ALWAYS);
+
             ScrollPane automatonVariablePane = inspectorFactory.createAutomatonVariablePane();
-            VBox.setVgrow(automatonVariablePane, Priority.ALWAYS);
-            vbox.getChildren().addAll(currentInspectorNode, automatonVariablePane);
+            vbox.getChildren().addAll(inspectorBox, automatonVariablePane);
             return vbox;
         }
     }

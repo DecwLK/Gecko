@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class EditorViewModelTest {
 
     @Test
-    void getRegionViewModels() {
+    void getRegionViewModels() throws ModelException {
         GeckoModel geckoModel = new GeckoModel();
         GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();

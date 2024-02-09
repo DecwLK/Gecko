@@ -38,6 +38,10 @@ public abstract class AbstractInspectorBuilder<T extends PositionableViewModelEl
         inspectorElements.add(element);
     }
 
+    protected void removeInspectorElement(InspectorElement<?> element) {
+        inspectorElements.remove(element);
+    }
+
     public Inspector build() {
         // Element delete button
         inspectorElements.add(new InspectorDeleteButton(actionManager, viewModel));

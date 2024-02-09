@@ -12,10 +12,13 @@ public class ActionManager {
     private final ArrayDeque<Action> undoStack;
     private final ArrayDeque<Action> redoStack;
 
+    private final CopyPositionableViewModelElementVisitor copyVisitor;
+
     public ActionManager(GeckoViewModel geckoViewModel) {
         this.actionFactory = new ActionFactory(geckoViewModel);
         undoStack = new ArrayDeque<>();
         redoStack = new ArrayDeque<>();
+        copyVisitor = new CopyPositionableViewModelElementVisitor();
     }
 
     public void undo() {
@@ -53,6 +56,19 @@ public class ActionManager {
         }
     }
 
+    public void cut() {
+        copy();
+        run(actionFactory.createDeletePositionableViewModelElementAction(copyVisitor.getAllElements()));
+    }
+
+    public void copy() {
+        run(actionFactory.createCopyPositionableViewModelElementAction(copyVisitor));
+    }
+
+    public void paste() {
+        run(actionFactory.createPastePositionableViewModelElementAction(copyVisitor));
+    }
+
     public void run(Action action) {
         try {
             if (!action.run()) {
@@ -69,7 +85,7 @@ public class ActionManager {
         }
     }
 
-    private void showExceptionAlert(String message) {
+    public void showExceptionAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("An error occurred");

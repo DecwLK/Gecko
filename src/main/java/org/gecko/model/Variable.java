@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 
 /**
  * Represents a variable in the domain model of a Gecko project. A {@link Variable} has a name, a type and a
@@ -26,10 +27,31 @@ public class Variable extends Element implements Renamable {
     @JsonCreator
     public Variable(
         @JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("type") String type,
-        @JsonProperty("visibility") Visibility visibility) {
+        @JsonProperty("visibility") Visibility visibility) throws ModelException {
         super(id);
-        this.visibility = visibility;
+        setVisibility(visibility);
+        setName(name);
+        setType(type);
+    }
+
+    public void setName(String name) throws ModelException {
+        if (name == null || name.isEmpty()) {
+            throw new ModelException("Variable's name is invalid.");
+        }
         this.name = name;
+    }
+
+    public void setVisibility(Visibility visibility) throws ModelException {
+        if (visibility == null) {
+            throw new ModelException("Visibility is null.");
+        }
+        this.visibility = visibility;
+    }
+
+    public void setType(String type) throws ModelException {
+        if (type == null || type.isEmpty()) {
+            throw new ModelException("Variable's type is invalid.");
+        }
         this.type = type;
     }
 
@@ -38,7 +60,7 @@ public class Variable extends Element implements Renamable {
     }
 
     @Override
-    public void accept(ElementVisitor visitor) {
+    public void accept(ElementVisitor visitor) throws ModelException {
         visitor.visit(this);
     }
 }

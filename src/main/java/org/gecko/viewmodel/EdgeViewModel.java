@@ -141,4 +141,14 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
     public void setEdgePoint(int index, Point2D point) {
         edgePoints.get(index).setValue(point);
     }
+
+    public String getRepresentation() {
+        String representation = "";
+        representation += getPriority() + ". ";
+        representation += getKind().name();
+        if (getContract() != null) {
+            representation += "(" + getContract().getName() + ")";
+        }
+        return representation;
+    }
 }

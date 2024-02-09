@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Set;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.GeckoModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -22,7 +23,7 @@ class DeleteRestoreActionTest {
     private static StateViewModel stateViewModel2;
 
     @BeforeAll
-    static void setUp() {
+    static void setUp() throws ModelException {
         geckoModel = new GeckoModel();
         geckoViewModel = new GeckoViewModel(geckoModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();

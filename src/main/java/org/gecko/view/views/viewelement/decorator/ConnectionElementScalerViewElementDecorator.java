@@ -27,7 +27,6 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
 
     private void updateEdgePoints(Change<? extends Property<Point2D>> change) {
         if (change.getList().size() == lastEdgePointCnt) {
-
             for (ElementScalerBlock scaler : getScalers()) {
                 scaler.refreshListeners();
             }
@@ -37,15 +36,15 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
 
         getDecoratedNode().getChildren().removeAll(getScalers());
         getScalers().clear();
-
-        for (int i = 0; i < change.getList().size(); i++) {
-            ElementScalerBlock scalerBlock = new ElementScalerBlock(i, this, SCALER_SIZE, SCALER_SIZE);
-            scalerBlock.setFill(Color.RED);
-
-            getScalers().add(scalerBlock);
-            getDecoratedNode().getChildren().add(scalerBlock);
-        }
-
+        createScalerBlock(0);
+        createScalerBlock(change.getList().size() - 1);
         lastEdgePointCnt = change.getList().size();
+    }
+
+    private void createScalerBlock(int change) {
+        ElementScalerBlock scalerBlock = new ElementScalerBlock(change, this, SCALER_SIZE, SCALER_SIZE);
+        scalerBlock.setFill(Color.RED);
+        getScalers().add(scalerBlock);
+        getDecoratedNode().getChildren().add(scalerBlock);
     }
 }

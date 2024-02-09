@@ -1,19 +1,22 @@
 package org.gecko.actions;
 
-import java.util.List;
 import org.gecko.exceptions.GeckoException;
-import org.gecko.viewmodel.EditorViewModel;
-import org.gecko.viewmodel.PositionableViewModelElement;
 
 public class CutPositionableViewModelElementAction extends Action {
+    CopyPositionableViewModelElementAction copyAction;
+    ActionGroup deleteActions;
+
     CutPositionableViewModelElementAction(
-        EditorViewModel editorViewModel, List<PositionableViewModelElement<?>> elements) {
+        CopyPositionableViewModelElementAction copyAction, ActionGroup deleteActions) {
+        this.copyAction = copyAction;
+        this.deleteActions = deleteActions;
     }
 
     @Override
     boolean run() throws GeckoException {
-        // TODO: copy + delete Actions
-        return true;
+        copyAction.run();
+        boolean delete = deleteActions.run();
+        return delete;
     }
 
     @Override

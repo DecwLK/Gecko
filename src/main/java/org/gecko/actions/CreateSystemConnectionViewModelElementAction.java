@@ -31,6 +31,10 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
+        if (destination.getTarget().isHasIncomingConnection()) {
+            return false;
+        }
+
         Property<Point2D> sourcePosition = new SimpleObjectProperty<>(
             sourceIsPort ? calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
                 source.getSystemPortSizeProperty().getValue(), source.getVisibility())
@@ -70,15 +74,18 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         SystemViewModel sourceSystem = (SystemViewModel) geckoViewModel.getViewModelElement(
             currentParentSystem.getTarget().getChildSystemWithVariable(source.getTarget()));
+        if (sourceSystem == null && currentParentSystem.getPorts().contains(source)) {
+            sourceSystem = currentParentSystem;
+        }
         SystemViewModel destinationSystem = (SystemViewModel) geckoViewModel.getViewModelElement(
             currentParentSystem.getTarget().getChildSystemWithVariable(destination.getTarget()));
+        if (destinationSystem == null && currentParentSystem.getPorts().contains(destination)) {
+            destinationSystem = currentParentSystem;
+        }
         if (sourceSystem == null || destinationSystem == null || sourceSystem == destinationSystem) {
             return false;
         }
 
-        if (destination.getTarget().isHasIncomingConnection()) {
-            return false;
-        }
 
         createdSystemConnectionViewModel = geckoViewModel.getViewModelFactory()
             .createSystemConnectionViewModelIn(currentParentSystem, source, destination);

@@ -20,6 +20,11 @@ public abstract class InspectorContractField extends TextArea implements Inspect
             if (getText().equals(stringProperty.get())) {
                 return;
             }
+
+            if (getText().isEmpty()) {
+                setText("true");
+            }
+
             actionManager.run(getAction());
         });
     }

@@ -46,6 +46,7 @@ public class SystemConnectionCreatorTool extends Tool {
     }
 
     private void setPortViewModel(PortViewModel portViewModel) {
+        System.out.println(portViewModel);
         if (firstPortViewModel == null || firstPortViewModel == portViewModel) {
             firstPortViewModel = portViewModel;
         } else {

@@ -75,8 +75,7 @@ public class PastePositionableViewModelElementAction extends Action {
         }
     }
 
-    private void pasteStateViewModel(ViewModelFactory factory, StateViewModel copiedState)
-        throws GeckoException {
+    private void pasteStateViewModel(ViewModelFactory factory, StateViewModel copiedState) throws GeckoException {
         if (states.get(copiedState) != null) {
             return;
         }
@@ -212,8 +211,8 @@ public class PastePositionableViewModelElementAction extends Action {
             copiedSourceParent.getPorts().add(copiedSource);
             copiedDestinationParent.getPorts().add(copiedDestination);
 
-            SystemConnectionViewModel newSystemConnection
-                = factory.createSystemConnectionViewModelIn(currentSystem, newSource, newDestination);
+            SystemConnectionViewModel newSystemConnection =
+                factory.createSystemConnectionViewModelIn(currentSystem, newSource, newDestination);
             newSystemConnection.setPosition(
                 copiedSystemConnection.getSystemConnection().getPosition().add(POSITION_OFFSET));
             newSystemConnection.setSize(copiedSystemConnection.getSystemConnection().getSize());

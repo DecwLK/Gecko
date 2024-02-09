@@ -29,22 +29,22 @@ public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
         Menu changeKindMenu = new Menu("Change Kind"); // TODO: Synchronize fields showed in inspector.
 
         MenuItem hitMenuItem = new MenuItem("HIT");
-        hitMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createChangeKindAction(edgeViewModel, Kind.HIT)));
+        hitMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.HIT)));
 
         MenuItem missMenuItem = new MenuItem("MISS");
-        missMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createChangeKindAction(edgeViewModel, Kind.MISS)));
+        missMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.MISS)));
 
         MenuItem failMenuItem = new MenuItem("FAIL");
-        failMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createChangeKindAction(edgeViewModel, Kind.FAIL)));
+        failMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.FAIL)));
 
         changeKindMenu.getItems().addAll(hitMenuItem, missMenuItem, failMenuItem);
 
         MenuItem deleteMenuItem = new MenuItem("Delete");
-        deleteMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createDeletePositionableViewModelElementAction(edgeViewModel)));
+        deleteMenuItem.setOnAction(e -> actionManager.run(
+            actionManager.getActionFactory().createDeletePositionableViewModelElementAction(edgeViewModel)));
 
         edgeContextMenu.getItems().addAll(dataTransferToEdgeEditingSeparator, changeKindMenu, deleteMenuItem);
         return edgeContextMenu;

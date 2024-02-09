@@ -70,10 +70,6 @@ public class GeckoView {
 
         centerPane.setPickOnBounds(false);
         centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
-      
-        // Menubar
-        menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
-        mainPane.setTop(menuBar);
         refreshView();
     }
 
@@ -177,10 +173,10 @@ public class GeckoView {
 
     public Set<PositionableViewModelElement<?>> getAllDisplayedElements() {
         if (!viewModel.getCurrentEditor().isAutomatonEditor()) {
-            return viewModel.getViewModelElements(currentView.getViewModel().getCurrentSystem().getTarget()
-                .getAllElements());
+            return viewModel.getViewModelElements(
+                currentView.getViewModel().getCurrentSystem().getTarget().getAllElements());
         }
-        return viewModel.getViewModelElements(currentView.getViewModel().getCurrentSystem().getTarget().getAutomaton()
-            .getAllElements());
+        return viewModel.getViewModelElements(
+            currentView.getViewModel().getCurrentSystem().getTarget().getAutomaton().getAllElements());
     }
 }

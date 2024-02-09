@@ -1,5 +1,6 @@
 package org.gecko.viewmodel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ import org.gecko.tools.Tool;
 import org.gecko.tools.ToolType;
 import org.gecko.tools.VariableBlockCreatorTool;
 import org.gecko.tools.ZoomTool;
+import org.gecko.view.views.ViewElementSearchVisitor;
 
 @Data
 public class EditorViewModel {
@@ -267,7 +269,18 @@ public class EditorViewModel {
         } else {
             return getZoomScale() * zoomFactor <= MAX_ZOOM_SCALE;
         }
+    }
 
+    public List<PositionableViewModelElement<?>> getElementsByName(String name) {
+        List<PositionableViewModelElement<?>> matches = new ArrayList<>();
+        PositionableViewModelElementVisitor visitor = new ViewElementSearchVisitor(name);
+        containedPositionableViewModelElementsProperty.forEach(element -> {
+            PositionableViewModelElement<?> searchResult = (PositionableViewModelElement<?>) element.accept(visitor);
+            if (searchResult != null) {
+                matches.add(searchResult);
+            }
+        });
+        return matches;
     }
 
     public Set<PositionableViewModelElement<?>> getElementsInArea(Bounds bound) {

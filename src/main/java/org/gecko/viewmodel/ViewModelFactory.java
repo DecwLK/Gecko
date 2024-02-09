@@ -97,6 +97,7 @@ public class ViewModelFactory {
             modelFactory.createSystemConnection(parentSystem.getTarget(), source.getTarget(), destination.getTarget());
         SystemConnectionViewModel result =
             new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
+        geckoViewModel.addViewModelElement(result);
 
         boolean sourceIsPort = isPort(source);
         boolean destIsPort = isPort(destination);
@@ -139,7 +140,6 @@ public class ViewModelFactory {
         result.getEdgePoints().add(sourcePosition);
         result.getEdgePoints().add(destinationPosition);
         result.updateTarget();
-        geckoViewModel.addViewModelElement(result);
         return result;
     }
 

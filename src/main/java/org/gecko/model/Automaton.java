@@ -133,6 +133,7 @@ public class Automaton {
         return regions.stream().filter(region -> region.getStates().contains(state)).toList();
     }
 
+    @JsonIgnore
     public boolean isEmpty() {
         return states.isEmpty() && edges.isEmpty() && regions.isEmpty();
     }

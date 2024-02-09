@@ -148,6 +148,7 @@ public class System extends Element implements Renamable {
      *
      * @return a list of all children of this system
      */
+    @JsonIgnore
     public List<System> getAllChildren() {
         return children.stream()
             .flatMap(child -> Stream.concat(Stream.of(child), child.getAllChildren().stream()))

@@ -1,6 +1,7 @@
 package org.gecko.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.gecko.exceptions.ModelException;
@@ -33,6 +34,7 @@ public class Condition {
         }
     }
 
+    @JsonIgnore
     public Condition not() {
         try {
             // This and other are always valid
@@ -42,6 +44,7 @@ public class Condition {
         }
     }
 
+    @JsonIgnore
     @Override
     public String toString() {
         return condition;

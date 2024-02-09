@@ -1,6 +1,7 @@
 package org.gecko.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +55,7 @@ public class Contract extends Element implements Renamable {
         visitor.visit(this);
     }
 
+    @JsonIgnore
     @Override
     public String toString() {
         return name;

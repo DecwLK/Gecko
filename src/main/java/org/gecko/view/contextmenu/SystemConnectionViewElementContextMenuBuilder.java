@@ -19,7 +19,7 @@ public class SystemConnectionViewElementContextMenuBuilder extends ViewContextMe
 
     @Override
     public ContextMenu build() {
-        ContextMenu systemConnectionContextMenu  = super.build();
+        ContextMenu systemConnectionContextMenu = super.build();
 
         SeparatorMenuItem dataTransferToEdgeEditingSeparator = new SeparatorMenuItem();
 

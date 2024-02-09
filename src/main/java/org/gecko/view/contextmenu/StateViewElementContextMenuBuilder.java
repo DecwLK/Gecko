@@ -18,19 +18,19 @@ public class StateViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     @Override
     public ContextMenu build() {
-        ContextMenu stateContextMenu  = super.build();
+        ContextMenu stateContextMenu = super.build();
 
         SeparatorMenuItem dataTransferToStateEditingSeparator = new SeparatorMenuItem();
 
         // State editing commands:
         MenuItem startStateMenuItem = new MenuItem("Start State");
         startStateMenuItem.setDisable(stateViewModel.getIsStartState());
-        startStateMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createSetStartStateViewModelElementAction(stateViewModel)));
+        startStateMenuItem.setOnAction(e -> actionManager.run(
+            actionManager.getActionFactory().createSetStartStateViewModelElementAction(stateViewModel)));
 
         MenuItem deleteMenuItem = new MenuItem("Delete");
-        deleteMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createDeletePositionableViewModelElementAction(stateViewModel)));
+        deleteMenuItem.setOnAction(e -> actionManager.run(
+            actionManager.getActionFactory().createDeletePositionableViewModelElementAction(stateViewModel)));
 
         stateContextMenu.getItems().addAll(dataTransferToStateEditingSeparator, startStateMenuItem, deleteMenuItem);
         return stateContextMenu;

@@ -26,13 +26,13 @@ public class SystemViewElementContextMenuBuilder extends ViewContextMenuBuilder 
 
         // Access system commands:
         MenuItem openSystemMenuItem = new MenuItem("Open System");
-        openSystemMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createViewSwitchAction(systemViewModel, false)));
+        openSystemMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createViewSwitchAction(systemViewModel, false)));
         openSystemMenuItem.setAccelerator(Shortcuts.OPEN_CHILD_SYSTEM_EDITOR.get());
 
         MenuItem deleteMenuItem = new MenuItem("Delete");
-        deleteMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
-            .createDeletePositionableViewModelElementAction(systemViewModel)));
+        deleteMenuItem.setOnAction(e -> actionManager.run(
+            actionManager.getActionFactory().createDeletePositionableViewModelElementAction(systemViewModel)));
 
 
         systemContextMenu.getItems().addAll(dataTransferToSystemAccessSeparator, openSystemMenuItem, deleteMenuItem);

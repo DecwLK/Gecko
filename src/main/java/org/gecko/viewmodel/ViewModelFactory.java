@@ -1,5 +1,8 @@
 package org.gecko.viewmodel;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Point2D;
 import org.gecko.actions.ActionManager;
 import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
@@ -11,6 +14,7 @@ import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
+import org.gecko.model.Visibility;
 
 /**
  * Represents a factory for the view model elements of a Gecko project. Provides a method for the creation of each
@@ -93,6 +97,48 @@ public class ViewModelFactory {
             modelFactory.createSystemConnection(parentSystem.getTarget(), source.getTarget(), destination.getTarget());
         SystemConnectionViewModel result =
             new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
+
+        boolean sourceIsPort = isPort(source);
+        boolean destIsPort = isPort(destination);
+        Property<Point2D> sourcePosition = new SimpleObjectProperty<>(
+            sourceIsPort ? calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
+                source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true)
+                : calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
+
+        // position the line at the tip of the port
+        if (sourceIsPort) {
+            source.getSystemPortPositionProperty()
+                .addListener((observable, oldValue, newValue) -> sourcePosition.setValue(
+                    calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
+                        source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true)));
+        } else {
+            source.getPositionProperty().addListener((observable, oldValue, newValue) -> {
+                sourcePosition.setValue(
+                    calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
+            });
+        }
+
+        Property<Point2D> destinationPosition = new SimpleObjectProperty<>(
+            destIsPort ? calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
+                destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true)
+                : calculateEndPortPosition(destination.getPosition(), destination.getSize(),
+                    destination.getVisibility(), false));
+
+        if (destIsPort) {
+            destination.getSystemPortPositionProperty()
+                .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
+                    calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
+                        destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true)));
+        } else {
+            destination.getPositionProperty().addListener((observable, oldValue, newValue) -> {
+                destinationPosition.setValue(calculateEndPortPosition(destination.getPosition(), destination.getSize(),
+                    destination.getVisibility(), false));
+            });
+        }
+
+        result.getEdgePoints().add(sourcePosition);
+        result.getEdgePoints().add(destinationPosition);
+        result.updateTarget();
         geckoViewModel.addViewModelElement(result);
         return result;
     }
@@ -219,5 +265,22 @@ public class ViewModelFactory {
             }
         }
         return null;
+    }
+
+    private Point2D calculateEndPortPosition(Point2D position, Point2D size, Visibility visibility, boolean isPort) {
+        int sign = (isPort) ? 1 : -1;
+        return position.add(size.multiply(0.5))
+            .subtract((visibility == Visibility.INPUT ? 1 : -1) * sign * size.getX() / 2, 0);
+    }
+
+    private boolean isPort(PortViewModel portViewModel) {
+        return geckoViewModel.getCurrentEditor()
+            .getCurrentSystem()
+            .getTarget()
+            .getVariables()
+            .stream()
+            .filter(variable -> portViewModel.getTarget().equals(variable))
+            .findFirst()
+            .isEmpty();
     }
 }

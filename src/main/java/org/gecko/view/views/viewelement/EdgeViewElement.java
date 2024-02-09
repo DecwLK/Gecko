@@ -73,14 +73,17 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         edgeViewModel.getDestination().getOutgoingEdges().addListener(updateMaskPathSource);
 
         edgeViewModel.getSourceProperty().addListener((observable, oldValue, newValue) -> {
-            updateMaskPathSourceListeners(oldValue);
+            updateMaskPathSourceListeners(oldValue, newValue);
         });
 
         edgeViewModel.getDestinationProperty().addListener((observable, oldValue, newValue) -> {
-            updateMaskPathSourceListeners(oldValue);
+            updateMaskPathSourceListeners(oldValue, newValue);
         });
 
-        updateMaskPathSourceListeners(null);
+        updateMaskPathSourceListeners(null, edgeViewModel.getSource());
+        updateMaskPathSourceListeners(null, edgeViewModel.getDestination());
+
+        maskPathSource();
     }
 
     private void calculateLabelPosition() {
@@ -123,7 +126,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
     }
 
-    private void updateMaskPathSourceListeners(StateViewModel oldStateViewModel) {
+    private void updateMaskPathSourceListeners(StateViewModel oldStateViewModel, StateViewModel newStateViewModel) {
         // Remove listeners from old state view model
         if (oldStateViewModel != null) {
             oldStateViewModel.getPositionProperty()
@@ -131,36 +134,29 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
             oldStateViewModel.getSizeProperty().removeListener((observable, oldValue, newValue) -> maskPathSource());
         }
 
+        newStateViewModel.getPositionProperty().addListener((observable, oldValue, newValue) -> maskPathSource());
         maskPathSource();
-
-        edgeViewModel.getSource()
-            .getPositionProperty()
-            .addListener((observable, oldValue, newValue) -> maskPathSource());
-
-        edgeViewModel.getDestination()
-            .getPositionProperty()
-            .addListener((observable, oldValue, newValue) -> maskPathSource());
     }
 
     private void maskPathSource() {
         // If source and destination are the same, draw a loop
         if (edgeViewModel.getSource() == edgeViewModel.getDestination() && getEdgePoints().size() == 2) {
             setLoop(true);
-            getEdgePoints().getFirst().setValue(edgeViewModel.getSource().getPosition());
-            getEdgePoints().getLast()
-                .setValue(edgeViewModel.getSource().getPosition().add(new Point2D(0, LOOP_RADIUS)));
+            setEdgePoint(0, edgeViewModel.getSource().getPosition());
+            setEdgePoint(getEdgePoints().size() - 1,
+                edgeViewModel.getSource().getPosition().add(new Point2D(0, LOOP_RADIUS)));
             updatePathVisualization();
             return;
         }
 
         double sourceEdgeOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
-        getEdgePoints().getFirst()
-            .setValue(maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
-                edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(), sourceEdgeOffset));
+        setEdgePoint(0, maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
+            edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(), sourceEdgeOffset));
+        System.out.println(edgeViewModel.getDestination().getTarget().getName());
 
         double destinationEdgeOffset = edgeViewModel.getDestination().getEdgeOffset(edgeViewModel);
-        getEdgePoints().getLast()
-            .setValue(maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
+        setEdgePoint(getEdgePoints().size() - 1,
+            maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
                 edgeViewModel.getSource().getCenter(), edgeViewModel.getDestination().getCenter(),
                 destinationEdgeOffset));
         setLoop(false);

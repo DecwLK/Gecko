@@ -29,13 +29,24 @@ public class SystemConnectionCreatorTool extends Tool {
     @Override
     public void visit(PortViewElement portViewElement) {
         super.visit(portViewElement);
-        portViewElement.setOnMouseClicked(event -> setPortViewModel(portViewElement.getViewModel()));
+        portViewElement.setOnMouseClicked(event -> {
+            if (!event.isPrimaryButtonDown()) {
+                return;
+            }
+
+            setPortViewModel(portViewElement.getViewModel());
+        });
     }
 
     @Override
     public void visit(VariableBlockViewElement variableBlockViewElement) {
         super.visit(variableBlockViewElement);
-        variableBlockViewElement.setOnMouseClicked(event -> setPortViewModel(variableBlockViewElement.getTarget()));
+        variableBlockViewElement.setOnMouseClicked(event -> {
+            if (!event.isPrimaryButtonDown()) {
+                return;
+            }
+            setPortViewModel(variableBlockViewElement.getTarget());
+        });
     }
 
     @Override
@@ -46,7 +57,6 @@ public class SystemConnectionCreatorTool extends Tool {
     }
 
     private void setPortViewModel(PortViewModel portViewModel) {
-        System.out.println(portViewModel);
         if (firstPortViewModel == null || firstPortViewModel == portViewModel) {
             firstPortViewModel = portViewModel;
         } else {

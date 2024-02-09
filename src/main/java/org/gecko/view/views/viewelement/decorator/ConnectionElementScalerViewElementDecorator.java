@@ -17,6 +17,14 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         super(decoratorTarget);
 
         getEdgePoints().addListener(this::updateEdgePoints);
+
+        for (Property<Point2D> edgePoint : getEdgePoints()) {
+            edgePoint.addListener((observable, oldValue, newValue) -> {
+                for (ElementScalerBlock scaler : getScalers()) {
+                    scaler.refreshListeners();
+                }
+            });
+        }
     }
 
     @Override

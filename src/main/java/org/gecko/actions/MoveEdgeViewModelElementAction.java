@@ -40,8 +40,6 @@ public class MoveEdgeViewModelElementAction extends Action {
         } else {
             edgeViewModel.setDestination(newStateViewModel);
         }
-
-        elementScalerBlock.setPoint(newStateViewModel.getCenter());
         edgeViewModel.updateTarget();
         return true;
     }

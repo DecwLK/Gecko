@@ -6,6 +6,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
@@ -69,7 +70,13 @@ public class CursorTool extends Tool {
     @Override
     public void visit(EdgeViewElement edgeViewElement) {
         super.visit(edgeViewElement);
-        edgeViewElement.setOnMouseClicked(event -> selectElement(edgeViewElement, !event.isShiftDown()));
+        edgeViewElement.setOnMouseClicked(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+
+            selectElement(edgeViewElement, !event.isShiftDown());
+        });
     }
 
     @Override
@@ -87,8 +94,12 @@ public class CursorTool extends Tool {
     @Override
     public void visit(SystemConnectionViewElement systemConnectionViewElement) {
         super.visit(systemConnectionViewElement);
-        systemConnectionViewElement.setOnMouseClicked(
-            event -> selectElement(systemConnectionViewElement, !event.isShiftDown()));
+        systemConnectionViewElement.setOnMouseClicked(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+            selectElement(systemConnectionViewElement, !event.isShiftDown());
+        });
     }
 
     @Override
@@ -111,6 +122,10 @@ public class CursorTool extends Tool {
 
     private void setBlockScalerElementHandlers(ElementScalerBlock scaler) {
         scaler.setOnMousePressed(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+
             startDraggingElementHandler(event, scaler);
             scaler.setDragging(true);
         });
@@ -142,6 +157,10 @@ public class CursorTool extends Tool {
 
     private void setConnectionScalerElementsHandlers(ElementScalerBlock scaler) {
         scaler.setOnMousePressed(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+
             startDraggingElementHandler(event, scaler);
             scaler.setDragging(true);
         });
@@ -182,6 +201,9 @@ public class CursorTool extends Tool {
 
     private void setDragAndSelectHandlers(ViewElement<?> element) {
         element.drawElement().setOnMousePressed(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
             startDraggingElementHandler(event, element.drawElement());
             selectElement(element, !event.isShiftDown());
         });

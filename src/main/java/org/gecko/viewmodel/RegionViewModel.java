@@ -57,7 +57,6 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     }
 
     public void addState(@NonNull StateViewModel state) {
-        // TODO: prior checks
         statesProperty.add(state);
     }
 

@@ -17,6 +17,7 @@ import lombok.Setter;
 
 @Getter
 public abstract class ConnectionViewElement extends Path {
+    private static final String STYLE_CLASS = "path";
     private static final double ARROW_HEAD_LENGTH = 25;
     private static final double ARROW_HEAD_ANGLE = 10;
 
@@ -34,6 +35,7 @@ public abstract class ConnectionViewElement extends Path {
         pathSource.addListener(pathChangedListener);
 
         setStrokeWidth(5);
+        getStyleClass().add(STYLE_CLASS);
     }
 
     protected void updatePathSource(int index, Point2D point) {

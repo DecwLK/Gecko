@@ -152,7 +152,6 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         double sourceEdgeOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
         setEdgePoint(0, maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
             edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(), sourceEdgeOffset));
-        System.out.println(edgeViewModel.getDestination().getTarget().getName());
 
         double destinationEdgeOffset = edgeViewModel.getDestination().getEdgeOffset(edgeViewModel);
         setEdgePoint(getEdgePoints().size() - 1,

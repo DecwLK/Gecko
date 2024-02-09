@@ -1,13 +1,14 @@
 * {
-    -fx-bg: #efefef;
-    -fx-fg0: #e0e0e0;
-    -fx-fg1: #d0d0d0;
-    -fx-fg2: lightgrey;
-    -fx-text: #222222;
-    -fx-highlight: #ee4700;
+    -fx-bg: #1c1c1c;
+    -fx-fg0: #4a4a4a;
+    -fx-fg1: #6d6d6d;
+    -fx-fg2: #878787;
+    -fx-text: #e6e6e6;
+    -fx-highlight: #8b0000;
 }
 
 .root {
+    -fx-base: -fx-fg0;
     -fx-focus-color: transparent;
 }
 
@@ -37,51 +38,51 @@
 }
 
 .undo-toolbar-icon {
-    -fx-background-image: url('icons/Redo.png');
+    -fx-background-image: url('dark-icons/Redo.png');
 }
 
 .redo-toolbar-icon {
-    -fx-background-image: url('icons/Undo.png');
+    -fx-background-image: url('dark-icons/Undo.png');
 }
 
 .cursor-icon {
-    -fx-background-image: url('icons/Toolbar_Cursor.png');
+    -fx-background-image: url('dark-icons/Toolbar_Cursor.png');
 }
 
 .hand-icon {
-    -fx-background-image: url('icons/Toolbar_Hand.png');
+    -fx-background-image: url('dark-icons/Toolbar_Hand.png');
 }
 
 .edge-icon {
-    -fx-background-image: url('icons/Toolbar_Edge.png');
+    -fx-background-image: url('dark-icons/Toolbar_Edge.png');
 }
 
 .zoom-icon {
-    -fx-background-image: url('icons/Toolbar_Zoom.png');
+    -fx-background-image: url('dark-icons/Toolbar_Zoom.png');
 }
 
 .marquee-icon {
-    -fx-background-image: url('icons/Toolbar_Marquee.png');
+    -fx-background-image: url('dark-icons/Toolbar_Marquee.png');
 }
 
 .variable-block-creator-icon {
-    -fx-background-image: url('icons/Toolbar_Variable.png');
+    -fx-background-image: url('dark-icons/Toolbar_Variable.png');
 }
 
 .state-creator-icon {
-    -fx-background-image: url('icons/Toolbar_State.png');
+    -fx-background-image: url('dark-icons/Toolbar_State.png');
 }
 
 .system-creator-icon {
-    -fx-background-image: url('icons/Toolbar_System_Component.png');
+    -fx-background-image: url('dark-icons/Toolbar_System_Component.png');
 }
 
 .pan-icon {
-    -fx-background-image: url('icons/Toolbar_Hand.png');
+    -fx-background-image: url('dark-icons/Toolbar_Hand.png');
 }
 
 .region-creator-icon {
-    -fx-background-image: url('icons/Toolbar_Region.png');
+    -fx-background-image: url('dark-icons/Toolbar_Region.png');
 }
 
 .path {
@@ -126,23 +127,23 @@
 }
 
 .inspector-selection-forward-button {
-    -fx-background-image: url('icons/Selection_Next.png');
+    -fx-background-image: url('dark-icons/Selection_Next.png');
 }
 
 .inspector-selection-backward-button {
-    -fx-background-image: url('icons/Selection_Previous.png');
+    -fx-background-image: url('dark-icons/Selection_Previous.png');
 }
 
 .inspector-collapse-button {
-    -fx-background-image: url('icons/Inspector_Collapse.png');
+    -fx-background-image: url('dark-icons/Inspector_Collapse.png');
 }
 
 .inspector-remove-button {
-    -fx-background-image: url('icons/Inspector_Remove.png');
+    -fx-background-image: url('dark-icons/Inspector_Remove.png');
 }
 
 .inspector-contract-expand-button {
-    -fx-background-image: url('icons/Inspector_Contract_Expand.png');
+    -fx-background-image: url('dark-icons/Inspector_Contract_Expand.png');
     -fx-background-size: 12px 12px;
     -icon-paint: transparent;
     -fx-border-color: transparent;
@@ -150,7 +151,7 @@
 }
 
 .inspector-contract-expanded-button {
-    -fx-background-image: url('icons/Inspector_Contract_Expanded.png');
+    -fx-background-image: url('dark-icons/Inspector_Contract_Expanded.png');
     -fx-background-size: 12px 12px;
     -icon-paint: transparent;
     -fx-border-color: transparent;
@@ -158,7 +159,7 @@
 }
 
 .inspector-focus-element-button {
-    -fx-background-image: url('icons/Locate.png');
+    -fx-background-image: url('dark-icons/Locate.png');
 }
 
 .floating-ui-button {
@@ -191,35 +192,35 @@
 }
 
 .floating-uncollapse-inspector-button {
-    -fx-background-image: url('icons/Inspector_Uncollapse.png');
+    -fx-background-image: url('dark-icons/Inspector_Uncollapse.png');
 }
 
 .floating-zoom-in-button {
-    -fx-background-image: url('icons/Zoom_Plus.png');
+    -fx-background-image: url('dark-icons/Zoom_Plus.png');
 }
 
 .floating-zoom-out-button {
-    -fx-background-image: url('icons/Zoom_Minus.png');
+    -fx-background-image: url('dark-icons/Zoom_Minus.png');
 }
 
 .floating-parent-system-switch-button {
-    -fx-background-image: url('icons/Back_To_System.png');
+    -fx-background-image: url('dark-icons/Back_To_System.png');
 }
 
 .floating-switch-to-system-button {
-    -fx-background-image: url('icons/Toolbar_System_Component.png');
+    -fx-background-image: url('dark-icons/Toolbar_System_Component.png');
 }
 
 .floating-switch-to-automaton-button {
-    -fx-background-image: url('icons/Toolbar_State.png');
+    -fx-background-image: url('dark-icons/Toolbar_State.png');
 }
 
 .scroll-bar {
     -fx-background-color: -fx-fg0;
     -fx-background-radius: 5;
-    -fx-border-radius: 5;
     -fx-border-width: 0;
     -fx-border-color: transparent;
+    -fx-border-color: -fx-text;
     -fx-text-fill: -fx-text;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
@@ -351,8 +352,7 @@
 .tool-bar {
     -fx-background-color: -fx-fg0;
     -fx-background-radius: 5;
-    -fx-border-radius: 5;
-    -fx-border-width: 0;
+    -fx-border-radius: 0;
     -fx-border-color: transparent;
     -fx-text-fill: -fx-text;
     -fx-font-size: 12px;

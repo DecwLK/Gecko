@@ -11,8 +11,8 @@ import org.gecko.exceptions.ModelException;
 
 /**
  * Represents a system in the domain model of a Gecko project. A {@link System} has a name, a parent-{@link System}, a
- * set of children-{@link System}s and an {@link Automaton}. It is also described by a code snippet (?), a set of
- * {@link Variable}s, a set of {@link SystemConnection}s connecting the variables. Contains methods for managing the
+ * set of children-{@link System}s and an {@link Automaton}. It is also described by a code snippet, a set of
+ * {@link Variable}s and a set of {@link SystemConnection}s connecting the variables. Contains methods for managing the
  * afferent data.
  */
 @Getter

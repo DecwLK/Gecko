@@ -17,10 +17,10 @@ public class Condition {
         setCondition(condition);
     }
 
-    /*public void setCondition(String condition) throws ModelException {
+    public void setCondition(String condition) throws ModelException {
         if (condition == null || condition.isEmpty()) {
             throw new ModelException("Condition is invalid.");
         }
         this.condition = condition;
-    }*/
+    }
 }

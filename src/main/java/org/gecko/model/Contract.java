@@ -10,8 +10,8 @@ import org.gecko.exceptions.ModelException;
  * Represents a contract in the domain model of a Gecko project. A {@link Contract} has a name and is described by a
  * pre- and a post-{@link Condition}.
  */
+
 @Getter
-@Setter
 public class Contract extends Element implements Renamable {
     private String name;
     private Condition preCondition;
@@ -46,7 +46,7 @@ public class Contract extends Element implements Renamable {
         if (postCondition == null) {
             throw new ModelException("Postcondition for contract is null.");
         }
-        this.postCondition = preCondition;
+        this.postCondition = postCondition;
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.gecko.exceptions.ModelException;
 import org.gecko.util.graphlayouting.Graphlayouter;
 import org.gecko.viewmodel.GeckoViewModel;
 
@@ -21,7 +22,14 @@ public class AutomatonFileParser implements FileParser {
         parser.removeErrorListeners();
         parser.addErrorListener(listener);
 
-        AutomatonFileVisitor visitor = new AutomatonFileVisitor();
+        AutomatonFileVisitor visitor;
+
+        try {
+            visitor = new AutomatonFileVisitor();
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to create an instance of an empty model");
+        }
+
         String result = visitor.visitModel(parser.model());
         if (result != null) {
             throw new IOException(result);
@@ -31,8 +39,7 @@ public class AutomatonFileParser implements FileParser {
         }
 
         GeckoViewModel gvm = new GeckoViewModel(visitor.getModel());
-        ViewModelElementCreatorVisitor vmVisitor =
-            new ViewModelElementCreatorVisitor(gvm, List.of());
+        ViewModelElementCreatorVisitor vmVisitor = new ViewModelElementCreatorVisitor(gvm, List.of());
         vmVisitor.visitModel(gvm.getGeckoModel().getRoot());
         Graphlayouter graphlayouter = new Graphlayouter(gvm);
         graphlayouter.layout();

@@ -15,6 +15,8 @@ import java.util.StringJoiner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.gecko.exceptions.GeckoException;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Automaton;
 import org.gecko.model.Condition;
 import org.gecko.model.Contract;
@@ -127,8 +129,12 @@ public class AutomatonFileSerializer implements FileSerializer {
                     continue; //Highest prio doesn't need to be altered
                 }
                 Contract contractWithPrio = newContracts.get(edge.getContract());
-                contractWithPrio.setPreCondition(
-                    contractWithPrio.getPreCondition().and(allLowerPrioPreConditions.get(prioIndex - 1).not()));
+                try {
+                    contractWithPrio.setPreCondition(
+                        contractWithPrio.getPreCondition().and(allLowerPrioPreConditions.get(prioIndex - 1).not()));
+                } catch (ModelException e) {
+                    throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
+                }
                 newContracts.put(edge.getContract(), contractWithPrio);
             }
             prioIndex++;
@@ -139,15 +145,27 @@ public class AutomatonFileSerializer implements FileSerializer {
     private Contract applyKindToContract(Contract contract, Kind kind) {
         switch (kind) {
             case MISS -> {
-                return new Contract(0, contract.getName(), contract.getPreCondition().not(),
-                    contract.getPostCondition());
+                try {
+                    return new Contract(0, contract.getName(), contract.getPreCondition().not(),
+                        contract.getPostCondition());
+                } catch (ModelException e) {
+                    throw new RuntimeException("Failed to negate a valid condition", e);
+                }
             }
             case FAIL -> {
-                return new Contract(0, contract.getName(), contract.getPreCondition(),
-                    contract.getPostCondition().not());
+                try {
+                    return new Contract(0, contract.getName(), contract.getPreCondition(),
+                        contract.getPostCondition().not());
+                } catch (ModelException e) {
+                    throw new RuntimeException("Failed to negate a valid condition", e);
+                }
             }
             case HIT -> {
-                return new Contract(0, contract.getName(), contract.getPreCondition(), contract.getPostCondition());
+                try {
+                    return new Contract(0, contract.getName(), contract.getPreCondition(), contract.getPostCondition());
+                } catch (ModelException e) {
+                    throw new RuntimeException("Failed to copy a contract", e);
+                }
             }
             default -> throw new IllegalArgumentException("Unknown kind: " + kind);
         }
@@ -158,14 +176,27 @@ public class AutomatonFileSerializer implements FileSerializer {
             return;
         }
         List<Condition> newConditions = andConditions(relevantRegions);
-        contract.setPreCondition(contract.getPreCondition().and(newConditions.getFirst()));
-        contract.setPostCondition(contract.getPostCondition().and(newConditions.get(1)));
+
+        try {
+            contract.setPreCondition(contract.getPreCondition().and(newConditions.getFirst()));
+            contract.setPostCondition(contract.getPostCondition().and(newConditions.get(1)));
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
+        }
     }
 
     private List<Condition> andConditions(List<Region> regions) {
         Region first = regions.getFirst();
-        Condition newPre = new Condition(first.getPreAndPostCondition().getPreCondition().getCondition());
-        Condition newPost = new Condition(first.getPreAndPostCondition().getPostCondition().getCondition());
+
+        Condition newPre;
+        Condition newPost;
+        try {
+            newPre = new Condition(first.getPreAndPostCondition().getPreCondition().getCondition());
+            newPost = new Condition(first.getPreAndPostCondition().getPostCondition().getCondition());
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
+        }
+
         for (Region region : regions) {
             newPre = newPre.and(region.getPreAndPostCondition().getPreCondition());
             newPre = newPre.and(region.getInvariant());

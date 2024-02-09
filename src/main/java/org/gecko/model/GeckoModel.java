@@ -24,7 +24,6 @@ public class GeckoModel {
     public GeckoModel() throws ModelException {
         this.modelFactory = new ModelFactory();
         this.root = modelFactory.createRoot();
-        this.root.setName("root");
     }
 
     public GeckoModel(System root) {

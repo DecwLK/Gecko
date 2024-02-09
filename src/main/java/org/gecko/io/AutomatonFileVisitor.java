@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.Getter;
+import org.gecko.exceptions.GeckoException;
+import org.gecko.exceptions.ModelException;
+import org.gecko.model.Condition;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.GeckoModel;
@@ -26,7 +29,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
     private static final String START_STATE_REGEX = "[a-z].*";
     private static final String SELF_REFERENCE_TOKEN = "self";
 
-    public AutomatonFileVisitor() {
+    public AutomatonFileVisitor() throws ModelException {
         this.model = new GeckoModel();
         currentSystem = model.getRoot();
     }
@@ -65,7 +68,12 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
 
     @Override
     public String visitSystem(SystemDefParser.SystemContext ctx) {
-        System system = buildSystem(ctx);
+        System system;
+        try {
+            system = buildSystem(ctx);
+        } catch (GeckoException e) {
+            return e.getMessage();
+        }
         currentSystem = system;
         for (SystemDefParser.IoContext io : ctx.io()) {
             String result = io.accept(this);
@@ -143,7 +151,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         if (startStateCandidates.size() > 1) {
             return "Found multiple start states in automaton %s".formatted(ctx.ident().getText());
         } else if (startStateCandidates.size() == 1) {
-            currentSystem.getAutomaton().setStartState(startStateCandidates.getFirst());
+            try {
+                currentSystem.getAutomaton().setStartState(startStateCandidates.get(0));
+            } catch (ModelException e) {
+                return e.getMessage();
+            }
         }
         return null;
     }
@@ -160,19 +172,43 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         String endName = ctx.to.getText();
         State start = currentSystem.getAutomaton().getStateByName(startName);
         if (start == null) {
-            start = model.getModelFactory().createState(currentSystem.getAutomaton());
-            start.setName(startName);
+            try {
+                start = model.getModelFactory().createState(currentSystem.getAutomaton());
+                start.setName(startName);
+            } catch (ModelException e) {
+                return e.getMessage();
+            }
         }
         State end = currentSystem.getAutomaton().getStateByName(endName);
         if (end == null) {
-            end = model.getModelFactory().createState(currentSystem.getAutomaton());
-            end.setName(endName);
+            try {
+                end = model.getModelFactory().createState(currentSystem.getAutomaton());
+                end.setName(endName);
+            } catch (ModelException e) {
+                return e.getMessage();
+            }
         }
-        Contract contract = model.getModelFactory().createContract(start);
-        contract.setPreCondition(model.getModelFactory().createCondition(ctx.pre.getText()));
-        contract.setPostCondition(model.getModelFactory().createCondition(ctx.post.getText()));
-        Edge edge = model.getModelFactory().createEdge(currentSystem.getAutomaton(), start, end);
-        edge.setContract(contract);
+        Contract contract;
+        try {
+            contract = model.getModelFactory().createContract(start);
+        } catch (ModelException e) {
+            return e.getMessage();
+        }
+        Condition pre;
+        Condition post;
+        try {
+            pre = new Condition(ctx.pre.getText());
+            post = new Condition(ctx.post.getText());
+        } catch (ModelException e) {
+            return e.getMessage();
+        }
+        Edge edge;
+        try {
+            edge = model.getModelFactory().createEdge(currentSystem.getAutomaton(), start, end);
+            edge.setContract(contract);
+        } catch (ModelException e) {
+            return e.getMessage();
+        }
         return null;
     }
 
@@ -195,10 +231,15 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                 if (currentSystem.getVariableByName(ident.Ident().getText()) != null) {
                     continue;
                 }
-                Variable var = model.getModelFactory().createVariable(currentSystem);
-                var.setName(ident.Ident().getText());
-                var.setType(variable.t.getText());
-                var.setVisibility(visibility);
+                Variable var;
+                try {
+                    var = model.getModelFactory().createVariable(currentSystem);
+                    var.setName(ident.Ident().getText());
+                    var.setType(variable.t.getText());
+                    var.setVisibility(visibility);
+                } catch (ModelException e) {
+                    return e.getMessage();
+                }
                 if (variable.init != null) {
                     var.setValue(variable.init.getText());
                 }
@@ -236,16 +277,29 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             }
             end.add(endVar);
         }
-        for (Variable variable : end) {
-            model.getModelFactory().createSystemConnection(currentSystem, start, variable); //TODO this should throw
+        try {
+            for (Variable variable : end) {
+                model.getModelFactory().createSystemConnection(currentSystem, start, variable); //TODO this should throw
+            }
+        } catch (ModelException e) {
+            return e.getMessage();
         }
         return null;
     }
 
-    private System buildSystem(SystemDefParser.SystemContext ctx) {
-        System system = model.getModelFactory().createSystem(currentSystem);
+    private System buildSystem(SystemDefParser.SystemContext ctx) throws GeckoException {
+        System system;
+        try {
+            system = model.getModelFactory().createSystem(currentSystem);
+        } catch (ModelException e) {
+            throw new GeckoException(e.getMessage());
+        }
         if (nextSystemName != null) {
-            system.setName(nextSystemName);
+            try {
+                system.setName(nextSystemName);
+            } catch (ModelException e) {
+                throw new GeckoException(e.getMessage());
+            }
             nextSystemName = null;
         } else {
             system.setName(ctx.ident().Ident().getText());
@@ -260,14 +314,14 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         return code.substring(2, code.length() - 2);
     }
 
-    private System parseSystemReference(String name) throws Exception {
+    private System parseSystemReference(String name) throws GeckoException {
         System system;
         if (name.equals(SELF_REFERENCE_TOKEN)) {
             system = currentSystem;
         } else {
             system = currentSystem.getChildByName(name);
             if (system == null) {
-                throw new Exception("Could not find system %s".formatted(name));
+                throw new GeckoException("Could not find system %s".formatted(name));
             }
         }
         return system;

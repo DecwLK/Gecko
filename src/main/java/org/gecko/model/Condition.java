@@ -25,11 +25,21 @@ public class Condition {
     }
 
     public Condition and(Condition other) {
-        return new Condition("(" + condition + ") & (" + other.condition + ")");
+        try {
+            // This and other are always valid
+            return new Condition("(" + condition + ") & (" + other.condition + ")");
+        } catch (ModelException e) {
+            return null;
+        }
     }
 
     public Condition not() {
-        return new Condition("! (" + condition + ")");
+        try {
+            // This and other are always valid
+            return new Condition("! (" + condition + ")");
+        } catch (ModelException e) {
+            return null;
+        }
     }
 
     @Override

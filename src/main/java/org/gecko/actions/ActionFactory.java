@@ -88,6 +88,12 @@ public class ActionFactory {
             size);
     }
 
+    public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(
+        Point2D position, Point2D size, Color color) {
+        return new CreateRegionViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position, size,
+            color);
+    }
+
     public CreateStateViewModelElementAction createCreateStateViewModelElementAction(Point2D position) {
         return new CreateStateViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
     }

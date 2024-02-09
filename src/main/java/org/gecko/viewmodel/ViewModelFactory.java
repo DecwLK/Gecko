@@ -78,7 +78,7 @@ public class ViewModelFactory {
     }
 
     public SystemConnectionViewModel createSystemConnectionViewModelIn(
-        SystemViewModel parentSystem, PortViewModel source, PortViewModel destination) {
+        SystemViewModel parentSystem, PortViewModel source, PortViewModel destination) throws ModelException {
         SystemConnection systemConnection =
             modelFactory.createSystemConnection(parentSystem.getTarget(), source.getTarget(), destination.getTarget());
         SystemConnectionViewModel result =

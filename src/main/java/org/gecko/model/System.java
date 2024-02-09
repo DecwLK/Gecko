@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 
 /**
  * Represents a system in the domain model of a Gecko project. A {@link System} has a name, a parent-{@link System}, a
@@ -55,7 +56,7 @@ public class System extends Element implements Renamable {
         this.children.removeAll(children);
     }
 
-    public void addConnection(SystemConnection connection) {
+    public void addConnection(SystemConnection connection) throws ModelException {
         connections.add(connection);
     }
 

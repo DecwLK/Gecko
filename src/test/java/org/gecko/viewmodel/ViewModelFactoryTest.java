@@ -77,8 +77,13 @@ class ViewModelFactoryTest {
     void testAddSystemConnectionBetweenPorts() {
         PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
         PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
-        SystemConnectionViewModel systemConnectionViewModel =
-            viewModelFactory.createSystemConnectionViewModelIn(root, portViewModel1, portViewModel2);
+        SystemConnectionViewModel systemConnectionViewModel = null;
+        try {
+            systemConnectionViewModel =
+                viewModelFactory.createSystemConnectionViewModelIn(root, portViewModel1, portViewModel2);
+        } catch (ModelException e) {
+            fail();
+        }
         assertTrue(root.getTarget().getConnections().contains(systemConnectionViewModel.getTarget()));
         assertEquals(systemConnectionViewModel.getTarget().getSource(), portViewModel1.getTarget());
         assertEquals(systemConnectionViewModel.getTarget().getDestination(), portViewModel2.getTarget());

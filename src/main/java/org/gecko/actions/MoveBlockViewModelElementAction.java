@@ -37,6 +37,8 @@ public class MoveBlockViewModelElementAction extends Action {
         for (PositionableViewModelElement<?> element : elementsToMove) {
             element.setPosition(element.getPosition().add(delta));
         }
+
+        editorViewModel.updateRegions();
         return true;
     }
 

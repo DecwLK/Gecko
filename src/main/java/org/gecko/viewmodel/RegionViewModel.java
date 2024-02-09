@@ -8,6 +8,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.NonNull;
@@ -25,10 +28,11 @@ import org.gecko.model.Region;
 public class RegionViewModel extends BlockViewModelElement<Region> {
     private final Property<Color> colorProperty;
     private final StringProperty invariantProperty;
-    private final ObservableList<StateViewModel> statesProperty; //TODO should this be called property?
+    private final ObservableList<StateViewModel> statesProperty;
     private final ContractViewModel contract;
 
-    public RegionViewModel(int id, @NonNull Region target, @NonNull ContractViewModel contract) {
+    public RegionViewModel(
+        int id, @NonNull Region target, @NonNull ContractViewModel contract) {
         super(id, target);
         this.contract = contract;
         this.invariantProperty = new SimpleStringProperty(target.getInvariant().getCondition());
@@ -80,5 +84,15 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
 
     public Color getColor() {
         return colorProperty.getValue();
+    }
+
+    public static boolean checkStateInRegion(RegionViewModel region, StateViewModel state) {
+        Bounds regionBound =
+            new BoundingBox(region.getPosition().getX(), region.getPosition().getY(), region.getSize().getX(),
+                region.getSize().getY());
+        return regionBound.contains(state.getPosition()) || regionBound.contains(
+            state.getPosition().add(new Point2D(0, state.getSize().getY()))) || regionBound.contains(
+            state.getPosition().add(new Point2D(state.getSize().getX(), 0))) || regionBound.contains(
+            state.getPosition().add(state.getSize()));
     }
 }

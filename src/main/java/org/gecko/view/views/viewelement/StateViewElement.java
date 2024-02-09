@@ -27,6 +27,7 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
     private static final int CORNER_RADIUS = 10;
     private static final int INNER_CORNER_RADIUS = 20;
     private static final int SPACING = 5;
+    private static final int MAX_CONTRACT_CNT = 4;
 
     private static final String STYLE = "state-view-element";
     private static final String INNER_STYLE = "state-inner-view-element";
@@ -136,15 +137,17 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         VBox contractsPane = new VBox();
         double maxHeight = getHeight() - stateName.getHeight() - 2 * SPACING;
 
-        contractsProperty.addListener((observable, oldValue, newValue) -> refreshContracts(contractsPane, maxHeight));
+        contractsProperty.addListener((observable, oldValue, newValue) -> refreshContracts(contractsPane));
 
         contents.getChildren().add(contractsPane);
         getChildren().addAll(contents);
     }
 
-    private void refreshContracts(VBox contractsPane, double maxHeight) {
+    private void refreshContracts(VBox contractsPane) {
         contractsPane.getChildren().clear();
         contractsPane.setSpacing(SPACING);
+
+        int contractCount = 0;
 
         for (ContractViewModel contract : stateViewModel.getContracts()) {
             VBox contractBox = new VBox();
@@ -166,10 +169,11 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
             postconditionBox.getChildren().addAll(postconditionLabel, postcondition);
 
             contractBox.getChildren().addAll(contractLabel, preconditionBox, postconditionBox);
-            if (contractBox.getHeight() + contractsPane.getHeight() > maxHeight) {
+            if (contractCount >= MAX_CONTRACT_CNT) {
                 return;
             }
 
+            contractCount++;
             contractsPane.getChildren().add(contractBox);
         }
     }

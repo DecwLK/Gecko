@@ -23,7 +23,7 @@ public class ElementScalerBlock extends Rectangle {
         refreshListeners();
     }
 
-    public void refreshListeners() {
+    protected void refreshListeners() {
         decoratorTarget.getEdgePoints().get(index).removeListener((observable, oldValue, newValue) -> {
             if (!isDragging) {
                 setLayoutX(newValue.getX() - (getWidth() / 2));

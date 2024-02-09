@@ -95,7 +95,7 @@ public class ModelFactory {
         return automaton;
     }
 
-    public Condition createCondition(@NonNull String init) {
+    public Condition createCondition(@NonNull String init) throws ModelException {
         return new Condition(init);
     }
 }

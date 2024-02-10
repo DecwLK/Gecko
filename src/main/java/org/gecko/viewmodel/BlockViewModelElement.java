@@ -34,14 +34,10 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
     }
 
     public void scale(@NonNull Point2D otherPoint, @NonNull Point2D newPoint) {
-        System.out.println("other" + otherPoint);
-        System.out.println("new" + newPoint);
         Point2D newStartPosition =
             new Point2D(Math.min(otherPoint.getX(), newPoint.getX()), Math.min(otherPoint.getY(), newPoint.getY()));
         Point2D newEndPosition =
             new Point2D(Math.max(otherPoint.getX(), newPoint.getX()), Math.max(otherPoint.getY(), newPoint.getY()));
-        System.out.println("Start" + newStartPosition);
-        System.out.println("end" + newEndPosition);
         setPosition(newStartPosition);
         setSize(newEndPosition.subtract(newStartPosition));
     }

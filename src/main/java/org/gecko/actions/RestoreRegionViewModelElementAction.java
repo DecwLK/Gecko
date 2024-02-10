@@ -19,7 +19,7 @@ public class RestoreRegionViewModelElementAction extends Action {
 
 
     @Override
-    boolean run() throws GeckoException {
+    boolean run() {
         automaton.addRegion(regionViewModel.getTarget());
         geckoViewModel.addViewModelElement(regionViewModel);
         return true;

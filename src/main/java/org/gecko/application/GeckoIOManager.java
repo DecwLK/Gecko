@@ -108,8 +108,7 @@ public class GeckoIOManager {
             gvm = automatonFileParser.parse(file);
         } catch (IOException e) {
             String message =
-                "Could not read file: %s.%s%s".formatted(file.getPath(), System.lineSeparator(),
-                    e.getMessage());
+                "Could not read file: %s.%s%s".formatted(file.getPath(), System.lineSeparator(), e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
             alert.showAndWait();
             return;
@@ -163,8 +162,8 @@ public class GeckoIOManager {
     }
 
     private void launchSaveChangesAlert() throws GeckoException {
-        Alert saveChangesAlert
-            = new Alert(Alert.AlertType.NONE, "Do you want to save changes?", ButtonType.YES, ButtonType.NO);
+        Alert saveChangesAlert =
+            new Alert(Alert.AlertType.NONE, "Do you want to save changes?", ButtonType.YES, ButtonType.NO);
         saveChangesAlert.setTitle("Confirm Exit");
         saveChangesAlert.showAndWait();
 

@@ -102,8 +102,8 @@ public class EditorView {
         this.currentViewElements = new HashSet<>();
         String baseName = viewModel.getCurrentSystem().getName();
         this.currentView = new Tab(
-            baseName + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
-                : " (" + ResourceHandler.getString("View", "system") + ")"), currentViewPane);
+            baseName + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")" :
+                " (" + ResourceHandler.getString("View", "system") + ")"), currentViewPane);
 
         this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
             updateWorldSize();
@@ -187,8 +187,7 @@ public class EditorView {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
         });
 
-        ViewContextMenuBuilder contextMenuBuilder
-            = new ViewContextMenuBuilder(viewModel.getActionManager(), viewModel);
+        ViewContextMenuBuilder contextMenuBuilder = new ViewContextMenuBuilder(viewModel.getActionManager(), viewModel);
         this.contextMenu = contextMenuBuilder.build();
         currentViewPane.setOnContextMenuRequested(event -> {
             changeContextMenu(contextMenuBuilder.getContextMenu());

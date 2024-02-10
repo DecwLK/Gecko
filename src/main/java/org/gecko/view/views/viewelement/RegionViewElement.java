@@ -31,7 +31,10 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
     private final Property<Color> colorProperty;
     private final StringProperty invariantProperty;
     private final List<StateViewModel> states;
-    // TODO add more Properties once they get pushed
+
+    private static final String STYLE = "region-view-element";
+    private static final String INNER_STYLE = "region-inner-view-element";
+    private static final int BACKGROUND_ROUNDING = 15;
 
     public RegionViewElement(RegionViewModel regionViewModel) {
         super(regionViewModel);
@@ -42,7 +45,6 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
         this.regionViewModel = regionViewModel;
         bindViewModel();
         constructViewElement();
-        // TODO add more Properties once they get pushed
     }
 
     @Override
@@ -90,15 +92,15 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
             regionViewModel.getPositionProperty()));
         layoutYProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getY(),
             regionViewModel.getPositionProperty()));
-        // TODO is size width or coords?
         prefWidthProperty().bind(
             Bindings.createDoubleBinding(() -> regionViewModel.getSize().getX(), regionViewModel.getSizeProperty()));
         prefHeightProperty().bind(
             Bindings.createDoubleBinding(() -> regionViewModel.getSize().getY(), regionViewModel.getSizeProperty()));
-        // TODO add more binds once they get pushed
     }
 
     private void constructViewElement() {
+        getStyleClass().add(STYLE);
+
         Rectangle background = new Rectangle();
         background.widthProperty().bind(widthProperty());
         background.heightProperty().bind(heightProperty());
@@ -106,32 +108,31 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
             .bind(Bindings.createObjectBinding(
                 () -> new Color(colorProperty.getValue().getRed(), colorProperty.getValue().getGreen(),
                     colorProperty.getValue().getBlue(), 0.5), regionViewModel.getColorProperty()));
+        background.setArcHeight(BACKGROUND_ROUNDING);
+        background.setArcWidth(BACKGROUND_ROUNDING);
         GridPane gridPane = new GridPane();
+        gridPane.getStyleClass().add(INNER_STYLE);
 
+        Label nameDesc = new Label(ResourceHandler.getString("Labels", "name") + ": ");
         Label name = new Label();
-        name.textProperty()
-            .bind(Bindings.createStringBinding(
-                () -> ResourceHandler.getString("Labels", "region") + ": " + regionViewModel.getName(),
-                regionViewModel.getNameProperty()));
+        name.textProperty().bind(nameProperty);
+        Label preConditionDesc = new Label(ResourceHandler.getString("Labels", "pre_condition_short") + ": ");
         Label preCondition = new Label();
-        preCondition.textProperty()
-            .bind(Bindings.createStringBinding(
-                () -> ResourceHandler.getString("Labels", "pre_condition") + ": " + regionViewModel.getContract()
-                    .getPrecondition(), regionViewModel.getContract().getPreConditionProperty()));
+        preCondition.textProperty().bind(regionViewModel.getContract().getPreConditionProperty());
+        Label postConditionDesc = new Label(ResourceHandler.getString("Labels", "post_condition_short") + ": ");
         Label postCondition = new Label();
-        postCondition.textProperty()
-            .bind(Bindings.createStringBinding(
-                () -> ResourceHandler.getString("Labels", "post_condition") + ": " + regionViewModel.getContract()
-                    .getPostcondition(), regionViewModel.getContract().getPostConditionProperty()));
+        postCondition.textProperty().bind(regionViewModel.getContract().getPostConditionProperty());
+        Label invariantDesc = new Label(ResourceHandler.getString("Labels", "invariant_short") + ": ");
         Label invariant = new Label();
-        invariant.textProperty()
-            .bind(Bindings.createStringBinding(
-                () -> ResourceHandler.getString("Labels", "invariant") + ": " + regionViewModel.getInvariant(),
-                regionViewModel.getInvariantProperty()));
-        gridPane.add(name, 0, 0);
-        gridPane.add(preCondition, 0, 1);
-        gridPane.add(postCondition, 0, 2);
-        gridPane.add(invariant, 0, 3);
+        invariant.textProperty().bind(invariantProperty);
+        gridPane.add(nameDesc, 0, 0);
+        gridPane.add(name, 1, 0);
+        gridPane.add(preConditionDesc, 0, 1);
+        gridPane.add(preCondition, 1, 1);
+        gridPane.add(postConditionDesc, 0, 2);
+        gridPane.add(postCondition, 1, 2);
+        gridPane.add(invariantDesc, 0, 3);
+        gridPane.add(invariant, 1, 3);
         getChildren().addAll(background, gridPane);
     }
 

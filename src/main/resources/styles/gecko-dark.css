@@ -219,9 +219,9 @@
 .scroll-bar {
     -fx-background-color: -fx-fg0;
     -fx-background-radius: 5;
+    -fx-border-radius: 5;
     -fx-border-width: 0;
     -fx-border-color: transparent;
-    -fx-border-color: -fx-text;
     -fx-text-fill: -fx-text;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
@@ -353,7 +353,8 @@
 .tool-bar {
     -fx-background-color: -fx-fg0;
     -fx-background-radius: 5;
-    -fx-border-radius: 0;
+    -fx-border-radius: 5;
+    -fx-border-width: 0;
     -fx-border-color: transparent;
     -fx-text-fill: -fx-text;
     -fx-font-size: 12px;
@@ -451,6 +452,17 @@
     -fx-background-color: -fx-fg0;
     -fx-background-radius: 5;
     -fx-border-radius: 5;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.region-view-element {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
     -fx-border-color: -fx-text;
     -fx-text-fill: -fx-text;
     -fx-font-size: 12px;
@@ -497,6 +509,12 @@
     -fx-font-weight: bold;
     -fx-padding: 2px;
     -fx-font: 12px "System";
+}
+
+.region-inner-view-element {
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-backgroud-color: #00000004;
 }
 
 .state-view-element-non-start {

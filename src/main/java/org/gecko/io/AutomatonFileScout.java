@@ -13,7 +13,8 @@ import org.gecko.model.Variable;
 
 public final class AutomatonFileScout {
 
-    record SystemInfo(String name, String type) { }
+    record SystemInfo(String name, String type) {
+    }
 
     private final Map<String, SystemDefParser.SystemContext> systems;
     private final Map<String, SystemDefParser.AutomataContext> automata;

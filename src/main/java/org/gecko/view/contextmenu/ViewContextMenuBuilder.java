@@ -54,8 +54,8 @@ public class ViewContextMenuBuilder {
         deselectMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory().createDeselectAction()));
         deselectMenuItem.setAccelerator(Shortcuts.DESELECT_ALL.get());
 
-        contextMenu.getItems().addAll(cutMenuItem, copyMenuItem, pasteMenuItem, separatorMenuItem, selectMenuItem,
-            deselectMenuItem);
+        contextMenu.getItems()
+            .addAll(cutMenuItem, copyMenuItem, pasteMenuItem, separatorMenuItem, selectMenuItem, deselectMenuItem);
 
         this.contextMenu = contextMenu;
         return contextMenu;

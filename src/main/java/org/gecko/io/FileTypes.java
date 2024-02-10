@@ -3,8 +3,8 @@ package org.gecko.io;
 import lombok.Getter;
 
 /**
- * Enumerates the two file types which can be managed in the Gecko Graphic Editor:
- * JSON files as project files and SYS files as automaton files.
+ * Enumerates the two file types which can be managed in the Gecko Graphic Editor: JSON files as project files and SYS
+ * files as automaton files.
  */
 @Getter
 public enum FileTypes {

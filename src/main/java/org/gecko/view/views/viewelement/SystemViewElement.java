@@ -140,7 +140,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         portViewElements.add(portViewElement);
         if (portViewModel.getVisibility() == Visibility.INPUT) {
             inputPortsAligner.getChildren().add(portViewElement);
-        } else {
+        } else if (portViewModel.getVisibility() == Visibility.OUTPUT) {
             outputPortsAligner.getChildren().add(portViewElement);
         }
         updatePortViewModels();

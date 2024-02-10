@@ -17,6 +17,7 @@ public final class AutomatonFileScout {
 
     private final Map<String, SystemDefParser.SystemContext> systems;
     private final Map<String, SystemDefParser.AutomataContext> automata;
+    private final Map<String, SystemDefParser.PrepostContext> contracts;
 
     private final Set<SystemInfo> foundChildren;
     private final Set<String> rootChildrenIdents;
@@ -33,10 +34,10 @@ public final class AutomatonFileScout {
         this.rootChildrenIdents = new HashSet<>();
         this.parents = new HashMap<>();
         this.rootChildren = new HashSet<>();
+        this.contracts = new HashMap<>();
         this.scoutVisitor = new ScoutVisitor();
         ctx.accept(scoutVisitor);
     }
-
 
     public SystemDefParser.SystemContext getSystem(String name) {
         return systems.get(name);
@@ -44,6 +45,10 @@ public final class AutomatonFileScout {
 
     public SystemDefParser.AutomataContext getAutomaton(String name) {
         return automata.get(name);
+    }
+
+    public SystemDefParser.PrepostContext getContract(String name) {
+        return contracts.get(name);
     }
 
     public List<SystemDefParser.SystemContext> getParents(SystemDefParser.SystemContext ctx) {
@@ -86,6 +91,9 @@ public final class AutomatonFileScout {
         @Override
         public Void visitContract(SystemDefParser.ContractContext ctx) {
             automata.put(ctx.automata().ident().Ident().getText(), ctx.automata());
+            for (SystemDefParser.PrepostContext prepost : ctx.automata().prepost()) {
+                contracts.put(prepost.ident().getText(), prepost);
+            }
             return null;
         }
 

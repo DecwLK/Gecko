@@ -10,7 +10,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -68,7 +67,8 @@ public class AutomatonFileSerializer implements FileSerializer {
         StringJoiner joiner = new StringJoiner(java.lang.System.lineSeparator());
         joiner.add("contract %s {".formatted(system.getName()));
         if (!system.getVariables().isEmpty()) {
-            serializeIo(system);
+            joiner.add(serializeIo(system));
+            joiner.add("");
         }
         joiner.add(serializeCollectionWithMapping(automaton.getStates(), this::serializeStateContracts, automaton));
         joiner.add("");
@@ -80,20 +80,18 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeStateContracts(State state, Automaton automaton) {
+        //Edges are used so much here because contracts don't have priorities or kinds and only states can be in regions
         List<Region> relevantRegions = automaton.getRegionsWithState(state);
-        List<Edge> edges = automaton.getOutgoingEdges(state)
-            .stream()
-            .filter(Objects::nonNull)
-            .filter(edge -> edge.getContract() != null)
-            .toList();
+        List<Edge> edges =
+            automaton.getOutgoingEdges(state).stream().filter(edge -> edge.getContract() != null).toList();
         if (edges.isEmpty()) {
             return "";
         }
         //Creating new contracts to not alter the model
         Map<Contract, Contract> newContracts = new HashMap<>();
         for (Edge edge : edges) {
-            Contract newContract = applyRegionsToContract(relevantRegions, edge.getContract());
-            applyKindToContract(newContract, edge.getKind());
+            Contract newContract = applyKindToContract(edge.getContract(), edge.getKind());
+            applyRegionsToContract(relevantRegions, newContract);
             newContracts.put(edge.getContract(), newContract);
         }
 
@@ -127,12 +125,8 @@ public class AutomatonFileSerializer implements FileSerializer {
                     continue; //Highest prio doesn't need to be altered
                 }
                 Contract contractWithPrio = newContracts.get(edge.getContract());
-                try {
-                    contractWithPrio.setPreCondition(
-                        contractWithPrio.getPreCondition().and(allLowerPrioPreConditions.get(prioIndex - 1).not()));
-                } catch (ModelException e) {
-                    throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
-                }
+                contractWithPrio.setPreCondition(
+                    contractWithPrio.getPreCondition().and(allLowerPrioPreConditions.get(prioIndex - 1).not()));
                 newContracts.put(edge.getContract(), contractWithPrio);
             }
             prioIndex++;
@@ -140,63 +134,57 @@ public class AutomatonFileSerializer implements FileSerializer {
         return serializeCollectionWithMapping(newContracts.values(), this::serializeContract);
     }
 
-    private void applyKindToContract(Contract contract, Kind kind) {
+    private Contract applyKindToContract(Contract contract, Kind kind) {
         switch (kind) {
             case MISS -> {
                 try {
-                    contract.setPreCondition(contract.getPreCondition().not());
+                    return new Contract(0, contract.getName(), contract.getPreCondition().not(),
+                        contract.getPostCondition());
                 } catch (ModelException e) {
                     throw new RuntimeException("Failed to negate a valid condition", e);
                 }
             }
             case FAIL -> {
                 try {
-                    contract.setPostCondition(contract.getPostCondition().not());
+                    return new Contract(0, contract.getName(), contract.getPreCondition(),
+                        contract.getPostCondition().not());
                 } catch (ModelException e) {
                     throw new RuntimeException("Failed to negate a valid condition", e);
                 }
             }
-            case HIT -> { }
+            case HIT -> {
+                try {
+                    return new Contract(0, contract.getName(), contract.getPreCondition(), contract.getPostCondition());
+                } catch (ModelException e) {
+                    throw new RuntimeException("Failed to copy a contract", e);
+                }
+            }
             default -> throw new IllegalArgumentException("Unknown kind: " + kind);
         }
     }
 
-    private Contract applyRegionsToContract(List<Region> relevantRegions, Contract contract) {
-        Contract newContract;
-        try {
-            newContract = new Contract(0, contract.getName(), contract.getPreCondition(),
-                contract.getPostCondition());
-        } catch (ModelException e) {
-            throw new RuntimeException("Failed to copy a contract", e);
-        }
+    private void applyRegionsToContract(List<Region> relevantRegions, Contract contract) {
         if (relevantRegions.isEmpty()) {
-            return newContract;
+            return;
         }
         List<Condition> newConditions = andConditions(relevantRegions);
-        try {
-            newContract.setPreCondition(contract.getPreCondition().and(newConditions.getFirst()));
-            newContract.setPostCondition(contract.getPostCondition().and(newConditions.get(1)));
-        } catch (ModelException e) {
-            throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
-        }
-        return newContract;
+        contract.setPreCondition(contract.getPreCondition().and(newConditions.getFirst()));
+        contract.setPostCondition(contract.getPostCondition().and(newConditions.get(1)));
     }
 
     private List<Condition> andConditions(List<Region> regions) {
-        List<Region> regionsCopy = new ArrayList<>(regions);
-        Region first = regionsCopy.removeFirst();
+        Region first = regions.getFirst();
+
         Condition newPre;
         Condition newPost;
         try {
             newPre = new Condition(first.getPreAndPostCondition().getPreCondition().getCondition());
-            newPre = newPre.and(first.getInvariant());
             newPost = new Condition(first.getPreAndPostCondition().getPostCondition().getCondition());
-            newPost = newPost.and(first.getInvariant());
         } catch (ModelException e) {
             throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
         }
 
-        for (Region region : regionsCopy) {
+        for (Region region : regions) {
             newPre = newPre.and(region.getPreAndPostCondition().getPreCondition());
             newPre = newPre.and(region.getInvariant());
             newPost = newPost.and(region.getPreAndPostCondition().getPostCondition());
@@ -206,7 +194,7 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeContract(Contract contract) {
-        return INDENT + "contract %s = %s ==> %s".formatted(contract.getName(), contract.getPreCondition(),
+        return INDENT + "contract %s := %s ==> %s".formatted(contract.getName(), contract.getPreCondition(),
             contract.getPostCondition());
     }
 
@@ -226,16 +214,16 @@ public class AutomatonFileSerializer implements FileSerializer {
             joiner.add(serializeChildren(system));
             joiner.add("");
         }
-        if (!system.getConnections().isEmpty()) {
-            joiner.add(serializeConnections(system));
-            joiner.add("");
-        }
         if (system.getAutomaton() != null && !system.getAutomaton().isEmpty()) {
             joiner.add(INDENT + "contract %s".formatted(system.getName()));
             joiner.add("");
         }
+        if (!system.getConnections().isEmpty()) {
+            joiner.add(serializeConnections(system));
+            joiner.add("");
+        }
         if (system.getCode() != null) {
-            joiner.add(system.getCode());
+            joiner.add(serializeCode(system.getCode()));
         }
         joiner.add("}");
         joiner.add("");
@@ -263,6 +251,7 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeIo(System system) {
+        //TODO group variables of the same type into one line
         List<Variable> orderedVariables =
             system.getVariables().stream().sorted(Comparator.comparing(Variable::getVisibility)).toList();
         return serializeCollectionWithMapping(orderedVariables, this::serializeVariable);
@@ -285,14 +274,12 @@ public class AutomatonFileSerializer implements FileSerializer {
             default -> throw new IllegalArgumentException("Unknown visibility: " + variable.getVisibility());
         };
         output += " %s: %s".formatted(variable.getName(), variable.getType());
-        if (variable.getValue() != null) {
-            output += " := %s".formatted(variable.getValue());
-        }
+        //TODO append variable value
         return output;
     }
 
     private String serializeCode(String code) {
-        return "{=" + code + "=}";
+        return INDENT + "{=" + code + "=}";
     }
 
     private <T> String serializeCollectionWithMapping(Collection<T> collection, Function<T, String> mapping) {

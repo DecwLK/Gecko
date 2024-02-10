@@ -44,6 +44,9 @@ public class Graphlayouter {
     }
 
     private void layoutGraph(ElkNode root, LayoutAlgorithms layoutAlgorithm) {
+        if (root.getChildren().isEmpty()) {
+            return;
+        }
         root.setProperty(CoreOptions.ALGORITHM, layoutAlgorithm.toString());
         double spacing = root.getChildren().getFirst().getWidth() / 3;
         root.setProperty(CoreOptions.SPACING_NODE_NODE, spacing);

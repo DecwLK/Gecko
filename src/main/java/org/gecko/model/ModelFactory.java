@@ -9,7 +9,7 @@ import org.gecko.exceptions.ModelException;
 public class ModelFactory {
 
     //TODO defaults are temporary and need to be changed
-    private static int elementId = 0;
+    private int elementId = 0;
     private static final String DEFAULT_NAME = "Element_%d";
     private static final String DEFAULT_TYPE = "int";
     private static final String DEFAULT_CONDITION = "true";
@@ -22,12 +22,12 @@ public class ModelFactory {
         return DEFAULT_NAME.formatted(id);
     }
 
-    private static Contract getDefaultContract() throws ModelException {
+    private Contract getDefaultContract() throws ModelException {
         int id = getNewElementId();
         return new Contract(id, getDefaultName(id), new Condition(DEFAULT_CONDITION), new Condition(DEFAULT_CONDITION));
     }
 
-    private static int getNewElementId() {
+    private int getNewElementId() {
         return elementId++;
     }
 

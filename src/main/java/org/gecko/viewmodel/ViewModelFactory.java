@@ -21,7 +21,7 @@ import org.gecko.model.Visibility;
  * element.
  */
 public class ViewModelFactory {
-    private static int viewModelElementId = 0;
+    private int viewModelElementId = 0;
     private final ActionManager actionManager;
     private final ModelFactory modelFactory;
     private final GeckoViewModel geckoViewModel;
@@ -237,7 +237,7 @@ public class ViewModelFactory {
         return new ContractViewModel(getNewViewModelElementId(), contract);
     }
 
-    private static int getNewViewModelElementId() {
+    private int getNewViewModelElementId() {
         return viewModelElementId++;
     }
 

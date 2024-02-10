@@ -60,7 +60,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
 
     @Override
     public void setEdgePoint(int index, Point2D point) {
-
     }
 
     @Override
@@ -87,6 +86,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         portsProperty.bind(systemViewModel.getPortsProperty());
 
         systemViewModel.getPositionProperty().addListener((observable, oldValue, newValue) -> updatePortViewModels());
+        updatePortViewModels();
     }
 
     @Override
@@ -108,7 +108,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         getChildren().addAll(getBackgroundRectangle(), container);
         portsProperty.forEach(this::addPort);
         portsProperty.addListener(this::onPortsChanged);
-        portsProperty.forEach(this::addPort);
     }
 
     private void onPortsChanged(ListChangeListener.Change<? extends PortViewModel> change) {
@@ -119,6 +118,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
                 change.getRemoved().forEach(this::removePort);
             }
         }
+        updatePortViewModels();
     }
 
     private void updatePortViewModels() {
@@ -143,7 +143,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         } else if (portViewModel.getVisibility() == Visibility.OUTPUT) {
             outputPortsAligner.getChildren().add(portViewElement);
         }
-        updatePortViewModels();
     }
 
     private void removePort(PortViewModel portViewModel) {

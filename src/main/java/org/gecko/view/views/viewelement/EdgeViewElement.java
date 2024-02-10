@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.model.Kind;
+import org.gecko.model.SystemConnection;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -83,7 +84,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
         constructVisualization();
 
-        // Redraw edge when there are changes in the edge list
+        // Redraw edges when there are changes in the edge list
         edgeViewModel.getSourceProperty().addListener((observable, oldValue, newValue) -> {
             oldValue.getIncomingEdges().removeListener(sourceMaskPathListener);
             oldValue.getOutgoingEdges().removeListener(sourceMaskPathListener);
@@ -162,14 +163,20 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         }
 
         double sourceEdgeOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
-        setEdgePoint(0, maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
-            edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(), sourceEdgeOffset));
+        Point2D firstPoint = maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
+            edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(), sourceEdgeOffset);
+        if (firstPoint != null) {
+            setEdgePoint(0, firstPoint);
+        }
 
         double destinationEdgeOffset = edgeViewModel.getDestination().getEdgeOffset(edgeViewModel);
-        setEdgePoint(getEdgePoints().size() - 1,
+        Point2D lastPoint =
             maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
                 edgeViewModel.getSource().getCenter(), edgeViewModel.getDestination().getCenter(),
-                destinationEdgeOffset));
+                destinationEdgeOffset);
+        if (lastPoint != null) {
+            setEdgePoint(getEdgePoints().size() - 1, lastPoint);
+        }
         setLoop(false);
     }
 

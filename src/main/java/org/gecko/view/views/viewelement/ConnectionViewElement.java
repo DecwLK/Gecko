@@ -28,6 +28,8 @@ public abstract class ConnectionViewElement extends Path {
     @Setter
     private boolean isLoop;
 
+    protected List<Pair<DoubleProperty, DoubleProperty>> renderPathSource;
+
     protected ConnectionViewElement(ObservableList<Property<Point2D>> path) {
         this.pathSource = path;
 
@@ -57,7 +59,6 @@ public abstract class ConnectionViewElement extends Path {
      */
     protected Point2D maskBlock(
         Point2D blockPosition, Point2D blockSize, Point2D start, Point2D end, double edgeOffset) {
-        System.out.println("MASKING");
         List<Point2D> blockCorners = new ArrayList<>();
         blockCorners.add(blockPosition);
         blockCorners.add(blockPosition.add(new Point2D(blockSize.getX(), 0)));
@@ -99,7 +100,7 @@ public abstract class ConnectionViewElement extends Path {
     protected void updatePathVisualization() {
         getElements().clear();
 
-        List<Pair<DoubleProperty, DoubleProperty>> renderPathSource = new ArrayList<>();
+        renderPathSource = new ArrayList<>();
 
         // If there are less than two points, there is no path to draw
         if (pathSource.size() < 2) {

@@ -74,6 +74,7 @@ public class SelectableViewElementDecorator extends ViewElementDecorator {
     public void setSelected(boolean selected) {
         borderLine.setVisible(selected);
         super.setSelected(selected);
+        getDecoratorTarget().setSelected(selected);
     }
 
     @Override

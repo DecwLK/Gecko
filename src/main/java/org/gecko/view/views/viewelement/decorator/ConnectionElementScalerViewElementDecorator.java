@@ -9,6 +9,7 @@ import org.gecko.view.views.viewelement.ViewElementVisitor;
 
 public class ConnectionElementScalerViewElementDecorator extends ElementScalerViewElementDecorator {
     private static final double SCALER_SIZE = 10;
+    private static final int IGNORE_Z_PRIORITY = 10000;
 
     private int lastEdgePointCnt;
 
@@ -47,5 +48,13 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         scalerBlock.setFill(Color.RED);
         getScalers().add(scalerBlock);
         getDecoratedNode().getChildren().add(scalerBlock);
+    }
+
+    @Override
+    public int getZPriority() {
+        if (isSelected()) {
+            return getDecoratorTarget().getZPriority() + IGNORE_Z_PRIORITY;
+        }
+        return getDecoratorTarget().getZPriority();
     }
 }

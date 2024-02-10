@@ -41,7 +41,7 @@ public class ModelFactory {
     public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull State destination)
         throws ModelException {
         int id = getNewElementId();
-        Edge edge = new Edge(id, source, destination, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
+        Edge edge = new Edge(id, source, destination, null, DEFAULT_KIND, DEFAULT_PRIORITY);
         automaton.addEdge(edge);
         return edge;
     }

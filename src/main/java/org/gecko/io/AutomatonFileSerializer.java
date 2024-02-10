@@ -15,7 +15,6 @@ import java.util.StringJoiner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.gecko.exceptions.GeckoException;
 import org.gecko.exceptions.ModelException;
 import org.gecko.model.Automaton;
 import org.gecko.model.Condition;
@@ -81,7 +80,6 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeStateContracts(State state, Automaton automaton) {
-        //Edges are used so much here because contracts don't have priorities or kinds and only states can be in regions
         List<Region> relevantRegions = automaton.getRegionsWithState(state);
         List<Edge> edges = automaton.getOutgoingEdges(state)
             .stream()
@@ -94,8 +92,8 @@ public class AutomatonFileSerializer implements FileSerializer {
         //Creating new contracts to not alter the model
         Map<Contract, Contract> newContracts = new HashMap<>();
         for (Edge edge : edges) {
-            Contract newContract = applyKindToContract(edge.getContract(), edge.getKind());
-            applyRegionsToContract(relevantRegions, newContract);
+            Contract newContract = applyRegionsToContract(relevantRegions, edge.getContract());
+            applyKindToContract(newContract, edge.getKind());
             newContracts.put(edge.getContract(), newContract);
         }
 
@@ -142,62 +140,63 @@ public class AutomatonFileSerializer implements FileSerializer {
         return serializeCollectionWithMapping(newContracts.values(), this::serializeContract);
     }
 
-    private Contract applyKindToContract(Contract contract, Kind kind) {
+    private void applyKindToContract(Contract contract, Kind kind) {
         switch (kind) {
             case MISS -> {
                 try {
-                    return new Contract(0, contract.getName(), contract.getPreCondition().not(),
-                        contract.getPostCondition());
+                    contract.setPreCondition(contract.getPreCondition().not());
                 } catch (ModelException e) {
                     throw new RuntimeException("Failed to negate a valid condition", e);
                 }
             }
             case FAIL -> {
                 try {
-                    return new Contract(0, contract.getName(), contract.getPreCondition(),
-                        contract.getPostCondition().not());
+                    contract.setPostCondition(contract.getPostCondition().not());
                 } catch (ModelException e) {
                     throw new RuntimeException("Failed to negate a valid condition", e);
                 }
             }
-            case HIT -> {
-                try {
-                    return new Contract(0, contract.getName(), contract.getPreCondition(), contract.getPostCondition());
-                } catch (ModelException e) {
-                    throw new RuntimeException("Failed to copy a contract", e);
-                }
-            }
+            case HIT -> { }
             default -> throw new IllegalArgumentException("Unknown kind: " + kind);
         }
     }
 
-    private void applyRegionsToContract(List<Region> relevantRegions, Contract contract) {
+    private Contract applyRegionsToContract(List<Region> relevantRegions, Contract contract) {
+        Contract newContract;
+        try {
+            newContract = new Contract(0, contract.getName(), contract.getPreCondition(),
+                contract.getPostCondition());
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to copy a contract", e);
+        }
         if (relevantRegions.isEmpty()) {
-            return;
+            return newContract;
         }
         List<Condition> newConditions = andConditions(relevantRegions);
-
         try {
-            contract.setPreCondition(contract.getPreCondition().and(newConditions.getFirst()));
-            contract.setPostCondition(contract.getPostCondition().and(newConditions.get(1)));
+            newContract.setPreCondition(contract.getPreCondition().and(newConditions.getFirst()));
+            newContract.setPostCondition(contract.getPostCondition().and(newConditions.get(1)));
         } catch (ModelException e) {
             throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
         }
+        return newContract;
     }
 
     private List<Condition> andConditions(List<Region> regions) {
-        Region first = regions.getFirst();
-
+        List<Region> regionsCopy = new ArrayList<>(regions);
+        Region first = regionsCopy.removeFirst();
         Condition newPre;
         Condition newPost;
         try {
             newPre = new Condition(first.getPreAndPostCondition().getPreCondition().getCondition());
+            newPre = newPre.and(first.getInvariant());
             newPost = new Condition(first.getPreAndPostCondition().getPostCondition().getCondition());
+            newPost = newPost.and(first.getInvariant());
         } catch (ModelException e) {
             throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
         }
 
-        for (Region region : regions) {
+        for (Region region : regionsCopy) {
             newPre = newPre.and(region.getPreAndPostCondition().getPreCondition());
             newPre = newPre.and(region.getInvariant());
             newPost = newPost.and(region.getPreAndPostCondition().getPostCondition());
@@ -264,7 +263,6 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeIo(System system) {
-        //TODO group variables of the same type into one line
         List<Variable> orderedVariables =
             system.getVariables().stream().sorted(Comparator.comparing(Variable::getVisibility)).toList();
         return serializeCollectionWithMapping(orderedVariables, this::serializeVariable);
@@ -287,7 +285,9 @@ public class AutomatonFileSerializer implements FileSerializer {
             default -> throw new IllegalArgumentException("Unknown visibility: " + variable.getVisibility());
         };
         output += " %s: %s".formatted(variable.getName(), variable.getType());
-        //TODO append variable value
+        if (variable.getValue() != null) {
+            output += " := %s".formatted(variable.getValue());
+        }
         return output;
     }
 

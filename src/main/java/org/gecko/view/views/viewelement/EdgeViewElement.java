@@ -90,9 +90,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         Point2D last;
         if (edgeViewModel.getSource().equals(edgeViewModel.getDestination())) {
             first =
-                new Point2D(renderPathSource.get(2).getKey().getValue(), renderPathSource.get(2).getValue().getValue());
+                new Point2D(renderPathSource.get(1).getKey().getValue(), renderPathSource.get(1).getValue().getValue());
             last =
-                new Point2D(renderPathSource.get(3).getKey().getValue(), renderPathSource.get(3).getValue().getValue());
+                new Point2D(renderPathSource.get(2).getKey().getValue(), renderPathSource.get(2).getValue().getValue());
         } else {
             first = edgeViewModel.getEdgePoints().getFirst().getValue();
             last = edgeViewModel.getEdgePoints().getLast().getValue();

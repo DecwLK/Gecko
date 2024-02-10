@@ -3,6 +3,7 @@ package org.gecko.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 
@@ -12,6 +13,7 @@ import org.gecko.exceptions.ModelException;
  */
 
 @Getter
+@Setter(onMethod_ = {@NonNull})
 public class Contract extends Element implements Renamable {
     private String name;
     private Condition preCondition;
@@ -28,25 +30,11 @@ public class Contract extends Element implements Renamable {
         setPostCondition(postCondition);
     }
 
-    public void setName(String name) throws ModelException {
-        if (name == null || name.isEmpty()) {
+    public void setName(@NonNull String name) throws ModelException {
+        if (name.isEmpty()) {
             throw new ModelException("Contract's name is invalid.");
         }
         this.name = name;
-    }
-
-    public void setPreCondition(Condition preCondition) throws ModelException {
-        if (preCondition == null) {
-            throw new ModelException("Precondition for contract is null.");
-        }
-        this.preCondition = preCondition;
-    }
-
-    public void setPostCondition(Condition postCondition) throws ModelException {
-        if (postCondition == null) {
-            throw new ModelException("Postcondition for contract is null.");
-        }
-        this.postCondition = postCondition;
     }
 
     @Override

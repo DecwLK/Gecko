@@ -82,10 +82,8 @@ public class AutomatonFileSerializer implements FileSerializer {
     private String serializeStateContracts(State state, Automaton automaton) {
         //Edges are used so much here because contracts don't have priorities or kinds and only states can be in regions
         List<Region> relevantRegions = automaton.getRegionsWithState(state);
-        List<Edge> edges = automaton.getOutgoingEdges(state)
-            .stream()
-            .filter(edge -> edge.getContract() != null)
-            .toList();
+        List<Edge> edges =
+            automaton.getOutgoingEdges(state).stream().filter(edge -> edge.getContract() != null).toList();
         if (edges.isEmpty()) {
             return "";
         }
@@ -127,12 +125,8 @@ public class AutomatonFileSerializer implements FileSerializer {
                     continue; //Highest prio doesn't need to be altered
                 }
                 Contract contractWithPrio = newContracts.get(edge.getContract());
-                try {
-                    contractWithPrio.setPreCondition(
-                        contractWithPrio.getPreCondition().and(allLowerPrioPreConditions.get(prioIndex - 1).not()));
-                } catch (ModelException e) {
-                    throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
-                }
+                contractWithPrio.setPreCondition(
+                    contractWithPrio.getPreCondition().and(allLowerPrioPreConditions.get(prioIndex - 1).not()));
                 newContracts.put(edge.getContract(), contractWithPrio);
             }
             prioIndex++;
@@ -174,13 +168,8 @@ public class AutomatonFileSerializer implements FileSerializer {
             return;
         }
         List<Condition> newConditions = andConditions(relevantRegions);
-
-        try {
-            contract.setPreCondition(contract.getPreCondition().and(newConditions.getFirst()));
-            contract.setPostCondition(contract.getPostCondition().and(newConditions.get(1)));
-        } catch (ModelException e) {
-            throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
-        }
+        contract.setPreCondition(contract.getPreCondition().and(newConditions.getFirst()));
+        contract.setPostCondition(contract.getPostCondition().and(newConditions.get(1)));
     }
 
     private List<Condition> andConditions(List<Region> regions) {

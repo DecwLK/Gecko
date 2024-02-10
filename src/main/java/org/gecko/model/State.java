@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NonNull;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -13,8 +13,8 @@ import org.gecko.exceptions.ModelException;
  * Contains methods for managing the afferent data.
  */
 @Getter
-@Setter
 public class State extends Element implements Renamable {
+
     private String name;
     private final Set<Contract> contracts;
 
@@ -25,34 +25,28 @@ public class State extends Element implements Renamable {
         this.contracts = new HashSet<>();
     }
 
-    public void setName(String name) throws ModelException {
-        if (name == null || name.isEmpty()) {
+    public void setName(@NonNull String name) throws ModelException {
+        if (name.isEmpty()) {
             throw new ModelException("State's name is invalid.");
         }
         this.name = name;
     }
 
-    public void addContract(Contract contract) throws ModelException {
-        if (contract == null || contracts.contains(contract)) {
-            throw new ModelException("Cannot add contract to state.");
-        }
+    public void addContract(@NonNull Contract contract) {
         contracts.add(contract);
     }
 
-    public void addContracts(Set<Contract> contracts) throws ModelException {
+    public void addContracts(@NonNull Set<Contract> contracts) {
         for (Contract contract : contracts) {
             addContract(contract);
         }
     }
 
-    public void removeContract(Contract contract) throws ModelException {
-        if (contract == null || !contracts.contains(contract)) {
-            throw new ModelException("Cannot remove contract from state.");
-        }
+    public void removeContract(@NonNull Contract contract) {
         contracts.remove(contract);
     }
 
-    public void removeContracts(Set<Contract> contracts) throws ModelException {
+    public void removeContracts(@NonNull Set<Contract> contracts) {
         for (Contract contract : contracts) {
             removeContract(contract);
         }

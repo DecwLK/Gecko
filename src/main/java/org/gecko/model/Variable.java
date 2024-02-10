@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Set;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 
@@ -12,7 +13,7 @@ import org.gecko.exceptions.ModelException;
  * {@link Visibility}.
  */
 @Getter
-@Setter
+@Setter(onMethod_ = {@NonNull})
 public class Variable extends Element implements Renamable {
     private String name;
     private String type;
@@ -34,25 +35,25 @@ public class Variable extends Element implements Renamable {
         setType(type);
     }
 
-    public void setName(String name) throws ModelException {
-        if (name == null || name.isEmpty()) {
+    public void setName(@NonNull String name) throws ModelException {
+        if (name.isEmpty()) {
             throw new ModelException("Variable's name is invalid.");
         }
         this.name = name;
     }
 
-    public void setVisibility(Visibility visibility) throws ModelException {
-        if (visibility == null) {
-            throw new ModelException("Visibility is null.");
-        }
-        this.visibility = visibility;
-    }
-
-    public void setType(String type) throws ModelException {
-        if (type == null || type.isEmpty()) {
+    public void setType(@NonNull String type) throws ModelException {
+        if (type.isEmpty()) {
             throw new ModelException("Variable's type is invalid.");
         }
         this.type = type;
+    }
+
+    public void setValue(@NonNull String value) throws ModelException {
+        if (value.isEmpty()) {
+            throw new ModelException("Variable's value is invalid.");
+        }
+        this.value = value;
     }
 
     public static Set<String> getBuiltinTypes() {

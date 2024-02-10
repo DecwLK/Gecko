@@ -182,7 +182,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             return "Found multiple start states in automaton %s".formatted(ctx.ident().getText());
         } else if (startStateCandidates.size() == 1) {
             try {
-                currentSystem.getAutomaton().setStartState(startStateCandidates.get(0));
+                currentSystem.getAutomaton().setStartState(startStateCandidates.getFirst());
             } catch (ModelException e) {
                 return e.getMessage();
             }
@@ -270,11 +270,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                     var.setName(ident.Ident().getText());
                     var.setType(variable.t.getText());
                     var.setVisibility(visibility);
+                    if (variable.init != null) {
+                        var.setValue(variable.init.getText());
+                    }
                 } catch (ModelException e) {
                     return e.getMessage();
-                }
-                if (variable.init != null) {
-                    var.setValue(variable.init.getText());
                 }
             }
         }

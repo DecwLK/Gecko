@@ -10,12 +10,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.gecko.exceptions.GeckoException;
 import org.gecko.exceptions.ModelException;
 import org.gecko.model.Automaton;
 import org.gecko.model.Condition;
@@ -69,7 +67,8 @@ public class AutomatonFileSerializer implements FileSerializer {
         StringJoiner joiner = new StringJoiner(java.lang.System.lineSeparator());
         joiner.add("contract %s {".formatted(system.getName()));
         if (!system.getVariables().isEmpty()) {
-            serializeIo(system);
+            joiner.add(serializeIo(system));
+            joiner.add("");
         }
         joiner.add(serializeCollectionWithMapping(automaton.getStates(), this::serializeStateContracts, automaton));
         joiner.add("");
@@ -85,7 +84,6 @@ public class AutomatonFileSerializer implements FileSerializer {
         List<Region> relevantRegions = automaton.getRegionsWithState(state);
         List<Edge> edges = automaton.getOutgoingEdges(state)
             .stream()
-            .filter(Objects::nonNull)
             .filter(edge -> edge.getContract() != null)
             .toList();
         if (edges.isEmpty()) {
@@ -207,7 +205,7 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeContract(Contract contract) {
-        return INDENT + "contract %s = %s ==> %s".formatted(contract.getName(), contract.getPreCondition(),
+        return INDENT + "contract %s := %s ==> %s".formatted(contract.getName(), contract.getPreCondition(),
             contract.getPostCondition());
     }
 
@@ -227,16 +225,16 @@ public class AutomatonFileSerializer implements FileSerializer {
             joiner.add(serializeChildren(system));
             joiner.add("");
         }
-        if (!system.getConnections().isEmpty()) {
-            joiner.add(serializeConnections(system));
-            joiner.add("");
-        }
         if (system.getAutomaton() != null && !system.getAutomaton().isEmpty()) {
             joiner.add(INDENT + "contract %s".formatted(system.getName()));
             joiner.add("");
         }
+        if (!system.getConnections().isEmpty()) {
+            joiner.add(serializeConnections(system));
+            joiner.add("");
+        }
         if (system.getCode() != null) {
-            joiner.add(system.getCode());
+            joiner.add(serializeCode(system.getCode()));
         }
         joiner.add("}");
         joiner.add("");
@@ -292,7 +290,7 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeCode(String code) {
-        return "{=" + code + "=}";
+        return INDENT + "{=" + code + "=}";
     }
 
     private <T> String serializeCollectionWithMapping(Collection<T> collection, Function<T, String> mapping) {

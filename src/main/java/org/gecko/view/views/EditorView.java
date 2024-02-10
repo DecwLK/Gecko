@@ -404,7 +404,6 @@ public class EditorView {
         });
         if (elementInBorder) {
             changeWorldSize(WORLD_SIZE_DELTA);
-            updateWorldSize();
             return;
         }
 
@@ -415,7 +414,6 @@ public class EditorView {
         });
         if (!wouldElementBeInBorder && worldWouldHaveMinSize()) {
             changeWorldSize(-WORLD_SIZE_DELTA);
-            updateWorldSize();
         }
     }
 

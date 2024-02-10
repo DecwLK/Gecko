@@ -32,6 +32,7 @@ public class Automaton {
         if (state != null && !states.contains(state)) {
             throw new ModelException("State cannot be set as start-state.");
         }
+        startState = state;
     }
 
     public State getStateWithContract(Contract contract) {

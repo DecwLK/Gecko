@@ -106,6 +106,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         List<HBox> portContainers = setupPortContainers();
         container.getChildren().addAll(portContainers.getFirst(), getCenteredNameLabel(), portContainers.getLast());
         getChildren().addAll(getBackgroundRectangle(), container);
+        portsProperty.forEach(this::addPort);
         portsProperty.addListener(this::onPortsChanged);
         portsProperty.forEach(this::addPort);
     }
@@ -113,10 +114,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     private void onPortsChanged(ListChangeListener.Change<? extends PortViewModel> change) {
         while (change.next()) {
             if (change.wasAdded()) {
-                change.getAddedSubList().forEach(portViewModel -> {
-                    addPort(portViewModel);
-                    portViewModel.getVisibilityProperty().addListener(this::onVisibilityChanged);
-                });
+                change.getAddedSubList().forEach(this::addPort);
             } else if (change.wasRemoved()) {
                 change.getRemoved().forEach(this::removePort);
             }
@@ -137,6 +135,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     }
 
     private void addPort(PortViewModel portViewModel) {
+        portViewModel.getVisibilityProperty().addListener(this::onVisibilityChanged);
         PortViewElement portViewElement = new PortViewElement(portViewModel);
         portViewElements.add(portViewElement);
         if (portViewModel.getVisibility() == Visibility.INPUT) {

@@ -47,6 +47,7 @@ import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 public class EditorView {
     private static final double RELATIVE_BORDER_SIZE = 0.25;
     private static final double MIN_WORLD_SIZE = 1000;
+    private static final double MAX_WORLD_SIZE = 15000;
     private static final double WORLD_SIZE_DELTA = 1000;
     private static final double AUTOMATON_INSPECTOR_HEIGHT = 680;
 
@@ -115,8 +116,7 @@ public class EditorView {
         viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
             double width = newValue.getWidth();
             double height = newValue.getHeight();
-            placeholder.setMinSize(Math.max(width, MIN_WORLD_SIZE) * 1 / viewModel.getZoomScale(),
-                Math.max(height, MIN_WORLD_SIZE) * 1 / viewModel.getZoomScale());
+            placeholder.setMinSize(Math.max(width, MIN_WORLD_SIZE), Math.max(height, MIN_WORLD_SIZE));
             viewElementsScrollPane.layout();
         });
 
@@ -402,9 +402,8 @@ public class EditorView {
             Point2D size = viewElement.getTarget().getSize();
             return isElementInGroupBorder(position, size);
         });
-        if (elementInBorder) {
+        if (elementInBorder && !worldWouldHaveMaxSize()) {
             changeWorldSize(WORLD_SIZE_DELTA);
-            updateWorldSize();
             return;
         }
 
@@ -413,18 +412,22 @@ public class EditorView {
             Point2D size = viewElement.getTarget().getSize();
             return wouldElementBeInBorder(position, size);
         });
-        if (!wouldElementBeInBorder && worldWouldHaveMinSize()) {
+        if (!wouldElementBeInBorder && !worldWouldHaveMinSize()) {
             changeWorldSize(-WORLD_SIZE_DELTA);
-            updateWorldSize();
         }
     }
 
     private boolean worldWouldHaveMinSize() {
         Bounds viewportBounds = viewElementsScrollPane.getViewportBounds();
-        return viewElementsGroup.getLayoutBounds().getWidth() - WORLD_SIZE_DELTA >= Math.max(MIN_WORLD_SIZE,
+        return viewElementsGroup.getLayoutBounds().getWidth() - WORLD_SIZE_DELTA <= Math.max(MIN_WORLD_SIZE,
             viewportBounds.getWidth())
-            && viewElementsGroup.getLayoutBounds().getHeight() - WORLD_SIZE_DELTA >= Math.max(MIN_WORLD_SIZE,
+            || viewElementsGroup.getLayoutBounds().getHeight() - WORLD_SIZE_DELTA <= Math.max(MIN_WORLD_SIZE,
             viewportBounds.getHeight());
+    }
+
+    private boolean worldWouldHaveMaxSize() {
+        return viewElementsGroup.getLayoutBounds().getWidth() + WORLD_SIZE_DELTA >= MAX_WORLD_SIZE
+            || viewElementsGroup.getLayoutBounds().getHeight() + WORLD_SIZE_DELTA >= MAX_WORLD_SIZE;
     }
 
     private void changeWorldSize(double delta) {

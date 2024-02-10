@@ -24,7 +24,9 @@ public abstract class AreaTool extends Tool {
     @Override
     public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
         super.visitView(vbox, view, worldGroup, containerGroup);
+        view.setPannable(false);
         view.setCursor(Cursor.CROSSHAIR);
+        worldGroup.setMouseTransparent(true);
         startPosition = null;
 
         vbox.setOnMousePressed(event -> {

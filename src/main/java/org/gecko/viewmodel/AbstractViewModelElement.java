@@ -1,5 +1,6 @@
 package org.gecko.viewmodel;
 
+import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
 import org.gecko.exceptions.ModelException;
@@ -20,4 +21,21 @@ public abstract class AbstractViewModelElement<T extends Element> {
     }
 
     public abstract void updateTarget() throws ModelException;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AbstractViewModelElement<?> element = (AbstractViewModelElement<?>) o;
+        return id == element.id;
+    }
 }

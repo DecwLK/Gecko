@@ -1,10 +1,10 @@
 package org.gecko.view.views.viewelement;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -42,15 +42,16 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         this.contractProperty = new SimpleObjectProperty<>();
         this.priorityProperty = new SimpleIntegerProperty();
         this.kindProperty = new SimpleObjectProperty<>();
+        this.contractProperty.bind(edgeViewModel.getContractProperty());
+        this.priorityProperty.bind(edgeViewModel.getPriorityProperty());
+        this.kindProperty.bind(edgeViewModel.getKindProperty());
         this.edgeViewModel = edgeViewModel;
         this.pane = new Group();
         pane.getChildren().add(this);
         pane.setManaged(false);
 
         label = new Label();
-        label.textProperty()
-            .bind(Bindings.createStringBinding(edgeViewModel::getRepresentation, edgeViewModel.getContractProperty(),
-                edgeViewModel.getKindProperty(), edgeViewModel.getPriorityProperty()));
+        label.setText(edgeViewModel.getRepresentation());
 
         edgeViewModel.getEdgePoints().getFirst().addListener((observable, oldValue, newValue) -> {
             calculateLabelPosition();
@@ -62,6 +63,22 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         });
         label.heightProperty().addListener((observable, oldValue, newValue) -> calculateLabelPosition());
         label.widthProperty().addListener((observable, oldValue, newValue) -> calculateLabelPosition());
+        ChangeListener<Object> updateLabel =
+            (observable, oldValue, newValue) -> label.setText(edgeViewModel.getRepresentation());
+
+        ContractViewModel contract = edgeViewModel.getContract();
+        if (contract != null) {
+            contract.getNameProperty().addListener(updateLabel);
+        }
+        contractProperty.addListener((observable, oldValue, newValue) -> {
+            label.setText(edgeViewModel.getRepresentation());
+            if (newValue != null) {
+                newValue.getNameProperty().addListener(updateLabel);
+            }
+        });
+        priorityProperty.addListener(updateLabel);
+        kindProperty.addListener(updateLabel);
+
         pane.getChildren().add(label);
 
         constructVisualization();
@@ -97,38 +114,26 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
             first = edgeViewModel.getEdgePoints().getFirst().getValue();
             last = edgeViewModel.getEdgePoints().getLast().getValue();
         }
-
-        Point2D mid = new Point2D((first.getX() + last.getX()) / 2, (first.getY() + last.getY()) / 2);
-        double angle = Math.atan2((last.getY() - first.getY()), (last.getX() - first.getX()));
-        double mp = 0;
-        boolean h = false;
-        if (Math.abs(Math.abs(angle) - Math.PI / 2) < Math.PI / 4) {
-            h = true;
-            mp = (label.getHeight() / 2) / Math.sin(angle);
-        } else {
-            mp = (label.getWidth() / 2) / Math.cos(angle);
-        }
-
+        Point2D mid = first.midpoint(last);
         Point2D vec = last.subtract(first);
+        double angle = Math.atan2(vec.getY(), vec.getX());
+        boolean isVertical = Math.abs(Math.abs(angle) - Math.PI / 2) < Math.PI / 4;
+        boolean isPart = angle > 0 && angle < Math.PI / 2 || angle < -(1.0 / 2.0) * Math.PI && angle > -Math.PI;
+
         Point2D p;
         Point2D newPos;
-        if (!h) {
-            if (angle > 0 && angle < Math.PI / 2 || angle < -(1.0 / 2.0) * Math.PI && angle > -Math.PI) {
-                p = vec.normalize().multiply(-mp).add(mid);
-                newPos = p.subtract(0, label.getHeight());
-            } else {
-                p = vec.normalize().multiply(mp).add(mid);
-                newPos = p.subtract(label.getWidth(), label.getHeight());
-            }
+        double mp = 0;
+        if (isVertical) {
+            mp = (label.getHeight() / 2) / Math.sin(angle);
+            p = vec.normalize().multiply(Math.abs(mp)).multiply(Math.signum(angle)).add(mid);
         } else {
-            if (angle > 0 && angle < Math.PI / 2 || angle < -(1.0 / 2.0) * Math.PI && angle > -Math.PI) {
-                p = vec.normalize().multiply(Math.abs(mp)).multiply(Math.signum(angle)).add(mid);
-                newPos = p.subtract(0, label.getHeight());
-            } else {
-                p = vec.normalize().multiply(Math.abs(mp)).multiply(Math.signum(angle)).add(mid);
-                newPos = p.subtract(label.getWidth(), label.getHeight());
-            }
+            mp = (label.getWidth() / 2) / Math.cos(angle);
+            Point2D sized = vec.normalize().multiply(mp);
+            sized = isPart ? sized.multiply(-1) : sized;
+            p = sized.add(mid);
         }
+
+        newPos = p.subtract(isPart ? 0 : label.getWidth(), label.getHeight());
 
         label.setLayoutX(newPos.getX());
         label.setLayoutY(newPos.getY());

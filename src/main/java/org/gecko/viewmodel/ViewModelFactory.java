@@ -102,10 +102,10 @@ public class ViewModelFactory {
 
         boolean sourceIsPort = isPort(source);
         boolean destIsPort = isPort(destination);
-        Property<Point2D> sourcePosition = new SimpleObjectProperty<>(sourceIsPort ?
-            calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
-                source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true) :
-            calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
+        Property<Point2D> sourcePosition = new SimpleObjectProperty<>(
+            sourceIsPort ? calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
+                source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true)
+                : calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
 
         // position the line at the tip of the port
         if (sourceIsPort) {
@@ -120,11 +120,11 @@ public class ViewModelFactory {
             });
         }
 
-        Property<Point2D> destinationPosition = new SimpleObjectProperty<>(destIsPort ?
-            calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
-                destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true) :
-            calculateEndPortPosition(destination.getPosition(), destination.getSize(), destination.getVisibility(),
-                false));
+        Property<Point2D> destinationPosition = new SimpleObjectProperty<>(
+            destIsPort ? calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
+                destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true)
+                : calculateEndPortPosition(destination.getPosition(), destination.getSize(),
+                    destination.getVisibility(), false));
 
         if (destIsPort) {
             destination.getSystemPortPositionProperty()

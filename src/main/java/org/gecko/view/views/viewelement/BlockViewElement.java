@@ -15,6 +15,8 @@ public abstract class BlockViewElement extends Pane {
     @Getter
     private final ObservableList<Property<Point2D>> edgePoints;
 
+    protected static final int BACKGROUND_ROUNDING = 15;
+
     protected BlockViewElement(PositionableViewModelElement<? extends Element> positionableViewModelElement) {
         // Initialize edge points for a rectangular shaped block
         this.edgePoints = FXCollections.observableArrayList();

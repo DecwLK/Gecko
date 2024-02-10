@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.AccessLevel;
@@ -86,17 +87,21 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
     }
 
     private void constructVisualization() {
+        StackPane container = new StackPane();
         Rectangle rectangle = new Rectangle();
         rectangle.widthProperty().bind(widthProperty());
         rectangle.heightProperty().bind(heightProperty());
         rectangle.fillProperty().bind(Bindings.createObjectBinding(() -> switch (visibilityProperty.getValue()) {
-            case INPUT -> Color.GREEN;
-            case OUTPUT -> Color.RED;
-            case STATE -> Color.BLUE;
+            case INPUT -> Color.LIGHTGREEN;
+            case OUTPUT -> Color.LIGHTCORAL;
+            case STATE -> Color.LIGHTSKYBLUE;
         }, visibilityProperty));
-        getChildren().add(rectangle);
+        rectangle.setArcWidth(BACKGROUND_ROUNDING);
+        rectangle.setArcHeight(BACKGROUND_ROUNDING);
+        container.getChildren().add(rectangle);
         Label label = new Label();
         label.textProperty().bind(nameProperty);
-        getChildren().add(label);
+        container.getChildren().add(label);
+        getChildren().add(container);
     }
 }

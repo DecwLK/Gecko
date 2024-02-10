@@ -34,7 +34,6 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
 
     private static final String STYLE = "region-view-element";
     private static final String INNER_STYLE = "region-inner-view-element";
-    private static final int BACKGROUND_ROUNDING = 15;
 
     public RegionViewElement(RegionViewModel regionViewModel) {
         super(regionViewModel);

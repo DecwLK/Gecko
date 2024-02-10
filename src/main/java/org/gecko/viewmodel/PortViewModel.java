@@ -29,6 +29,7 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
         super(id, target);
         this.visibilityProperty = new SimpleObjectProperty<>(target.getVisibility());
         this.typeProperty = new SimpleStringProperty(target.getType());
+        this.sizeProperty.setValue(new Point2D(100, 50));
         this.systemPortPositionProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
         this.systemPortSizeProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
     }

@@ -47,9 +47,8 @@ public class ViewFactory {
     public ViewElement<?> createViewElementFrom(StateViewModel stateViewModel) {
         StateViewElement newStateViewElement = new StateViewElement(stateViewModel);
 
-        ViewContextMenuBuilder contextMenuBuilder =
-            new StateViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
-                stateViewModel);
+        ViewContextMenuBuilder contextMenuBuilder
+            = new StateViewElementContextMenuBuilder(actionManager, stateViewModel);
         setContextMenu(newStateViewElement, contextMenuBuilder);
         return new SelectableViewElementDecorator(newStateViewElement);
     }
@@ -58,8 +57,7 @@ public class ViewFactory {
         RegionViewElement newRegionViewElement = new RegionViewElement(regionViewModel);
 
         ViewContextMenuBuilder contextMenuBuilder =
-            new RegionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
-                regionViewModel);
+            new RegionViewElementContextMenuBuilder(actionManager, regionViewModel);
         setContextMenu(newRegionViewElement, contextMenuBuilder);
         return new SelectableViewElementDecorator(new ElementScalerViewElementDecorator(newRegionViewElement));
     }
@@ -68,8 +66,7 @@ public class ViewFactory {
         VariableBlockViewElement newVariableBlockViewElement = new VariableBlockViewElement(portViewModel);
 
         ViewContextMenuBuilder contextMenuBuilder =
-            new VariableBlockViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
-                portViewModel);
+            new VariableBlockViewElementContextMenuBuilder(actionManager, portViewModel);
         setContextMenu(newVariableBlockViewElement, contextMenuBuilder);
 
         return new SelectableViewElementDecorator(newVariableBlockViewElement);
@@ -78,8 +75,7 @@ public class ViewFactory {
     public ViewElement<?> createViewElementFrom(EdgeViewModel edgeViewModel) {
         EdgeViewElement newEdgeViewElement = new EdgeViewElement(edgeViewModel);
 
-        ViewContextMenuBuilder contextMenuBuilder = new EdgeViewElementContextMenuBuilder(actionManager,
-            geckoView.getCurrentView().getViewModel(), edgeViewModel);
+        ViewContextMenuBuilder contextMenuBuilder = new EdgeViewElementContextMenuBuilder(actionManager, edgeViewModel);
         setContextMenu(newEdgeViewElement, contextMenuBuilder);
 
         return new ConnectionElementScalerViewElementDecorator(newEdgeViewElement);
@@ -90,8 +86,7 @@ public class ViewFactory {
             new SystemConnectionViewElement(systemConnectionViewModel);
 
         ViewContextMenuBuilder contextMenuBuilder =
-            new SystemConnectionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
-                systemConnectionViewModel);
+            new SystemConnectionViewElementContextMenuBuilder(actionManager, systemConnectionViewModel);
         setContextMenu(newSystemConnectionViewElement, contextMenuBuilder);
 
         return new ConnectionElementScalerViewElementDecorator(newSystemConnectionViewElement);
@@ -101,8 +96,7 @@ public class ViewFactory {
         SystemViewElement newSystemViewElement = new SystemViewElement(systemViewModel);
 
         ViewContextMenuBuilder contextMenuBuilder =
-            new SystemViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
-                systemViewModel);
+            new SystemViewElementContextMenuBuilder(actionManager, systemViewModel);
         setContextMenu(newSystemViewElement, contextMenuBuilder);
 
         return new SelectableViewElementDecorator(newSystemViewElement);
@@ -112,6 +106,11 @@ public class ViewFactory {
         newViewElement.setOnContextMenuRequested(event -> {
             geckoView.getCurrentView().switchToCursorTool();
             geckoView.getCurrentView().changeContextMenu(contextMenuBuilder.build());
+            contextMenuBuilder.getContextMenu().getItems()
+                .stream()
+                .filter(menuItem -> menuItem.getText().equals("Select All"))
+                .findAny()
+                .ifPresent(selectMenuItem -> selectMenuItem.setVisible(false));
             contextMenuBuilder.getContextMenu().show(newViewElement, event.getScreenX(), event.getScreenY());
             event.consume();
         });

@@ -12,8 +12,8 @@ public class VariableBlockViewElementContextMenuBuilder extends ViewContextMenuB
     private final PortViewModel portViewModel;
 
     public VariableBlockViewElementContextMenuBuilder(
-        ActionManager actionManager, EditorViewModel editorViewModel, PortViewModel portViewModel) {
-        super(actionManager, editorViewModel);
+        ActionManager actionManager, PortViewModel portViewModel) {
+        super(actionManager);
         this.portViewModel = portViewModel;
     }
 

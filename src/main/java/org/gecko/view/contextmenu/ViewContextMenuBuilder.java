@@ -4,15 +4,22 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import lombok.Getter;
+import lombok.Setter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.EditorViewModel;
 
 public class ViewContextMenuBuilder {
     protected final ActionManager actionManager;
-    protected final EditorViewModel editorViewModel;
+    @Setter
+    protected EditorViewModel editorViewModel;
     @Getter
     protected ContextMenu contextMenu;
+
+    public ViewContextMenuBuilder(ActionManager actionManager) {
+        this.actionManager = actionManager;
+        this.editorViewModel = null;
+    }
 
     public ViewContextMenuBuilder(ActionManager actionManager, EditorViewModel editorViewModel) {
         this.actionManager = actionManager;

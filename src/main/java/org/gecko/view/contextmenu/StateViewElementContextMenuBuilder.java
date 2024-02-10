@@ -12,8 +12,8 @@ public class StateViewElementContextMenuBuilder extends ViewContextMenuBuilder {
     private final StateViewModel stateViewModel;
 
     public StateViewElementContextMenuBuilder(
-        ActionManager actionManager, EditorViewModel editorViewModel, StateViewModel stateViewModel) {
-        super(actionManager, editorViewModel);
+        ActionManager actionManager, StateViewModel stateViewModel) {
+        super(actionManager);
         this.stateViewModel = stateViewModel;
     }
 

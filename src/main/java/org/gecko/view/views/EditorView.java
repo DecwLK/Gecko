@@ -188,7 +188,7 @@ public class EditorView {
         });
 
         ViewContextMenuBuilder contextMenuBuilder
-            = new ViewContextMenuBuilder(viewModel.getActionManager(), this.getViewModel());
+            = new ViewContextMenuBuilder(viewModel.getActionManager(), viewModel);
         this.contextMenu = contextMenuBuilder.build();
         currentViewPane.setOnContextMenuRequested(event -> {
             changeContextMenu(contextMenuBuilder.getContextMenu());
@@ -211,7 +211,7 @@ public class EditorView {
                 .filter(menuItem -> menuItem.getText().equals("Select All"))
                 .findAny()
                 .ifPresent(selectMenuItem -> selectMenuItem.setDisable(
-                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
+                    viewModel.getContainedPositionableViewModelElementsProperty().isEmpty()));
 
             this.contextMenu.getItems()
                 .stream()

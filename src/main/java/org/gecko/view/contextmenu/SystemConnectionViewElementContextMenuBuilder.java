@@ -12,8 +12,8 @@ public class SystemConnectionViewElementContextMenuBuilder extends ViewContextMe
     private final SystemConnectionViewModel systemConnectionViewModel;
 
     public SystemConnectionViewElementContextMenuBuilder(
-        ActionManager actionManager, EditorViewModel editorViewModel, SystemConnectionViewModel systemConnectionViewModel) {
-        super(actionManager, editorViewModel);
+        ActionManager actionManager, SystemConnectionViewModel systemConnectionViewModel) {
+        super(actionManager);
 
         this.systemConnectionViewModel = systemConnectionViewModel;
     }

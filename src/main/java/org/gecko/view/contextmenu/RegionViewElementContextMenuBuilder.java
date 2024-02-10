@@ -12,8 +12,8 @@ public class RegionViewElementContextMenuBuilder extends ViewContextMenuBuilder 
     private final RegionViewModel regionViewModel;
 
     public RegionViewElementContextMenuBuilder(
-        ActionManager actionManager, EditorViewModel editorViewModel, RegionViewModel regionViewModel) {
-        super(actionManager, editorViewModel);
+        ActionManager actionManager, RegionViewModel regionViewModel) {
+        super(actionManager);
 
         this.regionViewModel = regionViewModel;
     }

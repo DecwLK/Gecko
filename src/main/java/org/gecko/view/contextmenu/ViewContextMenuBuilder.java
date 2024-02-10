@@ -4,16 +4,26 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import lombok.Getter;
+import lombok.Setter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.shortcuts.Shortcuts;
+import org.gecko.viewmodel.EditorViewModel;
 
 public class ViewContextMenuBuilder {
     protected final ActionManager actionManager;
+    @Setter
+    protected EditorViewModel editorViewModel;
     @Getter
     protected ContextMenu contextMenu;
 
     public ViewContextMenuBuilder(ActionManager actionManager) {
         this.actionManager = actionManager;
+        this.editorViewModel = null;
+    }
+
+    public ViewContextMenuBuilder(ActionManager actionManager, EditorViewModel editorViewModel) {
+        this.actionManager = actionManager;
+        this.editorViewModel = editorViewModel;
     }
 
     public ContextMenu build() {
@@ -35,11 +45,17 @@ public class ViewContextMenuBuilder {
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
         separatorMenuItem.setText("");
 
+        MenuItem selectMenuItem = new MenuItem("Select All");
+        selectMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
+            .createSelectAction(editorViewModel.getPositionableViewModelElements(), true)));
+        selectMenuItem.setAccelerator(Shortcuts.SELECT_ALL.get());
+
         MenuItem deselectMenuItem = new MenuItem("Deselect All");
         deselectMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory().createDeselectAction()));
         deselectMenuItem.setAccelerator(Shortcuts.DESELECT_ALL.get());
 
-        contextMenu.getItems().addAll(cutMenuItem, copyMenuItem, pasteMenuItem, separatorMenuItem, deselectMenuItem);
+        contextMenu.getItems().addAll(cutMenuItem, copyMenuItem, pasteMenuItem, separatorMenuItem, selectMenuItem,
+            deselectMenuItem);
 
         this.contextMenu = contextMenu;
         return contextMenu;

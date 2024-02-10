@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.paint.Color;
 import org.gecko.model.Automaton;
-import org.gecko.model.Contract;
 import org.gecko.model.Edge;
-import org.gecko.model.ElementVisitor;
 import org.gecko.model.Region;
 import org.gecko.model.State;
 import org.gecko.model.System;
@@ -17,28 +15,26 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.RegionViewModel;
 
 /**
- * Visitor performing operations for every {@link org.gecko.model.Element Model-Element} from the subtree of a
+ * Performs operations for every {@link org.gecko.model.Element Model-Element} from the subtree of a
  * {@link System}, creating for each of them a {@link ViewModelPropertiesContainer}, depending on the attributes of the
  * corresponding {@link PositionableViewModelElement}.
  */
-public class ViewModelElementSaveVisitor implements ElementVisitor {
+public class ViewModelElementSaver {
     private final GeckoViewModel geckoViewModel;
     private final List<ViewModelPropertiesContainer> viewModelProperties;
 
-    protected ViewModelElementSaveVisitor(GeckoViewModel geckoViewModel) {
+    protected ViewModelElementSaver(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
         this.viewModelProperties = new ArrayList<>();
     }
 
-    @Override
-    public void visit(State state) {
+    public void saveStateViewModelProperties(State state) {
         ViewModelPropertiesContainer stateViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(state));
         this.viewModelProperties.add(stateViewModelContainer);
     }
 
-    @Override
-    public void visit(Region region) {
+    public void saveRegionViewModelProperties(Region region) {
         ViewModelPropertiesContainer regionViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(region));
 
@@ -50,33 +46,25 @@ public class ViewModelElementSaveVisitor implements ElementVisitor {
         this.viewModelProperties.add(regionViewModelContainer);
     }
 
-    @Override
-    public void visit(Contract contract) {
-    }
-
-    @Override
-    public void visit(System system) {
+    public void saveSystemViewModelProperties(System system) {
         ViewModelPropertiesContainer systemViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(system));
         this.viewModelProperties.add(systemViewModelContainer);
     }
 
-    @Override
-    public void visit(SystemConnection systemConnection) {
+    public void saveSystemConnectionViewModelProperties(SystemConnection systemConnection) {
         ViewModelPropertiesContainer systemConnectionViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(systemConnection));
         this.viewModelProperties.add(systemConnectionViewModelContainer);
     }
 
-    @Override
-    public void visit(Edge edge) {
+    public void saveEdgeModelProperties(Edge edge) {
         ViewModelPropertiesContainer edgeViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(edge));
         this.viewModelProperties.add(edgeViewModelContainer);
     }
 
-    @Override
-    public void visit(Variable variable) {
+    public void savePortViewModelProperties(Variable variable) {
         ViewModelPropertiesContainer variableViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(variable));
         this.viewModelProperties.add(variableViewModelContainer);
@@ -94,36 +82,36 @@ public class ViewModelElementSaveVisitor implements ElementVisitor {
     }
 
     protected List<ViewModelPropertiesContainer> getViewModelProperties(System root) {
-        this.visitSystemAttributes(root);
+        this.gatherSystemAttributes(root);
         return this.viewModelProperties;
     }
 
-    private void visitSystemAttributes(System system) {
+    private void gatherSystemAttributes(System system) {
         for (Variable variable : system.getVariables()) {
-            this.visit(variable);
+            this.savePortViewModelProperties(variable);
         }
 
         for (SystemConnection systemConnection : system.getConnections()) {
-            this.visit(systemConnection);
+            this.saveSystemConnectionViewModelProperties(systemConnection);
         }
 
         Automaton automaton = system.getAutomaton();
 
         for (Region region : automaton.getRegions()) {
-            this.visit(region);
+            this.saveRegionViewModelProperties(region);
         }
 
         for (State state : automaton.getStates()) {
-            this.visit(state);
+            this.saveStateViewModelProperties(state);
         }
 
         for (Edge edge : automaton.getEdges()) {
-            this.visit(edge);
+            this.saveEdgeModelProperties(edge);
         }
 
         for (System child : system.getChildren()) {
-            this.visit(child);
-            this.visitSystemAttributes(child);
+            this.saveSystemViewModelProperties(child);
+            this.gatherSystemAttributes(child);
         }
     }
 }

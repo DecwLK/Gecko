@@ -30,7 +30,7 @@ public class ProjectFileSerializer implements FileSerializer {
         String rootInJson = this.getRootInJson(root);
         geckoJsonWrapper.setModel(rootInJson);
 
-        ViewModelElementSaveVisitor visitor = new ViewModelElementSaveVisitor(viewModel);
+        ViewModelElementSaver visitor = new ViewModelElementSaver(viewModel);
         List<ViewModelPropertiesContainer> viewModelProperties = visitor.getViewModelProperties(root);
 
         String viewModelPropertiesInJson = this.getViewModelPropertiesInJson(viewModelProperties);

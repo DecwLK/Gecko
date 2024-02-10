@@ -8,14 +8,11 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.model.Automaton;
-import org.gecko.model.Contract;
 import org.gecko.model.Edge;
-import org.gecko.model.ElementVisitor;
 import org.gecko.model.Region;
 import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
-import org.gecko.model.Variable;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -27,18 +24,18 @@ import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
 
 /**
- * Visitor performing operations for every {@link org.gecko.model.Element Model-Element} from the subtree of a
+ * Performs operations for every {@link org.gecko.model.Element Model-Element} from the subtree of a
  * {@link System}, creating for each of them a {@link org.gecko.viewmodel.AbstractViewModelElement ViewModel-Element},
  * depending on the attributes of the corresponding {@link ViewModelPropertiesContainer}.
  */
-public class ViewModelElementCreatorVisitor implements ElementVisitor {
+public class ViewModelElementCreator {
     @Getter
     private final List<PositionableViewModelElement<?>> generatedViewModelElements;
     private final GeckoViewModel viewModel;
     private final ViewModelFactory viewModelFactory;
     private final HashMap<Integer, ViewModelPropertiesContainer> viewModelProperties;
 
-    ViewModelElementCreatorVisitor(
+    ViewModelElementCreator(
         GeckoViewModel viewModel, List<ViewModelPropertiesContainer> viewModelProperties) {
         this.viewModel = viewModel;
         this.viewModelFactory = viewModel.getViewModelFactory();
@@ -57,33 +54,32 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         }
     }
 
-    protected void visitModel(System system) {
+    protected void traverseModel(System system) {
         for (SystemConnection systemConnection : system.getConnections()) {
-            visit(systemConnection);
+            createSystemConnectionViewModel(systemConnection);
         }
 
         Automaton automaton = system.getAutomaton();
 
         for (State state : automaton.getStates()) {
-            visit(state);
+            createStateViewModel(state);
         }
 
         for (Region region : automaton.getRegions()) {
-            visit(region);
+            createRegionViewModel(region);
         }
 
         for (Edge edge : automaton.getEdges()) {
-            visit(edge);
+            createEdgeViewModel(edge);
         }
 
         for (System child : system.getChildren()) {
-            visit(child);
-            visitModel(child);
+            createSystemViewModel(child);
+            traverseModel(child);
         }
     }
 
-    @Override
-    public void visit(State state) {
+    public void createStateViewModel(State state) {
         StateViewModel stateViewModel = viewModelFactory.createStateViewModelFrom(state);
         ViewModelPropertiesContainer container = viewModelProperties.get(state.getId());
         if (container == null) {
@@ -93,8 +89,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         }
     }
 
-    @Override
-    public void visit(SystemConnection systemConnection) {
+    public void createSystemConnectionViewModel(SystemConnection systemConnection) {
         SystemConnectionViewModel systemConnectionViewModel = null;
         try {
             systemConnectionViewModel = viewModelFactory.createSystemConnectionViewModelFrom(systemConnection);
@@ -110,7 +105,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
             }
             generatedViewModelElements.add(source);
             generatedViewModelElements.add(destination);
-            visit(systemConnection);
+            createSystemConnectionViewModel(systemConnection);
         }
 
         if (systemConnectionViewModel != null) {
@@ -123,8 +118,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         }
     }
 
-    @Override
-    public void visit(System system) {
+    public void createSystemViewModel(System system) {
         SystemViewModel systemViewModel = viewModelFactory.createSystemViewModelFrom(system);
         ViewModelPropertiesContainer container = viewModelProperties.get(system.getId());
         if (container == null) {
@@ -134,8 +128,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         }
     }
 
-    @Override
-    public void visit(Region region) {
+    public void createRegionViewModel(Region region) {
         RegionViewModel regionViewModel = null;
         try {
             regionViewModel = viewModelFactory.createRegionViewModelFrom(region);
@@ -144,7 +137,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
                 StateViewModel stateViewModel = viewModelFactory.createStateViewModelFrom(state);
                 generatedViewModelElements.add(stateViewModel);
             }
-            visit(region);
+            createRegionViewModel(region);
         }
 
         if (regionViewModel != null) {
@@ -158,8 +151,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
         }
     }
 
-    @Override
-    public void visit(Edge edge) {
+    public void createEdgeViewModel(Edge edge) {
         EdgeViewModel edgeViewModel = null;
         try {
             edgeViewModel = viewModelFactory.createEdgeViewModelFrom(edge);
@@ -168,7 +160,7 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
             StateViewModel destination = viewModelFactory.createStateViewModelFrom(edge.getDestination());
             generatedViewModelElements.add(source);
             generatedViewModelElements.add(destination);
-            visit(edge);
+            createEdgeViewModel(edge);
         }
 
         if (edgeViewModel != null) {
@@ -179,13 +171,5 @@ public class ViewModelElementCreatorVisitor implements ElementVisitor {
                 setPositionAndSize(edgeViewModel, container);
             }
         }
-    }
-
-    @Override
-    public void visit(Variable variable) {
-    }
-
-    @Override
-    public void visit(Contract contract) {
     }
 }

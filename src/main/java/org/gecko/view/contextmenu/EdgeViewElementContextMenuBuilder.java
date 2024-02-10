@@ -7,6 +7,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Kind;
 import org.gecko.viewmodel.EdgeViewModel;
+import org.gecko.viewmodel.EditorViewModel;
 
 public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 

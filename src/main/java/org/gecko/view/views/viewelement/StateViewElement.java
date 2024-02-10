@@ -29,6 +29,8 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
     private static final int SPACING = 5;
     private static final int MAX_CONTRACT_CNT = 4;
 
+    private static final String START_STATE_STYLE = "state-view-element-start";
+    private static final String NON_START_STATE_STYLE = "state-view-element-non-start";
     private static final String STYLE = "state-view-element";
     private static final String INNER_STYLE = "state-inner-view-element";
     private static final String INNER_INNER_STYLE = "state-inner-inner-view-element";
@@ -181,9 +183,11 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
 
     private void colorStateName(Pane stateName) {
         if (isStartStateProperty.getValue()) {
-            stateName.setStyle("-fx-background-color: green;");
+            stateName.getStyleClass().clear();
+            stateName.getStyleClass().add(START_STATE_STYLE);
         } else {
-            stateName.setStyle("-fx-background-color: lightgray;");
+            stateName.getStyleClass().clear();
+            stateName.getStyleClass().add(NON_START_STATE_STYLE);
         }
     }
 }

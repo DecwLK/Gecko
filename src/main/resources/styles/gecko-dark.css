@@ -5,6 +5,7 @@
     -fx-fg2: #878787;
     -fx-text: #e6e6e6;
     -fx-highlight: #8b0000;
+    -fx-green: #3a5311;
 }
 
 .root {
@@ -484,4 +485,28 @@
 
 .inspector-delete-button {
     -fx-background-color: -fx-highlight;
+}
+
+.state-view-element-start {
+    -fx-background-color: -fx-green;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
+}
+
+.state-view-element-non-start {
+    -fx-background-color: -fx-fg1;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-text;
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px;
+    -fx-font: 12px "System";
 }

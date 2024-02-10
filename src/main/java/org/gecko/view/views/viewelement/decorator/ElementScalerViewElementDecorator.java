@@ -31,6 +31,7 @@ public class ElementScalerViewElementDecorator extends ViewElementDecorator {
             scalers.add(scalerBlock);
             decoratedNode.getChildren().add(scalerBlock);
         }
+        setSelected(false);
     }
 
     @Override

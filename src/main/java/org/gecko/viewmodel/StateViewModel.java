@@ -93,10 +93,11 @@ public class StateViewModel extends BlockViewModelElement<State> {
         return (edgeCount <= 1) ? -1 : edgeIndex / edgeCount;
     }
 
-    public int getLoopCount() {
-        return (int) incomingEdges.stream()
-            .filter(edge -> edge.getSource() == this && edge.getDestination() == this)
-            .count();
+    public int getLoopOffset(EdgeViewModel edgeViewModel) {
+        List<EdgeViewModel> loops =
+            incomingEdges.stream().filter(edge -> edge.getSource() == this && edge.getDestination() == this).toList();
+
+        return loops.indexOf(edgeViewModel) + 1;
     }
 
     @Override

@@ -184,10 +184,7 @@ public class ViewModelFactory {
 
         // Check for states in the region
         for (State state : parentSystem.getTarget().getAutomaton().getStates()) {
-            StateViewModel stateViewModel = (StateViewModel) geckoViewModel.getViewModelElement(state);
-            if (RegionViewModel.checkStateInRegion(result, stateViewModel)) {
-                result.addState(stateViewModel);
-            }
+            result.checkStateInRegion((StateViewModel) geckoViewModel.getViewModelElement(state));
         }
 
         geckoViewModel.addViewModelElement(result);

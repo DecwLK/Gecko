@@ -16,6 +16,7 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         ViewElement<?> decoratorTarget) {
         super(decoratorTarget);
 
+        // create new scaler block if edge points list change
         getEdgePoints().addListener(this::updateEdgePoints);
     }
 

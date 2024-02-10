@@ -5,6 +5,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -32,6 +33,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     private final Property<Kind> kindProperty;
     private final Group pane;
     private final Label label;
+
+    private ChangeListener<Point2D> sourcePositionListener;
+    private ChangeListener<Point2D> destinationPositionListener;
 
     public EdgeViewElement(EdgeViewModel edgeViewModel) {
         super(edgeViewModel.getEdgePoints());
@@ -73,17 +77,17 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         edgeViewModel.getDestination().getOutgoingEdges().addListener(updateMaskPathSource);
 
         edgeViewModel.getSourceProperty().addListener((observable, oldValue, newValue) -> {
-            updateMaskPathSourceListeners(oldValue, newValue);
+            oldValue.getPositionProperty().removeListener(sourcePositionListener);
+            sourcePositionListener = updateMaskPathSourceListeners(newValue);
         });
 
         edgeViewModel.getDestinationProperty().addListener((observable, oldValue, newValue) -> {
-            updateMaskPathSourceListeners(oldValue, newValue);
+            oldValue.getPositionProperty().removeListener(destinationPositionListener);
+            destinationPositionListener = updateMaskPathSourceListeners(newValue);
         });
 
-        updateMaskPathSourceListeners(null, edgeViewModel.getSource());
-        updateMaskPathSourceListeners(null, edgeViewModel.getDestination());
-
-        maskPathSource();
+        sourcePositionListener = updateMaskPathSourceListeners(edgeViewModel.getSource());
+        destinationPositionListener = updateMaskPathSourceListeners(edgeViewModel.getDestination());
     }
 
     private void calculateLabelPosition() {
@@ -126,16 +130,13 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
     }
 
-    private void updateMaskPathSourceListeners(StateViewModel oldStateViewModel, StateViewModel newStateViewModel) {
-        // Remove listeners from old state view model
-        if (oldStateViewModel != null) {
-            oldStateViewModel.getPositionProperty()
-                .removeListener((observable, oldValue, newValue) -> maskPathSource());
-            oldStateViewModel.getSizeProperty().removeListener((observable, oldValue, newValue) -> maskPathSource());
-        }
-
-        newStateViewModel.getPositionProperty().addListener((observable, oldValue, newValue) -> maskPathSource());
+    private ChangeListener<Point2D> updateMaskPathSourceListeners(StateViewModel newStateViewModel) {
+        ChangeListener<Point2D> positionListener = (observable, oldValue, newValue) -> {
+            maskPathSource();
+        };
+        newStateViewModel.getPositionProperty().addListener(positionListener);
         maskPathSource();
+        return positionListener;
     }
 
     private void maskPathSource() {
@@ -143,8 +144,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         if (edgeViewModel.getSource() == edgeViewModel.getDestination() && getEdgePoints().size() == 2) {
             setLoop(true);
             setEdgePoint(0, edgeViewModel.getSource().getPosition());
-            setEdgePoint(getEdgePoints().size() - 1,
-                edgeViewModel.getSource().getPosition().add(new Point2D(0, LOOP_RADIUS)));
+            setEdgePoint(getEdgePoints().size() - 1, edgeViewModel.getSource()
+                .getPosition()
+                .add(new Point2D(0, edgeViewModel.getSource().getLoopOffset(edgeViewModel) * LOOP_RADIUS)));
             updatePathVisualization();
             return;
         }

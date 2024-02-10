@@ -17,6 +17,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 import org.gecko.model.Region;
+import org.gecko.model.State;
 
 /**
  * Represents an abstraction of a {@link Region} model element. A {@link RegionViewModel} is described by a
@@ -85,13 +86,17 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         return colorProperty.getValue();
     }
 
-    public static boolean checkStateInRegion(RegionViewModel region, StateViewModel state) {
+    public void checkStateInRegion(StateViewModel state) {
         Bounds regionBound =
-            new BoundingBox(region.getPosition().getX(), region.getPosition().getY(), region.getSize().getX(),
-                region.getSize().getY());
-        return regionBound.contains(state.getPosition()) || regionBound.contains(
+            new BoundingBox(getPosition().getX(), getPosition().getY(), getSize().getX(), getSize().getY());
+        boolean isStateInRegion = regionBound.contains(state.getPosition()) || regionBound.contains(
             state.getPosition().add(new Point2D(0, state.getSize().getY()))) || regionBound.contains(
             state.getPosition().add(new Point2D(state.getSize().getX(), 0))) || regionBound.contains(
             state.getPosition().add(state.getSize()));
+        if (isStateInRegion) {
+            addState(state);
+        } else {
+            removeState(state);
+        }
     }
 }

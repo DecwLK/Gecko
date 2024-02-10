@@ -16,15 +16,20 @@ import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
-public class ELKGraphCreator {
+/**
+ * The ELKGraphCreator is used to create ELK graphs from a view model. When creating an ELK graph, it applies the current
+ * position and size of the view model elements to the ELK nodes. It also creates edges between the nodes based on the
+ * connections in the view model.
+ */
+class ELKGraphCreator {
 
     private final GeckoViewModel viewModel;
 
-    public ELKGraphCreator(GeckoViewModel viewModel) {
+    ELKGraphCreator(GeckoViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
-    public ElkNode createSystemElkGraph(SystemViewModel system) {
+    ElkNode createSystemElkGraph(SystemViewModel system) {
         ElkNode root = createGraph();
         List<BlockViewModelElement<?>> children = new ArrayList<>(getChildSystemViewModels(system));
         children.addAll(system.getPorts());
@@ -39,7 +44,7 @@ public class ELKGraphCreator {
         return root;
     }
 
-    public ElkNode createAutomatonElkGraph(SystemViewModel system) {
+    ElkNode createAutomatonElkGraph(SystemViewModel system) {
         ElkNode root = createGraph();
         List<StateViewModel> children = getStates(system);
         for (StateViewModel child : children) {

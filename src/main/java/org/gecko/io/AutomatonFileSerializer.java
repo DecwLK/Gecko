@@ -27,6 +27,10 @@ import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
 
+/**
+ * The AutomatonFileSerializer is used to export a project to a sys file. When exporting, it transforms features unique
+ * to Gecko, such as regions, kinds and priorities, to be compatible with the sys file format.
+ */
 public class AutomatonFileSerializer implements FileSerializer {
 
     private final GeckoModel model;

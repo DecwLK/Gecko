@@ -11,7 +11,12 @@ import java.util.Set;
 import lombok.Getter;
 import org.gecko.model.Variable;
 
-public final class AutomatonFileScout {
+/**
+ * The AutomatonFileScout is responsible for scanning the parsed automaton file and extracting information about the
+ * systems, automata, and contracts. It is used by the {@link AutomatonFileParser} to give access to information about a
+ * sys file that would otherwise be hard to obtain while visiting single elements.
+ */
+final class AutomatonFileScout {
 
     record SystemInfo(String name, String type) {
     }
@@ -28,7 +33,7 @@ public final class AutomatonFileScout {
 
     private final ScoutVisitor scoutVisitor;
 
-    public AutomatonFileScout(SystemDefParser.ModelContext ctx) {
+    AutomatonFileScout(SystemDefParser.ModelContext ctx) {
         this.systems = new HashMap<>();
         this.automata = new HashMap<>();
         this.foundChildren = new HashSet<>();

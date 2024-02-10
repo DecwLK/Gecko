@@ -1,6 +1,9 @@
 package org.gecko.util.graphlayouting;
 
-public enum LayoutAlgorithms {
+/**
+ * LayoutAlgorithms currently supported by Gecko. This enum is simply a listing of used ELK dependencies.
+ */
+enum LayoutAlgorithms {
     FORCE("force"), LAYERED("layered");
 
     private final String name;

@@ -43,8 +43,6 @@ public class CreateRegionViewModelElementAction extends Action {
         if (color != null) {
             createdRegionViewModel.setColor(color);
         }
-        createdRegionViewModel.setPosition(editorViewModel.transformScreenToWorldCoordinates(position));
-        createdRegionViewModel.setSize(size.multiply(1 / editorViewModel.getZoomScaleProperty().get()));
         createdRegionViewModel.updateTarget();
         ActionManager actionManager = geckoViewModel.getActionManager();
         actionManager.run(actionManager.getActionFactory().createSelectAction(createdRegionViewModel, true));

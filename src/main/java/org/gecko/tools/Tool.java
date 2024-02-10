@@ -36,6 +36,7 @@ public abstract class Tool implements ViewElementVisitor {
 
     public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
         view.setCursor(Cursor.DEFAULT);
+        worldGroup.setMouseTransparent(false);
         setAllHandlers(view, null);
         setAllHandlers(vbox, null);
     }

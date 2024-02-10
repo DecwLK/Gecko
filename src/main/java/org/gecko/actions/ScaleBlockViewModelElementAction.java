@@ -11,30 +11,47 @@ public class ScaleBlockViewModelElementAction extends Action {
     private final EditorViewModel editorViewModel;
     private final BlockViewModelElement<?> element;
     private final ElementScalerBlock elementScalerBlock;
-    private final Point2D delta;
+    private Point2D oldSize;
+    private Point2D oldPos;
 
     ScaleBlockViewModelElementAction(
         EditorViewModel editorViewModel, BlockViewModelElement<?> element, ElementScalerBlock elementScalerBlock,
-        Point2D delta) {
+        Point2D oldPos, Point2D oldSize) {
         this.editorViewModel = editorViewModel;
         this.element = element;
         this.elementScalerBlock = elementScalerBlock;
-        this.delta = delta;
+        this.oldPos = oldPos;
+        this.oldSize = oldSize;
+    }
+
+    ScaleBlockViewModelElementAction(
+        EditorViewModel editorViewModel, BlockViewModelElement<?> element, ElementScalerBlock elementScalerBlock) {
+        this.editorViewModel = editorViewModel;
+        this.element = element;
+        this.elementScalerBlock = elementScalerBlock;
     }
 
     @Override
     boolean run() throws GeckoException {
-        if (delta.equals(Point2D.ZERO)) {
-            return false;
+        Point2D oldSizeCopy = oldSize;
+        Point2D oldPosCopy = oldPos;
+        oldSize = element.getSize();
+        oldPos = element.getPosition();
+
+        if (oldSizeCopy != null && oldPosCopy != null) {
+            element.setSize(oldSizeCopy);
+            element.setPosition(oldPosCopy);
+        } else {
+            elementScalerBlock.getDecoratorTarget()
+                .setEdgePoint(elementScalerBlock.getIndex(), elementScalerBlock.getCenter());
         }
 
-        elementScalerBlock.setPoint(elementScalerBlock.getPoint().add(delta));
         editorViewModel.updateRegions();
         return true;
     }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createScaleBlockViewModelElementAction(element, elementScalerBlock, delta.multiply(-1));
+        return actionFactory.createScaleBlockViewModelElementAction(element, elementScalerBlock, oldPos, oldSize);
     }
 }

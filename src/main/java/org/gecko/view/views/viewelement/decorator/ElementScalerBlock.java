@@ -42,14 +42,26 @@ public class ElementScalerBlock extends Rectangle {
         });
     }
 
-    public void setPoint(Point2D point) {
+    public void setPosition(Point2D point) {
         setLayoutX(point.getX());
         setLayoutY(point.getY());
 
         decoratorTarget.setEdgePoint(index, point);
     }
 
-    public Point2D getPoint() {
+    public void setCenter(Point2D point) {
+        Point2D center = new Point2D(point.getX() - (getWidth() / 2), point.getY() - (getHeight() / 2));
+        setLayoutX(center.getX());
+        setLayoutY(center.getY());
+
+        decoratorTarget.setEdgePoint(index, point);
+    }
+
+    public Point2D getPosition() {
         return new Point2D(getLayoutX(), getLayoutY());
+    }
+
+    public Point2D getCenter() {
+        return new Point2D(getLayoutX() + (getWidth() / 2), getLayoutY() + (getHeight() / 2));
     }
 }

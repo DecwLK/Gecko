@@ -76,7 +76,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
             return null;
         }
 
-        return getPortViewModelAt(elementScalerBlock.getPoint().add(delta));
+        return getPortViewModelAt(elementScalerBlock.getPosition().add(delta));
     }
 
     private PortViewModel getPortViewModelAt(Point2D point) {

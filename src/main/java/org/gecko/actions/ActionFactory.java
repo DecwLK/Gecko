@@ -156,14 +156,21 @@ public class ActionFactory {
     }
 
     public RestoreContractViewModelElementAction createRestoreContractViewModelElementAction(
-        StateViewModel parent, ContractViewModel contractViewModel) {
-        return new RestoreContractViewModelElementAction(parent, contractViewModel);
+        StateViewModel parent, ContractViewModel contractViewModel, Set<EdgeViewModel> edgesWithContract) {
+        return new RestoreContractViewModelElementAction(parent, contractViewModel, edgesWithContract);
     }
 
     public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(
-        BlockViewModelElement<?> blockViewModelElement, ElementScalerBlock elementScalerBlock, Point2D delta) {
+        BlockViewModelElement<?> blockViewModelElement, ElementScalerBlock elementScalerBlock, Point2D oldPos,
+        Point2D oldSize) {
         return new ScaleBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), blockViewModelElement,
-            elementScalerBlock, delta);
+            elementScalerBlock, oldPos, oldSize);
+    }
+
+    public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(
+        BlockViewModelElement<?> blockViewModelElement, ElementScalerBlock elementScalerBlock) {
+        return new ScaleBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), blockViewModelElement,
+            elementScalerBlock);
     }
 
     public FocusPositionableViewModelElementAction createFocusPositionableViewModelElementAction(

@@ -8,6 +8,7 @@ public class ChangeKindEdgeViewModelAction extends Action {
 
     private final Kind kind;
     private final EdgeViewModel edgeViewModel;
+    private Kind oldKind;
 
     public ChangeKindEdgeViewModelAction(EdgeViewModel edgeViewModel, Kind kind) {
         this.edgeViewModel = edgeViewModel;
@@ -16,6 +17,7 @@ public class ChangeKindEdgeViewModelAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
+        oldKind = edgeViewModel.getKind();
         edgeViewModel.setKind(kind);
         edgeViewModel.updateTarget();
         return true;
@@ -23,6 +25,6 @@ public class ChangeKindEdgeViewModelAction extends Action {
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return actionFactory.createChangeKindAction(edgeViewModel, edgeViewModel.getKind());
+        return actionFactory.createChangeKindAction(edgeViewModel, oldKind);
     }
 }

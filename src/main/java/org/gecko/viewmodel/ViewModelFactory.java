@@ -102,36 +102,44 @@ public class ViewModelFactory {
 
         boolean sourceIsPort = isPort(source);
         boolean destIsPort = isPort(destination);
-        Property<Point2D> sourcePosition = new SimpleObjectProperty<>(
-            sourceIsPort ? calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
-                source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true)
-                : calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
+        Property<Point2D> sourcePosition;
 
         // position the line at the tip of the port
         if (sourceIsPort) {
+            sourcePosition = new SimpleObjectProperty<>(
+                calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
+                    source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true));
+
             source.getSystemPortPositionProperty()
                 .addListener((observable, oldValue, newValue) -> sourcePosition.setValue(
                     calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
                         source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true)));
         } else {
+            sourcePosition = new SimpleObjectProperty<>(
+                calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
+
             source.getPositionProperty().addListener((observable, oldValue, newValue) -> {
                 sourcePosition.setValue(
                     calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
             });
         }
 
-        Property<Point2D> destinationPosition = new SimpleObjectProperty<>(
-            destIsPort ? calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
-                destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true)
-                : calculateEndPortPosition(destination.getPosition(), destination.getSize(),
-                    destination.getVisibility(), false));
+        Property<Point2D> destinationPosition;
 
         if (destIsPort) {
+            destinationPosition = new SimpleObjectProperty<>(
+                calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
+                    destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true));
+
             destination.getSystemPortPositionProperty()
                 .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
                     calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
                         destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true)));
         } else {
+            destinationPosition = new SimpleObjectProperty<>(
+                calculateEndPortPosition(destination.getPosition(), destination.getSize(), destination.getVisibility(),
+                    false));
+
             destination.getPositionProperty().addListener((observable, oldValue, newValue) -> {
                 destinationPosition.setValue(calculateEndPortPosition(destination.getPosition(), destination.getSize(),
                     destination.getVisibility(), false));

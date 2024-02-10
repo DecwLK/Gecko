@@ -1,15 +1,21 @@
 package org.gecko.view.views;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.EditorViewModel;
+import org.gecko.viewmodel.PositionableViewModelElement;
 
 public class FloatingUIBuilder {
 
@@ -19,6 +25,7 @@ public class FloatingUIBuilder {
     private static final String FLOATING_BUTTON_STYLE_CLASS = "floating-ui-button";
     private static final String ZOOM_IN_STYLE_CLASS = "floating-zoom-in-button";
     private static final String ZOOM_OUT_STYLE_CLASS = "floating-zoom-out-button";
+    private static final String MATCHES_REGEX = "%d of %d matches";
 
     private final ActionManager actionManager;
     private final EditorViewModel editorViewModel;
@@ -62,8 +69,79 @@ public class FloatingUIBuilder {
         return currentViewLabel;
     }
 
-    public Node buildRegionsLabels() {
-        return null;
+    public Node buildSearchWindow(EditorView editorView) {
+        ToolBar searchBar = new ToolBar();
+
+        // Close Search:
+        Button closeButton = new Button("x");
+        closeButton.setCancelButton(true);
+
+        // Navigate Search:
+        Button backwardButton = new Button("<");
+        backwardButton.setDisable(true);
+
+        Button forwardButton = new Button(">");
+        forwardButton.setDisable(true);
+
+        Label matchesLabel = new Label();
+        matchesLabel.setTextFill(Color.BLACK);
+
+        final List<PositionableViewModelElement<?>> matches = new ArrayList<>();
+        TextField searchTextField = new TextField();
+        searchTextField.setPromptText("Search");
+
+        searchBar.getItems().addAll(closeButton, searchTextField, backwardButton, forwardButton, matchesLabel);
+
+        searchTextField.setOnAction(e -> {
+            // TODO: Deselect current selection.
+            List<PositionableViewModelElement<?>> oldSearchMatches = new ArrayList<>(matches);
+            oldSearchMatches.forEach(matches::remove);
+            matches.addAll(editorViewModel.getElementsByName(searchTextField.getText()));
+
+            if (!matches.isEmpty()) {
+                actionManager.run(
+                    actionManager.getActionFactory().createFocusPositionableViewModelElementAction(matches.getFirst()));
+                matchesLabel.setText(String.format(MATCHES_REGEX, 1, matches.size()));
+                backwardButton.setDisable(true);
+                forwardButton.setDisable(matches.size() == 1);
+            } else {
+                matchesLabel.setText(String.format(MATCHES_REGEX, 0, 0));
+                backwardButton.setDisable(true);
+                forwardButton.setDisable(true);
+            }
+        });
+
+        backwardButton.setOnAction(e -> {
+            if (!matches.isEmpty()) {
+                searchNextResult(matches, matchesLabel, backwardButton, forwardButton, -1);
+            }
+        });
+
+        forwardButton.setOnAction(e -> {
+            if (!matches.isEmpty()) {
+                searchNextResult(matches, matchesLabel, backwardButton, forwardButton, 1);
+            }
+        });
+
+        closeButton.setOnAction(e -> {
+            searchTextField.setText("");
+            matchesLabel.setText("");
+            editorView.activateSearchWindow(false);
+        });
+
+        return searchBar;
+    }
+
+    private void searchNextResult(
+        List<PositionableViewModelElement<?>> matches, Label matchesLabel, Button backwardButton, Button forwardButton,
+        int direction) {
+        int currentPosition = matches.indexOf(editorViewModel.getFocusedElement());
+        actionManager.run(actionManager.getActionFactory()
+            .createFocusPositionableViewModelElementAction(matches.get(currentPosition + direction)));
+        currentPosition += direction;
+        matchesLabel.setText(String.format(MATCHES_REGEX, currentPosition + 1, matches.size()));
+        backwardButton.setDisable(currentPosition == 0);
+        forwardButton.setDisable(currentPosition == matches.size() - 1);
     }
 
     public Node buildViewSwitchButtons() {

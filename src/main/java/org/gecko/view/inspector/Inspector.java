@@ -17,6 +17,7 @@ public class Inspector extends ScrollPane {
 
     private static final int INSPECTOR_ELEMENT_SPACING = 10;
     private static final int INSPECTOR_WIDTH = 320;
+    private static final String INSPECTOR_STYLE_NAME = "inspector";
 
     public Inspector(
         List<InspectorElement<?>> elements, ActionManager actionManager) {
@@ -42,6 +43,7 @@ public class Inspector extends ScrollPane {
         }
         setPadding(new Insets(INSPECTOR_ELEMENT_SPACING / 2.0));
         vBox.setSpacing(INSPECTOR_ELEMENT_SPACING);
+        getStyleClass().add(INSPECTOR_STYLE_NAME);
         setContent(vBox);
     }
 

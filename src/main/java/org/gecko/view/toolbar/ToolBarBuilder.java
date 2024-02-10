@@ -100,7 +100,7 @@ public class ToolBarBuilder {
                 }
             });
 
-            toolButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);
+            toolButton.getStyleClass().set(0, DEFAULT_TOOLBAR_ICON_STYLE_NAME);
             toolButton.getStyleClass().add(toolType.getIcon());
             Tooltip tooltip =
                 new Tooltip(toolType.getLabel() + " (" + toolType.getKeyCodeCombination().getDisplayText() + ")");

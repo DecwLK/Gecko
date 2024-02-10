@@ -97,12 +97,7 @@ public class EditorViewModel {
             .collect(Collectors.toSet());
         for (RegionViewModel regionViewModel : regionViewModels) {
             for (StateViewModel stateViewModel : stateViewModels) {
-                if (RegionViewModel.checkStateInRegion(regionViewModel, stateViewModel)) {
-                    regionViewModel.addState(stateViewModel);
-                } else {
-                    regionViewModel.removeState(stateViewModel);
-                }
-
+                regionViewModel.checkStateInRegion(stateViewModel);
                 regionViewModel.updateTarget();
             }
         }

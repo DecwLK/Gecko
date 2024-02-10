@@ -24,6 +24,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
     private static final int Z_PRIORITY = 20;
     private static final double LOOP_RADIUS = 40;
+    private static final double FIRST_LOOP_RADIUS = 120;
 
     @Getter(AccessLevel.NONE)
     private final EdgeViewModel edgeViewModel;
@@ -32,6 +33,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     private final Property<Kind> kindProperty;
     private final Group pane;
     private final Label label;
+
+    private ListChangeListener<? super EdgeViewModel> sourceMaskPathListener;
+    private ListChangeListener<? super EdgeViewModel> destinationMaskPathListener;
 
     public EdgeViewElement(EdgeViewModel edgeViewModel) {
         super(edgeViewModel.getEdgePoints());
@@ -49,6 +53,16 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         label = new Label();
         label.setText(edgeViewModel.getRepresentation());
 
+        edgeViewModel.getEdgePoints().getFirst().addListener((observable, oldValue, newValue) -> {
+            calculateLabelPosition();
+            maskPathSource();
+        });
+        edgeViewModel.getEdgePoints().getLast().addListener((observable, oldValue, newValue) -> {
+            calculateLabelPosition();
+            maskPathSource();
+        });
+        label.heightProperty().addListener((observable, oldValue, newValue) -> calculateLabelPosition());
+        label.widthProperty().addListener((observable, oldValue, newValue) -> calculateLabelPosition());
         ChangeListener<Object> updateLabel =
             (observable, oldValue, newValue) -> label.setText(edgeViewModel.getRepresentation());
 
@@ -65,37 +79,41 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         priorityProperty.addListener(updateLabel);
         kindProperty.addListener(updateLabel);
 
-        ChangeListener<Object> calculateLabelPosition = (observable, oldValue, newValue) -> calculateLabelPosition();
-        edgeViewModel.getEdgePoints().getFirst().addListener(calculateLabelPosition);
-        edgeViewModel.getEdgePoints().getLast().addListener(calculateLabelPosition);
-        label.heightProperty().addListener(calculateLabelPosition);
-        label.widthProperty().addListener(calculateLabelPosition);
         pane.getChildren().add(label);
 
-        calculateLabelPosition();
         constructVisualization();
 
         // Redraw edge when there are changes in the edge list
-        ListChangeListener<? super EdgeViewModel> updateMaskPathSource = change -> maskPathSource();
-        edgeViewModel.getSource().getIncomingEdges().addListener(updateMaskPathSource);
-        edgeViewModel.getSource().getOutgoingEdges().addListener(updateMaskPathSource);
-        edgeViewModel.getDestination().getIncomingEdges().addListener(updateMaskPathSource);
-        edgeViewModel.getDestination().getOutgoingEdges().addListener(updateMaskPathSource);
-
         edgeViewModel.getSourceProperty().addListener((observable, oldValue, newValue) -> {
-            updateMaskPathSourceListeners(oldValue);
+            oldValue.getIncomingEdges().removeListener(sourceMaskPathListener);
+            oldValue.getOutgoingEdges().removeListener(sourceMaskPathListener);
+            sourceMaskPathListener = updateMaskPathSourceListeners(newValue);
         });
 
         edgeViewModel.getDestinationProperty().addListener((observable, oldValue, newValue) -> {
-            updateMaskPathSourceListeners(oldValue);
+            oldValue.getIncomingEdges().removeListener(destinationMaskPathListener);
+            oldValue.getOutgoingEdges().removeListener(destinationMaskPathListener);
+            destinationMaskPathListener = updateMaskPathSourceListeners(newValue);
         });
 
-        updateMaskPathSourceListeners(null);
+        sourceMaskPathListener = updateMaskPathSourceListeners(edgeViewModel.getSource());
+        destinationMaskPathListener = updateMaskPathSourceListeners(edgeViewModel.getDestination());
+
+        calculateLabelPosition();
     }
 
     private void calculateLabelPosition() {
-        Point2D first = edgeViewModel.getEdgePoints().getFirst().getValue();
-        Point2D last = edgeViewModel.getEdgePoints().getLast().getValue();
+        Point2D first;
+        Point2D last;
+        if (edgeViewModel.getSource().equals(edgeViewModel.getDestination())) {
+            first =
+                new Point2D(renderPathSource.get(1).getKey().getValue(), renderPathSource.get(1).getValue().getValue());
+            last =
+                new Point2D(renderPathSource.get(2).getKey().getValue(), renderPathSource.get(2).getValue().getValue());
+        } else {
+            first = edgeViewModel.getEdgePoints().getFirst().getValue();
+            last = edgeViewModel.getEdgePoints().getLast().getValue();
+        }
         Point2D mid = first.midpoint(last);
         Point2D vec = last.subtract(first);
         double angle = Math.atan2(vec.getY(), vec.getX());
@@ -122,44 +140,34 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
     }
 
-    private void updateMaskPathSourceListeners(StateViewModel oldStateViewModel) {
-        // Remove listeners from old state view model
-        if (oldStateViewModel != null) {
-            oldStateViewModel.getPositionProperty()
-                .removeListener((observable, oldValue, newValue) -> maskPathSource());
-            oldStateViewModel.getSizeProperty().removeListener((observable, oldValue, newValue) -> maskPathSource());
-        }
-
+    private ListChangeListener<? super EdgeViewModel> updateMaskPathSourceListeners(StateViewModel newStateViewModel) {
+        ListChangeListener<? super EdgeViewModel> updateMaskPathSource = change -> maskPathSource();
+        newStateViewModel.getIncomingEdges().addListener(updateMaskPathSource);
+        newStateViewModel.getOutgoingEdges().addListener(updateMaskPathSource);
         maskPathSource();
-
-        edgeViewModel.getSource()
-            .getPositionProperty()
-            .addListener((observable, oldValue, newValue) -> maskPathSource());
-
-        edgeViewModel.getDestination()
-            .getPositionProperty()
-            .addListener((observable, oldValue, newValue) -> maskPathSource());
+        return updateMaskPathSource;
     }
 
     private void maskPathSource() {
         // If source and destination are the same, draw a loop
         if (edgeViewModel.getSource() == edgeViewModel.getDestination() && getEdgePoints().size() == 2) {
             setLoop(true);
-            getEdgePoints().getFirst().setValue(edgeViewModel.getSource().getPosition());
-            getEdgePoints().getLast()
-                .setValue(edgeViewModel.getSource().getPosition().add(new Point2D(0, LOOP_RADIUS)));
+            setEdgePoint(0, edgeViewModel.getSource().getPosition());
+            setEdgePoint(getEdgePoints().size() - 1, edgeViewModel.getSource()
+                .getPosition()
+                .add(new Point2D(0,
+                    edgeViewModel.getSource().getLoopOffset(edgeViewModel) * LOOP_RADIUS + FIRST_LOOP_RADIUS)));
             updatePathVisualization();
             return;
         }
 
         double sourceEdgeOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
-        getEdgePoints().getFirst()
-            .setValue(maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
-                edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(), sourceEdgeOffset));
+        setEdgePoint(0, maskBlock(edgeViewModel.getSource().getPosition(), edgeViewModel.getSource().getSize(),
+            edgeViewModel.getDestination().getCenter(), edgeViewModel.getSource().getCenter(), sourceEdgeOffset));
 
         double destinationEdgeOffset = edgeViewModel.getDestination().getEdgeOffset(edgeViewModel);
-        getEdgePoints().getLast()
-            .setValue(maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
+        setEdgePoint(getEdgePoints().size() - 1,
+            maskBlock(edgeViewModel.getDestination().getPosition(), edgeViewModel.getDestination().getSize(),
                 edgeViewModel.getSource().getCenter(), edgeViewModel.getDestination().getCenter(),
                 destinationEdgeOffset));
         setLoop(false);

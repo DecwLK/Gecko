@@ -14,7 +14,6 @@ import org.gecko.view.views.viewelement.ViewElementVisitor;
 public class ElementScalerViewElementDecorator extends ViewElementDecorator {
 
     private static final int SCALER_SIZE = 10;
-    private static final int IGNORE_Z_PRIORITY = 10000;
 
     private final Group decoratedNode;
     private final List<ElementScalerBlock> scalers;
@@ -31,6 +30,7 @@ public class ElementScalerViewElementDecorator extends ViewElementDecorator {
             scalers.add(scalerBlock);
             decoratedNode.getChildren().add(scalerBlock);
         }
+        setSelected(false);
     }
 
     @Override
@@ -46,14 +46,7 @@ public class ElementScalerViewElementDecorator extends ViewElementDecorator {
             }
         }
         super.setSelected(selected);
-    }
-
-    @Override
-    public int getZPriority() {
-        if (isSelected()) {
-            return getDecoratorTarget().getZPriority() + IGNORE_Z_PRIORITY;
-        }
-        return getDecoratorTarget().getZPriority();
+        getDecoratorTarget().setSelected(selected);
     }
 
     @Override

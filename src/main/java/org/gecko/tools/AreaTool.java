@@ -6,6 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -29,6 +30,10 @@ public abstract class AreaTool extends Tool {
         startPosition = null;
 
         vbox.setOnMousePressed(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+
             startPosition = containerGroup.sceneToLocal(event.getSceneX(), event.getSceneY());
             area = createNewArea();
             area.setX(startPosition.getX());

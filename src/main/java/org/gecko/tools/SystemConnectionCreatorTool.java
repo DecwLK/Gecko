@@ -3,6 +3,7 @@ package org.gecko.tools;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
@@ -29,13 +30,24 @@ public class SystemConnectionCreatorTool extends Tool {
     @Override
     public void visit(PortViewElement portViewElement) {
         super.visit(portViewElement);
-        portViewElement.setOnMouseClicked(event -> setPortViewModel(portViewElement.getViewModel()));
+        portViewElement.setOnMouseClicked(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+
+            setPortViewModel(portViewElement.getViewModel());
+        });
     }
 
     @Override
     public void visit(VariableBlockViewElement variableBlockViewElement) {
         super.visit(variableBlockViewElement);
-        variableBlockViewElement.setOnMouseClicked(event -> setPortViewModel(variableBlockViewElement.getTarget()));
+        variableBlockViewElement.setOnMouseClicked(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+            setPortViewModel(variableBlockViewElement.getTarget());
+        });
     }
 
     @Override

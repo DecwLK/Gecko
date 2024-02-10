@@ -1,7 +1,6 @@
 package org.gecko.view;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -40,7 +39,7 @@ public class GeckoView {
     @Getter
     private EditorView currentView;
 
-    private final List<EditorView> openedViews;
+    private final ArrayList<EditorView> openedViews;
 
     public GeckoView(GeckoViewModel viewModel) {
         this.viewModel = viewModel;
@@ -69,7 +68,6 @@ public class GeckoView {
         centerPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
         centerPane.setPickOnBounds(false);
-        centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
         refreshView();
     }
 
@@ -89,9 +87,7 @@ public class GeckoView {
     private void onOpenedEditorChanged(
         ObservableValue<? extends ObservableSet<EditorViewModel>> observable, ObservableSet<EditorViewModel> oldValue,
         ObservableSet<EditorViewModel> newValue) {
-        Set<EditorViewModel> removedEditors = new HashSet<>(oldValue);
         if (newValue != null) {
-            removedEditors.removeAll(newValue);
             for (EditorViewModel editorViewModel : newValue) {
                 if (openedViews.stream().anyMatch(editorView -> editorView.getViewModel().equals(editorViewModel))) {
                     continue;
@@ -167,8 +163,8 @@ public class GeckoView {
                 .filter(editorView -> editorView.getCurrentView() == newValue)
                 .findFirst()
                 .orElse(null);
-            refreshView();
         }
+        refreshView();
     }
 
     public Set<PositionableViewModelElement<?>> getAllDisplayedElements() {

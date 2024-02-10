@@ -17,5 +17,6 @@ public class PanTool extends Tool {
         super.visitView(vbox, view, worldGroup, containerGroup);
         view.setPannable(true);
         view.setCursor(Cursor.OPEN_HAND);
+        worldGroup.setMouseTransparent(true);
     }
 }

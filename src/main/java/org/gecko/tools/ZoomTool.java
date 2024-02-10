@@ -18,6 +18,7 @@ public class ZoomTool extends Tool {
     public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
         super.visitView(vbox, view, worldGroup, containerGroup);
         view.setCursor(Cursor.CROSSHAIR);
+        worldGroup.setMouseTransparent(true);
 
         view.setOnMouseClicked(event -> {
             Point2D position = new Point2D(event.getX(), event.getY());

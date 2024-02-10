@@ -2,6 +2,7 @@ package org.gecko.viewmodel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javafx.beans.property.Property;
@@ -36,6 +37,7 @@ import org.gecko.view.views.ViewElementSearchVisitor;
 @Data
 public class EditorViewModel {
     private static final double MAX_ZOOM_SCALE = 5;
+    private final int id;
     private final ActionManager actionManager;
     private final SystemViewModel currentSystem;
     private final SystemViewModel parentSystem;
@@ -54,12 +56,13 @@ public class EditorViewModel {
 
     public EditorViewModel(
         ActionManager actionManager, SystemViewModel currentSystem, SystemViewModel parentSystem,
-        boolean isAutomatonEditor) {
+        boolean isAutomatonEditor, int id) {
         this.actionManager = actionManager;
         this.currentSystem = currentSystem;
         this.parentSystem = parentSystem;
         this.containedPositionableViewModelElementsProperty = FXCollections.observableSet();
         this.isAutomatonEditor = isAutomatonEditor;
+        this.id = id;
         this.tools = FXCollections.observableArrayList();
         this.selectionManager = new SelectionManager();
         this.zoomScaleProperty = new SimpleDoubleProperty(1);
@@ -290,5 +293,22 @@ public class EditorViewModel {
                     element.getSize().getY());
             return bound.intersects(elementBound);
         }).collect(Collectors.toSet());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        EditorViewModel editorViewModel = (EditorViewModel) o;
+        return id == editorViewModel.id;
     }
 }

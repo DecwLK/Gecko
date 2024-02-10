@@ -30,7 +30,8 @@ public class ViewModelFactory {
 
     public EditorViewModel createEditorViewModel(
         SystemViewModel systemViewModel, SystemViewModel parentSystem, boolean isAutomatonEditor) {
-        return new EditorViewModel(actionManager, systemViewModel, parentSystem, isAutomatonEditor);
+        return new EditorViewModel(actionManager, systemViewModel, parentSystem, isAutomatonEditor,
+            getNewViewModelElementId());
     }
 
     public StateViewModel createStateViewModelIn(SystemViewModel parentSystem) throws ModelException {

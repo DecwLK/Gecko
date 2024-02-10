@@ -41,7 +41,7 @@ public class MoveEdgeViewModelElementAction extends Action {
             edgeViewModel.setDestination(newStateViewModel);
         }
 
-        elementScalerBlock.setPoint(newStateViewModel.getCenter());
+        elementScalerBlock.setPosition(newStateViewModel.getCenter());
         edgeViewModel.updateTarget();
         return true;
     }
@@ -53,7 +53,7 @@ public class MoveEdgeViewModelElementAction extends Action {
     }
 
     private StateViewModel attemptRelocation() {
-        return getStateViewModelAt(elementScalerBlock.getPoint().add(delta));
+        return getStateViewModelAt(elementScalerBlock.getPosition().add(delta));
     }
 
     private StateViewModel getStateViewModelAt(Point2D point) {

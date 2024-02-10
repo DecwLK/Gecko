@@ -33,14 +33,13 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
         nameProperty.setValue(name);
     }
 
-    public void scale(@NonNull Point2D startPoint, @NonNull Point2D newPoint) {
-        Point2D newPosition = new Point2D(Math.min(Math.min(startPoint.getX(), newPoint.getX()), getSize().getX()),
-            Math.min(Math.min(startPoint.getY(), newPoint.getY()), getSize().getY()));
-        Point2D newSize = new Point2D(Math.max(Math.max(startPoint.getX(), newPoint.getX()), getSize().getX()),
-            Math.max(Math.max(startPoint.getY(), newPoint.getY()), getSize().getY()));
-
-        setPosition(newPosition);
-        setSize(newSize);
+    public void scale(@NonNull Point2D otherPoint, @NonNull Point2D newPoint) {
+        Point2D newStartPosition =
+            new Point2D(Math.min(otherPoint.getX(), newPoint.getX()), Math.min(otherPoint.getY(), newPoint.getY()));
+        Point2D newEndPosition =
+            new Point2D(Math.max(otherPoint.getX(), newPoint.getX()), Math.max(otherPoint.getY(), newPoint.getY()));
+        setPosition(newStartPosition);
+        setSize(newEndPosition.subtract(newStartPosition));
     }
 
     @Override

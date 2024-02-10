@@ -70,8 +70,8 @@ public class EditorView {
     private final Pane placeholder;
     private final Property<Point2D> viewPortPositionViewProperty;
     private final ChangeListener<Point2D> worldSizeUpdateListener;
-
     private final Inspector emptyInspector;
+    private final Node searchWindow;
 
     @Getter
     private ObjectProperty<Inspector> currentInspector;
@@ -123,7 +123,6 @@ public class EditorView {
         placeholder.setMouseTransparent(true);
         viewElementsScrollPane.layout();
 
-
         // Floating UI
         FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
         Node zoomButtons = floatingUIBuilder.buildZoomButtons();
@@ -138,8 +137,11 @@ public class EditorView {
         AnchorPane.setTopAnchor(viewSwitchButton, 18.0);
         AnchorPane.setRightAnchor(viewSwitchButton, 18.0);
 
+        searchWindow = floatingUIBuilder.buildSearchWindow(this);
+        activateSearchWindow(false);
+
         AnchorPane floatingUI = new AnchorPane();
-        floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton);
+        floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton, searchWindow);
         floatingUI.setPickOnBounds(false);
 
         // Build stack pane
@@ -187,8 +189,7 @@ public class EditorView {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
         });
 
-        ViewContextMenuBuilder contextMenuBuilder
-            = new ViewContextMenuBuilder(viewModel.getActionManager(), viewModel);
+        ViewContextMenuBuilder contextMenuBuilder = new ViewContextMenuBuilder(viewModel.getActionManager(), viewModel);
         this.contextMenu = contextMenuBuilder.build();
         currentViewPane.setOnContextMenuRequested(event -> {
             changeContextMenu(contextMenuBuilder.getContextMenu());
@@ -423,6 +424,12 @@ public class EditorView {
         if (!wouldElementBeInBorder && !worldWouldHaveMinSize()) {
             changeWorldSize(-WORLD_SIZE_DELTA);
         }
+    }
+
+    public void activateSearchWindow(boolean activate) {
+        AnchorPane.setTopAnchor(searchWindow, currentViewPane.getHeight() / 2);
+        AnchorPane.setLeftAnchor(searchWindow, currentViewPane.getWidth() / 2);
+        searchWindow.setVisible(activate);
     }
 
     private boolean worldWouldHaveMinSize() {

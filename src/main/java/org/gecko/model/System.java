@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 
@@ -18,15 +19,17 @@ import org.gecko.exceptions.ModelException;
  * afferent data.
  */
 @Getter
-@Setter
 public class System extends Element implements Renamable {
     private final Set<System> children;
     private final Set<SystemConnection> connections;
     private final Set<Variable> variables;
     private String name;
     @JsonIgnore
+    @Setter(onMethod_ = {@NonNull})
     private System parent;
+    @Setter()
     private String code;
+    @Setter(onMethod_ = {@NonNull})
     private Automaton automaton;
 
     @JsonCreator
@@ -42,94 +45,69 @@ public class System extends Element implements Renamable {
         this.variables = new HashSet<>();
     }
 
-    public void setName(String name) throws ModelException {
-        if (name == null || name.isEmpty()) {
+    public void setName(@NonNull String name) throws ModelException {
+        if (name.isEmpty()) {
             throw new ModelException("System's name is invalid.");
         }
         this.name = name;
     }
 
-    public void setAutomaton(Automaton automaton) throws ModelException {
-        if (automaton == null) {
-            throw new ModelException("Automaton is null.");
-        }
-        this.automaton = automaton;
-    }
-
-    public void addChild(System child) throws ModelException {
-        if (child == null || children.contains(child)) {
-            throw new ModelException("Cannot add child to system.");
-        }
+    public void addChild(@NonNull System child) {
         children.add(child);
     }
 
-    public void addChildren(Set<System> children) throws ModelException {
+    public void addChildren(@NonNull Set<System> children) {
         for (System child : children) {
             addChild(child);
         }
     }
 
-    public void removeChild(System child) throws ModelException {
-        if (child == null || !children.contains(child)) {
-            throw new ModelException("Cannot remove child from system.");
-        }
+    public void removeChild(@NonNull System child) {
         children.remove(child);
     }
 
-    public void removeChildren(Set<System> children) throws ModelException {
+    public void removeChildren(@NonNull Set<System> children) {
         for (System child : children) {
             removeChild(child);
         }
     }
 
-    public void addConnection(SystemConnection connection) throws ModelException {
-        if (connection == null || connections.contains(connection)) {
-            throw new ModelException("Cannot add connection to system.");
-        }
+    public void addConnection(@NonNull SystemConnection connection) {
         connections.add(connection);
     }
 
-    public void addConnections(Set<SystemConnection> connections) throws ModelException {
+    public void addConnections(@NonNull Set<SystemConnection> connections) {
         for (SystemConnection connection : connections) {
             addConnection(connection);
         }
     }
 
-    public void removeConnection(SystemConnection connection) throws ModelException {
-        if (connection == null || !connections.contains(connection)) {
-            throw new ModelException("Cannot remove connection from system.");
-        }
+    public void removeConnection(@NonNull SystemConnection connection) {
         connection.getDestination().setHasIncomingConnection(false);
         connections.remove(connection);
     }
 
-    public void removeConnections(Set<SystemConnection> connections) throws ModelException {
+    public void removeConnections(@NonNull Set<SystemConnection> connections) {
         for (SystemConnection connection : connections) {
             removeConnection(connection);
         }
     }
 
-    public void addVariable(Variable variable) throws ModelException {
-        if (variable == null || variables.contains(variable)) {
-            throw new ModelException("Cannot add variable to system.");
-        }
+    public void addVariable(@NonNull Variable variable) {
         variables.add(variable);
     }
 
-    public void addVariables(Set<Variable> variables) throws ModelException {
+    public void addVariables(@NonNull Set<Variable> variables) {
         for (Variable variable : variables) {
             addVariable(variable);
         }
     }
 
-    public void removeVariable(Variable variable) throws ModelException {
-        if (variable == null || !variables.contains(variable)) {
-            throw new ModelException("Cannot remove variable from system.");
-        }
+    public void removeVariable(@NonNull Variable variable) {
         variables.remove(variable);
     }
 
-    public void removeVariables(Set<Variable> variables) throws ModelException {
+    public void removeVariables(@NonNull Set<Variable> variables) {
         for (Variable variable : variables) {
             removeVariable(variable);
         }
@@ -148,6 +126,7 @@ public class System extends Element implements Renamable {
      *
      * @return a list of all children of this system
      */
+    @JsonIgnore
     public List<System> getAllChildren() {
         return children.stream()
             .flatMap(child -> Stream.concat(Stream.of(child), child.getAllChildren().stream()))

@@ -3,6 +3,7 @@ package org.gecko.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 
@@ -12,7 +13,7 @@ import org.gecko.exceptions.ModelException;
  * priority and a {@link Kind}, which informs about how the associated {@link Contract} is handled.
  */
 @Getter
-@Setter
+@Setter(onMethod_ = {@NonNull})
 public class Edge extends Element {
     private Contract contract;
     private Kind kind;
@@ -33,36 +34,11 @@ public class Edge extends Element {
         setPriority(priority);
     }
 
-    public void setKind(Kind kind) throws ModelException {
-        if (kind == null) {
-            throw new ModelException("Edge's kind is null.");
-        }
-        this.kind = kind;
-    }
-
     public void setPriority(int priority) throws ModelException {
         if (priority < 0) {
             throw new ModelException("Negative edge priorities are not allowed.");
         }
         this.priority = priority;
-    }
-
-    public void setContract(Contract contract) throws ModelException {
-        this.contract = contract;
-    }
-
-    public void setSource(State state) throws ModelException {
-        if (state == null) {
-            throw new ModelException("Edge's source is null.");
-        }
-        this.source = state;
-    }
-
-    public void setDestination(State state) throws ModelException {
-        if (state == null) {
-            throw new ModelException("Edge's destination is null.");
-        }
-        this.destination = state;
     }
 
     @Override

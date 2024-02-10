@@ -3,6 +3,7 @@ package org.gecko.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.NonNull;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -17,8 +18,8 @@ public class Condition {
         setCondition(condition);
     }
 
-    public void setCondition(String condition) throws ModelException {
-        if (condition == null || condition.isEmpty()) {
+    public void setCondition(@NonNull String condition) throws ModelException {
+        if (condition.isEmpty()) {
             throw new ModelException("Condition is invalid.");
         }
         this.condition = condition;
@@ -35,7 +36,7 @@ public class Condition {
 
     public Condition not() {
         try {
-            // This and other are always valid
+            // This is always valid
             return new Condition("! (" + condition + ")");
         } catch (ModelException e) {
             return null;

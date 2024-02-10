@@ -25,7 +25,7 @@ public class ELKGraphCreator {
     }
 
     public ElkNode createSystemElkGraph(SystemViewModel system) {
-        ElkNode root = createRootNode();
+        ElkNode root = createGraph();
         List<BlockViewModelElement<?>> children = new ArrayList<>(getChildSystemViewModels(system));
         children.addAll(system.getPorts());
         for (BlockViewModelElement<?> child : children) {
@@ -40,7 +40,7 @@ public class ELKGraphCreator {
     }
 
     public ElkNode createAutomatonElkGraph(SystemViewModel system) {
-        ElkNode root = createRootNode();
+        ElkNode root = createGraph();
         List<StateViewModel> children = getStates(system);
         for (StateViewModel child : children) {
             createElkNode(root, child);
@@ -48,13 +48,6 @@ public class ELKGraphCreator {
         for (EdgeViewModel edge : getAutomatonEdges(system)) {
             createSimpleEdge(findNode(root, edge.getSource()), findNode(root, edge.getDestination()));
         }
-        return root;
-    }
-
-    private ElkNode createRootNode() {
-        ElkNode root = createGraph();
-        root.setWidth(3840); //TODO using the min resolution, dont have anything better
-        root.setHeight(2160);
         return root;
     }
 

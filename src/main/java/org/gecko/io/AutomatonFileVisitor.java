@@ -6,9 +6,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.exceptions.ModelException;
+import org.gecko.model.Automaton;
 import org.gecko.model.Condition;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
@@ -18,19 +25,24 @@ import org.gecko.model.System;
 import org.gecko.model.Variable;
 import org.gecko.model.Visibility;
 
-@Getter
 public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
 
+    @Getter
     private GeckoModel model;
+    @Getter
+    private final Set<String> warnings;
+
     private System currentSystem;
     private String nextSystemName;
     private AutomatonFileScout scout;
+
 
     private static final String START_STATE_REGEX = "[a-z].*";
     private static final String SELF_REFERENCE_TOKEN = "self";
 
     public AutomatonFileVisitor() throws ModelException {
         this.model = new GeckoModel();
+        this.warnings = new TreeSet<>();
         currentSystem = model.getRoot();
     }
 
@@ -40,29 +52,28 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         if (hasCyclicChildSystems(ctx)) {
             return "Cyclic child systems found";
         }
+        String rootName;
         if (scout.getRootChildren().size() == 1) {
-            //We can use the first root system as the root of the model
-            String result = scout.getSystem(scout.getRootChildren().iterator().next().ident().getText()).accept(this);
-            if (result != null) {
-                return result;
-            }
-            System newRoot = model.getRoot()
-                .getChildren()
-                .iterator()
-                .next(); //Because rootChildren had size 1, root now has exactly 1 child
-            newRoot.setParent(null);
-            model = new GeckoModel(newRoot);
+            rootName = scout.getRootChildren().iterator().next().ident().getText();
         } else if (scout.getRootChildren().size() > 1) {
-            //Because we can't have multiple roots, we need to create a new root system
-            for (SystemDefParser.SystemContext rootChild : scout.getRootChildren()) {
-                String result = rootChild.accept(this);
-                if (result != null) {
-                    return result;
-                }
+            List<String> rootNames = scout.getRootChildren().stream().map(ctx1 -> ctx1.ident().getText()).toList();
+            rootName = makeUserChooseSystem(rootNames);
+            if (rootName == null) {
+                return "Must choose a root system to continue";
             }
         } else {
             return "No root system found";
         }
+        String result = scout.getSystem(rootName).accept(this);
+        if (result != null) {
+            return result;
+        }
+        System newRoot = model.getRoot()
+            .getChildren()
+            .iterator()
+            .next(); //Because rootChildren had size 1, root now has exactly 1 child
+        newRoot.setParent(null);
+        model = new GeckoModel(newRoot);
         return null;
     }
 
@@ -83,7 +94,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         }
         for (AutomatonFileScout.SystemInfo child : scout.getChildSystemInfos(ctx)) {
             if (scout.getSystem(child.type()) == null) {
-                return "System %s not found".formatted(child);
+                return "System %s not found".formatted(child.name());
             }
             SystemDefParser.SystemContext childCtx = scout.getSystem(child.type());
             nextSystemName = child.name();
@@ -113,29 +124,48 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
 
     @Override
     public String visitUse_contract(SystemDefParser.Use_contractContext ctx) {
-        if (!ctx.subst().isEmpty()) {
-            return "Substitution not supported";
-        }
         SystemDefParser.AutomataContext automata = scout.getAutomaton(ctx.ident().getText());
         if (automata == null) {
             return "Automaton %s not found".formatted(ctx.ident().getText());
         }
-        return automata.accept(this);
+        String result = automata.accept(this);
+        if (result != null) {
+            return result;
+        }
+        for (SystemDefParser.SubstContext subst : ctx.subst()) {
+            result = subst.accept(this);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String visitSubst(SystemDefParser.SubstContext ctx) {
+        String toReplace = ctx.local.getText();
+        if (ctx.from.inst != null) {
+            return "Variables to substitute can only be from the same system";
+        }
+        String toReplaceWith = ctx.from.port.getText();
+        if (currentSystem.getVariables().stream().noneMatch(variable -> variable.getName().equals(toReplaceWith))) {
+            return "Variable %s not found not found in system %s".formatted(toReplace, currentSystem.getName());
+        }
+        try {
+            applySubstitution(currentSystem, toReplace, toReplaceWith);
+        } catch (ModelException e) {
+            return e.getMessage();
+        }
+        return null;
     }
 
     @Override
     public String visitAutomata(SystemDefParser.AutomataContext ctx) {
-        if (!ctx.io().isEmpty()) {
-            return "Automata io not supported";
-        }
         if (!ctx.history().isEmpty()) {
-            return "Automata history not supported";
-        }
-        if (!ctx.prepost().isEmpty()) {
-            return "Automata prepost not supported";
+            warnings.add("Automaton %s has history, which is ignored".formatted(ctx.ident().getText()));
         }
         if (!ctx.use_contracts().isEmpty()) {
-            return "Automata use_contracts not supported";
+            warnings.add("Automaton %s has use_contracts, which are be ignored".formatted(ctx.ident().getText()));
         }
         for (SystemDefParser.TransitionContext transition : ctx.transition()) {
             String result = transition.accept(this);
@@ -152,7 +182,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             return "Found multiple start states in automaton %s".formatted(ctx.ident().getText());
         } else if (startStateCandidates.size() == 1) {
             try {
-                currentSystem.getAutomaton().setStartState(startStateCandidates.get(0));
+                currentSystem.getAutomaton().setStartState(startStateCandidates.getFirst());
             } catch (ModelException e) {
                 return e.getMessage();
             }
@@ -164,9 +194,6 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
     public String visitTransition(SystemDefParser.TransitionContext ctx) {
         if (ctx.vvguard() != null) {
             return "Vvguards are not supported";
-        }
-        if (ctx.contr != null) {
-            return "Nested automata are not supported";
         }
         String startName = ctx.from.getText();
         String endName = ctx.to.getText();
@@ -189,18 +216,18 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             }
         }
         Contract contract;
-        try {
-            contract = model.getModelFactory().createContract(start);
-        } catch (ModelException e) {
-            return e.getMessage();
-        }
-        Condition pre;
-        Condition post;
-        try {
-            pre = new Condition(ctx.pre.getText());
-            post = new Condition(ctx.post.getText());
-        } catch (ModelException e) {
-            return e.getMessage();
+        if (ctx.contr != null) {
+            try {
+                contract = buildContract(start, scout.getContract(ctx.contr.getText()));
+            } catch (GeckoException e) {
+                return e.getMessage();
+            }
+        } else {
+            try {
+                contract = buildContract(start, ctx.pre.getText(), ctx.post.getText());
+            } catch (GeckoException e) {
+                return e.getMessage();
+            }
         }
         Edge edge;
         try {
@@ -218,17 +245,23 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             case SystemDefParser.INPUT -> Visibility.INPUT;
             case SystemDefParser.OUTPUT -> Visibility.OUTPUT;
             case SystemDefParser.STATE -> Visibility.STATE;
-            default -> null;
+            default -> throw new IllegalStateException("Unexpected variable visibility: " + ctx.type.getType());
         };
-        if (visibility == Visibility.STATE) {
-            return null;
-        }
         for (SystemDefParser.VariableContext variable : ctx.variable()) {
             if (!Variable.getBuiltinTypes().contains(variable.t.getText())) {
-                return "Input and Output types must be built-in types";
+                if (visibility == Visibility.STATE) {
+                    if (scout.getSystem(variable.t.getText()) != null) {
+                        return null;
+                    } else {
+                        return "State type must be a system or builin type";
+                    }
+                } else {
+                    return "Input and Output types must be built-in types";
+                }
             }
             for (SystemDefParser.IdentContext ident : variable.n) {
-                if (currentSystem.getVariableByName(ident.Ident().getText()) != null) {
+                if (currentSystem.getVariableByName(ident.Ident().getText()) != null
+                    || scout.getSystem(ident.getText()) != null) {
                     continue;
                 }
                 Variable var;
@@ -237,11 +270,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                     var.setName(ident.Ident().getText());
                     var.setType(variable.t.getText());
                     var.setVisibility(visibility);
+                    if (variable.init != null) {
+                        var.setValue(variable.init.getText());
+                    }
                 } catch (ModelException e) {
                     return e.getMessage();
-                }
-                if (variable.init != null) {
-                    var.setValue(variable.init.getText());
                 }
             }
         }
@@ -310,7 +343,47 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         return system;
     }
 
+    private Contract buildContract(State state, SystemDefParser.PrepostContext contract) throws GeckoException {
+        return buildContract(state, contract.pre.getText(), contract.post.getText());
+    }
+
+    private Contract buildContract(State state, String pre, String post) throws GeckoException {
+        Contract newContract;
+        Condition preCondition;
+        Condition postCondition;
+        try {
+            newContract = model.getModelFactory().createContract(state);
+            preCondition = model.getModelFactory().createCondition(pre);
+            postCondition = model.getModelFactory().createCondition(post);
+            newContract.setPreCondition(preCondition);
+            newContract.setPostCondition(postCondition);
+        } catch (ModelException e) {
+            throw new GeckoException(e.getMessage());
+        }
+        return newContract;
+    }
+
+    private void applySubstitution(System currentSystem, String toReplace, String toReplaceWith) throws ModelException {
+        Automaton automaton = currentSystem.getAutomaton();
+        for (State state : automaton.getStates()) {
+            for (Contract contract : state.getContracts()) {
+                applySubstitution(contract.getPreCondition(), toReplace, toReplaceWith);
+                applySubstitution(contract.getPostCondition(), toReplace, toReplaceWith);
+            }
+        }
+    }
+
+    private void applySubstitution(Condition condition, String toReplace, String toReplaceWith) throws ModelException {
+        String con = condition.getCondition();
+        //replace normal occurrences (var -> newVar)
+        con = con.replaceAll("\\b" + toReplace + "\\b", toReplaceWith);
+        //replace history occurrences (h_var_\d -> h_newVar_\d)
+        con = con.replaceAll("\\bh_" + toReplace + "_(\\d+)\\b", "h_" + toReplaceWith + "_$1");
+        condition.setCondition(con);
+    }
+
     private String cleanCode(String code) {
+        //length("{=") = 2
         return code.substring(2, code.length() - 2);
     }
 
@@ -340,5 +413,31 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             }
         }
         return false;
+    }
+
+    private String makeUserChooseSystem(List<String> systemNames) {
+        ComboBox<String> comboBox = new ComboBox<>();
+        comboBox.getItems().addAll(systemNames);
+        comboBox.setPromptText("Choose a system");
+
+        VBox vBox = new VBox(10);
+        vBox.setPadding(new Insets(20));
+        vBox.getChildren().add(comboBox);
+
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setHeaderText("Found multiple top level systems. Please choose a system as root of the project.");
+        alert.getDialogPane().setContent(vBox);
+
+        alert.setOnCloseRequest(event -> {
+            ButtonType result = alert.getResult();
+            if (result == ButtonType.OK && comboBox.getValue() == null) {
+                event.consume(); // Prevent dialog from closing
+            }
+        });
+
+        alert.showAndWait();
+
+        return comboBox.getValue();
     }
 }

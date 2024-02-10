@@ -89,12 +89,6 @@ public class ModelFactory {
         return region;
     }
 
-    public Automaton createAutomaton(@NonNull System system) throws ModelException {
-        Automaton automaton = new Automaton();
-        system.setAutomaton(automaton);
-        return automaton;
-    }
-
     public Condition createCondition(@NonNull String init) throws ModelException {
         return new Condition(init);
     }

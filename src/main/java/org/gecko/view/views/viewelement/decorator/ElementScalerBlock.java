@@ -31,8 +31,7 @@ public class ElementScalerBlock extends Rectangle {
             }
         });
 
-        setLayoutX(decoratorTarget.getEdgePoints().get(index).getValue().getX() - (getWidth() / 2));
-        setLayoutY(decoratorTarget.getEdgePoints().get(index).getValue().getY() - (getHeight() / 2));
+        updatePosition();
 
         decoratorTarget.getEdgePoints().get(index).addListener((observable, oldValue, newValue) -> {
             if (!isDragging) {
@@ -40,6 +39,11 @@ public class ElementScalerBlock extends Rectangle {
                 setLayoutY(newValue.getY() - (getHeight() / 2));
             }
         });
+    }
+
+    public void updatePosition() {
+        setLayoutX(decoratorTarget.getEdgePoints().get(index).getValue().getX() - (getWidth() / 2));
+        setLayoutY(decoratorTarget.getEdgePoints().get(index).getValue().getY() - (getHeight() / 2));
     }
 
     public void setPosition(Point2D point) {

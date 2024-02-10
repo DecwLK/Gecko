@@ -105,11 +105,11 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     private void calculateLabelPosition() {
         Point2D first;
         Point2D last;
-        if (edgeViewModel.getSource().equals(edgeViewModel.getDestination())) {
+        if (edgeViewModel.getSource().equals(edgeViewModel.getDestination()) && renderPathSource.size() >= 4) {
             first =
-                new Point2D(renderPathSource.get(1).getKey().getValue(), renderPathSource.get(1).getValue().getValue());
-            last =
                 new Point2D(renderPathSource.get(2).getKey().getValue(), renderPathSource.get(2).getValue().getValue());
+            last =
+                new Point2D(renderPathSource.get(3).getKey().getValue(), renderPathSource.get(3).getValue().getValue());
         } else {
             first = edgeViewModel.getEdgePoints().getFirst().getValue();
             last = edgeViewModel.getEdgePoints().getLast().getValue();

@@ -137,6 +137,7 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         VBox contractsPane = new VBox();
         double maxHeight = getHeight() - stateName.getHeight() - 2 * SPACING;
 
+        refreshContracts(contractsPane);
         contractsProperty.addListener((observable, oldValue, newValue) -> refreshContracts(contractsPane));
 
         contents.getChildren().add(contractsPane);

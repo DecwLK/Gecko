@@ -47,8 +47,8 @@ public class ViewFactory {
     public ViewElement<?> createViewElementFrom(StateViewModel stateViewModel) {
         StateViewElement newStateViewElement = new StateViewElement(stateViewModel);
 
-        ViewContextMenuBuilder contextMenuBuilder
-            = new StateViewElementContextMenuBuilder(actionManager, stateViewModel);
+        ViewContextMenuBuilder contextMenuBuilder =
+            new StateViewElementContextMenuBuilder(actionManager, stateViewModel);
         setContextMenu(newStateViewElement, contextMenuBuilder);
         return new SelectableViewElementDecorator(newStateViewElement);
     }
@@ -106,7 +106,8 @@ public class ViewFactory {
         newViewElement.setOnContextMenuRequested(event -> {
             geckoView.getCurrentView().switchToCursorTool();
             geckoView.getCurrentView().changeContextMenu(contextMenuBuilder.build());
-            contextMenuBuilder.getContextMenu().getItems()
+            contextMenuBuilder.getContextMenu()
+                .getItems()
                 .stream()
                 .filter(menuItem -> menuItem.getText().equals("Select All"))
                 .findAny()

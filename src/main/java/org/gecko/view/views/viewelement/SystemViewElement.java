@@ -108,7 +108,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         getChildren().addAll(getBackgroundRectangle(), container);
         portsProperty.forEach(this::addPort);
         portsProperty.addListener(this::onPortsChanged);
-        portsProperty.forEach(this::addPort);
     }
 
     private void onPortsChanged(ListChangeListener.Change<? extends PortViewModel> change) {
@@ -202,6 +201,8 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         Rectangle background = new Rectangle();
         background.widthProperty().bind(widthProperty());
         background.heightProperty().bind(heightProperty());
+        background.setArcWidth(BACKGROUND_ROUNDING);
+        background.setArcHeight(BACKGROUND_ROUNDING);
         background.setFill(Color.LIGHTGRAY);
         return background;
     }

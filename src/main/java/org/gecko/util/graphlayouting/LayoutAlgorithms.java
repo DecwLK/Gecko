@@ -1,8 +1,7 @@
 package org.gecko.util.graphlayouting;
 
 public enum LayoutAlgorithms {
-    FORCE("force"),
-    LAYERED("layered");
+    FORCE("force"), LAYERED("layered");
 
     private final String name;
 

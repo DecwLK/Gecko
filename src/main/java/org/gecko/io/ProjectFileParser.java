@@ -39,8 +39,7 @@ public class ProjectFileParser implements FileParser {
         GeckoModel model = new GeckoModel(root);
         GeckoViewModel viewModel = new GeckoViewModel(model);
 
-        ViewModelElementCreator visitor =
-            new ViewModelElementCreator(viewModel, newViewModelProperties);
+        ViewModelElementCreator visitor = new ViewModelElementCreator(viewModel, newViewModelProperties);
         visitor.traverseModel(root);
         generatedViewModelElements = visitor.getGeneratedViewModelElements();
         return viewModel;

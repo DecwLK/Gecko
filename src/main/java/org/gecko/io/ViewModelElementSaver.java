@@ -15,9 +15,9 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.RegionViewModel;
 
 /**
- * Performs operations for every {@link org.gecko.model.Element Model-Element} from the subtree of a
- * {@link System}, creating for each of them a {@link ViewModelPropertiesContainer}, depending on the attributes of the
- * corresponding {@link PositionableViewModelElement}.
+ * Performs operations for every {@link org.gecko.model.Element Model-Element} from the subtree of a {@link System},
+ * creating for each of them a {@link ViewModelPropertiesContainer}, depending on the attributes of the corresponding
+ * {@link PositionableViewModelElement}.
  */
 public class ViewModelElementSaver {
     private final GeckoViewModel geckoViewModel;

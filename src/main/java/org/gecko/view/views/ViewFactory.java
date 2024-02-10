@@ -48,7 +48,8 @@ public class ViewFactory {
         StateViewElement newStateViewElement = new StateViewElement(stateViewModel);
 
         ViewContextMenuBuilder contextMenuBuilder =
-            new StateViewElementContextMenuBuilder(actionManager, stateViewModel);
+            new StateViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
+                stateViewModel);
         setContextMenu(newStateViewElement, contextMenuBuilder);
         return new SelectableViewElementDecorator(newStateViewElement);
     }
@@ -57,7 +58,8 @@ public class ViewFactory {
         RegionViewElement newRegionViewElement = new RegionViewElement(regionViewModel);
 
         ViewContextMenuBuilder contextMenuBuilder =
-            new RegionViewElementContextMenuBuilder(actionManager, regionViewModel);
+            new RegionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
+                regionViewModel);
         setContextMenu(newRegionViewElement, contextMenuBuilder);
         return new SelectableViewElementDecorator(new ElementScalerViewElementDecorator(newRegionViewElement));
     }
@@ -66,7 +68,8 @@ public class ViewFactory {
         VariableBlockViewElement newVariableBlockViewElement = new VariableBlockViewElement(portViewModel);
 
         ViewContextMenuBuilder contextMenuBuilder =
-            new VariableBlockViewElementContextMenuBuilder(actionManager, portViewModel);
+            new VariableBlockViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
+                portViewModel);
         setContextMenu(newVariableBlockViewElement, contextMenuBuilder);
 
         return new SelectableViewElementDecorator(newVariableBlockViewElement);
@@ -75,7 +78,8 @@ public class ViewFactory {
     public ViewElement<?> createViewElementFrom(EdgeViewModel edgeViewModel) {
         EdgeViewElement newEdgeViewElement = new EdgeViewElement(edgeViewModel);
 
-        ViewContextMenuBuilder contextMenuBuilder = new EdgeViewElementContextMenuBuilder(actionManager, edgeViewModel);
+        ViewContextMenuBuilder contextMenuBuilder = new EdgeViewElementContextMenuBuilder(actionManager,
+            geckoView.getCurrentView().getViewModel(), edgeViewModel);
         setContextMenu(newEdgeViewElement, contextMenuBuilder);
 
         return new ConnectionElementScalerViewElementDecorator(newEdgeViewElement);
@@ -86,7 +90,8 @@ public class ViewFactory {
             new SystemConnectionViewElement(systemConnectionViewModel);
 
         ViewContextMenuBuilder contextMenuBuilder =
-            new SystemConnectionViewElementContextMenuBuilder(actionManager, systemConnectionViewModel);
+            new SystemConnectionViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
+                systemConnectionViewModel);
         setContextMenu(newSystemConnectionViewElement, contextMenuBuilder);
 
         return new ConnectionElementScalerViewElementDecorator(newSystemConnectionViewElement);
@@ -96,7 +101,8 @@ public class ViewFactory {
         SystemViewElement newSystemViewElement = new SystemViewElement(systemViewModel);
 
         ViewContextMenuBuilder contextMenuBuilder =
-            new SystemViewElementContextMenuBuilder(actionManager, systemViewModel);
+            new SystemViewElementContextMenuBuilder(actionManager, geckoView.getCurrentView().getViewModel(),
+                systemViewModel);
         setContextMenu(newSystemViewElement, contextMenuBuilder);
 
         return new SelectableViewElementDecorator(newSystemViewElement);

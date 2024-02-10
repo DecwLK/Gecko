@@ -187,7 +187,8 @@ public class EditorView {
             viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
         });
 
-        ViewContextMenuBuilder contextMenuBuilder = new ViewContextMenuBuilder(viewModel.getActionManager());
+        ViewContextMenuBuilder contextMenuBuilder
+            = new ViewContextMenuBuilder(viewModel.getActionManager(), this.getViewModel());
         this.contextMenu = contextMenuBuilder.build();
         currentViewPane.setOnContextMenuRequested(event -> {
             changeContextMenu(contextMenuBuilder.getContextMenu());
@@ -203,6 +204,13 @@ public class EditorView {
                 .filter(menuItem -> menuItem.getText().equals("Cut"))
                 .findAny()
                 .ifPresent(cutMenuItem -> cutMenuItem.setDisable(
+                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
+
+            this.contextMenu.getItems()
+                .stream()
+                .filter(menuItem -> menuItem.getText().equals("Select All"))
+                .findAny()
+                .ifPresent(selectMenuItem -> selectMenuItem.setDisable(
                     viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
 
             this.contextMenu.getItems()

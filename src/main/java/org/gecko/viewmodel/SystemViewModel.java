@@ -17,7 +17,7 @@ import org.gecko.model.System;
 
 /**
  * Represents an abstraction of a {@link System} model element. A {@link SystemViewModel} is described by a code snippet
- * (?) and a set of {@link PortViewModel}s. Contains methods for managing the afferent data and updating the
+ * and a set of {@link PortViewModel}s. Contains methods for managing the afferent data and updating the
  * target-{@link System}.
  */
 @Getter

@@ -29,29 +29,21 @@ public class DeleteActionsCreatorVisitor implements PositionableViewModelElement
 
     @Override
     public Set<AbstractPositionableViewModelElementAction> visit(SystemViewModel systemViewModel) {
+        DeleteActionsCreatorVisitor deleteActionsCreatorVisitor =
+            new DeleteActionsCreatorVisitor(geckoViewModel, systemViewModel);
         for (System childSystem : systemViewModel.getTarget().getChildren()) {
             SystemViewModel childSystemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(childSystem);
-            DeleteActionsCreatorVisitor deleteActionsCreatorVisitor =
-                new DeleteActionsCreatorVisitor(geckoViewModel, systemViewModel);
             deleteActions.addAll((Set<AbstractPositionableViewModelElementAction>) childSystemViewModel.accept(
                 deleteActionsCreatorVisitor));
         }
 
-        DeleteActionsCreatorVisitor deleteActionsCreatorVisitor =
-            new DeleteActionsCreatorVisitor(geckoViewModel, systemViewModel);
         systemViewModel.getPorts().forEach(portViewModel -> {
-            deleteActions.addAll(
-                (Set<AbstractPositionableViewModelElementAction>) portViewModel.accept(deleteActionsCreatorVisitor));
+            deleteActions.addAll((Set<AbstractPositionableViewModelElementAction>) portViewModel.accept(this));
         });
 
         System system = systemViewModel.getTarget();
         geckoViewModel.getViewModelElements(system.getConnections()).forEach(systemConnectionViewModel -> {
-            systemConnectionViewModel.accept(this);
-        });
-        geckoViewModel.getViewModelElements(system.getChildren()).forEach(childSystemViewModel -> {
-            deleteActions.add(
-                new DeleteSystemViewModelElementAction(geckoViewModel, (SystemViewModel) childSystemViewModel,
-                    systemViewModel.getTarget()));
+            systemConnectionViewModel.accept(deleteActionsCreatorVisitor);
         });
         geckoViewModel.getViewModelElements(system.getAutomaton().getAllElements()).forEach(element -> {
             element.accept(this);
@@ -143,7 +135,10 @@ public class DeleteActionsCreatorVisitor implements PositionableViewModelElement
                 || systemConnection.getDestination().equals(portViewModel.getTarget()))
             .collect(Collectors.toSet());
         geckoViewModel.getViewModelElements(systemConnections).forEach(systemConnectionViewModel -> {
-            systemConnectionViewModel.accept(this);
+            DeleteActionsCreatorVisitor deleteActionsCreatorVisitor =
+                new DeleteActionsCreatorVisitor(geckoViewModel, systemViewModel);
+            deleteActions.addAll((Set<AbstractPositionableViewModelElementAction>) systemConnectionViewModel.accept(
+                deleteActionsCreatorVisitor));
         });
     }
 }

@@ -15,7 +15,6 @@ import java.util.StringJoiner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.gecko.exceptions.GeckoException;
 import org.gecko.exceptions.ModelException;
 import org.gecko.model.Automaton;
 import org.gecko.model.Condition;

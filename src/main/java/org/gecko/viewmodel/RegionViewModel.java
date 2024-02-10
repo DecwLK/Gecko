@@ -17,7 +17,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 import org.gecko.model.Region;
-import org.gecko.model.State;
 
 /**
  * Represents an abstraction of a {@link Region} model element. A {@link RegionViewModel} is described by a

@@ -1,7 +1,6 @@
 package org.gecko.view.inspector.element.button;
 
 import javafx.scene.control.Tooltip;
-import javafx.scene.paint.Color;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.ResourceHandler;
 import org.gecko.view.views.shortcuts.Shortcuts;

@@ -1,10 +1,6 @@
 package org.gecko.actions;
 
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.Point2D;
 import org.gecko.exceptions.GeckoException;
-import org.gecko.model.Visibility;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;

@@ -239,10 +239,6 @@ public class EditorViewModel {
         focusedElementProperty.setValue(focusedElement);
     }
 
-    public void addPositionableViewModelElement(PositionableViewModelElement<?> element) {
-        addPositionableViewModelElements(Set.of(element));
-    }
-
     /**
      * Adds the given elements to the current {@link EditorViewModel}. They will then be displayed in the view.
      *
@@ -251,22 +247,14 @@ public class EditorViewModel {
     public void addPositionableViewModelElements(Set<PositionableViewModelElement<?>> elements) {
         elements.removeAll(containedPositionableViewModelElementsProperty);
         containedPositionableViewModelElementsProperty.addAll(elements);
-        //don't select elements if no elements are added to the current view
-        /*if (!elements.isEmpty()) {
-            actionManager.run(actionManager.getActionFactory().createSelectAction(elements, true));
-        }*/
     }
 
     /**
-     * Removes the given element from the current {@link EditorViewModel}. It will then no longer be displayed in the
+     * Removes the given elements from the current {@link EditorViewModel}. They will then no longer be displayed in the
      * view.
      *
-     * @param element the element to remove
+     * @param elements the elements to remove
      */
-    public void removePositionableViewModelElement(PositionableViewModelElement<?> element) {
-        containedPositionableViewModelElementsProperty.remove(element);
-    }
-
     public void removePositionableViewModelElements(Set<PositionableViewModelElement<?>> elements) {
         elements.forEach(containedPositionableViewModelElementsProperty::remove);
     }

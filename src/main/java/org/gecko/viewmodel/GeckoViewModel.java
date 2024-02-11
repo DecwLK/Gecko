@@ -68,13 +68,11 @@ public class GeckoViewModel {
     }
 
     private void setupNewEditorViewModel(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
-        SystemViewModel currentSystemViewModel = null;
-        if (getCurrentEditor() != null) {
-            currentSystemViewModel = getCurrentEditor().getCurrentSystem();
+        SystemViewModel parent = null;
+        if (nextSystemViewModel.getTarget().getParent() != null) {
+            parent = (SystemViewModel) getViewModelElement(nextSystemViewModel.getTarget().getParent());
         }
-
-        EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel,
-            nextSystemViewModel.equals(currentSystemViewModel) ? null : currentSystemViewModel, isAutomatonEditor);
+        EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel, parent, isAutomatonEditor);
         openedEditorsProperty.add(editorViewModel);
         setCurrentEditor(editorViewModel);
     }

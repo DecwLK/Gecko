@@ -14,6 +14,7 @@ import org.gecko.exceptions.ModelException;
  */
 @Getter
 public class GeckoModel {
+    private static final String DEFAULT_NAME = "^Element_\\d+\\b";
     private final System root;
     private final ModelFactory modelFactory;
     @Setter
@@ -54,5 +55,46 @@ public class GeckoModel {
             }
         }
         return null;
+    }
+
+    public boolean isNameValid(@NonNull String name) {
+        return !isNameDefaultName(name) && isNameUnique(name);
+    }
+
+    private boolean isNameUnique(@NonNull String name) {
+        return isNameUnique(root, name);
+    }
+
+    private boolean isNameUnique(@NonNull System system, @NonNull String name) {
+        if (system.getName().equals(name)) {
+            return false;
+        }
+        if (system.getVariables().stream().anyMatch(variable -> variable.getName().equals(name))) {
+            return false;
+        }
+
+        Automaton automaton = system.getAutomaton();
+        if (automaton.getRegions().stream().anyMatch(region -> region.getName().equals(name))) {
+            return false;
+        }
+        for (State state : automaton.getStates()) {
+            if (state.getName().equals(name)) {
+                return false;
+            }
+            if (state.getContracts().stream().anyMatch(contract -> contract.getName().equals(name))) {
+                return false;
+            }
+        }
+
+        for (System child : system.getChildren()) {
+            if (!isNameUnique(child, name)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isNameDefaultName(@NonNull String name) {
+        return name.matches(DEFAULT_NAME);
     }
 }

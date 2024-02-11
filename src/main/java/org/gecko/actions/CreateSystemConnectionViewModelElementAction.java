@@ -37,7 +37,7 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
         if (destinationSystem == null && currentParentSystem.getPorts().contains(destination)) {
             destinationSystem = currentParentSystem;
         }
-        if (sourceSystem == null || destinationSystem == null || sourceSystem == destinationSystem) {
+        if (sourceSystem == null || destinationSystem == null || sourceSystem.equals(destinationSystem)) {
             return false;
         }
 

@@ -23,7 +23,7 @@ public class InspectorAddVariableButton extends AbstractInspectorButton {
             try {
                 addedPort.updateTarget();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException("Failed while changeing a port's visibility. This should never happen.");
             }
         });
     }

@@ -87,7 +87,6 @@ public abstract class ConnectionViewElement extends Path {
                 // No intersection
                 continue;
             }
-            Point2D vector = corner.subtract(nextCorner).normalize();
 
             Point2D edgePosition = new Point2D(intersectionShape.getBoundsInLocal().getMinX(),
                 intersectionShape.getBoundsInLocal().getMinY());

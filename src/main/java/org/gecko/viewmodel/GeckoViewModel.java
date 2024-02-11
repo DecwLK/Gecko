@@ -51,7 +51,7 @@ public class GeckoViewModel {
 
     public void switchEditor(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
         openedEditorsProperty.stream()
-            .filter(editorViewModel -> (editorViewModel.getCurrentSystem() == nextSystemViewModel
+            .filter(editorViewModel -> (editorViewModel.getCurrentSystem().equals(nextSystemViewModel)
                 && editorViewModel.isAutomatonEditor() == isAutomatonEditor))
             .findFirst()
             .ifPresentOrElse(this::setCurrentEditor,
@@ -69,7 +69,7 @@ public class GeckoViewModel {
         }
 
         EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel,
-            (nextSystemViewModel == currentSystemViewModel) ? null : currentSystemViewModel, isAutomatonEditor);
+            nextSystemViewModel.equals(currentSystemViewModel) ? null : currentSystemViewModel, isAutomatonEditor);
         openedEditorsProperty.add(editorViewModel);
         setCurrentEditor(editorViewModel);
     }

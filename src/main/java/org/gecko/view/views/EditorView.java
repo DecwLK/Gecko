@@ -430,12 +430,14 @@ public class EditorView {
         ObservableValue<? extends Set<PositionableViewModelElement<?>>> observable,
         Set<PositionableViewModelElement<?>> oldValue, Set<PositionableViewModelElement<?>> newValue) {
 
+        List<PositionableViewModelElement<?>> toRemove = new ArrayList<>();
         for (PositionableViewModelElement<?> element : oldValue) {
             ViewElement<?> viewElement = findViewElement(element);
             if (viewElement == null) {
-                oldValue.remove(element);
+                toRemove.add(element);
             }
         }
+        toRemove.forEach(oldValue::remove);
 
         oldValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(false));
         newValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(true));

@@ -262,8 +262,8 @@ public class EditorViewModel {
             return false;
         }
         if (zoomFactor < 1) {
-            return getViewPortSize().getX() / (getZoomScale()) <= getWorldSize().getX() * zoomFactor
-                && getViewPortSize().getY() / (getZoomScale()) <= getWorldSize().getY() * zoomFactor;
+            return getViewPortSize().getX() / getZoomScale() <= getWorldSize().getX() * zoomFactor
+                && getViewPortSize().getY() / getZoomScale() <= getWorldSize().getY() * zoomFactor;
         } else {
             return getZoomScale() * zoomFactor <= MAX_ZOOM_SCALE;
         }
@@ -300,10 +300,9 @@ public class EditorViewModel {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof EditorViewModel editorViewModel)) {
             return false;
         }
-        EditorViewModel editorViewModel = (EditorViewModel) o;
         return id == editorViewModel.id;
     }
 }

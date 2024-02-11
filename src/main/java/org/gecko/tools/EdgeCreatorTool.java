@@ -10,6 +10,7 @@ import org.gecko.actions.ActionManager;
 import org.gecko.view.views.viewelement.StateViewElement;
 import org.gecko.viewmodel.StateViewModel;
 
+/** A concrete representation of an edge-creating-{@link Tool}, utilized for connecting a source- and a destination-{@link StateViewModel} through an {@link org.gecko.viewmodel.EdgeViewModel}. Holds the source-{@link StateViewModel}. */
 public class EdgeCreatorTool extends Tool {
     private StateViewModel source;
 

@@ -5,6 +5,7 @@ import org.gecko.model.Automaton;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 
+/** A concrete representation of an {@link Action} that restores a deleted {@link EdgeViewModel} in a given {@link Automaton}. */
 public class RestoreEdgeViewModelElementAction extends Action {
     private final GeckoViewModel geckoViewModel;
     private final EdgeViewModel edgeViewModel;

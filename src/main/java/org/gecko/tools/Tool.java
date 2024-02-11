@@ -23,6 +23,7 @@ import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewEle
 import org.gecko.view.views.viewelement.decorator.ElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
 
+/** An abstract representation of a tool used in the Gecko Graphic Editor, characterized by a {@toolType}. Follows the visitor pattern, implementing the {@link ViewElementVisitor} interface. Defines the {@link MouseEvent} {@link EventHandler}s for each {@link org.gecko.view.views.viewelement.ViewElement}. */
 public abstract class Tool implements ViewElementVisitor {
 
     protected final ActionManager actionManager;

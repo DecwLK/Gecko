@@ -7,6 +7,7 @@ import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/** A concrete representation of an {@link Action} that restores a set of deleted {@link PositionableViewModelElement}s in the current {@link org.gecko.viewmodel.EditorViewModel}. */
 public class RestorePositionableViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;

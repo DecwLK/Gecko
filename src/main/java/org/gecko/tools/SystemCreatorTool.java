@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 
+/** A concrete representation of a system-creating-{@link Tool}, utilized for creating a {@link org.gecko.viewmodel.SystemViewModel}. */
 public class SystemCreatorTool extends Tool {
     public SystemCreatorTool(ActionManager actionManager) {
         super(actionManager, ToolType.SYSTEM_CREATOR);

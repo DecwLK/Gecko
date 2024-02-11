@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.RegionViewModel;
 
+/** A concrete representation of an {@link Action} that changes the color of a {@link RegionViewModel}. Additionally holds the old and new {@link Color}s of the region for undo/redo purposes. */
 public class ChangeColorRegionViewModelElementAction extends Action {
 
     private final RegionViewModel regionViewModel;

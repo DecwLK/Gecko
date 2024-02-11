@@ -6,6 +6,7 @@ import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** A concrete representation of an {@link Action} that removes a {@link SystemViewModel} from a given {@link SystemViewModel}. */
 public class DeleteSystemViewModelElementAction extends AbstractPositionableViewModelElementAction {
     private final GeckoViewModel geckoViewModel;
     private final SystemViewModel systemViewModel;

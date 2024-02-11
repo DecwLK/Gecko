@@ -6,6 +6,7 @@ import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
+/** A concrete representation of an {@link Action} that restores a deleted {@link ContractViewModel} in a given parent-{@link StateViewModel}. */
 public class RestoreContractViewModelElementAction extends Action {
 
     private final StateViewModel parent;

@@ -12,6 +12,7 @@ import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** A concrete representation of an {@link Action} that removes a {@link StateViewModel} from the {@link GeckoViewModel} and its target-{@link State} from the given {@link Automaton}. */
 public class DeleteStateViewModelElementAction extends AbstractPositionableViewModelElementAction {
     private final GeckoViewModel geckoViewModel;
     private final EditorViewModel editorViewModel;

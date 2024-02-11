@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.GeckoViewModel;
 
+/** Represents a manager for the actions of the active {@link org.gecko.application.Gecko}. Holds an {@link ActionFactory}, a stack of currently undoable {@link Action}s and a stack of currently redoable {@link Action}s, thus providing methods for running, undoing and redoing actions. */
 public class ActionManager {
     @Getter
     private final ActionFactory actionFactory;

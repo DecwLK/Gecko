@@ -6,6 +6,7 @@ import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** A concrete representation of an {@link Action} that removes a {@link PortViewModel} from the given parent-{@link SystemViewModel}. */
 public class DeletePortViewModelElementAction extends AbstractPositionableViewModelElementAction {
     private final GeckoViewModel geckoViewModel;
     private final PortViewModel portViewModel;

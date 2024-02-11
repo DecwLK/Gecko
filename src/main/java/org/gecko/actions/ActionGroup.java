@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.gecko.exceptions.GeckoException;
 
+/** A concrete representation of an {@link Action}, which encapsulates a list of other concrete actions, which are iteratively run or undone. */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ActionGroup extends Action {

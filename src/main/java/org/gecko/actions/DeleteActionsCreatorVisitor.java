@@ -15,6 +15,8 @@ import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+
+/** Follows the visitor pattern, implementing the {@link PositionableViewModelElementVisitor} interface. Determines all necessary delete-{@link Action}s for deleting all "lower level"-dependencies of a given parent-@link SystemViewModel}. */
 public class DeleteActionsCreatorVisitor implements PositionableViewModelElementVisitor {
 
     private final GeckoViewModel geckoViewModel;

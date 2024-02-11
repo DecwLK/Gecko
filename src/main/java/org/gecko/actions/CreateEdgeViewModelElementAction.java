@@ -6,6 +6,7 @@ import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** A concrete representation of an {@link Action} that creates an {@link EdgeViewModel} in the current-{@link SystemViewModel} with given source- and destination-{@link StateViewModel}s through the {@link org.gecko.viewmodel.ViewModelFactory} of the {@link GeckoViewModel}. */
 public class CreateEdgeViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;

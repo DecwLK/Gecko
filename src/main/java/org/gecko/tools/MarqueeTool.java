@@ -9,6 +9,7 @@ import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/** A concrete representation of a marquee-{@link AreaTool}, utilized for marking a rectangle-formed area in the view and thus selecting the covered {@link org.gecko.view.views.viewelement.ViewElement}s. Holds the current {@link EditorViewModel}.. */
 public class MarqueeTool extends AreaTool {
     private final EditorViewModel editorViewModel;
 

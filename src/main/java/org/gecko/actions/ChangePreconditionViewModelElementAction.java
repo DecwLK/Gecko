@@ -3,6 +3,7 @@ package org.gecko.actions;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.ContractViewModel;
 
+/** A concrete representation of an {@link Action} that changes the precondition of a {@link ContractViewModel}, which it holds a reference to. Additionally holds the old and new {@link String precondition}s of the contract for undo/redo purposes. */
 public class ChangePreconditionViewModelElementAction extends Action {
 
     private final ContractViewModel contractViewModel;

@@ -5,6 +5,7 @@ import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** A concrete representation of an {@link Action} that restores a deleted {@link PortViewModel} in a given {@link SystemViewModel}. */
 public class RestorePortViewModelElementAction extends Action {
     private final GeckoViewModel geckoViewModel;
     private final PortViewModel portViewModel;

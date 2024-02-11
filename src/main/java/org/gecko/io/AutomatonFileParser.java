@@ -12,9 +12,15 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.gecko.exceptions.ModelException;
+import org.gecko.model.GeckoModel;
 import org.gecko.util.graphlayouting.Graphlayouter;
 import org.gecko.viewmodel.GeckoViewModel;
 
+/**
+ * The AutomatonFileParser is used to import a project from a sys file. It is responsible for parsing a sys file and
+ * creating a {@link GeckoViewModel} from it. It uses the {@link AutomatonFileVisitor} the file into a
+ * {@link GeckoModel}. And then uses the {@link ViewModelElementCreator} to create the view model from the model.
+ */
 public class AutomatonFileParser implements FileParser {
     @Override
     public GeckoViewModel parse(File file) throws IOException {

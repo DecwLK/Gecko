@@ -25,6 +25,11 @@ import org.gecko.model.System;
 import org.gecko.model.Variable;
 import org.gecko.model.Visibility;
 
+/**
+ * Used for building a {@link GeckoModel} from a sys file. This class is a visitor for the ANTLR4 generated parser for
+ * the sys file format. The entire {@link GeckoModel} can be built by calling {@link #visitModel} and passing it the
+ * {@link SystemDefParser.ModelContext} of a sys file.
+ */
 public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
 
     @Getter

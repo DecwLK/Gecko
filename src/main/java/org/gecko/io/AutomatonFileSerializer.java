@@ -27,6 +27,10 @@ import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
 
+/**
+ * The AutomatonFileSerializer is used to export a project to a sys file. When exporting, it transforms features unique
+ * to Gecko, such as regions, kinds and priorities, to be compatible with the sys file format.
+ */
 public class AutomatonFileSerializer implements FileSerializer {
 
     private final GeckoModel model;
@@ -90,8 +94,8 @@ public class AutomatonFileSerializer implements FileSerializer {
         //Creating new contracts to not alter the model
         Map<Contract, Contract> newContracts = new HashMap<>();
         for (Edge edge : edges) {
-            Contract newContract = applyKindToContract(edge.getContract(), edge.getKind());
-            applyRegionsToContract(relevantRegions, newContract);
+            Contract newContract = applyRegionsToContract(relevantRegions, edge.getContract());
+            applyKindToContract(newContract, edge.getKind());
             newContracts.put(edge.getContract(), newContract);
         }
 
@@ -134,42 +138,34 @@ public class AutomatonFileSerializer implements FileSerializer {
         return serializeCollectionWithMapping(newContracts.values(), this::serializeContract);
     }
 
-    private Contract applyKindToContract(Contract contract, Kind kind) {
+    private void applyKindToContract(Contract contract, Kind kind) {
         switch (kind) {
             case MISS -> {
-                try {
-                    return new Contract(0, contract.getName(), contract.getPreCondition().not(),
-                        contract.getPostCondition());
-                } catch (ModelException e) {
-                    throw new RuntimeException("Failed to negate a valid condition", e);
-                }
+                contract.setPreCondition(contract.getPreCondition().not());
             }
             case FAIL -> {
-                try {
-                    return new Contract(0, contract.getName(), contract.getPreCondition(),
-                        contract.getPostCondition().not());
-                } catch (ModelException e) {
-                    throw new RuntimeException("Failed to negate a valid condition", e);
-                }
+                contract.setPostCondition(contract.getPostCondition().not());
             }
             case HIT -> {
-                try {
-                    return new Contract(0, contract.getName(), contract.getPreCondition(), contract.getPostCondition());
-                } catch (ModelException e) {
-                    throw new RuntimeException("Failed to copy a contract", e);
-                }
             }
             default -> throw new IllegalArgumentException("Unknown kind: " + kind);
         }
     }
 
-    private void applyRegionsToContract(List<Region> relevantRegions, Contract contract) {
+    private Contract applyRegionsToContract(List<Region> relevantRegions, Contract contract) {
+        Contract newContract;
+        try {
+            newContract = new Contract(0, contract.getName(), contract.getPreCondition(), contract.getPostCondition());
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to build contract out of other valid contracts", e);
+        }
         if (relevantRegions.isEmpty()) {
-            return;
+            return newContract;
         }
         List<Condition> newConditions = andConditions(relevantRegions);
-        contract.setPreCondition(contract.getPreCondition().and(newConditions.getFirst()));
-        contract.setPostCondition(contract.getPostCondition().and(newConditions.get(1)));
+        newContract.setPreCondition(newConditions.getFirst());
+        newContract.setPostCondition(newConditions.get(1));
+        return newContract;
     }
 
     private List<Condition> andConditions(List<Region> regions) {

@@ -15,6 +15,11 @@ import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/**
+ * The Graphlayouter is the core of the graphlayouting package. It is responsible for creating the ELK graph from the
+ * view model and applying the layout to the view model. Currently, the layoutalgorithms are hardcoded to use the
+ * layered algorithm for the system graph and the force algorithm for the automaton graph.
+ */
 public class Graphlayouter {
 
     private final GeckoViewModel viewModel;

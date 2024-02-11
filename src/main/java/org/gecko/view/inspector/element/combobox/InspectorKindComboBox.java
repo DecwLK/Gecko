@@ -6,6 +6,7 @@ import org.gecko.actions.ActionManager;
 import org.gecko.model.Kind;
 import org.gecko.viewmodel.EdgeViewModel;
 
+/** Represents a type of {@link InspectorComboBox} encapsulating a {@link Kind}. Holds a reference to an {@link EdgeViewModel} and the current {@link ActionManager}. */
 public class InspectorKindComboBox extends InspectorComboBox<Kind> {
     private final EdgeViewModel viewModel;
     private final ActionManager actionManager;

@@ -7,6 +7,7 @@ import org.gecko.view.inspector.element.container.InspectorContractItem;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
+/** A concrete representation of an {@link AbstractInspectorList} encapsulating an {@link InspectorContractItem}. */
 public class InspectorContractList extends AbstractInspectorList<InspectorContractItem> {
     public InspectorContractList(ActionManager actionManager, StateViewModel stateViewModel) {
         ObservableList<InspectorContractItem> items = getItems();

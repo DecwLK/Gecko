@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 
+/** Represents a type of {@link HBox} implementing the {@link InspectorElement} interface. Contains an {@link InspectorLabel} and the labeled {@link InspectorElement}. */
 public class LabeledInspectorElement extends HBox implements InspectorElement<HBox> {
 
     public LabeledInspectorElement(InspectorLabel label, InspectorElement<?> element) {

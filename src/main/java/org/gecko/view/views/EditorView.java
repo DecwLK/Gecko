@@ -45,6 +45,7 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 
+/** Represents a displayable view in the Gecko Graphic Editor, holding a collection of displayed {@link ViewElement}s and other items specific to their vizualization. */
 public class EditorView {
     private static final double RELATIVE_BORDER_SIZE = 0.25;
     private static final double MIN_WORLD_SIZE = 1000;

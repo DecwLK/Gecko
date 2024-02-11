@@ -13,6 +13,7 @@ import org.gecko.tools.ToolType;
 import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 
+/** An abstract representation of a handler for shortcut events, implementing the {@link EventHandler} interface, which encapsulates a {@link KeyEvent}. Holds a reference to the current {@link ActionManager}, the {@link ActionFactory} and the {@link EditorView}, as well as a map of {@link KeyCodeCombination}-keys and {@link Runnable}-values, which allow for actions to be run by using keyboard shortcuts. */
 public abstract class ShortcutHandler implements EventHandler<KeyEvent> {
     private static final double ZOOM_FACTOR = 1.1;
     protected HashMap<KeyCodeCombination, Runnable> shortcuts = new HashMap<>();

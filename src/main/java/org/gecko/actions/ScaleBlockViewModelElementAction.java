@@ -6,6 +6,7 @@ import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.BlockViewModelElement;
 import org.gecko.viewmodel.EditorViewModel;
 
+/** A concrete representation of an {@link Action} that scales a  {@link BlockViewModelElement} by a {@link Point2D delta value} using an {@link ElementScalerBlock}. */
 public class ScaleBlockViewModelElementAction extends Action {
 
     private final EditorViewModel editorViewModel;

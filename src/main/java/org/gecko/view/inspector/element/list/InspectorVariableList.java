@@ -8,6 +8,7 @@ import org.gecko.view.inspector.element.container.InspectorVariableField;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** A concrete representation of an {@link AbstractInspectorList} encapsulating an {@link InspectorVariableField}. */
 public class InspectorVariableList extends AbstractInspectorList<InspectorVariableField> {
 
     private final ActionManager actionManager;

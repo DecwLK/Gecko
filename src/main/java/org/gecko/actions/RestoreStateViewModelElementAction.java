@@ -6,6 +6,7 @@ import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** A concrete representation of an {@link Action} that restores a deleted {@link StateViewModel} in a given {@link Automaton}. */
 public class RestoreStateViewModelElementAction extends Action {
     private final GeckoViewModel geckoViewModel;
     private final StateViewModel stateViewModel;

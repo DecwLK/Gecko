@@ -4,6 +4,7 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.ContractViewModel;
 
+/** A concrete representation of an {@link InspectorAreaField} for a {@link ContractViewModel}, through which the postcondition of the contract can be changed. */
 public class InspectorPostconditionField extends InspectorAreaField {
     private final ActionManager actionManager;
     private final ContractViewModel contractViewModel;

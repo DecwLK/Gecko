@@ -9,6 +9,7 @@ import org.gecko.actions.ActionManager;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.EditorViewModel;
 
+/** Represents a builder for a general purpose {@link ContextMenu} in the view, containing {@link MenuItem}s that run the cut, copy, paste, select all and deselect all operations. Holds therefore a reference to the {@link ActionManager} and to the built {@link ContextMenu}. */
 public class ViewContextMenuBuilder {
     protected final ActionManager actionManager;
     @Setter

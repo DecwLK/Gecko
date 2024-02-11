@@ -9,6 +9,7 @@ import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** Follows the visitor pattern, implementing the {@link PositionableViewModelElementVisitor} interface. Holds a reference to the {@link InspectorFactory} and to the built {@link Inspector}. It uses the factory when visiting each type of {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement} in order to create inspectors for concrete {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement}s. */
 public class InspectorFactoryVisitor implements PositionableViewModelElementVisitor {
 
     private final InspectorFactory inspectorFactory;

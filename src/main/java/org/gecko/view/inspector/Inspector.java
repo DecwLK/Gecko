@@ -13,6 +13,7 @@ import org.gecko.view.inspector.element.button.AbstractInspectorButton;
 import org.gecko.view.inspector.element.button.InspectorSelectionBackwardButton;
 import org.gecko.view.inspector.element.button.InspectorSelectionForwardButton;
 
+/** Represents a {@link ScrollPane} that encapsulates {@link InspectorElement}s, which allow the properties of Gecko elements to be modified from the view. */
 public class Inspector extends ScrollPane {
 
     private static final int INSPECTOR_ELEMENT_SPACING = 10;

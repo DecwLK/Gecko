@@ -6,6 +6,7 @@ import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** Represents a type of {@link AbstractInspectorButton} used for adding a {@link PortViewModel} to a given {@link SystemViewModel} with a given {@link Visibility}.  */
 public class InspectorAddVariableButton extends AbstractInspectorButton {
 
     private static final int WIDTH = 70;

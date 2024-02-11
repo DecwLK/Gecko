@@ -13,6 +13,7 @@ import org.gecko.view.inspector.element.textfield.InspectorRenameField;
 import org.gecko.view.inspector.element.textfield.InspectorTypeField;
 import org.gecko.viewmodel.PortViewModel;
 
+/** Represents a type of {@link VBox} implementing the {@link InspectorElement} interface. Holds a reference to a {@link PortViewModel} and contains an {@link InspectorRenameField}, an {@link InspectorRemoveVariableButton} and an {link InspectorTypeField}. */
 @Getter
 public class InspectorVariableField extends VBox implements InspectorElement<VBox> {
 

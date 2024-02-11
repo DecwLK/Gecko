@@ -12,6 +12,7 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
+/** Represents a type of {@link AbstractInspectorBuilder} of an {@link Inspector} for a {@link StateViewModel}. Adds to the list of {@link InspectorElement}s, which are added to a built {@link org.gecko.view.inspector.Inspector Inspector}, the following: an {@link InspectorLabel} for each {@link RegionViewModel} of the {@link StateViewModel}, an {@link InspectorSetStartStateButton} and an {@link InspectorContractList}. */
 public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewModel> {
 
     public StateInspectorBuilder(

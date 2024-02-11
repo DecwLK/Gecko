@@ -10,6 +10,7 @@ import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** Follows the visitor pattern, implementing the {@link PositionableViewModelElementVisitor} interface. Searches for absolute or partial matches between a given {@link String} and the names of {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement}s, if present. */
 public class ViewElementSearchVisitor implements PositionableViewModelElementVisitor {
     private final String search;
 

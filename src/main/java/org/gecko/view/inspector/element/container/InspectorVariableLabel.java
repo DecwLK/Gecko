@@ -7,6 +7,7 @@ import org.gecko.view.inspector.element.button.InspectorAddVariableButton;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** Represents a type of {@link LabeledInspectorElement}. Contains an {@link InspectorLabel} and an {@link InspectorAddVariableButton}. */
 public class InspectorVariableLabel extends LabeledInspectorElement {
 
     public InspectorVariableLabel(ActionManager actionManager, SystemViewModel viewModel, Visibility visibility) {

@@ -19,6 +19,7 @@ import org.gecko.tools.ToolType;
 import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 
+/** Represents a builder for the {@link ToolBar} displayed in the view, containing a {@link ToggleGroup} with {@link ToggleButton}s for each of the current view's available {@link Tool}s, as well as {@link ToggleButton}s for running the undo and redo operations. Holds a reference to the built {@link ToolBar} and the current {@link EditorView}. */
 public class ToolBarBuilder {
 
     private static final String DEFAULT_TOOLBAR_ICON_STYLE_NAME = "toolbar-icon";

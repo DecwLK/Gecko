@@ -9,6 +9,7 @@ import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** Follows the visitor pattern, implementing the {@link PositionableViewModelElementVisitor} interface. Creates each type of {@link ViewElement} through the {@link ViewFactory} by visiting a type of {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement}. */
 public class ViewElementCreatorVisitor implements PositionableViewModelElementVisitor {
 
     private final ViewFactory viewFactory;

@@ -6,6 +6,7 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 
+/** A concrete representation of an {@link TextField} implementing the {@link InspectorElement} interface, which encapsulates a {@link TextField}. */
 public abstract class InspectorTextField extends TextField implements InspectorElement<TextField> {
 
     protected InspectorTextField(StringProperty stringProperty, ActionManager actionManager) {

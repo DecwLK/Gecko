@@ -30,6 +30,7 @@ import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/** Represents a factory for the view elements of a Gecko project. Provides a method for the creation of each element. */
 public class ViewFactory {
 
     private final ActionManager actionManager;

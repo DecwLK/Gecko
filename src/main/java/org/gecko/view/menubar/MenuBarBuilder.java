@@ -21,6 +21,7 @@ import org.gecko.view.GeckoView;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/** Represents a builder for the {@link MenuBar} displayed in the view, containing {@link MenuItem}s in {@link Menu}s grouped by category. Holds a reference to the built {@link MenuBar}, the current {@link GeckoView} and the {@link ActionManager}, which allow for actions to be run from the menu bar. Relevant menus for the Gecko Graphic Editor are "File" (running operations like creating, saving, loading, importing and exporting files), "Edit" (running operations like undoing and redoing actions, cutting, copying and pasting or selecting and deselecting all elements), "View" (running operations like changing the view, opening the parent system or zomming in and out of the view), "Tools" (providing the active tools which can be selected in the current view) and "Help" (running operations like finding an element by name matches, opening a comprehensive list of all shortcuts available or reading more information about Gecko). */
 public class MenuBarBuilder {
     private final MenuBar menuBar;
     private final GeckoView view;

@@ -72,7 +72,7 @@ public class ViewModelElementCreator {
         }
 
         for (SystemConnection systemConnection : system.getConnections()) {
-            createSystemConnectionViewModel(systemConnection);
+            createSystemConnectionViewModel(system, systemConnection);
         }
 
         Automaton automaton = system.getAutomaton();
@@ -189,10 +189,10 @@ public class ViewModelElementCreator {
         updateHighestId(system);
     }
 
-    private void createSystemConnectionViewModel(SystemConnection systemConnection) throws IOException {
+    private void createSystemConnectionViewModel(System system, SystemConnection systemConnection) throws IOException {
         SystemConnectionViewModel systemConnectionViewModel = null;
         try {
-            systemConnectionViewModel = viewModelFactory.createSystemConnectionViewModelFrom(systemConnection);
+            systemConnectionViewModel = viewModelFactory.createSystemConnectionViewModelFrom(system, systemConnection);
         } catch (MissingViewModelElementException e) {
             PortViewModel source = (PortViewModel) viewModel.getViewModelElement(systemConnection.getSource());
             if (source == null) {
@@ -203,7 +203,7 @@ public class ViewModelElementCreator {
             if (destination == null) {
                 createPortViewModel(systemConnection.getDestination());
             }
-            createSystemConnectionViewModel(systemConnection);
+            createSystemConnectionViewModel(system, systemConnection);
         }
 
         if (systemConnectionViewModel != null) {

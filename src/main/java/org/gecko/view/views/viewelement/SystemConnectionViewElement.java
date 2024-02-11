@@ -59,12 +59,6 @@ public class SystemConnectionViewElement extends ConnectionViewElement
     }
 
     @Override
-    public void setSelected(boolean selected) {
-        System.out.println(systemConnectionViewModel.getSource().getTarget().getName() + " : "
-            + systemConnectionViewModel.getDestination().getTarget().getName() + " : " + selected);
-    }
-
-    @Override
     public int getZPriority() {
         return Z_PRIORITY;
     }

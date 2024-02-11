@@ -115,7 +115,7 @@ public class ViewModelFactory {
             new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
         geckoViewModel.addViewModelElement(result);
 
-        setSystemConnectionEdgePoints(source, destination, result);
+        setSystemConnectionEdgePoints(parentSystem, source, destination, result);
         result.updateTarget();
         return result;
     }
@@ -123,8 +123,8 @@ public class ViewModelFactory {
     /**
      * Expects the source and destination of the system connection to be in the view model.
      */
-    public SystemConnectionViewModel createSystemConnectionViewModelFrom(SystemConnection systemConnection)
-        throws MissingViewModelElementException {
+    public SystemConnectionViewModel createSystemConnectionViewModelFrom(
+        System system, SystemConnection systemConnection) throws MissingViewModelElementException {
         PortViewModel source = (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getSource());
         PortViewModel destination =
             (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getDestination());
@@ -134,7 +134,8 @@ public class ViewModelFactory {
         SystemConnectionViewModel result =
             new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
         geckoViewModel.addViewModelElement(result);
-        setSystemConnectionEdgePoints(source, destination, result);
+        setSystemConnectionEdgePoints((SystemViewModel) geckoViewModel.getViewModelElement(system), source, destination,
+            result);
         // Since target is already up-to-date and we're building from target, we don't need to call updateTarget
         return result;
     }
@@ -261,10 +262,8 @@ public class ViewModelFactory {
             .subtract((visibility == Visibility.INPUT ? 1 : -1) * sign * size.getX() / 2, 0);
     }
 
-    private boolean isPort(PortViewModel portViewModel) {
-        return geckoViewModel.getCurrentEditor()
-            .getCurrentSystem()
-            .getTarget()
+    private boolean isPort(SystemViewModel systemViewModel, PortViewModel portViewModel) {
+        return systemViewModel.getTarget()
             .getVariables()
             .stream()
             .filter(variable -> portViewModel.getTarget().equals(variable))
@@ -273,9 +272,10 @@ public class ViewModelFactory {
     }
 
     private void setSystemConnectionEdgePoints(
-        PortViewModel source, PortViewModel destination, SystemConnectionViewModel result) {
-        boolean sourceIsPort = isPort(source);
-        boolean destIsPort = isPort(destination);
+        SystemViewModel parentSystem, PortViewModel source, PortViewModel destination,
+        SystemConnectionViewModel result) {
+        boolean sourceIsPort = isPort(parentSystem, source);
+        boolean destIsPort = isPort(parentSystem, destination);
         Property<Point2D> sourcePosition;
 
         // position the line at the tip of the port
@@ -292,9 +292,10 @@ public class ViewModelFactory {
             sourcePosition = new SimpleObjectProperty<>(
                 calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
 
-            source.getPositionProperty()
-                .addListener((observable, oldValue, newValue) -> sourcePosition.setValue(
-                    calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false)));
+            source.getPositionProperty().addListener((observable, oldValue, newValue) -> {
+                sourcePosition.setValue(
+                    calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
+            });
         }
 
         Property<Point2D> destinationPosition;
@@ -304,19 +305,20 @@ public class ViewModelFactory {
                 calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
                     destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true));
 
-            destination.getSystemPortPositionProperty()
-                .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
+            destination.getSystemPortPositionProperty().addListener((observable, oldValue, newValue) -> {
+                destinationPosition.setValue(
                     calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
-                        destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true)));
+                        destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true));
+            });
         } else {
             destinationPosition = new SimpleObjectProperty<>(
                 calculateEndPortPosition(destination.getPosition(), destination.getSize(), destination.getVisibility(),
                     false));
 
-            destination.getPositionProperty()
-                .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
-                    calculateEndPortPosition(destination.getPosition(), destination.getSize(),
-                        destination.getVisibility(), false)));
+            destination.getPositionProperty().addListener((observable, oldValue, newValue) -> {
+                destinationPosition.setValue(calculateEndPortPosition(destination.getPosition(), destination.getSize(),
+                    destination.getVisibility(), false));
+            });
         }
 
         result.getEdgePoints().add(sourcePosition);

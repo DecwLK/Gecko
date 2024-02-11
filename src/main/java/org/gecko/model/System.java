@@ -27,7 +27,6 @@ public class System extends Element implements Renamable {
     @JsonIgnore
     @Setter(onMethod_ = {@NonNull})
     private System parent;
-    @Setter()
     private String code;
     @Setter(onMethod_ = {@NonNull})
     private Automaton automaton;
@@ -51,6 +50,13 @@ public class System extends Element implements Renamable {
             throw new ModelException("System's name is invalid.");
         }
         this.name = name;
+    }
+
+    public void setCode(String code) throws ModelException {
+        if (code != null && code.isEmpty()) {
+            throw new ModelException("System's code is invalid.");
+        }
+        this.code = code;
     }
 
     public void addChild(@NonNull System child) {

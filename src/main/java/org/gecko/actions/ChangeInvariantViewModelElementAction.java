@@ -17,6 +17,9 @@ public class ChangeInvariantViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
+        if (newInvariant.isEmpty()) {
+            return false;
+        }
         regionViewModel.setInvariant(newInvariant);
         regionViewModel.updateTarget();
         return true;

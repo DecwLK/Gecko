@@ -17,6 +17,9 @@ public class ChangePostconditionViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
+        if (newPostcondition.isEmpty()) {
+            return false;
+        }
         contractViewModel.setPostcondition(newPostcondition);
         contractViewModel.updateTarget();
         return true;

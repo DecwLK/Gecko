@@ -223,4 +223,8 @@ public class ActionFactory {
     public ZoomCenterAction createZoomCenterAction(double factor) {
         return new ZoomCenterAction(geckoViewModel.getCurrentEditor(), factor);
     }
+
+    public Action createChangeCodeSystemViewModelAction(SystemViewModel systemViewModel, String newCode) {
+        return new ChangeCodeSystemViewModelAction(systemViewModel, newCode);
+    }
 }

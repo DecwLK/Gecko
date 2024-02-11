@@ -1,6 +1,7 @@
 package org.gecko.model;
 
 import lombok.NonNull;
+import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -9,6 +10,7 @@ import org.gecko.exceptions.ModelException;
 public class ModelFactory {
 
     //TODO defaults are temporary and need to be changed
+    @Setter
     private final GeckoModel geckoModel;
     private int elementId = 0;
     private static final String DEFAULT_NAME = "Element_%d";

@@ -25,7 +25,41 @@ public class ViewModelElementSaver {
 
     ViewModelElementSaver(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
-        this.viewModelProperties = new ArrayList<>();
+        viewModelProperties = new ArrayList<>();
+    }
+
+    protected List<ViewModelPropertiesContainer> getViewModelProperties(System root) {
+        gatherSystemAttributes(root);
+        return this.viewModelProperties;
+    }
+
+    private void gatherSystemAttributes(System system) {
+        for (Variable variable : system.getVariables()) {
+            this.savePortViewModelProperties(variable);
+        }
+
+        for (SystemConnection systemConnection : system.getConnections()) {
+            this.saveSystemConnectionViewModelProperties(systemConnection);
+        }
+
+        Automaton automaton = system.getAutomaton();
+
+        for (Region region : automaton.getRegions()) {
+            this.saveRegionViewModelProperties(region);
+        }
+
+        for (State state : automaton.getStates()) {
+            this.saveStateViewModelProperties(state);
+        }
+
+        for (Edge edge : automaton.getEdges()) {
+            this.saveEdgeModelProperties(edge);
+        }
+
+        for (System child : system.getChildren()) {
+            this.saveSystemViewModelProperties(child);
+            this.gatherSystemAttributes(child);
+        }
     }
 
     private void saveStateViewModelProperties(State state) {
@@ -79,39 +113,5 @@ public class ViewModelElementSaver {
         container.setSizeX(element.getSize().getX());
         container.setSizeY(element.getSize().getY());
         return container;
-    }
-
-    protected List<ViewModelPropertiesContainer> getViewModelProperties(System root) {
-        this.gatherSystemAttributes(root);
-        return this.viewModelProperties;
-    }
-
-    private void gatherSystemAttributes(System system) {
-        for (Variable variable : system.getVariables()) {
-            this.savePortViewModelProperties(variable);
-        }
-
-        for (SystemConnection systemConnection : system.getConnections()) {
-            this.saveSystemConnectionViewModelProperties(systemConnection);
-        }
-
-        Automaton automaton = system.getAutomaton();
-
-        for (Region region : automaton.getRegions()) {
-            this.saveRegionViewModelProperties(region);
-        }
-
-        for (State state : automaton.getStates()) {
-            this.saveStateViewModelProperties(state);
-        }
-
-        for (Edge edge : automaton.getEdges()) {
-            this.saveEdgeModelProperties(edge);
-        }
-
-        for (System child : system.getChildren()) {
-            this.saveSystemViewModelProperties(child);
-            this.gatherSystemAttributes(child);
-        }
     }
 }

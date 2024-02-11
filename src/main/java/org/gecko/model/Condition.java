@@ -26,6 +26,7 @@ public class Condition {
         this.condition = condition;
     }
 
+    @JsonIgnore
     public Condition and(Condition other) {
         try {
             // This and other are always valid

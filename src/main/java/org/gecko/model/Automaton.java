@@ -2,6 +2,7 @@ package org.gecko.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,11 +25,18 @@ public class Automaton {
     private final Set<State> states;
     private final Set<Edge> edges;
 
-    @JsonCreator
     public Automaton() {
         this.regions = new HashSet<>();
         this.states = new HashSet<>();
         this.edges = new HashSet<>();
+    }
+
+    @JsonCreator
+    public Automaton(@JsonProperty("startState") State startState) {
+        this.regions = new HashSet<>();
+        this.states = new HashSet<>();
+        this.edges = new HashSet<>();
+        this.startState = startState;
     }
 
     public void setStartState(State state) throws ModelException {
@@ -38,6 +46,7 @@ public class Automaton {
         startState = state;
     }
 
+    @JsonIgnore
     public State getStateWithContract(Contract contract) {
         return states.stream().filter(state -> state.getContracts().contains(contract)).findFirst().orElse(null);
     }
@@ -110,14 +119,17 @@ public class Automaton {
         }
     }
 
+    @JsonIgnore
     public State getStateByName(String name) {
         return states.stream().filter(state -> state.getName().equals(name)).findFirst().orElse(null);
     }
 
+    @JsonIgnore
     public List<Edge> getOutgoingEdges(State state) {
         return edges.stream().filter(edge -> edge.getSource().equals(state)).toList();
     }
 
+    @JsonIgnore
     public List<Region> getRegionsWithState(State state) {
         return regions.stream().filter(region -> region.getStates().contains(state)).toList();
     }

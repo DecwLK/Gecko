@@ -10,18 +10,16 @@ import lombok.Getter;
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;
-import org.gecko.viewmodel.PositionableViewModelElement;
 
 /**
  * Provides methods for the conversion of data from a JSON file into Gecko-specific data.
  */
 @Getter
 public class ProjectFileParser implements FileParser {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-    private List<PositionableViewModelElement<?>> generatedViewModelElements;
+    private final ObjectMapper objectMapper;
 
     public ProjectFileParser() {
-        generatedViewModelElements = new ArrayList<>();
+        objectMapper = new ObjectMapper();
     }
 
     @Override
@@ -41,9 +39,10 @@ public class ProjectFileParser implements FileParser {
         GeckoModel model = new GeckoModel(root);
         GeckoViewModel viewModel = new GeckoViewModel(model);
 
-        ViewModelElementCreator visitor = new ViewModelElementCreator(viewModel, newViewModelProperties);
-        visitor.traverseModel(root);
-        generatedViewModelElements = visitor.getGeneratedViewModelElements();
+        ViewModelElementCreator creator = new ViewModelElementCreator(viewModel, newViewModelProperties);
+        creator.traverseModel(root);
+
+        viewModel.getGeckoModel().getModelFactory().setElementId(creator.getHighestId() + 1);
         return viewModel;
     }
 }

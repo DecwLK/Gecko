@@ -22,8 +22,6 @@ public class CopyPositionableViewModelElementAction extends Action {
             .getSelectionManager()
             .getCurrentSelection()
             .forEach(element -> element.accept(visitor));
-        visitor.removeDoubleSelectedStates();
-        visitor.removeDoubleSelectedSystems();
 
         copyVisitor.setAutomatonCopy(visitor.isAutomatonCopy());
         copyVisitor.setCopiedSystems(visitor.getCopiedSystems());

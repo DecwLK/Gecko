@@ -1,5 +1,6 @@
 package org.gecko.model;
 
+import java.util.HashMap;
 import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
@@ -68,9 +69,8 @@ public class ModelFactory {
     }
 
     public Edge copyEdge(@NonNull Edge edge) throws ModelException {
-        //TODO not functional
         int id = getNewElementId();
-        return new Edge(id, edge.getSource(), edge.getDestination(), copyContract(edge.getContract()), edge.getKind(), edge.getPriority());
+        return new Edge(id, null, null, copyContract(edge.getContract()), edge.getKind(), edge.getPriority());
     }
 
     public System createSystem(@NonNull System parentSystem) throws ModelException {
@@ -147,15 +147,22 @@ public class ModelFactory {
 
     public Automaton copyAutomaton (@NonNull Automaton automaton) throws ModelException {
         Automaton copy = new Automaton();
+        HashMap<State, State> stateToCopyMap = new HashMap<>();
         for (State state : automaton.getStates()) {
-            copy.addState(copyState(state));
+            State copyState = copyState(state);
+            copy.addState(copyState);
+            stateToCopyMap.put(state, copyState);
         }
         for (Edge edge : automaton.getEdges()) {
-            copy.addEdge(copyEdge(edge));
+            Edge copyEdge = copyEdge(edge);
+            copyEdge.setSource(stateToCopyMap.get(edge.getSource()));
+            copyEdge.setDestination(stateToCopyMap.get(edge.getDestination()));
+            copy.addEdge(copyEdge);
         }
         for (Region region : automaton.getRegions()) {
             copy.addRegion(copyRegion(region));
         }
+        copy.setStartState(stateToCopyMap.get(automaton.getStartState()));
         return copy;
     }
 

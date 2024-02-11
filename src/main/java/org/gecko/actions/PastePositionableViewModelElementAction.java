@@ -1,6 +1,5 @@
 package org.gecko.actions;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.geometry.Point2D;
@@ -9,11 +8,13 @@ import javafx.scene.control.ButtonType;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
+import org.gecko.model.Edge;
+import org.gecko.model.ModelFactory;
+import org.gecko.model.Region;
+import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
-import org.gecko.viewmodel.StateViewModel;
-import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
 
 public class PastePositionableViewModelElementAction extends Action {
@@ -50,27 +51,58 @@ public class PastePositionableViewModelElementAction extends Action {
 
         ViewModelFactory factory = geckoViewModel.getViewModelFactory();
         System currentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget();
+        ModelFactory modelFactory = geckoViewModel.getGeckoModel().getModelFactory();
         if (copyVisitor.isAutomatonCopy()) {
             copyVisitor.getCopiedStates().forEach(state -> {
-                currentSystem.getAutomaton().addState(state);
-                geckoViewModel.addViewModelElement(factory.createStateViewModelFrom(state));
+                State stateToPaste;
+                try {
+                    stateToPaste = modelFactory.copyState(state);
+                } catch (ModelException e) {
+                    throw new RuntimeException(e);
+                }
+                currentSystem.getAutomaton().addState(stateToPaste);
+                geckoViewModel.addViewModelElement(factory.createStateViewModelFrom(stateToPaste));
             });
             copyVisitor.getCopiedRegions().forEach(region -> {
-                currentSystem.getAutomaton().addRegion(region);
+                Region regionToPaste;
                 try {
-                    geckoViewModel.addViewModelElement(factory.createRegionViewModelFrom(region));
+                    regionToPaste = modelFactory.copyRegion(region);
+                } catch (ModelException e) {
+                    throw new RuntimeException(e);
+                }
+                currentSystem.getAutomaton().addRegion(regionToPaste);
+                try {
+                    geckoViewModel.addViewModelElement(factory.createRegionViewModelFrom(regionToPaste));
                 } catch (MissingViewModelElementException e) {
                     throw new RuntimeException(e);
                 }
             });
-            //pasteEdgeViewModels(factory);
+            copyVisitor.getCopiedEdges().forEach(edge -> {
+                Edge edgeToPaste;
+                try {
+                    edgeToPaste = modelFactory.copyEdge(edge);
+                } catch (ModelException e) {
+                    throw new RuntimeException(e);
+                }
+                currentSystem.getAutomaton().addEdge(edgeToPaste);
+                try {
+                    geckoViewModel.addViewModelElement(factory.createEdgeViewModelFrom(edgeToPaste));
+                } catch (MissingViewModelElementException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         } else {
             copyVisitor.getCopiedSystems().forEach(system -> {
-                system.setParent(currentSystem);
-                currentSystem.addChild(system);
-                factory.createSystemViewModelFrom(system);
-                factory.createSystemViewModelForChildren(system);
-                java.lang.System.out.println(system.getId());
+                System systemToPaste;
+                try {
+                    systemToPaste = modelFactory.copySystem(system);
+                } catch (ModelException e) {
+                    throw new RuntimeException(e);
+                }
+                systemToPaste.setParent(currentSystem);
+                currentSystem.addChild(systemToPaste);
+                factory.createSystemViewModelFrom(systemToPaste);
+                factory.createSystemViewModelForChildren(systemToPaste);
             });
             copyVisitor.getCopiedPorts().forEach(variable -> {
                 currentSystem.addVariable(variable);
@@ -80,73 +112,6 @@ public class PastePositionableViewModelElementAction extends Action {
         }
         return true;
     }
-
-    /*private void pasteEdgeViewModels(ViewModelFactory factory) throws GeckoException {
-        for (CopiedEdgeWrapper copiedEdgeWrapper : copyVisitor.getCopiedEdges()) {
-            if (states.get(copiedEdgeWrapper.getSource()) == null) {
-                pasteStateViewModel(factory, copiedEdgeWrapper.getSource());
-            }
-
-            if (states.get(copiedEdgeWrapper.getDestination()) == null) {
-                pasteStateViewModel(factory, copiedEdgeWrapper.getDestination());
-            }
-
-            EdgeViewModel newEdge =
-                factory.createEdgeViewModelIn(currentSystem, states.get(copiedEdgeWrapper.getSource()),
-                    states.get(copiedEdgeWrapper.getDestination()));
-
-            if (copiedEdgeWrapper.getEdge().getContract() != null) {
-                newEdge.setContract(copiedEdgeWrapper.getEdge().getContract());
-            }
-
-            newEdge.setKind(copiedEdgeWrapper.getEdge().getKind());
-            newEdge.setPriority(copiedEdgeWrapper.getEdge().getPriority());
-            newEdge.setPosition(copiedEdgeWrapper.getEdge().getPosition().add(POSITION_OFFSET));
-            newEdge.setSize(copiedEdgeWrapper.getEdge().getSize());
-            newEdge.updateTarget();
-
-            pastedElements.add(newEdge);
-        }
-    }*/
-
-    /*private void pasteSystemConnectionViewModels(ViewModelFactory factory) throws GeckoException {
-        for (CopiedSystemConnectionWrapper copiedSystemConnection : copyVisitor.getCopiedSystemConnections()) {
-            // Copied dependencies:
-            PortViewModel copiedSource = copiedSystemConnection.getSource();
-            PortViewModel copiedDestination = copiedSystemConnection.getDestination();
-
-            SystemViewModel copiedSourceParent = copiedSystemConnection.getSourceParent();
-            copiedSourceParent.getPorts().remove(copiedSource);
-            // TODO: avoid pasting it, don;t actually remove it
-            SystemViewModel copiedDestinationParent = copiedSystemConnection.getDestinationParent();
-            copiedDestinationParent.getPorts().remove(copiedDestination);
-            // TODO: avoid pasting it, don;t actually remove it
-
-            // New dependencies:
-            PortViewModel newSource = pastePortViewModel(factory, copiedSource);
-            PortViewModel newDestination = pastePortViewModel(factory, copiedDestination);
-
-            SystemViewModel newSourceParent = pasteSystemViewModel(factory, copiedSourceParent);
-            newSourceParent.getPorts().add(newSource);
-
-            SystemViewModel newDestinationParent = pasteSystemViewModel(factory, copiedDestinationParent);
-            newDestinationParent.getPorts().add(newDestination);
-
-            copiedSourceParent.getPorts().add(copiedSource);
-            copiedDestinationParent.getPorts().add(copiedDestination);
-
-            SystemConnectionViewModel newSystemConnection =
-                factory.createSystemConnectionViewModelIn(currentSystem, newSource, newDestination);
-            newSystemConnection.setPosition(
-                copiedSystemConnection.getSystemConnection().getPosition().add(POSITION_OFFSET));
-            newSystemConnection.setSize(copiedSystemConnection.getSystemConnection().getSize());
-            newSystemConnection.updateTarget();
-
-            pastedElements.add(newSource);
-            pastedElements.add(newDestination);
-            pastedElements.add(newSystemConnection);
-        }
-    }*/
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {

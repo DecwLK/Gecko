@@ -59,3 +59,9 @@ tasks.test {
 application {
     mainClass.set("org.gecko.application.Main")
 }
+
+tasks {
+    shadowJar {
+        exclude("module-info.class")
+    }
+}

@@ -49,6 +49,11 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         this.systemViewModel = systemViewModel;
         this.inputPortsAligner = new VBox();
         this.outputPortsAligner = new VBox();
+
+        inputPortsAligner.layoutBoundsProperty()
+            .addListener((observable, oldValue, newValue) -> updatePortViewModels());
+        outputPortsAligner.layoutBoundsProperty()
+            .addListener((observable, oldValue, newValue) -> updatePortViewModels());
         bindViewModel();
         constructVisualization();
     }
@@ -118,7 +123,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
                 change.getRemoved().forEach(this::removePort);
             }
         }
-        updatePortViewModels();
     }
 
     private void updatePortViewModels() {

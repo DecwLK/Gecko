@@ -54,7 +54,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
         SystemViewModel destinationSystem = geckoViewModel.getSystemViewModelWithPort(destinationPortViewModel);
 
         if (!SystemConnectionViewModel.isConnectingAllowed(sourcePortViewModel, destinationPortViewModel, sourceSystem,
-            destinationSystem, parentSystem)) {
+            destinationSystem, parentSystem, systemConnectionViewModel)) {
             return false;
         }
 

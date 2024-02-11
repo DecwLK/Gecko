@@ -58,29 +58,41 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
             return false;
         }
 
+        Property<Point2D> newPositionProperty;
+
         if (isVariableBlock) {
-            systemConnectionViewModel.getEdgePoints()
-                .set(elementScalerBlock.getIndex(), newPortViewModel.getPositionProperty());
+            newPositionProperty = new SimpleObjectProperty<>(
+                calculateEndPortPosition(newPortViewModel.getPosition(), newPortViewModel.getSize(),
+                    newPortViewModel.getVisibility(), false));
+
+            newPortViewModel.getPositionProperty().addListener((observable, oldValue, newValue) -> {
+                newPositionProperty.setValue(
+                    calculateEndPortPosition(newPortViewModel.getPosition(), newPortViewModel.getSize(),
+                        newPortViewModel.getVisibility(), false));
+            });
+
         } else {
-            Property<Point2D> newPositionProperty = new SimpleObjectProperty<>(
+            newPositionProperty = new SimpleObjectProperty<>(
                 calculateEndPortPosition(newPortViewModel.getSystemPortPositionProperty().getValue(),
-                    newPortViewModel.getSystemPortSizeProperty().getValue(), newPortViewModel.getVisibility()));
+                    newPortViewModel.getSystemPortSizeProperty().getValue(), newPortViewModel.getVisibility(), true));
 
             newPortViewModel.getSystemPortPositionProperty()
                 .addListener((observable, oldValue, newValue) -> newPositionProperty.setValue(
                     calculateEndPortPosition(newPortViewModel.getSystemPortPositionProperty().getValue(),
-                        newPortViewModel.getSystemPortSizeProperty().getValue(), newPortViewModel.getVisibility())));
-
-            systemConnectionViewModel.getEdgePoints().set(elementScalerBlock.getIndex(), newPositionProperty);
+                        newPortViewModel.getSystemPortSizeProperty().getValue(), newPortViewModel.getVisibility(),
+                        true)));
         }
+
+        systemConnectionViewModel.getEdgePoints().set(elementScalerBlock.getIndex(), newPositionProperty);
 
         if (isSource()) {
             systemConnectionViewModel.setSource(sourcePortViewModel);
         } else {
             systemConnectionViewModel.setDestination(destinationPortViewModel);
         }
-        systemConnectionViewModel.updateTarget();
 
+        elementScalerBlock.updatePosition();
+        systemConnectionViewModel.updateTarget();
 
         return true;
     }
@@ -130,9 +142,10 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
         return null;
     }
 
-    private Point2D calculateEndPortPosition(Point2D position, Point2D size, Visibility visibility) {
+    private Point2D calculateEndPortPosition(Point2D position, Point2D size, Visibility visibility, boolean isPort) {
+        int sign = isPort ? 1 : -1;
         return position.add(size.multiply(0.5))
-            .subtract((visibility == Visibility.INPUT ? 1 : -1) * size.getX() / 2, 0);
+            .subtract((visibility == Visibility.INPUT ? 1 : -1) * sign * size.getX() / 2, 0);
     }
 
     private boolean isSource() {

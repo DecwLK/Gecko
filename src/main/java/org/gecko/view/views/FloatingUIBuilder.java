@@ -65,7 +65,7 @@ public class FloatingUIBuilder {
         Label currentViewLabel = new Label();
         currentViewLabel.textProperty()
             .bind(Bindings.createStringBinding(() -> editorViewModel.getCurrentSystem().getName(),
-                currentViewLabel.textProperty()));
+                editorViewModel.getCurrentSystem().getNameProperty()));
         return currentViewLabel;
     }
 

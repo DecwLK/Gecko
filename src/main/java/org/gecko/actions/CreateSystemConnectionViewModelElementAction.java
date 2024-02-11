@@ -25,7 +25,7 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         if (!SystemConnectionViewModel.isConnectingAllowed(source, destination,
             geckoViewModel.getSystemViewModelWithPort(source), geckoViewModel.getSystemViewModelWithPort(destination),
-            currentParentSystem)) {
+            currentParentSystem, null)) {
             return false;
         }
 

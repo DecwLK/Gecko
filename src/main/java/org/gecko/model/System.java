@@ -45,6 +45,7 @@ public class System extends Element implements Renamable {
         this.variables = new HashSet<>();
     }
 
+    @Override
     public void setName(@NonNull String name) throws ModelException {
         if (name.isEmpty()) {
             throw new ModelException("System's name is invalid.");

@@ -2,6 +2,7 @@ package org.gecko.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,7 +54,7 @@ public class AutomatonFileSerializer implements FileSerializer {
         }
         joiner.add(serializeAutomata(model));
         joiner.add(serializeSystems(model));
-        Files.write(file.toPath(), joiner.toString().getBytes());
+        Files.write(file.toPath(), joiner.toString().getBytes(StandardCharsets.UTF_8));
     }
 
     private String serializeAutomata(GeckoModel model) {

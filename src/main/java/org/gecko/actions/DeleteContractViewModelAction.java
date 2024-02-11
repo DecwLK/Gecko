@@ -21,7 +21,7 @@ public class DeleteContractViewModelAction extends Action {
     boolean run() throws GeckoException {
         edgesWithContract = parent.getOutgoingEdges()
             .stream()
-            .filter(edge -> edge.getContract().equals(contractViewModel))
+            .filter(edge -> contractViewModel.equals(edge.getContract()))
             .collect(Collectors.toSet());
         for (EdgeViewModel edge : edgesWithContract) {
             edge.setContract(null);

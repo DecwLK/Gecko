@@ -64,12 +64,14 @@ public class SystemViewModel extends BlockViewModelElement<System> {
         portsProperty.remove(port);
     }
 
-    public void setStartState(@NonNull StateViewModel newStartState) {
+    public void setStartState(StateViewModel newStartState) {
+        if (newStartState != null) {
+            newStartState.setStartState(true);
+        }
         if (startState != null) {
             startState.setStartState(false);
         }
         startState = newStartState;
-        startState.setStartState(true);
     }
 
     @Override

@@ -32,10 +32,9 @@ public abstract class AbstractViewModelElement<T extends Element> {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof AbstractViewModelElement<?> element)) {
             return false;
         }
-        AbstractViewModelElement<?> element = (AbstractViewModelElement<?>) o;
         return id == element.id;
     }
 }

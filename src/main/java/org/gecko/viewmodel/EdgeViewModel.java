@@ -30,6 +30,9 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
     private final Property<ContractViewModel> contractProperty;
     private final Property<StateViewModel> sourceProperty;
     private final Property<StateViewModel> destinationProperty;
+    /**
+     * The list of edge points that define the path of the edge.
+     */
     private final ObservableList<Property<Point2D>> edgePoints;
 
     public EdgeViewModel(
@@ -138,10 +141,15 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
     }
 
     @Override
-    public void setEdgePoint(int index, Point2D point) {
-        edgePoints.get(index).setValue(point);
+    public void setEdgePoint(int index, Point2D newPosition) {
+        edgePoints.get(index).setValue(newPosition);
     }
 
+    /**
+     * Returns a string representation of this {@link EdgeViewModel} in the form of "priority. kind(contract)".
+     *
+     * @return a string representation of this {@link EdgeViewModel}
+     */
     public String getRepresentation() {
         String representation = "";
         representation += getPriority() + ". ";

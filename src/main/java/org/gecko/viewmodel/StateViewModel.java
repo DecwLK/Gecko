@@ -48,17 +48,11 @@ public class StateViewModel extends BlockViewModelElement<State> {
     @Override
     public void updateTarget() throws ModelException {
         super.updateTarget();
-        // TODO: not possible because of missing reference to parent system
-        /*Automaton automaton = parentSystem.getAutomaton();
-        if (getIsStartState()) {
-            automaton.setStartState(target);
-        }*/
         target.getContracts().clear();
         target.addContracts(contractsProperty.stream().map(ContractViewModel::getTarget).collect(Collectors.toSet()));
     }
 
     public void addContract(@NonNull ContractViewModel contract) {
-        // TODO: prior checks
         contractsProperty.add(contract);
     }
 

@@ -167,12 +167,12 @@ public class GeckoView {
         refreshView();
     }
 
+    /**
+     * Returns all displayed elements in the current view.
+     *
+     * @return a set of all displayed elements in the current view
+     */
     public Set<PositionableViewModelElement<?>> getAllDisplayedElements() {
-        if (!viewModel.getCurrentEditor().isAutomatonEditor()) {
-            return viewModel.getViewModelElements(
-                currentView.getViewModel().getCurrentSystem().getTarget().getAllElements());
-        }
-        return viewModel.getViewModelElements(
-            currentView.getViewModel().getCurrentSystem().getTarget().getAutomaton().getAllElements());
+        return viewModel.getCurrentEditor().getPositionableViewModelElements();
     }
 }

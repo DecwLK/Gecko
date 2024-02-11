@@ -44,7 +44,6 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
 
     @Override
     public void setEdgePoint(int index, Point2D point) {
-
     }
 
     @Override
@@ -55,6 +54,16 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
     @Override
     public Point2D getPosition() {
         return portViewModel.getPosition();
+    }
+
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public int getZPriority() {
+        return Z_PRIORITY;
     }
 
     private void bindViewModel() {
@@ -74,16 +83,6 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
             Bindings.createDoubleBinding(() -> portViewModel.getSize().getX(), portViewModel.getSizeProperty()));
         prefHeightProperty().bind(
             Bindings.createDoubleBinding(() -> portViewModel.getSize().getY(), portViewModel.getSizeProperty()));
-    }
-
-    @Override
-    public void accept(ViewElementVisitor visitor) {
-        visitor.visit(this);
-    }
-
-    @Override
-    public int getZPriority() {
-        return Z_PRIORITY;
     }
 
     private void constructVisualization() {

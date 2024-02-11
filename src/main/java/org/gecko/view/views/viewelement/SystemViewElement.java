@@ -72,6 +72,17 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         return systemViewModel.getPosition();
     }
 
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+        portViewElements.forEach(visitor::visit);
+    }
+
+    @Override
+    public int getZPriority() {
+        return Z_PRIORITY;
+    }
+
     private void bindViewModel() {
         nameProperty.bind(systemViewModel.getNameProperty());
         codeProperty.bind(systemViewModel.getCodeProperty());
@@ -87,17 +98,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
 
         systemViewModel.getPositionProperty().addListener((observable, oldValue, newValue) -> updatePortViewModels());
         updatePortViewModels();
-    }
-
-    @Override
-    public void accept(ViewElementVisitor visitor) {
-        visitor.visit(this);
-        portViewElements.forEach(visitor::visit);
-    }
-
-    @Override
-    public int getZPriority() {
-        return Z_PRIORITY;
     }
 
     private void constructVisualization() {

@@ -28,6 +28,12 @@ public abstract class ConnectionViewElement extends Path {
     @Setter
     private boolean isLoop;
 
+    /**
+     * The render path source is a list of pairs of double properties. The first element of the pair is the x property
+     * of the point, and the second element is the y property of the point. This list represents the actual points that
+     * are drawn on the screen. pathSource is a subset of renderPathSource. In order to draw a loop, extra points are
+     * added to renderPathSource.
+     */
     protected List<Pair<DoubleProperty, DoubleProperty>> renderPathSource;
 
     protected ConnectionViewElement(ObservableList<Property<Point2D>> path) {

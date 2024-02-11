@@ -252,6 +252,12 @@ public class MenuBarBuilder {
         return toolsMenu;
     }
 
+    /**
+     * Updates the tools menu with the updated tool lists.
+     *
+     * @param menuBar   The menu bar to update
+     * @param toolLists The updated tool lists
+     */
     public static void updateToolsMenu(MenuBar menuBar, List<List<Tool>> toolLists) {
         List<Tool> constantTools = toolLists.get(0);
         List<Tool> variableTools = toolLists.get(1);

@@ -11,6 +11,13 @@ public class ResourceHandler {
     @Setter
     private static Locale currentLocale = Locale.getDefault();
 
+    /**
+     * Returns the localized string for the given key from the given bundle.
+     *
+     * @param bundle the name of the bundle
+     * @param key    the key of the string
+     * @return the localized string
+     */
     public static String getString(String bundle, String key) {
         return getBundle(bundle).getString(key);
     }

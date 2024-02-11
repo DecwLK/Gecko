@@ -10,8 +10,8 @@ import org.gecko.exceptions.ModelException;
 public class ModelFactory {
 
     //TODO defaults are temporary and need to be changed
-    @Setter
     private final GeckoModel geckoModel;
+    @Setter
     private int elementId = 0;
     private static final String DEFAULT_NAME = "Element_%d";
     private static final String DEFAULT_TYPE = "int";

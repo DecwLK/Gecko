@@ -69,7 +69,10 @@ public class SystemViewModel extends BlockViewModelElement<System> {
      *
      * @param newStartState the new start state
      */
-    public void setStartState(@NonNull StateViewModel newStartState) {
+    public void setStartState(StateViewModel newStartState) {
+        if (newStartState != null) {
+            newStartState.setStartState(true);
+        }
         if (startState != null) {
             startState.setStartState(false);
         }

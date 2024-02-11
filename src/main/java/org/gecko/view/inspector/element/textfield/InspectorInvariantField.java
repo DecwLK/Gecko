@@ -4,12 +4,12 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.RegionViewModel;
 
-public class InspectorInvariantField extends InspectorContractField {
+public class InspectorInvariantField extends InspectorAreaField {
     private final ActionManager actionManager;
     private final RegionViewModel regionViewModel;
 
     public InspectorInvariantField(ActionManager actionManager, RegionViewModel regionViewModel) {
-        super(actionManager, regionViewModel.getInvariantProperty());
+        super(actionManager, regionViewModel.getInvariantProperty(), false);
         this.actionManager = actionManager;
         this.regionViewModel = regionViewModel;
     }

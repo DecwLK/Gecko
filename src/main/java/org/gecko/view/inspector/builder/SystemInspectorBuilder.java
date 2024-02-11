@@ -5,7 +5,9 @@ import org.gecko.model.Visibility;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.button.InspectorOpenSystemButton;
 import org.gecko.view.inspector.element.container.InspectorVariableLabel;
+import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.view.inspector.element.list.InspectorVariableList;
+import org.gecko.view.inspector.element.textfield.InspectorCodeSystemField;
 import org.gecko.viewmodel.SystemViewModel;
 
 public class SystemInspectorBuilder extends AbstractInspectorBuilder<SystemViewModel> {
@@ -24,5 +26,8 @@ public class SystemInspectorBuilder extends AbstractInspectorBuilder<SystemViewM
 
         addInspectorElement(new InspectorVariableLabel(actionManager, viewModel, Visibility.OUTPUT));
         addInspectorElement(new InspectorVariableList(actionManager, viewModel, Visibility.OUTPUT));
+
+        addInspectorElement(new InspectorLabel("Code"));
+        addInspectorElement(new InspectorCodeSystemField(actionManager, viewModel));
     }
 }

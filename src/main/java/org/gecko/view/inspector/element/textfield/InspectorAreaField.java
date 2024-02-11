@@ -6,11 +6,11 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 
-public abstract class InspectorContractField extends TextArea implements InspectorElement<TextArea> {
+public abstract class InspectorAreaField extends TextArea implements InspectorElement<TextArea> {
     private static final int MAX_HEIGHT = 30;
     private static final int EXPANDED_MAX_HEIGHT = 90;
 
-    protected InspectorContractField(ActionManager actionManager, StringProperty stringProperty) {
+    protected InspectorAreaField(ActionManager actionManager, StringProperty stringProperty, boolean isEmptyAllowed) {
         setText(stringProperty.get());
         stringProperty.addListener((observable, oldValue, newValue) -> setText(newValue));
         setPrefHeight(MAX_HEIGHT);
@@ -21,8 +21,8 @@ public abstract class InspectorContractField extends TextArea implements Inspect
                 return;
             }
 
-            if (getText().isEmpty()) {
-                setText("true");
+            if (getText().isEmpty() && !isEmptyAllowed) {
+                setText(stringProperty.get());
             }
 
             actionManager.run(getAction());

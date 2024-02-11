@@ -24,12 +24,12 @@ public class GeckoModel {
 
 
     public GeckoModel() throws ModelException {
-        this.modelFactory = new ModelFactory();
+        this.modelFactory = new ModelFactory(this);
         this.root = modelFactory.createRoot();
     }
 
     public GeckoModel(System root) {
-        this.modelFactory = new ModelFactory();
+        this.modelFactory = new ModelFactory(this);
         this.root = root;
     }
 
@@ -57,11 +57,10 @@ public class GeckoModel {
         return null;
     }
 
-    public boolean isNameValid(@NonNull String name) {
-        return !isNameDefaultName(name) && isNameUnique(name);
-    }
-
-    private boolean isNameUnique(@NonNull String name) {
+    public boolean isNameUnique(@NonNull String name) {
+        if (root == null) {
+            return true;
+        }
         return isNameUnique(root, name);
     }
 
@@ -92,9 +91,5 @@ public class GeckoModel {
             }
         }
         return true;
-    }
-
-    private boolean isNameDefaultName(@NonNull String name) {
-        return name.matches(DEFAULT_NAME);
     }
 }

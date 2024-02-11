@@ -20,7 +20,7 @@ public class RenameViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
-        if (!geckoModel.isNameValid(newName)) {
+        if (!geckoModel.isNameUnique(newName)) {
             return false;
         }
         renamable.setName(newName);

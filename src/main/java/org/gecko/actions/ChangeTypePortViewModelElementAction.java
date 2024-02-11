@@ -17,6 +17,9 @@ public class ChangeTypePortViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
+        if (newType.isEmpty()) {
+            return false;
+        }
         portViewModel.setType(newType);
         portViewModel.updateTarget();
         return true;

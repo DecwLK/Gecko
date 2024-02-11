@@ -17,6 +17,9 @@ public class ChangePreconditionViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
+        if (newPrecondition.isEmpty()) {
+            return false;
+        }
         contractViewModel.setPrecondition(newPrecondition);
         contractViewModel.updateTarget();
         return true;

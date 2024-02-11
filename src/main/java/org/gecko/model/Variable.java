@@ -1,6 +1,7 @@
 package org.gecko.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Set;
 import lombok.Getter;
@@ -49,15 +50,16 @@ public class Variable extends Element implements Renamable {
         this.type = type;
     }
 
-    public void setValue(@NonNull String value) throws ModelException {
-        if (value.isEmpty()) {
+    @JsonIgnore
+    public static Set<String> getBuiltinTypes() {
+        return BUILTIN_TYPES;
+    }
+
+    public void setValue(String value) throws ModelException {
+        if (value != null && value.isEmpty()) {
             throw new ModelException("Variable's value is invalid.");
         }
         this.value = value;
-    }
-
-    public static Set<String> getBuiltinTypes() {
-        return BUILTIN_TYPES;
     }
 
     @Override

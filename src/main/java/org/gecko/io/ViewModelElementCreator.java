@@ -1,18 +1,20 @@
 package org.gecko.io;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import lombok.Getter;
 import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.model.Automaton;
+import org.gecko.model.Contract;
 import org.gecko.model.Edge;
+import org.gecko.model.Element;
 import org.gecko.model.Region;
 import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
+import org.gecko.model.Variable;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -30,20 +32,20 @@ import org.gecko.viewmodel.ViewModelFactory;
  */
 public class ViewModelElementCreator {
     @Getter
-    private final List<PositionableViewModelElement<?>> generatedViewModelElements;
+    private int highestId;
     private final GeckoViewModel viewModel;
     private final ViewModelFactory viewModelFactory;
     private final HashMap<Integer, ViewModelPropertiesContainer> viewModelProperties;
 
     ViewModelElementCreator(
         GeckoViewModel viewModel, List<ViewModelPropertiesContainer> viewModelProperties) {
+        highestId = 0;
         this.viewModel = viewModel;
         this.viewModelFactory = viewModel.getViewModelFactory();
         this.viewModelProperties = new HashMap<>();
         for (ViewModelPropertiesContainer container : viewModelProperties) {
             this.viewModelProperties.put(container.getElementId(), container);
         }
-        this.generatedViewModelElements = new ArrayList<>();
     }
 
     private static void setPositionAndSize(
@@ -54,7 +56,11 @@ public class ViewModelElementCreator {
         }
     }
 
-    protected void traverseModel(System system) {
+    protected void traverseModel(System system) throws IOException {
+        for (Variable variable : system.getVariables()) {
+            createPortViewModel(variable);
+        }
+
         for (SystemConnection systemConnection : system.getConnections()) {
             createSystemConnectionViewModel(systemConnection);
         }
@@ -63,6 +69,9 @@ public class ViewModelElementCreator {
 
         for (State state : automaton.getStates()) {
             createStateViewModel(state);
+            for (Contract contract : state.getContracts()) {
+                createContractViewModel(contract);
+            }
         }
 
         for (Region region : automaton.getRegions()) {
@@ -79,63 +88,43 @@ public class ViewModelElementCreator {
         }
     }
 
-    public void createStateViewModel(State state) {
+    private void createPortViewModel(Variable variable) throws IOException {
+        PortViewModel portViewModel = viewModelFactory.createPortViewModelFrom(variable);
+        ViewModelPropertiesContainer container = viewModelProperties.get(variable.getId());
+
+        if (container == null) {
+            throw new IOException("Cannot create port view model for variable " + variable.getId());
+        }
+        setPositionAndSize(portViewModel, container);
+        updateHighestId(variable);
+    }
+
+    private void createStateViewModel(State state) throws IOException {
         StateViewModel stateViewModel = viewModelFactory.createStateViewModelFrom(state);
         ViewModelPropertiesContainer container = viewModelProperties.get(state.getId());
+
         if (container == null) {
-            generatedViewModelElements.add(stateViewModel);
-        } else {
-            setPositionAndSize(stateViewModel, container);
+            throw new IOException("Cannot create state view model for state " + state.getId());
         }
+        setPositionAndSize(stateViewModel, container);
+        updateHighestId(state);
     }
 
-    public void createSystemConnectionViewModel(SystemConnection systemConnection) {
-        SystemConnectionViewModel systemConnectionViewModel = null;
-        try {
-            systemConnectionViewModel = viewModelFactory.createSystemConnectionViewModelFrom(systemConnection);
-        } catch (MissingViewModelElementException e) {
-            PortViewModel source = (PortViewModel) viewModel.getViewModelElement(systemConnection.getSource());
-            if (source == null) {
-                source = viewModelFactory.createPortViewModelFrom(systemConnection.getSource());
-            }
-            PortViewModel destination =
-                (PortViewModel) viewModel.getViewModelElement(systemConnection.getDestination());
-            if (destination == null) {
-                destination = viewModelFactory.createPortViewModelFrom(systemConnection.getDestination());
-            }
-            generatedViewModelElements.add(source);
-            generatedViewModelElements.add(destination);
-            createSystemConnectionViewModel(systemConnection);
-        }
-
-        if (systemConnectionViewModel != null) {
-            ViewModelPropertiesContainer container = viewModelProperties.get(systemConnection.getId());
-            if (container == null) {
-                generatedViewModelElements.add(systemConnectionViewModel);
-            } else {
-                setPositionAndSize(systemConnectionViewModel, container);
-            }
-        }
+    private void createContractViewModel(Contract contract) throws IOException {
+        viewModelFactory.createContractViewModelFrom(contract);
+        updateHighestId(contract);
     }
 
-    public void createSystemViewModel(System system) {
-        SystemViewModel systemViewModel = viewModelFactory.createSystemViewModelFrom(system);
-        ViewModelPropertiesContainer container = viewModelProperties.get(system.getId());
-        if (container == null) {
-            generatedViewModelElements.add(systemViewModel);
-        } else {
-            setPositionAndSize(systemViewModel, container);
-        }
-    }
-
-    public void createRegionViewModel(Region region) {
+    private void createRegionViewModel(Region region) throws IOException {
         RegionViewModel regionViewModel = null;
         try {
             regionViewModel = viewModelFactory.createRegionViewModelFrom(region);
         } catch (MissingViewModelElementException e) {
             for (State state : region.getStates()) {
-                StateViewModel stateViewModel = viewModelFactory.createStateViewModelFrom(state);
-                generatedViewModelElements.add(stateViewModel);
+                StateViewModel stateViewModel = (StateViewModel) viewModel.getViewModelElement(state);
+                if (stateViewModel == null) {
+                    createStateViewModel(state);
+                }
             }
             createRegionViewModel(region);
         }
@@ -143,33 +132,84 @@ public class ViewModelElementCreator {
         if (regionViewModel != null) {
             ViewModelPropertiesContainer container = viewModelProperties.get(region.getId());
             if (container == null) {
-                generatedViewModelElements.add(regionViewModel);
-            } else {
-                setPositionAndSize(regionViewModel, container);
-                regionViewModel.setColor(Color.color(container.getRed(), container.getGreen(), container.getBlue()));
+                throw new IOException("Cannot create region view model for region " + region.getId());
             }
+            setPositionAndSize(regionViewModel, container);
+            updateHighestId(region);
         }
     }
 
-    public void createEdgeViewModel(Edge edge) {
+    private void createEdgeViewModel(Edge edge) throws IOException {
         EdgeViewModel edgeViewModel = null;
         try {
             edgeViewModel = viewModelFactory.createEdgeViewModelFrom(edge);
         } catch (MissingViewModelElementException e) {
-            StateViewModel source = viewModelFactory.createStateViewModelFrom(edge.getSource());
-            StateViewModel destination = viewModelFactory.createStateViewModelFrom(edge.getDestination());
-            generatedViewModelElements.add(source);
-            generatedViewModelElements.add(destination);
+            StateViewModel source = (StateViewModel) viewModel.getViewModelElement(edge.getSource());
+            if (source == null) {
+                viewModelFactory.createStateViewModelFrom(edge.getSource());
+            }
+            StateViewModel destination = (StateViewModel) viewModel.getViewModelElement(edge.getDestination());
+            if (destination == null) {
+                viewModelFactory.createStateViewModelFrom(edge.getDestination());
+            }
             createEdgeViewModel(edge);
         }
 
         if (edgeViewModel != null) {
             ViewModelPropertiesContainer container = viewModelProperties.get(edge.getId());
+
             if (container == null) {
-                generatedViewModelElements.add(edgeViewModel);
-            } else {
-                setPositionAndSize(edgeViewModel, container);
+                throw new IOException("Cannot create edge view model for edge " + edge.getId());
             }
+            setPositionAndSize(edgeViewModel, container);
+            updateHighestId(edge);
+        }
+    }
+
+    private void createSystemViewModel(System system) throws IOException {
+        SystemViewModel systemViewModel = viewModelFactory.createSystemViewModelFrom(system);
+        ViewModelPropertiesContainer container = viewModelProperties.get(system.getId());
+        if (container == null) {
+            throw new IOException("Cannot create system view model for system" + system.getId());
+        }
+        setPositionAndSize(systemViewModel, container);
+        updateHighestId(system);
+    }
+
+    private void createSystemConnectionViewModel(SystemConnection systemConnection) throws IOException {
+        SystemConnectionViewModel systemConnectionViewModel = null;
+        try {
+            systemConnectionViewModel = viewModelFactory.createSystemConnectionViewModelFrom(systemConnection);
+        } catch (MissingViewModelElementException e) {
+            PortViewModel source = (PortViewModel) viewModel.getViewModelElement(systemConnection.getSource());
+            if (source == null) {
+                createPortViewModel(systemConnection.getSource());
+            }
+            PortViewModel destination =
+                (PortViewModel) viewModel.getViewModelElement(systemConnection.getDestination());
+            if (destination == null) {
+                createPortViewModel(systemConnection.getDestination());
+            }
+            createSystemConnectionViewModel(systemConnection);
+        }
+
+        if (systemConnectionViewModel != null) {
+            ViewModelPropertiesContainer container = viewModelProperties.get(systemConnection.getId());
+            if (container == null) {
+                throw new IOException("Cannot create system connection view model for system " + "connection "
+                    + systemConnection.getId());
+            }
+            setPositionAndSize(systemConnectionViewModel, container);
+            updateHighestId(systemConnection);
+        }
+    }
+
+    private void updateHighestId(Element element) throws IOException {
+        if (element.getId() < 0) {
+            throw new IOException("Negative IDs are not allowed.");
+        }
+        if (element.getId() > highestId) {
+            highestId = element.getId();
         }
     }
 }

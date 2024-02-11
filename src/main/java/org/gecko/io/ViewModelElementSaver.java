@@ -25,64 +25,11 @@ public class ViewModelElementSaver {
 
     protected ViewModelElementSaver(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
-        this.viewModelProperties = new ArrayList<>();
-    }
-
-    public void saveStateViewModelProperties(State state) {
-        ViewModelPropertiesContainer stateViewModelContainer =
-            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(state));
-        this.viewModelProperties.add(stateViewModelContainer);
-    }
-
-    public void saveRegionViewModelProperties(Region region) {
-        ViewModelPropertiesContainer regionViewModelContainer =
-            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(region));
-
-        Color color = ((RegionViewModel) this.geckoViewModel.getViewModelElement(region)).getColor();
-        regionViewModelContainer.setRed(color.getRed());
-        regionViewModelContainer.setGreen(color.getGreen());
-        regionViewModelContainer.setBlue(color.getBlue());
-
-        this.viewModelProperties.add(regionViewModelContainer);
-    }
-
-    public void saveSystemViewModelProperties(System system) {
-        ViewModelPropertiesContainer systemViewModelContainer =
-            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(system));
-        this.viewModelProperties.add(systemViewModelContainer);
-    }
-
-    public void saveSystemConnectionViewModelProperties(SystemConnection systemConnection) {
-        ViewModelPropertiesContainer systemConnectionViewModelContainer =
-            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(systemConnection));
-        this.viewModelProperties.add(systemConnectionViewModelContainer);
-    }
-
-    public void saveEdgeModelProperties(Edge edge) {
-        ViewModelPropertiesContainer edgeViewModelContainer =
-            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(edge));
-        this.viewModelProperties.add(edgeViewModelContainer);
-    }
-
-    public void savePortViewModelProperties(Variable variable) {
-        ViewModelPropertiesContainer variableViewModelContainer =
-            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(variable));
-        this.viewModelProperties.add(variableViewModelContainer);
-    }
-
-    private ViewModelPropertiesContainer getCoordinateContainer(PositionableViewModelElement<?> element) {
-        ViewModelPropertiesContainer container = new ViewModelPropertiesContainer();
-        container.setElementId(element.getTarget().getId());
-        container.setId(element.getId());
-        container.setPositionX(element.getPosition().getX());
-        container.setPositionY(element.getPosition().getY());
-        container.setSizeX(element.getSize().getX());
-        container.setSizeY(element.getSize().getY());
-        return container;
+        viewModelProperties = new ArrayList<>();
     }
 
     protected List<ViewModelPropertiesContainer> getViewModelProperties(System root) {
-        this.gatherSystemAttributes(root);
+        gatherSystemAttributes(root);
         return this.viewModelProperties;
     }
 
@@ -113,5 +60,58 @@ public class ViewModelElementSaver {
             this.saveSystemViewModelProperties(child);
             this.gatherSystemAttributes(child);
         }
+    }
+
+    private void saveStateViewModelProperties(State state) {
+        ViewModelPropertiesContainer stateViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(state));
+        this.viewModelProperties.add(stateViewModelContainer);
+    }
+
+    private void saveRegionViewModelProperties(Region region) {
+        ViewModelPropertiesContainer regionViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(region));
+
+        Color color = ((RegionViewModel) this.geckoViewModel.getViewModelElement(region)).getColor();
+        regionViewModelContainer.setRed(color.getRed());
+        regionViewModelContainer.setGreen(color.getGreen());
+        regionViewModelContainer.setBlue(color.getBlue());
+
+        this.viewModelProperties.add(regionViewModelContainer);
+    }
+
+    private void saveSystemViewModelProperties(System system) {
+        ViewModelPropertiesContainer systemViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(system));
+        this.viewModelProperties.add(systemViewModelContainer);
+    }
+
+    private void saveSystemConnectionViewModelProperties(SystemConnection systemConnection) {
+        ViewModelPropertiesContainer systemConnectionViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(systemConnection));
+        this.viewModelProperties.add(systemConnectionViewModelContainer);
+    }
+
+    private void saveEdgeModelProperties(Edge edge) {
+        ViewModelPropertiesContainer edgeViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(edge));
+        this.viewModelProperties.add(edgeViewModelContainer);
+    }
+
+    private void savePortViewModelProperties(Variable variable) {
+        ViewModelPropertiesContainer variableViewModelContainer =
+            this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(variable));
+        this.viewModelProperties.add(variableViewModelContainer);
+    }
+
+    private ViewModelPropertiesContainer getCoordinateContainer(PositionableViewModelElement<?> element) {
+        ViewModelPropertiesContainer container = new ViewModelPropertiesContainer();
+        container.setElementId(element.getTarget().getId());
+        container.setId(element.getId());
+        container.setPositionX(element.getPosition().getX());
+        container.setPositionY(element.getPosition().getY());
+        container.setSizeX(element.getSize().getX());
+        container.setSizeY(element.getSize().getY());
+        return container;
     }
 }

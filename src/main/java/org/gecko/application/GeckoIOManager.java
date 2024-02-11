@@ -2,7 +2,6 @@ package org.gecko.application;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
@@ -19,7 +18,6 @@ import org.gecko.io.FileTypes;
 import org.gecko.io.ProjectFileParser;
 import org.gecko.io.ProjectFileSerializer;
 import org.gecko.viewmodel.GeckoViewModel;
-import org.gecko.viewmodel.PositionableViewModelElement;
 
 @Getter
 @Setter
@@ -85,20 +83,6 @@ public class GeckoIOManager {
         Gecko newGecko = new Gecko(gvm);
         geckoManager.setGecko(newGecko);
         file = fileToLoad;
-        List<PositionableViewModelElement<?>> generatedViewModelElements =
-            projectFileParser.getGeneratedViewModelElements();
-        if (generatedViewModelElements != null && !generatedViewModelElements.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "Loaded file contains elements with missing attributes. "
-                    + "Do you want to keep those elements with default attributes?", ButtonType.YES, ButtonType.NO);
-            alert.showAndWait();
-            if (alert.getResult().equals(ButtonType.YES)) {
-                return;
-            }
-            for (PositionableViewModelElement<?> viewModelElement : generatedViewModelElements) {
-                geckoManager.getGecko().getViewModel().deleteViewModelElement(viewModelElement);
-            }
-        }
     }
 
     public void importAutomatonFile(File file) {

@@ -35,7 +35,7 @@ public class SystemConnection extends Element {
         if (this.destination != null && this.destination.equals(destination)) {
             return;
         }
-        if (destination.isHasIncomingConnection()) {
+        if (this.destination != null && destination.isHasIncomingConnection()) {
             throw new ModelException("The destination already has an incoming connection.");
         }
         if (destination.equals(source)) {

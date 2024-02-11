@@ -1,5 +1,6 @@
 package org.gecko.view.views;
 
+import java.util.Locale;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -18,7 +19,7 @@ public class ViewElementSearchVisitor implements PositionableViewModelElementVis
 
     @Override
     public SystemViewModel visit(SystemViewModel systemViewModel) {
-        if (systemViewModel.getName().toLowerCase().contains(search.toLowerCase())) {
+        if (systemViewModel.getName().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT))) {
             return systemViewModel;
         }
         return null;
@@ -26,7 +27,7 @@ public class ViewElementSearchVisitor implements PositionableViewModelElementVis
 
     @Override
     public RegionViewModel visit(RegionViewModel regionViewModel) {
-        if (regionViewModel.getName().toLowerCase().contains(search.toLowerCase())) {
+        if (regionViewModel.getName().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT))) {
             return regionViewModel;
         }
         return null;
@@ -39,15 +40,12 @@ public class ViewElementSearchVisitor implements PositionableViewModelElementVis
 
     @Override
     public EdgeViewModel visit(EdgeViewModel edgeViewModel) {
-        if (visit(edgeViewModel.getContract())) {
-            return edgeViewModel;
-        }
         return null;
     }
 
     @Override
     public StateViewModel visit(StateViewModel stateViewModel) {
-        if (stateViewModel.getName().toLowerCase().contains(search.toLowerCase())) {
+        if (stateViewModel.getName().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT))) {
             return stateViewModel;
         }
         for (ContractViewModel contractViewModel : stateViewModel.getContracts()) {
@@ -60,13 +58,13 @@ public class ViewElementSearchVisitor implements PositionableViewModelElementVis
 
     @Override
     public PortViewModel visit(PortViewModel portViewModel) {
-        if (portViewModel.getName().toLowerCase().contains(search.toLowerCase())) {
+        if (portViewModel.getName().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT))) {
             return portViewModel;
         }
         return null;
     }
 
     private boolean visit(ContractViewModel contractViewModel) {
-        return contractViewModel.getName().toLowerCase().contains(search.toLowerCase());
+        return contractViewModel.getName().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT));
     }
 }

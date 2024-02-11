@@ -27,7 +27,9 @@ import org.gecko.viewmodel.PositionableViewModelElement;
  */
 public class GeckoView {
 
-    private static final String STYLE_SHEET = "/styles/gecko.css";
+    private static final String STYLE_SHEET_LIGHT = "/styles/gecko.css";
+    private static final String STYLE_SHEET_DARK = "/styles/gecko-dark.css";
+
 
     @Getter
     private final BorderPane mainPane;
@@ -40,6 +42,7 @@ public class GeckoView {
     private EditorView currentView;
 
     private final ArrayList<EditorView> openedViews;
+    private boolean darkMode = false;
 
     public GeckoView(GeckoViewModel viewModel) {
         this.viewModel = viewModel;
@@ -48,7 +51,8 @@ public class GeckoView {
         this.viewFactory = new ViewFactory(viewModel.getActionManager(), this);
         this.openedViews = new ArrayList<>();
 
-        mainPane.getStylesheets().add(Objects.requireNonNull(GeckoView.class.getResource(STYLE_SHEET)).toString());
+        mainPane.getStylesheets()
+            .add(Objects.requireNonNull(GeckoView.class.getResource(STYLE_SHEET_LIGHT)).toString());
 
         // Listener for current editor
         viewModel.getCurrentEditorProperty().addListener(this::onUpdateCurrentEditorFromViewModel);
@@ -167,12 +171,20 @@ public class GeckoView {
         refreshView();
     }
 
+    /**
+     * Returns all displayed elements in the current view.
+     *
+     * @return a set of all displayed elements in the current view
+     */
     public Set<PositionableViewModelElement<?>> getAllDisplayedElements() {
-        if (!viewModel.getCurrentEditor().isAutomatonEditor()) {
-            return viewModel.getViewModelElements(
-                currentView.getViewModel().getCurrentSystem().getTarget().getAllElements());
-        }
-        return viewModel.getViewModelElements(
-            currentView.getViewModel().getCurrentSystem().getTarget().getAutomaton().getAllElements());
+        return viewModel.getCurrentEditor().getPositionableViewModelElements();
+    }
+
+    public void toggleAppearance() {
+        darkMode = !darkMode;
+        mainPane.getStylesheets().clear();
+        mainPane.getStylesheets()
+            .add(Objects.requireNonNull(GeckoView.class.getResource(darkMode ? STYLE_SHEET_DARK : STYLE_SHEET_LIGHT))
+                .toString());
     }
 }

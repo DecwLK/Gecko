@@ -28,6 +28,12 @@ public class InspectorFactory {
         this.editorViewModel = editorViewModel;
     }
 
+    /**
+     * Create an inspector for the given view model.
+     *
+     * @param viewElement The view model element to create an inspector for.
+     * @return The inspector for the given view model.
+     */
     public Inspector createInspector(PositionableViewModelElement<?> viewElement) {
         InspectorFactoryVisitor visitor = new InspectorFactoryVisitor(this);
         if (viewElement == null) {

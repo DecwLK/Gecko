@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;
@@ -13,6 +14,7 @@ import org.gecko.viewmodel.GeckoViewModel;
 /**
  * Provides methods for the conversion of data from a JSON file into Gecko-specific data.
  */
+@Getter
 public class ProjectFileParser implements FileParser {
     private final ObjectMapper objectMapper;
 

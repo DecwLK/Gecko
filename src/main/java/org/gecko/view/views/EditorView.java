@@ -230,6 +230,11 @@ public class EditorView {
         focus();
     }
 
+    /**
+     * Set the shortcut handler for the editor view. This will be used to handle keyboard shortcuts.
+     *
+     * @param shortcutHandler the shortcut handler
+     */
     public void setShortcutHandler(ShortcutHandler shortcutHandler) {
         this.shortcutHandler = shortcutHandler;
         currentViewPane.addEventHandler(KeyEvent.ANY, shortcutHandler);
@@ -239,8 +244,88 @@ public class EditorView {
         }
     }
 
+    /**
+     * Focus the center pane of the editor view.
+     */
     public void focus() {
         currentViewPane.requestFocus();
+    }
+
+    /**
+     * Draw the toolbar of the editor view.
+     *
+     * @return the toolbar
+     */
+    public Node drawToolbar() {
+        toolBar.addEventHandler(KeyEvent.ANY, shortcutHandler);
+        return toolBar;
+    }
+
+    /**
+     * Draw the inspector of the editor view.
+     *
+     * @return the inspector
+     */
+    public Node drawInspector() {
+        if (!viewModel.isAutomatonEditor()) {
+            currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
+            return currentInspector.get();
+        } else {
+            VBox vbox = new VBox();
+            vbox.addEventHandler(KeyEvent.ANY, shortcutHandler);
+            Inspector currentInspectorNode = currentInspector.get();
+            currentInspectorNode.setPrefHeight(AUTOMATON_INSPECTOR_HEIGHT);
+            VBox inspectorBox = new VBox(currentInspectorNode);
+            VBox.setVgrow(inspectorBox, Priority.ALWAYS);
+
+            ScrollPane automatonVariablePane = inspectorFactory.createAutomatonVariablePane();
+            vbox.getChildren().addAll(inspectorBox, automatonVariablePane);
+            return vbox;
+        }
+    }
+
+    /**
+     * Request newer world size to fit more elements.
+     */
+    public void updateWorldSize() {
+        if (currentViewElements.stream().anyMatch(viewElement -> viewElement.getTarget().isCurrentlyModified())) {
+            return;
+        }
+
+        boolean elementInBorder = currentViewElements.stream().anyMatch(viewElement -> {
+            Point2D position = viewElement.getTarget().getPosition();
+            Point2D size = viewElement.getTarget().getSize();
+            return isElementInGroupBorder(position, size);
+        });
+        if (elementInBorder && !worldWouldHaveMaxSize()) {
+            changeWorldSize(WORLD_SIZE_DELTA);
+            return;
+        }
+
+        boolean wouldElementBeInBorder = currentViewElements.stream().anyMatch(viewElement -> {
+            Point2D position = viewElement.getTarget().getPosition();
+            Point2D size = viewElement.getTarget().getSize();
+            return wouldElementBeInBorder(position, size);
+        });
+        if (!wouldElementBeInBorder && !worldWouldHaveMinSize()) {
+            changeWorldSize(-WORLD_SIZE_DELTA);
+        }
+    }
+
+    /**
+     * Activate or deactivate the floating search window.
+     *
+     * @param activate true if the search window should be activated, false otherwise
+     */
+    public void activateSearchWindow(boolean activate) {
+        AnchorPane.setTopAnchor(searchWindow, currentViewPane.getHeight() / 2);
+        AnchorPane.setLeftAnchor(searchWindow, currentViewPane.getWidth() / 2);
+        searchWindow.setVisible(activate);
+        searchWindow.requestFocus();
+    }
+
+    public void toggleSearchWindow() {
+        activateSearchWindow(!searchWindow.isVisible());
     }
 
     private void setViewPortPosition(Point2D point) {
@@ -272,29 +357,6 @@ public class EditorView {
 
     private Point2D getWorldOffset() {
         return viewElementsGroup.parentToLocal(viewElementsGroupContainer.parentToLocal(new Point2D(0, 0)));
-    }
-
-    public Node drawToolbar() {
-        toolBar.addEventHandler(KeyEvent.ANY, shortcutHandler);
-        return toolBar;
-    }
-
-    public Node drawInspector() {
-        if (!viewModel.isAutomatonEditor()) {
-            currentInspector.get().addEventHandler(KeyEvent.ANY, shortcutHandler);
-            return currentInspector.get();
-        } else {
-            VBox vbox = new VBox();
-            vbox.addEventHandler(KeyEvent.ANY, shortcutHandler);
-            Inspector currentInspectorNode = currentInspector.get();
-            currentInspectorNode.setPrefHeight(AUTOMATON_INSPECTOR_HEIGHT);
-            VBox inspectorBox = new VBox(currentInspectorNode);
-            VBox.setVgrow(inspectorBox, Priority.ALWAYS);
-
-            ScrollPane automatonVariablePane = inspectorFactory.createAutomatonVariablePane();
-            vbox.getChildren().addAll(inspectorBox, automatonVariablePane);
-            return vbox;
-        }
     }
 
     private void onUpdateViewElements(SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
@@ -373,12 +435,14 @@ public class EditorView {
         ObservableValue<? extends Set<PositionableViewModelElement<?>>> observable,
         Set<PositionableViewModelElement<?>> oldValue, Set<PositionableViewModelElement<?>> newValue) {
 
+        List<PositionableViewModelElement<?>> toRemove = new ArrayList<>();
         for (PositionableViewModelElement<?> element : oldValue) {
             ViewElement<?> viewElement = findViewElement(element);
             if (viewElement == null) {
-                oldValue.remove(element);
+                toRemove.add(element);
             }
         }
+        toRemove.forEach(oldValue::remove);
 
         oldValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(false));
         newValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(true));
@@ -399,37 +463,6 @@ public class EditorView {
     private Point2D convertParentToLocal(Point2D point) {
         return viewElementsGroup.parentToLocal(
             viewElementsGroupContainer.parentToLocal(viewElementsVBoxContainer.parentToLocal(point)));
-    }
-
-    public void updateWorldSize() {
-        if (currentViewElements.stream().anyMatch(viewElement -> viewElement.getTarget().isCurrentlyModified())) {
-            return;
-        }
-
-        boolean elementInBorder = currentViewElements.stream().anyMatch(viewElement -> {
-            Point2D position = viewElement.getTarget().getPosition();
-            Point2D size = viewElement.getTarget().getSize();
-            return isElementInGroupBorder(position, size);
-        });
-        if (elementInBorder && !worldWouldHaveMaxSize()) {
-            changeWorldSize(WORLD_SIZE_DELTA);
-            return;
-        }
-
-        boolean wouldElementBeInBorder = currentViewElements.stream().anyMatch(viewElement -> {
-            Point2D position = viewElement.getTarget().getPosition();
-            Point2D size = viewElement.getTarget().getSize();
-            return wouldElementBeInBorder(position, size);
-        });
-        if (!wouldElementBeInBorder && !worldWouldHaveMinSize()) {
-            changeWorldSize(-WORLD_SIZE_DELTA);
-        }
-    }
-
-    public void activateSearchWindow(boolean activate) {
-        AnchorPane.setTopAnchor(searchWindow, currentViewPane.getHeight() / 2);
-        AnchorPane.setLeftAnchor(searchWindow, currentViewPane.getWidth() / 2);
-        searchWindow.setVisible(activate);
     }
 
     private boolean worldWouldHaveMinSize() {

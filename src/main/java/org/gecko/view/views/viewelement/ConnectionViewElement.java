@@ -28,6 +28,12 @@ public abstract class ConnectionViewElement extends Path {
     @Setter
     private boolean isLoop;
 
+    /**
+     * The render path source is a list of pairs of double properties. The first element of the pair is the x property
+     * of the point, and the second element is the y property of the point. This list represents the actual points that
+     * are drawn on the screen. pathSource is a subset of renderPathSource. In order to draw a loop, extra points are
+     * added to renderPathSource.
+     */
     protected List<Pair<DoubleProperty, DoubleProperty>> renderPathSource;
 
     protected ConnectionViewElement(ObservableList<Property<Point2D>> path) {
@@ -40,10 +46,6 @@ public abstract class ConnectionViewElement extends Path {
 
         setStrokeWidth(5);
         getStyleClass().add(STYLE_CLASS);
-    }
-
-    protected void updatePathSource(int index, Point2D point) {
-        pathSource.get(index).setValue(point);
     }
 
     /**
@@ -81,7 +83,6 @@ public abstract class ConnectionViewElement extends Path {
                 // No intersection
                 continue;
             }
-            Point2D vector = corner.subtract(nextCorner).normalize();
 
             Point2D edgePosition = new Point2D(intersectionShape.getBoundsInLocal().getMinX(),
                 intersectionShape.getBoundsInLocal().getMinY());
@@ -97,6 +98,13 @@ public abstract class ConnectionViewElement extends Path {
         return intersection;
     }
 
+    /**
+     * Update the visualization of the path. Path is drawn using the path source points. Path is automatically updated
+     * upon change of individual path source points.
+     * <p>
+     * If this connection view element is a loop, the path will be drawn as a loop by adding extra points to render path
+     * source.
+     */
     protected void updatePathVisualization() {
         getElements().clear();
 
@@ -170,8 +178,8 @@ public abstract class ConnectionViewElement extends Path {
             }
         }
 
-        DoubleProperty lastX = renderPathSource.get(renderPathSource.size() - 1).getKey();
-        DoubleProperty lastY = renderPathSource.get(renderPathSource.size() - 1).getValue();
+        DoubleProperty lastX = renderPathSource.getLast().getKey();
+        DoubleProperty lastY = renderPathSource.getLast().getValue();
         DoubleProperty secondLastX = renderPathSource.get(renderPathSource.size() - 2).getKey();
         DoubleProperty secondLastY = renderPathSource.get(renderPathSource.size() - 2).getValue();
 

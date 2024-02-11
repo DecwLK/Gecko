@@ -1,7 +1,5 @@
 package org.gecko.view.inspector.builder;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.ObservableList;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorSeparator;
@@ -16,13 +14,9 @@ import org.gecko.viewmodel.StateViewModel;
 
 public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewModel> {
 
-    private final List<InspectorLabel> regionLabels;
-
     public StateInspectorBuilder(
         ActionManager actionManager, EditorViewModel editorViewModel, StateViewModel viewModel) {
         super(actionManager, viewModel);
-
-        regionLabels = new ArrayList<>();
 
         // Region label
         addInspectorElement(new InspectorLabel("Regions"));

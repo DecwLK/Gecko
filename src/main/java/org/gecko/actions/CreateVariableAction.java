@@ -23,7 +23,7 @@ public class CreateVariableAction extends Action {
     boolean run() throws GeckoException {
         createdPortViewModel = geckoViewModel.getViewModelFactory()
             .createPortViewModelIn(geckoViewModel.getCurrentEditor().getCurrentSystem());
-        createdPortViewModel.setCenter(editorViewModel.transformScreenToWorldCoordinates(position));
+        createdPortViewModel.setCenter(editorViewModel.transformViewPortToWorldCoordinates(position));
         ActionManager actionManager = geckoViewModel.getActionManager();
         actionManager.run(actionManager.getActionFactory().createSelectAction(createdPortViewModel, true));
         return true;

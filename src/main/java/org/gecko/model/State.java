@@ -25,6 +25,7 @@ public class State extends Element implements Renamable {
         this.contracts = new HashSet<>();
     }
 
+    @Override
     public void setName(@NonNull String name) throws ModelException {
         if (name.isEmpty()) {
             throw new ModelException("State's name is invalid.");

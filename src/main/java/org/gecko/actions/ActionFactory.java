@@ -61,7 +61,13 @@ public class ActionFactory {
 
     public ChangeVisibilityPortViewModelAction createChangeVisibilityPortViewModelAction(
         PortViewModel portViewModel, Visibility visibility) {
-        return new ChangeVisibilityPortViewModelAction(portViewModel, visibility);
+        return new ChangeVisibilityPortViewModelAction(geckoViewModel, portViewModel, visibility);
+    }
+
+    public ChangeVisibilityPortViewModelAction createChangeVisibilityPortViewModelAction(
+        PortViewModel portViewModel, Visibility visibility, Action systemConnectionDeleteActionGroup) {
+        return new ChangeVisibilityPortViewModelAction(geckoViewModel, portViewModel, visibility,
+            systemConnectionDeleteActionGroup);
     }
 
     public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(
@@ -83,15 +89,9 @@ public class ActionFactory {
         return new CreatePortViewModelElementAction(geckoViewModel, parentSystem);
     }
 
-    public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(Point2D position, Point2D size) {
-        return new CreateRegionViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position,
-            size);
-    }
-
     public CreateRegionViewModelElementAction createCreateRegionViewModelElementAction(
         Point2D position, Point2D size, Color color) {
-        return new CreateRegionViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position, size,
-            color);
+        return new CreateRegionViewModelElementAction(geckoViewModel, position, size, color);
     }
 
     public CreateStateViewModelElementAction createCreateStateViewModelElementAction(Point2D position) {
@@ -113,7 +113,7 @@ public class ActionFactory {
 
     public DeleteContractViewModelAction createDeleteContractViewModelAction(
         StateViewModel parent, ContractViewModel contractViewModel) {
-        return new DeleteContractViewModelAction(geckoViewModel, parent, contractViewModel);
+        return new DeleteContractViewModelAction(parent, contractViewModel);
     }
 
     public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction(
@@ -152,7 +152,7 @@ public class ActionFactory {
     }
 
     public RenameViewModelElementAction createRenameViewModelElementAction(Renamable renamable, String name) {
-        return new RenameViewModelElementAction(renamable, name);
+        return new RenameViewModelElementAction(geckoViewModel.getGeckoModel(), renamable, name);
     }
 
     public RestoreContractViewModelElementAction createRestoreContractViewModelElementAction(

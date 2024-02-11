@@ -33,6 +33,7 @@ public class Region extends Element implements Renamable {
         this.preAndPostCondition = preAndPostCondition;
     }
 
+    @Override
     public void setName(@NonNull String name) throws ModelException {
         if (name.isEmpty()) {
             throw new ModelException("Region's name is invalid.");

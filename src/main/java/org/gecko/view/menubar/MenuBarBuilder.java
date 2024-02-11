@@ -55,7 +55,7 @@ public class MenuBarBuilder {
             if (file != null) {
                 GeckoIOManager.getInstance().saveGeckoProject(file);
             } else {
-                File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.JSON);
+                File fileToSaveTo = GeckoIOManager.getInstance().getSaveFileChooser(FileTypes.JSON);
                 if (fileToSaveTo != null) {
                     GeckoIOManager.getInstance().saveGeckoProject(fileToSaveTo);
                     GeckoIOManager.getInstance().setFile(fileToSaveTo);
@@ -66,7 +66,7 @@ public class MenuBarBuilder {
 
         MenuItem saveAsFileItem = new MenuItem("Save As");
         saveAsFileItem.setOnAction(e -> {
-            File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.JSON);
+            File fileToSaveTo = GeckoIOManager.getInstance().getSaveFileChooser(FileTypes.JSON);
             if (fileToSaveTo != null) {
                 GeckoIOManager.getInstance().saveGeckoProject(fileToSaveTo);
             }
@@ -76,7 +76,7 @@ public class MenuBarBuilder {
         MenuItem importFileItem = new MenuItem("Import");
         importFileItem.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN));
         importFileItem.setOnAction(e -> {
-            File fileToImport = GeckoIOManager.getInstance().openFileChooser(FileTypes.SYS);
+            File fileToImport = GeckoIOManager.getInstance().getOpenFileChooser(FileTypes.SYS);
             if (fileToImport != null) {
                 GeckoIOManager.getInstance().importAutomatonFile(fileToImport);
             }
@@ -85,7 +85,7 @@ public class MenuBarBuilder {
         MenuItem exportFileItem = new MenuItem("Export");
         exportFileItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));
         exportFileItem.setOnAction(e -> {
-            File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.SYS);
+            File fileToSaveTo = GeckoIOManager.getInstance().getSaveFileChooser(FileTypes.SYS);
             if (fileToSaveTo != null) {
                 GeckoIOManager.getInstance().exportAutomatonFile(fileToSaveTo);
             }
@@ -185,9 +185,15 @@ public class MenuBarBuilder {
             e -> actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1 / 1.1)));
         zoomOutMenuItem.setAccelerator(Shortcuts.ZOOM_OUT.get());
 
+        SeparatorMenuItem zoomToAppearanceSeparator = new SeparatorMenuItem();
+
+        MenuItem toggleAppearanceMenuItem = new MenuItem("Toggle Appearance");
+        toggleAppearanceMenuItem.setOnAction(e -> view.toggleAppearance());
+        toggleAppearanceMenuItem.setAccelerator(Shortcuts.TOGGLE_APPEARANCE.get());
+
         viewMenu.getItems()
             .addAll(changeViewMenuItem, goToParentSystemMenuItem, viewSwitchToZoomSeparator, zoomInMenuItem,
-                zoomOutMenuItem);
+                zoomOutMenuItem, zoomToAppearanceSeparator, toggleAppearanceMenuItem);
 
         return viewMenu;
     }
@@ -252,6 +258,12 @@ public class MenuBarBuilder {
         return toolsMenu;
     }
 
+    /**
+     * Updates the tools menu with the updated tool lists.
+     *
+     * @param menuBar   The menu bar to update
+     * @param toolLists The updated tool lists
+     */
     public static void updateToolsMenu(MenuBar menuBar, List<List<Tool>> toolLists) {
         List<Tool> constantTools = toolLists.get(0);
         List<Tool> variableTools = toolLists.get(1);
@@ -278,12 +290,14 @@ public class MenuBarBuilder {
     private Menu setupHelpMenu() {
         Menu helpMenu = new Menu("Help");
 
-        MenuItem findElementsMenuItem = new MenuItem("Find Elements");
-        findElementsMenuItem.setOnAction(e -> {
-            view.getCurrentView().activateSearchWindow(true);
+        MenuItem searchElementsMenuItem = new MenuItem("Search Elements");
+        searchElementsMenuItem.setOnAction(e -> {
+            view.getCurrentView().toggleSearchWindow();
         });
+        searchElementsMenuItem.setAccelerator(Shortcuts.TOGGLE_SEARCH.get());
 
-        helpMenu.getItems().add(findElementsMenuItem);
+
+        helpMenu.getItems().add(searchElementsMenuItem);
         return helpMenu;
     }
 }

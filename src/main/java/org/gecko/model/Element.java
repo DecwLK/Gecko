@@ -31,10 +31,9 @@ public abstract class Element {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Element element)) {
             return false;
         }
-        Element element = (Element) o;
         return id == element.id;
     }
 }

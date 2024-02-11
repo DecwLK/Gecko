@@ -37,19 +37,11 @@ public class GeckoIOManager {
         return instance;
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-        stage.setOnCloseRequest(e -> {
-            try {
-                launchSaveChangesAlert();
-            } catch (GeckoException ex) {
-                e.consume();
-            }
-        });
-    }
-
+    /**
+     * Attempts to create a new project and makes the user choose a file to save it to.
+     */
     public void createNewProject() {
-        File newFile = saveFileChooser(FileTypes.JSON);
+        File newFile = getSaveFileChooser(FileTypes.JSON);
         if (newFile != null) {
             file = newFile;
             Gecko newGecko;
@@ -64,8 +56,12 @@ public class GeckoIOManager {
         }
     }
 
+    /**
+     * Attempts to load a project from a file chosen that was either previously chosen or asks the user to choose a
+     * file.
+     */
     public void loadGeckoProject() {
-        File fileToLoad = openFileChooser(FileTypes.JSON);
+        File fileToLoad = getOpenFileChooser(FileTypes.JSON);
         if (fileToLoad == null) {
             return;
         }
@@ -85,6 +81,11 @@ public class GeckoIOManager {
         file = fileToLoad;
     }
 
+    /**
+     * Imports an automaton from a file chosen by the user.
+     *
+     * @param file The file to import the automaton from.
+     */
     public void importAutomatonFile(File file) {
         AutomatonFileParser automatonFileParser = new AutomatonFileParser();
         GeckoViewModel gvm;
@@ -101,6 +102,11 @@ public class GeckoIOManager {
         geckoManager.setGecko(newGecko);
     }
 
+    /**
+     * Saves the current project to a file chosen by the user.
+     *
+     * @param file The file to save the project to.
+     */
     public void saveGeckoProject(File file) {
         ProjectFileSerializer projectFileSerializer = new ProjectFileSerializer(geckoManager.getGecko().getViewModel());
         try {
@@ -111,6 +117,11 @@ public class GeckoIOManager {
         }
     }
 
+    /**
+     * Exports the current automaton to a file chosen by the user.
+     *
+     * @param file The file to export the automaton to.
+     */
     public void exportAutomatonFile(File file) {
         FileSerializer fileSerializer = new AutomatonFileSerializer(geckoManager.getGecko().getModel());
         try {
@@ -121,12 +132,12 @@ public class GeckoIOManager {
         }
     }
 
-    public File openFileChooser(FileTypes fileType) {
+    public File getOpenFileChooser(FileTypes fileType) {
         FileChooser fileChooser = getNewFileChooser(fileType);
         return fileChooser.showOpenDialog(stage);
     }
 
-    public File saveFileChooser(FileTypes fileType) {
+    public File getSaveFileChooser(FileTypes fileType) {
         FileChooser fileChooser = getNewFileChooser(fileType);
         File result = fileChooser.showSaveDialog(stage);
         if (result == null) {
@@ -156,12 +167,24 @@ public class GeckoIOManager {
         }
 
         if (file == null) {
-            File fileToSaveTo = saveFileChooser(FileTypes.JSON);
+            File fileToSaveTo = getSaveFileChooser(FileTypes.JSON);
             if (fileToSaveTo == null) {
                 throw new GeckoException("No file chosen.");
             }
             file = fileToSaveTo;
         }
         saveGeckoProject(file);
+    }
+
+
+    void setStage(Stage stage) {
+        this.stage = stage;
+        stage.setOnCloseRequest(e -> {
+            try {
+                launchSaveChangesAlert();
+            } catch (GeckoException ex) {
+                e.consume();
+            }
+        });
     }
 }

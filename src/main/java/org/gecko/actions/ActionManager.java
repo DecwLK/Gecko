@@ -21,6 +21,9 @@ public class ActionManager {
         copyVisitor = new CopyPositionableViewModelElementVisitor();
     }
 
+    /**
+     * Undoes the last action and makes it redoable.
+     */
     public void undo() {
         if (undoStack.isEmpty()) {
             return;
@@ -37,6 +40,9 @@ public class ActionManager {
         redoStack.addFirst(action.getUndoAction(actionFactory));
     }
 
+    /**
+     * Redoes the last undone action and makes it undoable again.
+     */
     public void redo() {
         if (redoStack.isEmpty()) {
             return;
@@ -69,6 +75,11 @@ public class ActionManager {
         run(actionFactory.createPastePositionableViewModelElementAction(copyVisitor));
     }
 
+    /**
+     * Runs the given action and makes it undoable if applicable.
+     *
+     * @param action The action to run.
+     */
     public void run(Action action) {
         try {
             if (!action.run()) {

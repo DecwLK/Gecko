@@ -17,10 +17,15 @@ import org.gecko.model.Variable;
 import org.gecko.model.Visibility;
 
 /**
- * Represents a factory for the view model elements of a Gecko project. Provides a method for the creation of each
+ * Represents a factory for the view model elements of a Gecko project. Provides methods for the creation of each
+ * element. The create[Element]ViewModelIn methods are used to create a new view model element and also new model
+ * element. The create[Element]ViewModelFrom methods are used to create a new view model element from an existing model
  * element.
  */
 public class ViewModelFactory {
+    /**
+     * The id of the next view model element to be created.
+     */
     private int viewModelElementId = 0;
     private final ActionManager actionManager;
     private final ModelFactory modelFactory;
@@ -38,6 +43,9 @@ public class ViewModelFactory {
             getNewViewModelElementId());
     }
 
+    /**
+     * If no start state is set in the parent system, the new state will be set as the start state.
+     */
     public StateViewModel createStateViewModelIn(SystemViewModel parentSystem) throws ModelException {
         State state = modelFactory.createState(parentSystem.getTarget().getAutomaton());
         StateViewModel result = new StateViewModel(getNewViewModelElementId(), state);
@@ -51,6 +59,10 @@ public class ViewModelFactory {
         return result;
     }
 
+    /**
+     * New ContractViewModels are created for the contracts of the state. If the state is the start state of a system,
+     * the system's start state is set to the new state.
+     */
     public StateViewModel createStateViewModelFrom(State state) {
         StateViewModel result = new StateViewModel(getNewViewModelElementId(), state);
         for (Contract contract : state.getContracts()) {
@@ -71,6 +83,9 @@ public class ViewModelFactory {
         return result;
     }
 
+    /**
+     * Expects the source and destination of the edge to be in the view model.
+     */
     public EdgeViewModel createEdgeViewModelFrom(Edge edge) throws MissingViewModelElementException {
         StateViewModel source = (StateViewModel) geckoViewModel.getViewModelElement(edge.getSource());
         StateViewModel destination = (StateViewModel) geckoViewModel.getViewModelElement(edge.getDestination());
@@ -105,6 +120,9 @@ public class ViewModelFactory {
         return result;
     }
 
+    /**
+     * Expects the source and destination of the system connection to be in the view model.
+     */
     public SystemConnectionViewModel createSystemConnectionViewModelFrom(SystemConnection systemConnection)
         throws MissingViewModelElementException {
         PortViewModel source = (PortViewModel) geckoViewModel.getViewModelElement(systemConnection.getSource());
@@ -128,6 +146,9 @@ public class ViewModelFactory {
         return result;
     }
 
+    /**
+     * Missing PortViewModels are created for the variables of the system.
+     */
     public SystemViewModel createSystemViewModelFrom(System system) {
         SystemViewModel result = new SystemViewModel(getNewViewModelElementId(), system);
         for (Variable variable : system.getVariables()) {
@@ -155,6 +176,9 @@ public class ViewModelFactory {
         return result;
     }
 
+    /**
+     * Expects the states in the region to be in the view model.
+     */
     public RegionViewModel createRegionViewModelFrom(Region region) throws MissingViewModelElementException {
         RegionViewModel result = new RegionViewModel(getNewViewModelElementId(), region,
             createContractViewModelFrom(region.getPreAndPostCondition()));
@@ -229,7 +253,7 @@ public class ViewModelFactory {
     }
 
     private Point2D calculateEndPortPosition(Point2D position, Point2D size, Visibility visibility, boolean isPort) {
-        int sign = (isPort) ? 1 : -1;
+        int sign = isPort ? 1 : -1;
         return position.add(size.multiply(0.5))
             .subtract((visibility == Visibility.INPUT ? 1 : -1) * sign * size.getX() / 2, 0);
     }

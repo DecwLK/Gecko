@@ -23,7 +23,7 @@ public class ViewModelElementSaver {
     private final GeckoViewModel geckoViewModel;
     private final List<ViewModelPropertiesContainer> viewModelProperties;
 
-    protected ViewModelElementSaver(GeckoViewModel geckoViewModel) {
+    ViewModelElementSaver(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
         viewModelProperties = new ArrayList<>();
     }
@@ -104,7 +104,7 @@ public class ViewModelElementSaver {
         this.viewModelProperties.add(variableViewModelContainer);
     }
 
-    private ViewModelPropertiesContainer getCoordinateContainer(PositionableViewModelElement<?> element) {
+    ViewModelPropertiesContainer getCoordinateContainer(PositionableViewModelElement<?> element) {
         ViewModelPropertiesContainer container = new ViewModelPropertiesContainer();
         container.setElementId(element.getTarget().getId());
         container.setId(element.getId());

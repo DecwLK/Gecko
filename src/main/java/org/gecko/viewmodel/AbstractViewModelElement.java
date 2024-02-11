@@ -12,7 +12,13 @@ import org.gecko.model.Element;
  */
 @Getter
 public abstract class AbstractViewModelElement<T extends Element> {
+    /**
+     * The target-{@link Element} in the model of this {@link AbstractViewModelElement}.
+     */
     protected final T target;
+    /**
+     * The unique identifier of this {@link AbstractViewModelElement}.
+     */
     protected final int id;
 
     public AbstractViewModelElement(int id, @NonNull T target) {
@@ -20,6 +26,13 @@ public abstract class AbstractViewModelElement<T extends Element> {
         this.target = target;
     }
 
+    /**
+     * Updates the target-{@link Element} in the model with the data of this {@link AbstractViewModelElement}. It has to
+     * be called after the data of this {@link AbstractViewModelElement} has been updated to keep the model consistent
+     * with the view model.
+     *
+     * @throws ModelException if the update fails because of a change, which is not allowed in the model
+     */
     public abstract void updateTarget() throws ModelException;
 
     @Override
@@ -32,10 +45,9 @@ public abstract class AbstractViewModelElement<T extends Element> {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof AbstractViewModelElement<?> element)) {
             return false;
         }
-        AbstractViewModelElement<?> element = (AbstractViewModelElement<?>) o;
         return id == element.id;
     }
 }

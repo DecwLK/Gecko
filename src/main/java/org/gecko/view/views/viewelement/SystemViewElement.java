@@ -49,6 +49,11 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         this.systemViewModel = systemViewModel;
         this.inputPortsAligner = new VBox();
         this.outputPortsAligner = new VBox();
+
+        inputPortsAligner.layoutBoundsProperty()
+            .addListener((observable, oldValue, newValue) -> updatePortViewModels());
+        outputPortsAligner.layoutBoundsProperty()
+            .addListener((observable, oldValue, newValue) -> updatePortViewModels());
         bindViewModel();
         constructVisualization();
     }
@@ -72,6 +77,17 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         return systemViewModel.getPosition();
     }
 
+    @Override
+    public void accept(ViewElementVisitor visitor) {
+        visitor.visit(this);
+        portViewElements.forEach(visitor::visit);
+    }
+
+    @Override
+    public int getZPriority() {
+        return Z_PRIORITY;
+    }
+
     private void bindViewModel() {
         nameProperty.bind(systemViewModel.getNameProperty());
         codeProperty.bind(systemViewModel.getCodeProperty());
@@ -87,17 +103,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
 
         systemViewModel.getPositionProperty().addListener((observable, oldValue, newValue) -> updatePortViewModels());
         updatePortViewModels();
-    }
-
-    @Override
-    public void accept(ViewElementVisitor visitor) {
-        visitor.visit(this);
-        portViewElements.forEach(visitor::visit);
-    }
-
-    @Override
-    public int getZPriority() {
-        return Z_PRIORITY;
     }
 
     private void constructVisualization() {
@@ -118,7 +123,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
                 change.getRemoved().forEach(this::removePort);
             }
         }
-        updatePortViewModels();
     }
 
     private void updatePortViewModels() {
@@ -152,7 +156,10 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         portViewElements.remove(portViewElement);
         if (portViewModel.getVisibility() == Visibility.INPUT) {
             inputPortsAligner.getChildren().remove(portViewElement);
+        } else if (portViewModel.getVisibility() == Visibility.OUTPUT) {
+            outputPortsAligner.getChildren().remove(portViewElement);
         } else {
+            inputPortsAligner.getChildren().remove(portViewElement);
             outputPortsAligner.getChildren().remove(portViewElement);
         }
     }
@@ -170,9 +177,12 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         if (newValue == Visibility.INPUT) {
             outputPortsAligner.getChildren().remove(portViewElement);
             inputPortsAligner.getChildren().add(portViewElement);
-        } else {
+        } else if (newValue == Visibility.OUTPUT) {
             inputPortsAligner.getChildren().remove(portViewElement);
             outputPortsAligner.getChildren().add(portViewElement);
+        } else {
+            inputPortsAligner.getChildren().remove(portViewElement);
+            outputPortsAligner.getChildren().remove(portViewElement);
         }
     }
 

@@ -135,7 +135,7 @@ public class ViewModelFactory {
             new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
         geckoViewModel.addViewModelElement(result);
         setSystemConnectionEdgePoints(source, destination, result);
-        // Since target is already up to date and we're building from target, we don't need to call updateTarget
+        // Since target is already up-to-date and we're building from target, we don't need to call updateTarget
         return result;
     }
 
@@ -205,6 +205,9 @@ public class ViewModelFactory {
      * New PortViewModel is not added to the SystemViewModel.
      **/
     public PortViewModel createPortViewModelFrom(Variable variable) {
+        if (geckoViewModel.getViewModelElement(variable) != null) {
+            return (PortViewModel) geckoViewModel.getViewModelElement(variable);
+        }
         PortViewModel result = new PortViewModel(getNewViewModelElementId(), variable);
         geckoViewModel.addViewModelElement(result);
         return result;

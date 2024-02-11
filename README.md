@@ -46,7 +46,7 @@ java -jar Gecko.jar
 
 ## Building
 
-To build Gecko, clone the repository and run the following commands in the root directory.
+To build Gecko, clone the repository and run the following commands in the root directory of the repository.
 
 ```bash
 ./gradlew build
@@ -56,6 +56,12 @@ Gecko can build shadow jars, which are executable jars that include all dependen
 
 ```bash
 ./gradlew shadowJar
+```
+
+To execute the compiled jar, execute the following command:
+
+```bash
+java -jar build/libs/Gecko-0.1-all.jar
 ```
 
 ## License

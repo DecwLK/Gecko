@@ -1,21 +1,12 @@
 package org.gecko.application;
 
 import javafx.application.Application;
-import javafx.stage.Stage;
 
-public class Main extends Application {
-
-    public static void main(String[] args) {
-        launch(args);
+public class Main {
+    private Main() {
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        // Initialize Gecko
-        stage.setTitle("Gecko");
-        stage.show();
-        GeckoManager geckoManager = new GeckoManager(stage);
-        GeckoIOManager.getInstance().setGeckoManager(geckoManager);
-        GeckoIOManager.getInstance().setStage(stage);
+    public static void main(String[] args) {
+        Application.launch(App.class, args);
     }
 }

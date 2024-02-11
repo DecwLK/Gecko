@@ -289,10 +289,9 @@ public class ViewModelFactory {
             sourcePosition = new SimpleObjectProperty<>(
                 calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
 
-            source.getPositionProperty().addListener((observable, oldValue, newValue) -> {
-                sourcePosition.setValue(
-                    calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
-            });
+            source.getPositionProperty()
+                .addListener((observable, oldValue, newValue) -> sourcePosition.setValue(
+                    calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false)));
         }
 
         Property<Point2D> destinationPosition;
@@ -311,10 +310,10 @@ public class ViewModelFactory {
                 calculateEndPortPosition(destination.getPosition(), destination.getSize(), destination.getVisibility(),
                     false));
 
-            destination.getPositionProperty().addListener((observable, oldValue, newValue) -> {
-                destinationPosition.setValue(calculateEndPortPosition(destination.getPosition(), destination.getSize(),
-                    destination.getVisibility(), false));
-            });
+            destination.getPositionProperty()
+                .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
+                    calculateEndPortPosition(destination.getPosition(), destination.getSize(),
+                        destination.getVisibility(), false)));
         }
 
         result.getEdgePoints().add(sourcePosition);

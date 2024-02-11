@@ -93,11 +93,10 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     public void checkStateInRegion(StateViewModel state) {
         Bounds regionBound =
             new BoundingBox(getPosition().getX(), getPosition().getY(), getSize().getX(), getSize().getY());
-        boolean isStateInRegion = regionBound.contains(state.getPosition()) || regionBound.contains(
-            state.getPosition().add(new Point2D(0, state.getSize().getY()))) || regionBound.contains(
-            state.getPosition().add(new Point2D(state.getSize().getX(), 0))) || regionBound.contains(
-            state.getPosition().add(state.getSize()));
-        if (isStateInRegion) {
+        Bounds stateBound =
+            new BoundingBox(state.getPosition().getX(), state.getPosition().getY(), state.getSize().getX(),
+                state.getSize().getY());
+        if (regionBound.intersects(stateBound)) {
             addState(state);
         } else {
             removeState(state);

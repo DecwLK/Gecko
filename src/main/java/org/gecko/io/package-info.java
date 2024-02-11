@@ -13,7 +13,11 @@
  *                 to traverse all view model elements.
  *             </li>
  *             <li>
- *                 <b>Serialization to SYS</b>:
+ *                 <b>Serialization to SYS</b>: Serializtaion to SYS files is done by the
+ *                 {@link org.gecko.io.AutomatonFileSerializer AutmatonFileSerializer}.
+ *                 When exporting the model it transforms features unique to Gecko such as
+ *                 {@link org.gecko.model.Kind Kinds} or {@link org.gecko.model.Region Regions}
+ *                 to be compatible with the SYS file format.
  *             </li>
  *         </ul>
  *     </li>
@@ -30,7 +34,10 @@
  *                 view model elements.
  *             </li>
  *             <li>
- *                 <b>Parsing from SYS</b>:
+ *                 <b>Parsing from SYS</b>: Parsing from SYS files is done by the
+ *                 {@link org.gecko.io.AutomatonFileParser AutomatonFileParser}. It uses the
+ *                 {@link org.gecko.io.AutomatonFileVisitor AutomatonFileVisitor},
+ *                 which is an ANTLR4 visitor, to traverse the SYS file and create the corresponding model elements.
  *             </li>
  *         </ul>
  *     </li>

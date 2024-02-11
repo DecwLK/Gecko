@@ -100,54 +100,7 @@ public class ViewModelFactory {
             new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
         geckoViewModel.addViewModelElement(result);
 
-        boolean sourceIsPort = isPort(source);
-        boolean destIsPort = isPort(destination);
-        Property<Point2D> sourcePosition;
-
-        // position the line at the tip of the port
-        if (sourceIsPort) {
-            sourcePosition = new SimpleObjectProperty<>(
-                calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
-                    source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true));
-
-            source.getSystemPortPositionProperty()
-                .addListener((observable, oldValue, newValue) -> sourcePosition.setValue(
-                    calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
-                        source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true)));
-        } else {
-            sourcePosition = new SimpleObjectProperty<>(
-                calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
-
-            source.getPositionProperty().addListener((observable, oldValue, newValue) -> {
-                sourcePosition.setValue(
-                    calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
-            });
-        }
-
-        Property<Point2D> destinationPosition;
-
-        if (destIsPort) {
-            destinationPosition = new SimpleObjectProperty<>(
-                calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
-                    destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true));
-
-            destination.getSystemPortPositionProperty()
-                .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
-                    calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
-                        destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true)));
-        } else {
-            destinationPosition = new SimpleObjectProperty<>(
-                calculateEndPortPosition(destination.getPosition(), destination.getSize(), destination.getVisibility(),
-                    false));
-
-            destination.getPositionProperty().addListener((observable, oldValue, newValue) -> {
-                destinationPosition.setValue(calculateEndPortPosition(destination.getPosition(), destination.getSize(),
-                    destination.getVisibility(), false));
-            });
-        }
-
-        result.getEdgePoints().add(sourcePosition);
-        result.getEdgePoints().add(destinationPosition);
+        setSystemConnectionEdgePoints(source, destination, result);
         result.updateTarget();
         return result;
     }
@@ -163,6 +116,8 @@ public class ViewModelFactory {
         SystemConnectionViewModel result =
             new SystemConnectionViewModel(getNewViewModelElementId(), systemConnection, source, destination);
         geckoViewModel.addViewModelElement(result);
+        setSystemConnectionEdgePoints(source, destination, result);
+        // Since target is already up to date and we're building from target, we don't need to call updateTarget
         return result;
     }
 
@@ -288,5 +243,57 @@ public class ViewModelFactory {
             .filter(variable -> portViewModel.getTarget().equals(variable))
             .findFirst()
             .isEmpty();
+    }
+
+    private void setSystemConnectionEdgePoints(
+        PortViewModel source, PortViewModel destination, SystemConnectionViewModel result) {
+        boolean sourceIsPort = isPort(source);
+        boolean destIsPort = isPort(destination);
+        Property<Point2D> sourcePosition;
+
+        // position the line at the tip of the port
+        if (sourceIsPort) {
+            sourcePosition = new SimpleObjectProperty<>(
+                calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
+                    source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true));
+
+            source.getSystemPortPositionProperty()
+                .addListener((observable, oldValue, newValue) -> sourcePosition.setValue(
+                    calculateEndPortPosition(source.getSystemPortPositionProperty().getValue(),
+                        source.getSystemPortSizeProperty().getValue(), source.getVisibility(), true)));
+        } else {
+            sourcePosition = new SimpleObjectProperty<>(
+                calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
+
+            source.getPositionProperty().addListener((observable, oldValue, newValue) -> {
+                sourcePosition.setValue(
+                    calculateEndPortPosition(source.getPosition(), source.getSize(), source.getVisibility(), false));
+            });
+        }
+
+        Property<Point2D> destinationPosition;
+
+        if (destIsPort) {
+            destinationPosition = new SimpleObjectProperty<>(
+                calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
+                    destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true));
+
+            destination.getSystemPortPositionProperty()
+                .addListener((observable, oldValue, newValue) -> destinationPosition.setValue(
+                    calculateEndPortPosition(destination.getSystemPortPositionProperty().getValue(),
+                        destination.getSystemPortSizeProperty().getValue(), destination.getVisibility(), true)));
+        } else {
+            destinationPosition = new SimpleObjectProperty<>(
+                calculateEndPortPosition(destination.getPosition(), destination.getSize(), destination.getVisibility(),
+                    false));
+
+            destination.getPositionProperty().addListener((observable, oldValue, newValue) -> {
+                destinationPosition.setValue(calculateEndPortPosition(destination.getPosition(), destination.getSize(),
+                    destination.getVisibility(), false));
+            });
+        }
+
+        result.getEdgePoints().add(sourcePosition);
+        result.getEdgePoints().add(destinationPosition);
     }
 }

@@ -90,7 +90,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
                 edgeCount++;
             }
         }
-        return (edgeCount <= 1) ? -1 : edgeIndex / edgeCount;
+        return (edgeCount <= 1) ? -1 : (edgeIndex / edgeCount);
     }
 
     public int getLoopOffset(EdgeViewModel edgeViewModel) {

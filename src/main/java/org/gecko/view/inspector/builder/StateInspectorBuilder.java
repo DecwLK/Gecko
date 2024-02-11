@@ -25,6 +25,7 @@ public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewMod
         regionLabels = new ArrayList<>();
 
         // Region label
+        addInspectorElement(new InspectorLabel("Regions"));
         ObservableList<RegionViewModel> regionViewModelList = editorViewModel.getRegionViewModels(viewModel);
         addInspectorElement(new InspectorRegionList(regionViewModelList));
 

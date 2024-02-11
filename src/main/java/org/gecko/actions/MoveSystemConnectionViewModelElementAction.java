@@ -21,6 +21,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
     private final SystemConnectionViewModel systemConnectionViewModel;
     private final ElementScalerBlock elementScalerBlock;
     private final Point2D delta;
+    private boolean isVariableBlock = false;
 
     MoveSystemConnectionViewModelElementAction(
         GeckoViewModel geckoViewModel, SystemConnectionViewModel systemConnectionViewModel,
@@ -34,7 +35,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
-        PortViewModel newPortViewModel = attemptPortViewModelRelocation();
+        PortViewModel newPortViewModel = getPortViewModelAt();
         if (newPortViewModel == null) {
             return false;
         }
@@ -57,12 +58,30 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
             return false;
         }
 
+        if (isVariableBlock) {
+            systemConnectionViewModel.getEdgePoints()
+                .set(elementScalerBlock.getIndex(), newPortViewModel.getPositionProperty());
+        } else {
+            Property<Point2D> newPositionProperty = new SimpleObjectProperty<>(
+                calculateEndPortPosition(newPortViewModel.getSystemPortPositionProperty().getValue(),
+                    newPortViewModel.getSystemPortSizeProperty().getValue(), newPortViewModel.getVisibility()));
+
+            newPortViewModel.getSystemPortPositionProperty()
+                .addListener((observable, oldValue, newValue) -> newPositionProperty.setValue(
+                    calculateEndPortPosition(newPortViewModel.getSystemPortPositionProperty().getValue(),
+                        newPortViewModel.getSystemPortSizeProperty().getValue(), newPortViewModel.getVisibility())));
+
+            systemConnectionViewModel.getEdgePoints().set(elementScalerBlock.getIndex(), newPositionProperty);
+        }
+
         if (isSource()) {
             systemConnectionViewModel.setSource(sourcePortViewModel);
         } else {
             systemConnectionViewModel.setDestination(destinationPortViewModel);
         }
         systemConnectionViewModel.updateTarget();
+
+
         return true;
     }
 
@@ -72,7 +91,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
             elementScalerBlock, delta.multiply(-1));
     }
 
-    private PortViewModel attemptPortViewModelRelocation() {
+    private PortViewModel getPortViewModelAt() {
         if (systemConnectionViewModel == null) {
             return null;
         }
@@ -88,8 +107,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
                 && point.getX() < portViewModel.getPosition().getX() + portViewModel.getSize().getX()
                 && point.getY() > portViewModel.getPosition().getY()
                 && point.getY() < portViewModel.getPosition().getY() + portViewModel.getSize().getY()) {
-                systemConnectionViewModel.getEdgePoints()
-                    .set(elementScalerBlock.getIndex(), portViewModel.getPositionProperty());
+                isVariableBlock = true;
                 return portViewModel;
             }
         }
@@ -104,18 +122,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
                     && point.getY() > portViewModel.getSystemPortPositionProperty().getValue().getY() && point.getY()
                     < portViewModel.getSystemPortPositionProperty().getValue().getY()
                     + portViewModel.getSystemPortSizeProperty().getValue().getY()) {
-
-                    // create new position property at the tip of the port
-                    Property<Point2D> newPositionProperty = new SimpleObjectProperty<>(
-                        calculateEndPortPosition(portViewModel.getSystemPortPositionProperty().getValue(),
-                            portViewModel.getSystemPortSizeProperty().getValue(), portViewModel.getVisibility()));
-
-                    portViewModel.getSystemPortPositionProperty()
-                        .addListener((observable, oldValue, newValue) -> newPositionProperty.setValue(
-                            calculateEndPortPosition(portViewModel.getSystemPortPositionProperty().getValue(),
-                                portViewModel.getSystemPortSizeProperty().getValue(), portViewModel.getVisibility())));
-
-                    systemConnectionViewModel.getEdgePoints().set(elementScalerBlock.getIndex(), newPositionProperty);
+                    isVariableBlock = false;
                     return portViewModel;
                 }
             }

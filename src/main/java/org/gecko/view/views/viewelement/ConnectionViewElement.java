@@ -48,10 +48,6 @@ public abstract class ConnectionViewElement extends Path {
         getStyleClass().add(STYLE_CLASS);
     }
 
-    protected void updatePathSource(int index, Point2D point) {
-        pathSource.get(index).setValue(point);
-    }
-
     /**
      * Mask the end position of the block with the given size and position. The mask is calculated by the intersection
      * of the block and the line defined by the start and end points.
@@ -182,8 +178,8 @@ public abstract class ConnectionViewElement extends Path {
             }
         }
 
-        DoubleProperty lastX = renderPathSource.get(renderPathSource.size() - 1).getKey();
-        DoubleProperty lastY = renderPathSource.get(renderPathSource.size() - 1).getValue();
+        DoubleProperty lastX = renderPathSource.getLast().getKey();
+        DoubleProperty lastY = renderPathSource.getLast().getValue();
         DoubleProperty secondLastX = renderPathSource.get(renderPathSource.size() - 2).getKey();
         DoubleProperty secondLastY = renderPathSource.get(renderPathSource.size() - 2).getValue();
 

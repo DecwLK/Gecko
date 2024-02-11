@@ -36,9 +36,10 @@ public abstract class Tool implements ViewElementVisitor {
 
     /**
      * Applies listeners to the given view, which is assumed to be the current view of the application.
-     * @param vbox the container around the container group
-     * @param view the scroll pane that contains the world group
-     * @param worldGroup the group that contains all the elements of the view
+     *
+     * @param vbox           the container around the container group
+     * @param view           the scroll pane that contains the world group
+     * @param worldGroup     the group that contains all the elements of the view
      * @param containerGroup the container group outside the world group
      */
     public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
@@ -49,8 +50,8 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a state view element.
-     * By default, consumes all events.
+     * Overriden by specific tools to handle interaction with a state view element. By default, consumes all events.
+     *
      * @param stateViewElement the state view element to visit
      */
     @Override
@@ -60,8 +61,8 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with an edge view element.
-     * By default, consumes all events.
+     * Overriden by specific tools to handle interaction with an edge view element. By default, consumes all events.
+     *
      * @param edgeViewElement the edge view element to visit
      */
     @Override
@@ -70,8 +71,9 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a region view element.
-     * By default, lets events pass through.
+     * Overriden by specific tools to handle interaction with a region view element. By default, lets events pass
+     * through.
+     *
      * @param regionViewElement the region view element to visit
      */
     @Override
@@ -80,8 +82,8 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a system view element.
-     * By default, consumes all events.
+     * Overriden by specific tools to handle interaction with a system view element. By default, consumes all events.
+     *
      * @param systemViewElement the system view element to visit
      */
     @Override
@@ -90,8 +92,9 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a system connection view element.
-     * By default, consumes all events.
+     * Overriden by specific tools to handle interaction with a system connection view element. By default, consumes all
+     * events.
+     *
      * @param systemConnectionViewElement the system connection view element to visit
      */
     @Override
@@ -100,8 +103,9 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a variable block view element.
-     * By default, consumes all events.
+     * Overriden by specific tools to handle interaction with a variable block view element. By default, consumes all
+     * events.
+     *
      * @param variableBlockViewElement the variable block view element to visit
      */
     @Override
@@ -110,8 +114,9 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a block element scaler view element decorator.
-     * By default, lets events pass through.
+     * Overriden by specific tools to handle interaction with a block element scaler view element decorator. By default,
+     * lets events pass through.
+     *
      * @param elementScalarViewElementDecorator the block element scaler view element decorator to visit
      */
     @Override
@@ -120,8 +125,9 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a connection element scaler view element decorator.
-     * By default, lets events pass through.
+     * Overriden by specific tools to handle interaction with a connection element scaler view element decorator. By
+     * default, lets events pass through.
+     *
      * @param connectionElementScalerViewElementDecorator the connection element scaler view element decorator to visit
      */
     @Override
@@ -130,8 +136,9 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a block element scaler view element decorator.
-     * By default, lets events pass through.
+     * Overriden by specific tools to handle interaction with a block element scaler view element decorator. By default,
+     * lets events pass through.
+     *
      * @param blockElementScalerViewElementDecorator the block element scaler view element decorator to visit
      */
     @Override
@@ -140,8 +147,9 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a selectable view element decorator.
-     * By default, lets events pass through.
+     * Overriden by specific tools to handle interaction with a selectable view element decorator. By default, lets
+     * events pass through.
+     *
      * @param selectableViewElementDecorator the selectable view element decorator to visit
      */
     @Override
@@ -150,8 +158,8 @@ public abstract class Tool implements ViewElementVisitor {
     }
 
     /**
-     * Overriden by specific tools to handle interaction with a port view element.
-     * By default, consumes all events.
+     * Overriden by specific tools to handle interaction with a port view element. By default, consumes all events.
+     *
      * @param portViewElement the port view element to visit
      */
     @Override

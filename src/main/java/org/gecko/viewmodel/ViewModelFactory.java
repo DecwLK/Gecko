@@ -154,7 +154,6 @@ public class ViewModelFactory {
         for (Variable variable : system.getVariables()) {
             PortViewModel portViewModel = (PortViewModel) geckoViewModel.getViewModelElement(variable);
             if (portViewModel == null) {
-                java.lang.System.out.println("PortViewModel: " + portViewModel);
                 portViewModel = createPortViewModelFrom(variable);
             }
             result.addPort(portViewModel);

@@ -61,16 +61,27 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     }
 
     @Override
-    public void setEdgePoint(int index, Point2D point) {
-        edgePoints.get(index).setValue(point);
+    public void setEdgePoint(int index, Point2D newPosition) {
+        edgePoints.get(index).setValue(newPosition);
     }
 
+    /**
+     * Checks if a connection between the given source and destination port is allowed.
+     *
+     * @param source            the new source port
+     * @param destination       the new destination port
+     * @param sourceSystem      the system that contains the source port
+     * @param destinationSystem the system that contains the destination port
+     * @param parentSystem      the system where the connection is created
+     * @param systemConnection  the connection that is being edited, or null if a new connection is being created
+     * @return true if the connection is allowed, false otherwise
+     */
     public static boolean isConnectingAllowed(
         @NonNull PortViewModel source, @NonNull PortViewModel destination, @NonNull SystemViewModel sourceSystem,
         @NonNull SystemViewModel destinationSystem, @NonNull SystemViewModel parentSystem,
-        SystemConnectionViewModel oldConnection) {
-        if (destination.getTarget().isHasIncomingConnection() && oldConnection != null
-            && !oldConnection.getDestination().equals(destination)) {
+        SystemConnectionViewModel systemConnection) {
+        if (destination.getTarget().isHasIncomingConnection() && systemConnection != null
+            && !systemConnection.getDestination().equals(destination)) {
             return false;
         }
         if (sourceSystem.equals(destinationSystem)) {

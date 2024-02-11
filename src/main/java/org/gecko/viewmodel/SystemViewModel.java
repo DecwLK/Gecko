@@ -64,6 +64,11 @@ public class SystemViewModel extends BlockViewModelElement<System> {
         portsProperty.remove(port);
     }
 
+    /**
+     * Sets the start state of the automaton of the system.
+     *
+     * @param newStartState the new start state
+     */
     public void setStartState(@NonNull StateViewModel newStartState) {
         if (startState != null) {
             startState.setStartState(false);

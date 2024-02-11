@@ -49,6 +49,15 @@ public class GeckoViewModel {
         switchEditor(rootSystemViewModel, false);
     }
 
+    /**
+     * Switches the current {@link EditorViewModel} to the one that contains the given {@link SystemViewModel} and has
+     * the correct type (automaton  or system editor). If the {@link EditorViewModel} does not exist, a new one is
+     * created.
+     *
+     * @param nextSystemViewModel the {@link SystemViewModel} that should be displayed in the editor
+     * @param isAutomatonEditor   true if the editor should be an automaton editor, false if it should be a system
+     *                            editor
+     */
     public void switchEditor(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
         openedEditorsProperty.stream()
             .filter(editorViewModel -> (editorViewModel.getCurrentSystem() == nextSystemViewModel
@@ -56,10 +65,6 @@ public class GeckoViewModel {
             .findFirst()
             .ifPresentOrElse(this::setCurrentEditor,
                 () -> setupNewEditorViewModel(nextSystemViewModel, isAutomatonEditor));
-    }
-
-    public void switchEditor(EditorViewModel editorViewModel) {
-        setCurrentEditor(editorViewModel);
     }
 
     private void setupNewEditorViewModel(SystemViewModel nextSystemViewModel, boolean isAutomatonEditor) {
@@ -88,11 +93,25 @@ public class GeckoViewModel {
         return positionableViewModelElements;
     }
 
+    /**
+     * Adds a new {@link PositionableViewModelElement} to the {@link GeckoViewModel}. The element is mapped to its
+     * corresponding {@link Element} from the model. The {@link PositionableViewModelElement} is then added to the
+     * correct {@link EditorViewModel}.
+     *
+     * @param element the {@link PositionableViewModelElement} to add
+     */
     public void addViewModelElement(PositionableViewModelElement<?> element) {
         modelToViewModel.put(element.getTarget(), element);
         updateEditors();
     }
 
+    /**
+     * Deletes a {@link PositionableViewModelElement} from the {@link GeckoViewModel}. The element is removed from the
+     * mapping and from all {@link EditorViewModel}s. The selection managers of the editors are updated and the element
+     * is removed from the editor that displays it.
+     *
+     * @param element the {@link PositionableViewModelElement} to delete
+     */
     public void deleteViewModelElement(PositionableViewModelElement<?> element) {
         modelToViewModel.remove(element.getTarget());
         updateSelectionManagers(element);

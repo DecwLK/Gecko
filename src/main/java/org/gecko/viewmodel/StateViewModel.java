@@ -70,6 +70,15 @@ public class StateViewModel extends BlockViewModelElement<State> {
         return new ArrayList<>(contractsProperty);
     }
 
+    /**
+     * Returns the offset used to position the provided edge. The offset is a value between 0 and 1, where 0 means the
+     * edge should be positioned at the start point of one of the state's edges and 1 means the edge should be
+     * positioned at the end point of one of the state's edges. If the given edge is only edge that is connected, -1 is
+     * returned.
+     *
+     * @param edgeViewModel the edge to get the offset for
+     * @return the offset used to position the provided edge
+     */
     public double getEdgeOffset(EdgeViewModel edgeViewModel) {
         List<EdgeViewModel> edges = new ArrayList<>(incomingEdges.reversed());
         edges.addAll(outgoingEdges);
@@ -93,6 +102,14 @@ public class StateViewModel extends BlockViewModelElement<State> {
         return (edgeCount <= 1) ? -1 : (edgeIndex / edgeCount);
     }
 
+    /**
+     * Returns the offset used to position the provided loop. This offset represents the second point of the loop, where
+     * 0 means the loop should be positioned at the start point of the state and 1 means the loop should be positioned
+     * at the end point of the state.
+     *
+     * @param edgeViewModel the loop to get the offset for
+     * @return the offset used to position the provided loop
+     */
     public int getLoopOffset(EdgeViewModel edgeViewModel) {
         List<EdgeViewModel> loops =
             incomingEdges.stream().filter(edge -> edge.getSource() == this && edge.getDestination() == this).toList();

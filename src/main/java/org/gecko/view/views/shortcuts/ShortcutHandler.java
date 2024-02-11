@@ -11,7 +11,6 @@ import org.gecko.actions.ActionFactory;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.ToolType;
 import org.gecko.view.views.EditorView;
-import org.gecko.viewmodel.EditorViewModel;
 
 public abstract class ShortcutHandler implements EventHandler<KeyEvent> {
     private static final double ZOOM_FACTOR = 1.1;
@@ -30,7 +29,6 @@ public abstract class ShortcutHandler implements EventHandler<KeyEvent> {
         addSelectionShortcuts();
         addDeleteShortcuts();
         addUndoRedoShortcuts();
-        addSwitchEditorShortcuts();
     }
 
     @Override
@@ -98,13 +96,5 @@ public abstract class ShortcutHandler implements EventHandler<KeyEvent> {
         shortcuts.put(Shortcuts.UNDO.get(), actionManager::undo);
 
         shortcuts.put(Shortcuts.REDO.get(), actionManager::redo);
-    }
-
-    private void addSwitchEditorShortcuts() {
-        shortcuts.put(Shortcuts.SWITCH_EDITOR.get(), () -> {
-            EditorViewModel editorViewModel = editorView.getViewModel();
-            actionManager.run(actionFactory.createViewSwitchAction(editorViewModel.getCurrentSystem(),
-                !editorViewModel.isAutomatonEditor()));
-        });
     }
 }

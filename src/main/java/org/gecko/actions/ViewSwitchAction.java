@@ -20,6 +20,9 @@ public class ViewSwitchAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
+        if (systemViewModel == null) {
+            return false;
+        }
         geckoViewModel.switchEditor(systemViewModel, isAutomaton);
         return true;
     }

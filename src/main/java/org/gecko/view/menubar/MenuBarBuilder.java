@@ -3,8 +3,6 @@ package org.gecko.view.menubar;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -20,6 +18,7 @@ import org.gecko.tools.ToolType;
 import org.gecko.view.GeckoView;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.PositionableViewModelElement;
+import org.gecko.viewmodel.SystemViewModel;
 
 public class MenuBarBuilder {
     private final MenuBar menuBar;
@@ -157,17 +156,9 @@ public class MenuBarBuilder {
 
         MenuItem goToParentSystemMenuItem = new MenuItem("Go To Parent System");
         goToParentSystemMenuItem.setOnAction(e -> {
-            if (view.getCurrentView().getViewModel().getCurrentSystem().getName().equals("root")) {
-                Alert alert =
-                    new Alert(Alert.AlertType.INFORMATION, "The root system does not have a parent.", ButtonType.OK);
-                alert.showAndWait();
-            } else {
-                if (view.getCurrentView().getViewModel().isAutomatonEditor()) {
-                    changeViewMenuItem.fire();
-                }
-                actionManager.run(actionManager.getActionFactory()
-                    .createViewSwitchAction(view.getCurrentView().getViewModel().getParentSystem(), false));
-            }
+            boolean isAutomatonEditor = view.getCurrentView().getViewModel().isAutomatonEditor();
+            SystemViewModel parentSystem = view.getCurrentView().getViewModel().getParentSystem();
+            actionManager.run(actionManager.getActionFactory().createViewSwitchAction(parentSystem, isAutomatonEditor));
         });
         goToParentSystemMenuItem.setAccelerator(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get());
 

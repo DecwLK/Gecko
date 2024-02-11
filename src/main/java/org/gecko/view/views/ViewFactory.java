@@ -59,7 +59,7 @@ public class ViewFactory {
         ViewContextMenuBuilder contextMenuBuilder =
             new RegionViewElementContextMenuBuilder(actionManager, regionViewModel);
         setContextMenu(newRegionViewElement, contextMenuBuilder);
-        return new SelectableViewElementDecorator(new BlockElementScalerViewElementDecorator(newRegionViewElement));
+        return new BlockElementScalerViewElementDecorator(new SelectableViewElementDecorator(newRegionViewElement));
     }
 
     public ViewElement<?> createViewElementFrom(PortViewModel portViewModel) {

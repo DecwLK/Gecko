@@ -1,8 +1,8 @@
 
 .selected-border {
     -fx-border-color: #3434aa !important;
-    -fx-border-insets: -2.5;
-    -fx-border-width: 2.5;
+    -fx-border-insets: -2;
+    -fx-border-width: 3;
     -fx-border-radius: 9;
 }
 
@@ -30,6 +30,7 @@
 .toolbar-icon:selected {
     -fx-background-color: -fx-fg2;
 }
+
 .path {
     -fx-stroke: -fx-text;
 }
@@ -99,6 +100,7 @@
 .floating-ui-button:selected {
     -fx-background-color: -fx-fg2;
 }
+
 .scroll-bar {
     -fx-background-color: -fx-fg0;
     -fx-background-radius: 5;

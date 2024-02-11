@@ -17,8 +17,8 @@ import org.gecko.util.graphlayouting.Graphlayouter;
 import org.gecko.viewmodel.GeckoViewModel;
 
 /**
- * The AutomatonFileParser is used to import a project from a sys file. It is responsible for parsing a sys file
- * and creating a {@link GeckoViewModel} from it. It uses the {@link AutomatonFileVisitor} the file into a
+ * The AutomatonFileParser is used to import a project from a sys file. It is responsible for parsing a sys file and
+ * creating a {@link GeckoViewModel} from it. It uses the {@link AutomatonFileVisitor} the file into a
  * {@link GeckoModel}. And then uses the {@link ViewModelElementCreator} to create the view model from the model.
  */
 public class AutomatonFileParser implements FileParser {

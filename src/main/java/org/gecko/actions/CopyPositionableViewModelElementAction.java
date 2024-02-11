@@ -7,11 +7,10 @@ public class CopyPositionableViewModelElementAction extends Action {
     GeckoViewModel geckoViewModel;
     CopyPositionableViewModelElementVisitor copyVisitor;
 
-    CopyPositionableViewModelElementAction(
-        GeckoViewModel geckoViewModel, CopyPositionableViewModelElementVisitor copyVisitor) {
+    CopyPositionableViewModelElementAction(GeckoViewModel geckoViewModel) {
 
         this.geckoViewModel = geckoViewModel;
-        this.copyVisitor = copyVisitor;
+        this.copyVisitor = geckoViewModel.getActionManager().getCopyVisitor();
     }
 
     @Override

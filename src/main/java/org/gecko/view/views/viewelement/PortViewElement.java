@@ -27,18 +27,20 @@ public class PortViewElement extends Pane {
         constructVisualization();
     }
 
-    public void setName(String name) {
-        nameProperty.setValue(name);
-    }
-
-    public String getName() {
-        return nameProperty.getValue();
-    }
-
+    /**
+     * Returns the position of the port view element.
+     *
+     * @return the position of the port view element
+     */
     public Point2D getViewPosition() {
         return new Point2D(getLayoutX(), getLayoutY());
     }
 
+    /**
+     * Returns the size of the port view element.
+     *
+     * @return the size of the port view element
+     */
     public Point2D getViewSize() {
         return new Point2D(getWidth(), getHeight());
     }

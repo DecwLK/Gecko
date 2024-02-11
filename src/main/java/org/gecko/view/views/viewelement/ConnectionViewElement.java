@@ -97,6 +97,13 @@ public abstract class ConnectionViewElement extends Path {
         return intersection;
     }
 
+    /**
+     * Update the visualization of the path. Path is drawn using the path source points. Path is automatically updated
+     * upon change of individual path source points.
+     * <p>
+     * If this connection view element is a loop, the path will be drawn as a loop by adding extra points to render path
+     * source.
+     */
     protected void updatePathVisualization() {
         getElements().clear();
 

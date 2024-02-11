@@ -27,6 +27,11 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         getDecoratorTarget().accept(visitor);
     }
 
+    @Override
+    public int getZPriority() {
+        return getDecoratorTarget().getZPriority() + (isSelected() ? IGNORE_Z_PRIORITY : 0);
+    }
+
     private void updateEdgePoints(Change<? extends Property<Point2D>> change) {
         if (change.getList().size() == lastEdgePointCnt) {
             for (ElementScalerBlock scaler : getScalers()) {
@@ -48,13 +53,5 @@ public class ConnectionElementScalerViewElementDecorator extends ElementScalerVi
         scalerBlock.setFill(Color.RED);
         getScalers().add(scalerBlock);
         getDecoratedNode().getChildren().add(scalerBlock);
-    }
-
-    @Override
-    public int getZPriority() {
-        if (isSelected()) {
-            return getDecoratorTarget().getZPriority() + IGNORE_Z_PRIORITY;
-        }
-        return getDecoratorTarget().getZPriority();
     }
 }

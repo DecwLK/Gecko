@@ -1,7 +1,7 @@
 package org.gecko.view.inspector.element.button;
 
 import java.util.List;
-import org.gecko.view.inspector.element.textfield.InspectorContractField;
+import org.gecko.view.inspector.element.textfield.InspectorAreaField;
 
 public class InspectorCollapseContractButton extends AbstractInspectorButton {
     private static final String ICON_STYLE_NAME = "inspector-contract-expand-button";
@@ -10,12 +10,12 @@ public class InspectorCollapseContractButton extends AbstractInspectorButton {
 
     private boolean expanded = false;
 
-    public InspectorCollapseContractButton(List<InspectorContractField> fields) {
+    public InspectorCollapseContractButton(List<InspectorAreaField> fields) {
         getStyleClass().add(ICON_STYLE_NAME);
         setPrefSize(DEFAULT_SIZE, DEFAULT_SIZE);
 
         setOnAction(event -> {
-            fields.forEach(InspectorContractField::toggleExpand);
+            fields.forEach(InspectorAreaField::toggleExpand);
             expanded = !expanded;
 
             if (expanded) {

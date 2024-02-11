@@ -4,12 +4,12 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.ContractViewModel;
 
-public class InspectorPreconditionField extends InspectorContractField {
+public class InspectorPreconditionField extends InspectorAreaField {
     private final ActionManager actionManager;
     private final ContractViewModel contractViewModel;
 
     public InspectorPreconditionField(ActionManager actionManager, ContractViewModel contractViewModel) {
-        super(actionManager, contractViewModel.getPreConditionProperty());
+        super(actionManager, contractViewModel.getPreConditionProperty(), false);
         this.actionManager = actionManager;
         this.contractViewModel = contractViewModel;
     }

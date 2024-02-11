@@ -6,7 +6,7 @@ import org.gecko.viewmodel.SystemViewModel;
 public class ChangeCodeSystemViewModelAction extends Action {
 
     private final SystemViewModel systemViewModel;
-    private final String newCode;
+    private String newCode;
     private final String oldCode;
 
     ChangeCodeSystemViewModelAction(SystemViewModel systemViewModel, String newCode) {
@@ -17,8 +17,8 @@ public class ChangeCodeSystemViewModelAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
-        if (newCode.isEmpty()) {
-            return false;
+        if (newCode == null || newCode.isEmpty()) {
+            newCode = null;
         }
         systemViewModel.setCode(newCode);
         systemViewModel.updateTarget();

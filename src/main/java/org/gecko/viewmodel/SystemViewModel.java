@@ -42,7 +42,7 @@ public class SystemViewModel extends BlockViewModelElement<System> {
         return codeProperty.getValue();
     }
 
-    public void setCode(@NonNull String code) {
+    public void setCode(String code) {
         codeProperty.setValue(code);
     }
 

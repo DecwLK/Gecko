@@ -52,8 +52,8 @@ public class System extends Element implements Renamable {
         this.name = name;
     }
 
-    public void setCode(@NonNull String code) throws ModelException {
-        if (code.isEmpty()) {
+    public void setCode(String code) throws ModelException {
+        if (code != null && code.isEmpty()) {
             throw new ModelException("System's code is invalid.");
         }
         this.code = code;

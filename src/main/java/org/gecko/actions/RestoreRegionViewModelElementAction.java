@@ -1,6 +1,5 @@
 package org.gecko.actions;
 
-import org.gecko.exceptions.GeckoException;
 import org.gecko.model.Automaton;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.RegionViewModel;

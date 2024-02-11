@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.model.Kind;
-import org.gecko.model.SystemConnection;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.StateViewModel;

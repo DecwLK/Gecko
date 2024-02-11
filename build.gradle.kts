@@ -1,6 +1,7 @@
 import net.ltgt.gradle.errorprone.errorprone
 
 plugins {
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("java")
     id("application")
     id("antlr")

@@ -96,7 +96,11 @@ public class AutomatonFileSerializer implements FileSerializer {
         Map<Contract, Contract> newContracts = new HashMap<>();
         for (Edge edge : edges) {
             Contract newContract = applyRegionsToContract(relevantRegions, edge.getContract());
-            applyKindToContract(newContract, edge.getKind());
+            try {
+                applyKindToContract(newContract, edge.getKind());
+            } catch (ModelException e) {
+                throw new RuntimeException("Failed to apply kind to contract", e);
+            }
             newContracts.put(edge.getContract(), newContract);
         }
 
@@ -139,10 +143,11 @@ public class AutomatonFileSerializer implements FileSerializer {
         return serializeCollectionWithMapping(newContracts.values(), this::serializeContract);
     }
 
-    private void applyKindToContract(Contract contract, Kind kind) {
+    private void applyKindToContract(Contract contract, Kind kind) throws ModelException {
         switch (kind) {
             case MISS -> {
                 contract.setPreCondition(contract.getPreCondition().not());
+                contract.setPostCondition(new Condition("TRUE"));
             }
             case FAIL -> {
                 contract.setPostCondition(contract.getPostCondition().not());

@@ -34,6 +34,8 @@ import org.gecko.viewmodel.ViewModelFactory;
 public class ViewModelElementCreator {
     @Getter
     private int highestId;
+    @Getter
+    private boolean foundNullContainer;
     private final GeckoViewModel viewModel;
     private final ViewModelFactory viewModelFactory;
     private final HashMap<Integer, ViewModelPropertiesContainer> viewModelProperties;
@@ -41,6 +43,7 @@ public class ViewModelElementCreator {
     ViewModelElementCreator(
         GeckoViewModel viewModel, List<ViewModelPropertiesContainer> viewModelProperties) {
         highestId = 0;
+        foundNullContainer = false;
         this.viewModel = viewModel;
         this.viewModelFactory = viewModel.getViewModelFactory();
         this.viewModelProperties = new HashMap<>();
@@ -100,7 +103,7 @@ public class ViewModelElementCreator {
         ViewModelPropertiesContainer container = viewModelProperties.get(variable.getId());
 
         if (container == null) {
-            throw new IOException("Cannot create port view model for variable " + variable.getId());
+            foundNullContainer = true;
         }
         setPositionAndSize(portViewModel, container);
         updateHighestId(variable);
@@ -111,7 +114,7 @@ public class ViewModelElementCreator {
         ViewModelPropertiesContainer container = viewModelProperties.get(state.getId());
 
         if (container == null) {
-            throw new IOException("Cannot create state view model for state " + state.getId());
+            foundNullContainer = true;
         }
         setPositionAndSize(stateViewModel, container);
         updateHighestId(state);
@@ -139,10 +142,11 @@ public class ViewModelElementCreator {
         if (regionViewModel != null) {
             ViewModelPropertiesContainer container = viewModelProperties.get(region.getId());
             if (container == null) {
-                throw new IOException("Cannot create region view model for region " + region.getId());
+                foundNullContainer = true;
+            } else {
+                setPositionAndSize(regionViewModel, container);
+                regionViewModel.setColor(Color.color(container.getRed(), container.getGreen(), container.getBlue()));
             }
-            setPositionAndSize(regionViewModel, container);
-            regionViewModel.setColor(Color.color(container.getRed(), container.getGreen(), container.getBlue()));
 
             updateHighestId(region);
         }
@@ -168,7 +172,7 @@ public class ViewModelElementCreator {
             ViewModelPropertiesContainer container = viewModelProperties.get(edge.getId());
 
             if (container == null) {
-                throw new IOException("Cannot create edge view model for edge " + edge.getId());
+                foundNullContainer = true;
             }
             setPositionAndSize(edgeViewModel, container);
             updateHighestId(edge);
@@ -179,7 +183,7 @@ public class ViewModelElementCreator {
         SystemViewModel systemViewModel = viewModelFactory.createSystemViewModelFrom(system);
         ViewModelPropertiesContainer container = viewModelProperties.get(system.getId());
         if (container == null) {
-            throw new IOException("Cannot create system view model for system" + system.getId());
+            foundNullContainer = true;
         }
         setPositionAndSize(systemViewModel, container);
         updateHighestId(system);
@@ -205,8 +209,7 @@ public class ViewModelElementCreator {
         if (systemConnectionViewModel != null) {
             ViewModelPropertiesContainer container = viewModelProperties.get(systemConnection.getId());
             if (container == null) {
-                throw new IOException("Cannot create system connection view model for system " + "connection "
-                    + systemConnection.getId());
+                foundNullContainer = true;
             }
             setPositionAndSize(systemConnectionViewModel, container);
             updateHighestId(systemConnection);

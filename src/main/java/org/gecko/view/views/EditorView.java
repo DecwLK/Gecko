@@ -321,6 +321,11 @@ public class EditorView {
         AnchorPane.setTopAnchor(searchWindow, currentViewPane.getHeight() / 2);
         AnchorPane.setLeftAnchor(searchWindow, currentViewPane.getWidth() / 2);
         searchWindow.setVisible(activate);
+        searchWindow.requestFocus();
+    }
+
+    public void toggleSearchWindow() {
+        activateSearchWindow(!searchWindow.isVisible());
     }
 
     private void setViewPortPosition(Point2D point) {

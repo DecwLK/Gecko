@@ -185,9 +185,15 @@ public class MenuBarBuilder {
             e -> actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1 / 1.1)));
         zoomOutMenuItem.setAccelerator(Shortcuts.ZOOM_OUT.get());
 
+        SeparatorMenuItem zoomToAppearanceSeparator = new SeparatorMenuItem();
+
+        MenuItem toggleAppearanceMenuItem = new MenuItem("Toggle Appearance");
+        toggleAppearanceMenuItem.setOnAction(e -> view.toggleAppearance());
+        toggleAppearanceMenuItem.setAccelerator(Shortcuts.TOGGLE_APPEARANCE.get());
+
         viewMenu.getItems()
             .addAll(changeViewMenuItem, goToParentSystemMenuItem, viewSwitchToZoomSeparator, zoomInMenuItem,
-                zoomOutMenuItem);
+                zoomOutMenuItem, zoomToAppearanceSeparator, toggleAppearanceMenuItem);
 
         return viewMenu;
     }
@@ -284,12 +290,14 @@ public class MenuBarBuilder {
     private Menu setupHelpMenu() {
         Menu helpMenu = new Menu("Help");
 
-        MenuItem findElementsMenuItem = new MenuItem("Find Elements");
-        findElementsMenuItem.setOnAction(e -> {
-            view.getCurrentView().activateSearchWindow(true);
+        MenuItem searchElementsMenuItem = new MenuItem("Search Elements");
+        searchElementsMenuItem.setOnAction(e -> {
+            view.getCurrentView().toggleSearchWindow();
         });
+        searchElementsMenuItem.setAccelerator(Shortcuts.TOGGLE_SEARCH.get());
 
-        helpMenu.getItems().add(findElementsMenuItem);
+
+        helpMenu.getItems().add(searchElementsMenuItem);
         return helpMenu;
     }
 }

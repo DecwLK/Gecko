@@ -23,7 +23,8 @@ public enum Shortcuts {
     OPEN_PARENT_SYSTEM_EDITOR(KeyCode.DIGIT3, KeyCombination.SHORTCUT_DOWN), CURSOR_TOOL(KeyCode.A),
     MARQUEE_TOOL(KeyCode.M), PAN_TOOL(KeyCode.H), ZOOM_TOOL(KeyCode.Z), SYSTEM_CREATOR(KeyCode.S),
     CONNECTION_CREATOR(KeyCode.E), VARIABLE_BLOCK_CREATOR(KeyCode.V), STATE_CREATOR(KeyCode.S), EDGE_CREATOR(KeyCode.E),
-    REGION_CREATOR(KeyCode.R);
+    REGION_CREATOR(KeyCode.R), TOGGLE_APPEARANCE(KeyCode.T, KeyCombination.SHORTCUT_DOWN),
+    TOGGLE_SEARCH(KeyCode.F, KeyCombination.SHORTCUT_DOWN);
 
     private final KeyCodeCombination keyCodeCombination;
 

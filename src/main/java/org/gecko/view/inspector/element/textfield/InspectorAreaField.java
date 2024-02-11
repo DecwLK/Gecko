@@ -17,11 +17,12 @@ public abstract class InspectorAreaField extends TextArea implements InspectorEl
         setWrapText(true);
 
         setOnMouseExited(event -> {
-            if (getText().equals(stringProperty.get())) {
+            if ((getText() == null && stringProperty.get() == null) || (getText() != null && getText().equals(
+                stringProperty.get())) || (stringProperty.get() != null && stringProperty.get().equals(getText()))) {
                 return;
             }
 
-            if (getText().isEmpty() && !isEmptyAllowed) {
+            if ((getText() == null || getText().isEmpty()) && !isEmptyAllowed) {
                 setText(stringProperty.get());
             }
 

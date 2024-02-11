@@ -290,7 +290,7 @@ public class CursorTool extends Tool {
             return null;
         }
 
-        return editorViewModel.transformScreenToWorldCoordinates(
+        return editorViewModel.transformViewPortToWorldCoordinates(
             new Point2D(parentX + point.getX(), parentY + point.getY()).multiply(editorViewModel.getZoomScale()));
     }
 }

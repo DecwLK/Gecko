@@ -22,22 +22,10 @@ public class CreateSystemConnectionViewModelElementAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
-        if (destination.getTarget().isHasIncomingConnection()) {
-            return false;
-        }
-
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
-        SystemViewModel sourceSystem = (SystemViewModel) geckoViewModel.getViewModelElement(
-            currentParentSystem.getTarget().getChildSystemWithVariable(source.getTarget()));
-        if (sourceSystem == null && currentParentSystem.getPorts().contains(source)) {
-            sourceSystem = currentParentSystem;
-        }
-        SystemViewModel destinationSystem = (SystemViewModel) geckoViewModel.getViewModelElement(
-            currentParentSystem.getTarget().getChildSystemWithVariable(destination.getTarget()));
-        if (destinationSystem == null && currentParentSystem.getPorts().contains(destination)) {
-            destinationSystem = currentParentSystem;
-        }
-        if (sourceSystem == null || destinationSystem == null || sourceSystem.equals(destinationSystem)) {
+        if (!SystemConnectionViewModel.isConnectingAllowed(source, destination,
+            geckoViewModel.getSystemViewModelWithPort(source), geckoViewModel.getSystemViewModelWithPort(destination),
+            currentParentSystem, null)) {
             return false;
         }
 

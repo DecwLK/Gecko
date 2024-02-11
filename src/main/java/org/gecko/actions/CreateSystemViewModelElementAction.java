@@ -24,7 +24,7 @@ public class CreateSystemViewModelElementAction extends Action {
     boolean run() throws GeckoException {
         SystemViewModel currentParentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
         createdSystemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelIn(currentParentSystem);
-        Point2D pos = editorViewModel.transformScreenToWorldCoordinates(position);
+        Point2D pos = editorViewModel.transformViewPortToWorldCoordinates(position);
         createdSystemViewModel.setCenter(pos);
         ActionManager actionManager = geckoViewModel.getActionManager();
         actionManager.run(actionManager.getActionFactory().createSelectAction(createdSystemViewModel, true));

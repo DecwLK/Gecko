@@ -61,7 +61,13 @@ public class ActionFactory {
 
     public ChangeVisibilityPortViewModelAction createChangeVisibilityPortViewModelAction(
         PortViewModel portViewModel, Visibility visibility) {
-        return new ChangeVisibilityPortViewModelAction(portViewModel, visibility);
+        return new ChangeVisibilityPortViewModelAction(geckoViewModel, portViewModel, visibility);
+    }
+
+    public ChangeVisibilityPortViewModelAction createChangeVisibilityPortViewModelAction(
+        PortViewModel portViewModel, Visibility visibility, Action systemConnectionDeleteActionGroup) {
+        return new ChangeVisibilityPortViewModelAction(geckoViewModel, portViewModel, visibility,
+            systemConnectionDeleteActionGroup);
     }
 
     public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(

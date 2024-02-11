@@ -35,31 +35,32 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
     @Override
     boolean run() throws GeckoException {
         PortViewModel newPortViewModel = attemptPortViewModelRelocation();
-
         if (newPortViewModel == null) {
             return false;
         }
 
-        SystemViewModel currentSystemViewModel = geckoViewModel.getCurrentEditor().getCurrentSystem();
-        System containingSystem =
-            currentSystemViewModel.getTarget().getChildSystemWithVariable(newPortViewModel.getTarget());
-        SystemViewModel containingSystemViewModel =
-            (SystemViewModel) geckoViewModel.getViewModelElement(containingSystem);
+        SystemViewModel parentSystem = geckoViewModel.getCurrentEditor().getCurrentSystem();
+        PortViewModel sourcePortViewModel = systemConnectionViewModel.getSource();
+        PortViewModel destinationPortViewModel = systemConnectionViewModel.getDestination();
 
-        if (elementScalerBlock.getIndex() == 0) {
-            if (containingSystemViewModel.getPorts().contains(systemConnectionViewModel.getDestination())) {
-                return false;
-            }
-            systemConnectionViewModel.setSource(newPortViewModel);
+        if (isSource()) {
+            sourcePortViewModel = newPortViewModel;
         } else {
-            if (containingSystemViewModel.getPorts().contains(systemConnectionViewModel.getSource())) {
-                return false;
-            }
+            destinationPortViewModel = newPortViewModel;
+        }
 
-            if (newPortViewModel.getTarget().isHasIncomingConnection()) {
-                return false;
-            }
-            systemConnectionViewModel.setDestination(newPortViewModel);
+        SystemViewModel sourceSystem = geckoViewModel.getSystemViewModelWithPort(sourcePortViewModel);
+        SystemViewModel destinationSystem = geckoViewModel.getSystemViewModelWithPort(destinationPortViewModel);
+
+        if (!SystemConnectionViewModel.isConnectingAllowed(sourcePortViewModel, destinationPortViewModel, sourceSystem,
+            destinationSystem, parentSystem)) {
+            return false;
+        }
+
+        if (isSource()) {
+            systemConnectionViewModel.setSource(sourcePortViewModel);
+        } else {
+            systemConnectionViewModel.setDestination(destinationPortViewModel);
         }
         systemConnectionViewModel.updateTarget();
         return true;
@@ -125,5 +126,9 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
     private Point2D calculateEndPortPosition(Point2D position, Point2D size, Visibility visibility) {
         return position.add(size.multiply(0.5))
             .subtract((visibility == Visibility.INPUT ? 1 : -1) * size.getX() / 2, 0);
+    }
+
+    private boolean isSource() {
+        return elementScalerBlock.getIndex() == 0;
     }
 }

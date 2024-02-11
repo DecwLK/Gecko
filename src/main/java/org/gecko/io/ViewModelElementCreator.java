@@ -56,6 +56,7 @@ public class ViewModelElementCreator {
 
     /**
      * Traverses the model that is beneath the given system and creates the corresponding view model elements.
+     *
      * @param system the system to traverse
      */
     protected void traverseModel(System system) {

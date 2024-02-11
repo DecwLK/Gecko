@@ -1,10 +1,9 @@
 /**
- * Groups classes which model, create and manage operations that can be performed in Gecko. These operations,
- * called {@link org.gecko.actions.Action Actions}, can be either run or undone by the
- * {@link org.gecko.actions.ActionManager}. The {@link org.gecko.actions.ActionFactory} is responsible for creating
- * instances of each of these actions. Actions can also be grouped in an {@link org.gecko.actions.ActionGroup}, which
- * represents an action that runs or undoes multiple actions iteratively. The actions fall into the following
- * categories:
+ * Groups classes which model, create and manage operations that can be performed in Gecko. These operations, called
+ * {@link org.gecko.actions.Action Actions}, can be either run or undone by the {@link org.gecko.actions.ActionManager}.
+ * The {@link org.gecko.actions.ActionFactory} is responsible for creating instances of each of these actions. Actions
+ * can also be grouped in an {@link org.gecko.actions.ActionGroup}, which represents an action that runs or undoes
+ * multiple actions iteratively. The actions fall into the following categories:
  * <ul>
  *     <li>
  *         <b>Creating {@link org.gecko.viewmodel.AbstractViewModelElement AbstractViewModelElements}</b>:

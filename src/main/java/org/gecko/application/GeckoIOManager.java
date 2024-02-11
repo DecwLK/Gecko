@@ -59,7 +59,8 @@ public class GeckoIOManager {
     }
 
     /**
-     * Attempts to load a project from a file chosen that was either previously chosen or asks the user to choose a file.
+     * Attempts to load a project from a file chosen that was either previously chosen or asks the user to choose a
+     * file.
      */
     public void loadGeckoProject() {
         File fileToLoad = getOpenFileChooser(FileTypes.JSON);
@@ -98,6 +99,7 @@ public class GeckoIOManager {
 
     /**
      * Imports an automaton from a file chosen by the user.
+     *
      * @param file The file to import the automaton from.
      */
     public void importAutomatonFile(File file) {
@@ -118,6 +120,7 @@ public class GeckoIOManager {
 
     /**
      * Saves the current project to a file chosen by the user.
+     *
      * @param file The file to save the project to.
      */
     public void saveGeckoProject(File file) {
@@ -132,6 +135,7 @@ public class GeckoIOManager {
 
     /**
      * Exports the current automaton to a file chosen by the user.
+     *
      * @param file The file to export the automaton to.
      */
     public void exportAutomatonFile(File file) {

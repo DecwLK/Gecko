@@ -13,7 +13,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import lombok.Getter;
-import org.gecko.actions.Action;
 import org.gecko.view.menubar.MenuBarBuilder;
 import org.gecko.view.views.EditorView;
 import org.gecko.view.views.ViewFactory;
@@ -152,6 +151,8 @@ public class GeckoView {
         currentView.getCurrentInspector().addListener((Observable observable) -> {
             mainPane.setRight(currentView.drawInspector());
         });
+        viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(),
+            currentView.getViewModel().isAutomatonEditor());
 
         currentView.updateWorldSize();
         currentView.focus();
@@ -166,11 +167,6 @@ public class GeckoView {
                 .filter(editorView -> editorView.getCurrentView() == newValue)
                 .findFirst()
                 .orElse(null);
-            Action switchAction = viewModel.getActionManager()
-                .getActionFactory()
-                .createViewSwitchAction(currentView.getViewModel().getCurrentSystem(),
-                    currentView.getViewModel().isAutomatonEditor());
-            viewModel.getActionManager().run(switchAction);
         }
         refreshView();
     }

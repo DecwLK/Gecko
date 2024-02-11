@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -100,10 +101,12 @@ public class EditorView {
         this.emptyInspector = new Inspector(new ArrayList<>(), actionManager);
         this.currentInspector = new SimpleObjectProperty<>(emptyInspector);
         this.currentViewElements = new HashSet<>();
-        String baseName = viewModel.getCurrentSystem().getName();
-        this.currentView = new Tab(
-            baseName + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
-                : " (" + ResourceHandler.getString("View", "system") + ")"), currentViewPane);
+        this.currentView = new Tab("Error_Name", currentViewPane);
+        currentView.textProperty().bind(Bindings.createStringBinding(() -> {
+            String name = viewModel.getCurrentSystem().getName();
+            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
+                : " (" + ResourceHandler.getString("View", "system") + ")");
+        }, viewModel.getCurrentSystem().getNameProperty()));
 
         this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
             updateWorldSize();

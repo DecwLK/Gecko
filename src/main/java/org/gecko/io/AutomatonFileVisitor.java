@@ -79,6 +79,12 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             .next(); //Because rootChildren had size 1, root now has exactly 1 child
         newRoot.setParent(null);
         model = new GeckoModel(newRoot);
+        if (ctx.globalCode != null) {
+            model.setGlobalCode(cleanCode(ctx.globalCode.getText()));
+        }
+        if (ctx.defines() != null) {
+            model.setGlobalDefines(ctx.defines().getText());
+        }
         return null;
     }
 

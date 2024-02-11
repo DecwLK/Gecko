@@ -13,6 +13,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import lombok.Getter;
+import org.gecko.actions.Action;
 import org.gecko.view.menubar.MenuBarBuilder;
 import org.gecko.view.views.EditorView;
 import org.gecko.view.views.ViewFactory;
@@ -27,7 +28,9 @@ import org.gecko.viewmodel.PositionableViewModelElement;
  */
 public class GeckoView {
 
-    private static final String STYLE_SHEET = "/styles/gecko.css";
+    private static final String STYLE_SHEET_LIGHT = "/styles/gecko.css";
+    private static final String STYLE_SHEET_DARK = "/styles/gecko-dark.css";
+
 
     @Getter
     private final BorderPane mainPane;
@@ -40,6 +43,7 @@ public class GeckoView {
     private EditorView currentView;
 
     private final ArrayList<EditorView> openedViews;
+    private boolean darkMode = false;
 
     public GeckoView(GeckoViewModel viewModel) {
         this.viewModel = viewModel;
@@ -48,7 +52,8 @@ public class GeckoView {
         this.viewFactory = new ViewFactory(viewModel.getActionManager(), this);
         this.openedViews = new ArrayList<>();
 
-        mainPane.getStylesheets().add(Objects.requireNonNull(GeckoView.class.getResource(STYLE_SHEET)).toString());
+        mainPane.getStylesheets()
+            .add(Objects.requireNonNull(GeckoView.class.getResource(STYLE_SHEET_LIGHT)).toString());
 
         // Listener for current editor
         viewModel.getCurrentEditorProperty().addListener(this::onUpdateCurrentEditorFromViewModel);
@@ -147,8 +152,6 @@ public class GeckoView {
         currentView.getCurrentInspector().addListener((Observable observable) -> {
             mainPane.setRight(currentView.drawInspector());
         });
-        viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(),
-            currentView.getViewModel().isAutomatonEditor());
 
         currentView.updateWorldSize();
         currentView.focus();
@@ -163,6 +166,11 @@ public class GeckoView {
                 .filter(editorView -> editorView.getCurrentView() == newValue)
                 .findFirst()
                 .orElse(null);
+            Action switchAction = viewModel.getActionManager()
+                .getActionFactory()
+                .createViewSwitchAction(currentView.getViewModel().getCurrentSystem(),
+                    currentView.getViewModel().isAutomatonEditor());
+            viewModel.getActionManager().run(switchAction);
         }
         refreshView();
     }
@@ -174,5 +182,13 @@ public class GeckoView {
      */
     public Set<PositionableViewModelElement<?>> getAllDisplayedElements() {
         return viewModel.getCurrentEditor().getPositionableViewModelElements();
+    }
+
+    public void toggleAppearance() {
+        darkMode = !darkMode;
+        mainPane.getStylesheets().clear();
+        mainPane.getStylesheets()
+            .add(Objects.requireNonNull(GeckoView.class.getResource(darkMode ? STYLE_SHEET_DARK : STYLE_SHEET_LIGHT))
+                .toString());
     }
 }

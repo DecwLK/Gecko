@@ -111,12 +111,6 @@ public class FloatingUIBuilder {
             }
         });
 
-        backwardButton.setOnAction(e -> {
-            if (!matches.isEmpty()) {
-                searchNextResult(matches, matchesLabel, backwardButton, forwardButton, -1);
-            }
-        });
-
         forwardButton.setOnAction(e -> {
             if (!matches.isEmpty()) {
                 searchNextResult(matches, matchesLabel, backwardButton, forwardButton, 1);

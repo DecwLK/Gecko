@@ -58,7 +58,6 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
 
     @Override
     public void setEdgePoint(int index, Point2D point) {
-
     }
 
     @Override
@@ -69,20 +68,6 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
     @Override
     public Point2D getPosition() {
         return stateViewModel.getPosition();
-    }
-
-    private void bindViewModel() {
-        nameProperty.bind(stateViewModel.getNameProperty());
-        isStartStateProperty.bind(stateViewModel.getIsStartStateProperty());
-        contractsProperty.bind(stateViewModel.getContractsProperty());
-        layoutXProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getX(),
-            stateViewModel.getPositionProperty()));
-        layoutYProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getY(),
-            stateViewModel.getPositionProperty()));
-        prefWidthProperty().bind(
-            Bindings.createDoubleBinding(() -> stateViewModel.getSize().getX(), stateViewModel.getSizeProperty()));
-        prefHeightProperty().bind(
-            Bindings.createDoubleBinding(() -> stateViewModel.getSize().getY(), stateViewModel.getSizeProperty()));
     }
 
     @Override
@@ -188,5 +173,19 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
             stateName.getStyleClass().clear();
             stateName.getStyleClass().add(NON_START_STATE_STYLE);
         }
+    }
+
+    private void bindViewModel() {
+        nameProperty.bind(stateViewModel.getNameProperty());
+        isStartStateProperty.bind(stateViewModel.getIsStartStateProperty());
+        contractsProperty.bind(stateViewModel.getContractsProperty());
+        layoutXProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getX(),
+            stateViewModel.getPositionProperty()));
+        layoutYProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getY(),
+            stateViewModel.getPositionProperty()));
+        prefWidthProperty().bind(
+            Bindings.createDoubleBinding(() -> stateViewModel.getSize().getX(), stateViewModel.getSizeProperty()));
+        prefHeightProperty().bind(
+            Bindings.createDoubleBinding(() -> stateViewModel.getSize().getY(), stateViewModel.getSizeProperty()));
     }
 }

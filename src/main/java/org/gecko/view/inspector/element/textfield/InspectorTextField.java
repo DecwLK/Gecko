@@ -20,6 +20,7 @@ public abstract class InspectorTextField extends TextField implements InspectorE
                 return;
             }
             actionManager.run(getAction());
+            setText(stringProperty.get());
         });
     }
 

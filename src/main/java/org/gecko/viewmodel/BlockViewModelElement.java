@@ -33,11 +33,18 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
         nameProperty.setValue(name);
     }
 
-    public void scale(@NonNull Point2D otherPoint, @NonNull Point2D newPoint) {
-        Point2D newStartPosition =
-            new Point2D(Math.min(otherPoint.getX(), newPoint.getX()), Math.min(otherPoint.getY(), newPoint.getY()));
-        Point2D newEndPosition =
-            new Point2D(Math.max(otherPoint.getX(), newPoint.getX()), Math.max(otherPoint.getY(), newPoint.getY()));
+    /**
+     * Manipulates the position and size of the element, so that the two points are two diagonally opposite corners of
+     * the {@link BlockViewModelElement}.
+     *
+     * @param firstCornerPoint  the first corner point
+     * @param secondCornerPoint the second corner point that is diagonally opposite to the first corner point
+     */
+    public void manipulate(@NonNull Point2D firstCornerPoint, @NonNull Point2D secondCornerPoint) {
+        Point2D newStartPosition = new Point2D(Math.min(firstCornerPoint.getX(), secondCornerPoint.getX()),
+            Math.min(firstCornerPoint.getY(), secondCornerPoint.getY()));
+        Point2D newEndPosition = new Point2D(Math.max(firstCornerPoint.getX(), secondCornerPoint.getX()),
+            Math.max(firstCornerPoint.getY(), secondCornerPoint.getY()));
         setPosition(newStartPosition);
         setSize(newEndPosition.subtract(newStartPosition));
     }

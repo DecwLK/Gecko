@@ -85,6 +85,11 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         return colorProperty.getValue();
     }
 
+    /**
+     * Checks if the given state is in the region and adds it to the region if it is or removes it if it is not.
+     *
+     * @param state the state to check
+     */
     public void checkStateInRegion(StateViewModel state) {
         Bounds regionBound =
             new BoundingBox(getPosition().getX(), getPosition().getY(), getSize().getX(), getSize().getY());

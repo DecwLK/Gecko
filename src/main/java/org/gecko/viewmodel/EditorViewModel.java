@@ -85,6 +85,12 @@ public class EditorViewModel {
         setCurrentTool(ToolType.CURSOR);
     }
 
+    /**
+     * Updates the regions of the automaton that is displayed by this {@link EditorViewModel}. This works by checking if
+     * a state of the automaton is in a region and updating the regions accordingly.
+     *
+     * @throws ModelException if the update of the regions fails
+     */
     public void updateRegions() throws ModelException {
         Automaton automaton = getCurrentSystem().getTarget().getAutomaton();
         Set<RegionViewModel> regionViewModels = containedPositionableViewModelElementsProperty.stream()
@@ -103,6 +109,13 @@ public class EditorViewModel {
         }
     }
 
+    /**
+     * Returns the {@link RegionViewModel}s that contain the given {@link StateViewModel} by checking if the state is in
+     * set of states of the region.
+     *
+     * @param stateViewModel the {@link StateViewModel} to get the containing {@link RegionViewModel}s for
+     * @return the {@link RegionViewModel}s that contain the given {@link StateViewModel}
+     */
     public ObservableList<RegionViewModel> getRegionViewModels(StateViewModel stateViewModel) {
         ObservableList<RegionViewModel> regionViewModels = FXCollections.observableArrayList();
         Set<Region> regions = currentSystem.getTarget().getAutomaton().getRegions();
@@ -143,10 +156,21 @@ public class EditorViewModel {
         }
     }
 
-    public Point2D transformScreenToWorldCoordinates(Point2D screenCoordinates) {
-        return screenCoordinates.multiply(1 / getZoomScale()).add(viewPortPositionProperty.getValue());
+    /**
+     * Transforms view port coordinates to world coordinates. This works by adjusting the coordinates by the zoom sclae
+     * and adding the current view port position to the view port coordinates.
+     *
+     * @param viewPortCoordinates the view port coordinates to transform
+     * @return the world coordinates
+     */
+    public Point2D transformViewPortToWorldCoordinates(Point2D viewPortCoordinates) {
+        return viewPortCoordinates.multiply(1 / getZoomScale()).add(viewPortPositionProperty.getValue());
     }
 
+    /**
+     * Focuses the focused element of this {@link EditorViewModel} by moving the view port to the center of the focused
+     * element.
+     */
     public void moveToFocusedElement() {
         if (focusedElementProperty.getValue() != null) {
             focusWorldPoint(focusedElementProperty.getValue().getCenter());
@@ -157,6 +181,13 @@ public class EditorViewModel {
         requestedViewPortPositionProperty.setValue(point.subtract(getViewPortSize().multiply(0.5)));
     }
 
+    /**
+     * Zooms the view port by the given zoom factor. The pivot is the point in the view port that should stay at the
+     * same position after the zoom.
+     *
+     * @param pivot      the pivot point
+     * @param zoomFactor the zoom factor
+     */
     public void zoom(Point2D pivot, double zoomFactor) {
         if (!isZoomAllowed(zoomFactor)) {
             return;
@@ -212,6 +243,11 @@ public class EditorViewModel {
         addPositionableViewModelElements(Set.of(element));
     }
 
+    /**
+     * Adds the given elements to the current {@link EditorViewModel}. They will then be displayed in the view.
+     *
+     * @param elements the elements to add
+     */
     public void addPositionableViewModelElements(Set<PositionableViewModelElement<?>> elements) {
         elements.removeAll(containedPositionableViewModelElementsProperty);
         containedPositionableViewModelElementsProperty.addAll(elements);
@@ -221,6 +257,12 @@ public class EditorViewModel {
         }*/
     }
 
+    /**
+     * Removes the given element from the current {@link EditorViewModel}. It will then no longer be displayed in the
+     * view.
+     *
+     * @param element the element to remove
+     */
     public void removePositionableViewModelElement(PositionableViewModelElement<?> element) {
         containedPositionableViewModelElementsProperty.remove(element);
     }
@@ -262,8 +304,8 @@ public class EditorViewModel {
             return false;
         }
         if (zoomFactor < 1) {
-            return getViewPortSize().getX() / (getZoomScale()) <= getWorldSize().getX() * zoomFactor
-                && getViewPortSize().getY() / (getZoomScale()) <= getWorldSize().getY() * zoomFactor;
+            return getViewPortSize().getX() / getZoomScale() <= getWorldSize().getX() * zoomFactor
+                && getViewPortSize().getY() / getZoomScale() <= getWorldSize().getY() * zoomFactor;
         } else {
             return getZoomScale() * zoomFactor <= MAX_ZOOM_SCALE;
         }
@@ -281,6 +323,12 @@ public class EditorViewModel {
         return matches;
     }
 
+    /**
+     * Returns the elements that are in the given area.
+     *
+     * @param bound the area in world coordinates
+     * @return the elements that are in the given area
+     */
     public Set<PositionableViewModelElement<?>> getElementsInArea(Bounds bound) {
         return containedPositionableViewModelElementsProperty.stream().filter(element -> {
             Bounds elementBound =

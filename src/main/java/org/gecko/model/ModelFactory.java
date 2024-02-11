@@ -9,6 +9,7 @@ import org.gecko.exceptions.ModelException;
 public class ModelFactory {
 
     //TODO defaults are temporary and need to be changed
+    private final GeckoModel geckoModel;
     private int elementId = 0;
     private static final String DEFAULT_NAME = "Element_%d";
     private static final String DEFAULT_TYPE = "int";
@@ -18,8 +19,17 @@ public class ModelFactory {
     private static final String DEFAULT_CODE = null;
     private static final Visibility DEFAULT_VISIBILITY = Visibility.INPUT;
 
-    private static String getDefaultName(int id) {
-        return DEFAULT_NAME.formatted(id);
+    public ModelFactory(GeckoModel geckoModel) {
+        this.geckoModel = geckoModel;
+    }
+
+    private String getDefaultName(int id) {
+        String name = DEFAULT_NAME.formatted(id);
+        while (!geckoModel.isNameUnique(name)) {
+            id++;
+            name = DEFAULT_NAME.formatted(id);
+        }
+        return name;
     }
 
     private Contract getDefaultContract() throws ModelException {
@@ -33,7 +43,7 @@ public class ModelFactory {
 
     public State createState(@NonNull Automaton automaton) throws ModelException {
         int id = getNewElementId();
-        State state = new State(id, DEFAULT_NAME.formatted(id));
+        State state = new State(id, getDefaultName(id));
         automaton.addState(state);
         return state;
     }

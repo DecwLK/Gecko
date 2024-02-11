@@ -23,18 +23,18 @@ public class ViewModelElementSaver {
     private final GeckoViewModel geckoViewModel;
     private final List<ViewModelPropertiesContainer> viewModelProperties;
 
-    protected ViewModelElementSaver(GeckoViewModel geckoViewModel) {
+    ViewModelElementSaver(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
         this.viewModelProperties = new ArrayList<>();
     }
 
-    public void saveStateViewModelProperties(State state) {
+    private void saveStateViewModelProperties(State state) {
         ViewModelPropertiesContainer stateViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(state));
         this.viewModelProperties.add(stateViewModelContainer);
     }
 
-    public void saveRegionViewModelProperties(Region region) {
+    private void saveRegionViewModelProperties(Region region) {
         ViewModelPropertiesContainer regionViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(region));
 
@@ -46,31 +46,31 @@ public class ViewModelElementSaver {
         this.viewModelProperties.add(regionViewModelContainer);
     }
 
-    public void saveSystemViewModelProperties(System system) {
+    private void saveSystemViewModelProperties(System system) {
         ViewModelPropertiesContainer systemViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(system));
         this.viewModelProperties.add(systemViewModelContainer);
     }
 
-    public void saveSystemConnectionViewModelProperties(SystemConnection systemConnection) {
+    private void saveSystemConnectionViewModelProperties(SystemConnection systemConnection) {
         ViewModelPropertiesContainer systemConnectionViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(systemConnection));
         this.viewModelProperties.add(systemConnectionViewModelContainer);
     }
 
-    public void saveEdgeModelProperties(Edge edge) {
+    private void saveEdgeModelProperties(Edge edge) {
         ViewModelPropertiesContainer edgeViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(edge));
         this.viewModelProperties.add(edgeViewModelContainer);
     }
 
-    public void savePortViewModelProperties(Variable variable) {
+    private void savePortViewModelProperties(Variable variable) {
         ViewModelPropertiesContainer variableViewModelContainer =
             this.getCoordinateContainer(this.geckoViewModel.getViewModelElement(variable));
         this.viewModelProperties.add(variableViewModelContainer);
     }
 
-    private ViewModelPropertiesContainer getCoordinateContainer(PositionableViewModelElement<?> element) {
+    ViewModelPropertiesContainer getCoordinateContainer(PositionableViewModelElement<?> element) {
         ViewModelPropertiesContainer container = new ViewModelPropertiesContainer();
         container.setElementId(element.getTarget().getId());
         container.setId(element.getId());

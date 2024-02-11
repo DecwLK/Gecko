@@ -54,6 +54,10 @@ public class ViewModelElementCreator {
         }
     }
 
+    /**
+     * Traverses the model that is beneath the given system and creates the corresponding view model elements.
+     * @param system the system to traverse
+     */
     protected void traverseModel(System system) {
         for (SystemConnection systemConnection : system.getConnections()) {
             createSystemConnectionViewModel(systemConnection);
@@ -79,7 +83,7 @@ public class ViewModelElementCreator {
         }
     }
 
-    public void createStateViewModel(State state) {
+    private void createStateViewModel(State state) {
         StateViewModel stateViewModel = viewModelFactory.createStateViewModelFrom(state);
         ViewModelPropertiesContainer container = viewModelProperties.get(state.getId());
         if (container == null) {
@@ -89,7 +93,7 @@ public class ViewModelElementCreator {
         }
     }
 
-    public void createSystemConnectionViewModel(SystemConnection systemConnection) {
+    private void createSystemConnectionViewModel(SystemConnection systemConnection) {
         SystemConnectionViewModel systemConnectionViewModel = null;
         try {
             systemConnectionViewModel = viewModelFactory.createSystemConnectionViewModelFrom(systemConnection);
@@ -118,7 +122,7 @@ public class ViewModelElementCreator {
         }
     }
 
-    public void createSystemViewModel(System system) {
+    private void createSystemViewModel(System system) {
         SystemViewModel systemViewModel = viewModelFactory.createSystemViewModelFrom(system);
         ViewModelPropertiesContainer container = viewModelProperties.get(system.getId());
         if (container == null) {
@@ -128,7 +132,7 @@ public class ViewModelElementCreator {
         }
     }
 
-    public void createRegionViewModel(Region region) {
+    private void createRegionViewModel(Region region) {
         RegionViewModel regionViewModel = null;
         try {
             regionViewModel = viewModelFactory.createRegionViewModelFrom(region);
@@ -151,7 +155,7 @@ public class ViewModelElementCreator {
         }
     }
 
-    public void createEdgeViewModel(Edge edge) {
+    private void createEdgeViewModel(Edge edge) {
         EdgeViewModel edgeViewModel = null;
         try {
             edgeViewModel = viewModelFactory.createEdgeViewModelFrom(edge);

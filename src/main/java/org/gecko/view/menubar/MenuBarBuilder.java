@@ -55,7 +55,7 @@ public class MenuBarBuilder {
             if (file != null) {
                 GeckoIOManager.getInstance().saveGeckoProject(file);
             } else {
-                File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.JSON);
+                File fileToSaveTo = GeckoIOManager.getInstance().getSaveFileChooser(FileTypes.JSON);
                 if (fileToSaveTo != null) {
                     GeckoIOManager.getInstance().saveGeckoProject(fileToSaveTo);
                     GeckoIOManager.getInstance().setFile(fileToSaveTo);
@@ -66,7 +66,7 @@ public class MenuBarBuilder {
 
         MenuItem saveAsFileItem = new MenuItem("Save As");
         saveAsFileItem.setOnAction(e -> {
-            File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.JSON);
+            File fileToSaveTo = GeckoIOManager.getInstance().getSaveFileChooser(FileTypes.JSON);
             if (fileToSaveTo != null) {
                 GeckoIOManager.getInstance().saveGeckoProject(fileToSaveTo);
             }
@@ -76,7 +76,7 @@ public class MenuBarBuilder {
         MenuItem importFileItem = new MenuItem("Import");
         importFileItem.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN));
         importFileItem.setOnAction(e -> {
-            File fileToImport = GeckoIOManager.getInstance().openFileChooser(FileTypes.SYS);
+            File fileToImport = GeckoIOManager.getInstance().getOpenFileChooser(FileTypes.SYS);
             if (fileToImport != null) {
                 GeckoIOManager.getInstance().importAutomatonFile(fileToImport);
             }
@@ -85,7 +85,7 @@ public class MenuBarBuilder {
         MenuItem exportFileItem = new MenuItem("Export");
         exportFileItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));
         exportFileItem.setOnAction(e -> {
-            File fileToSaveTo = GeckoIOManager.getInstance().saveFileChooser(FileTypes.SYS);
+            File fileToSaveTo = GeckoIOManager.getInstance().getSaveFileChooser(FileTypes.SYS);
             if (fileToSaveTo != null) {
                 GeckoIOManager.getInstance().exportAutomatonFile(fileToSaveTo);
             }

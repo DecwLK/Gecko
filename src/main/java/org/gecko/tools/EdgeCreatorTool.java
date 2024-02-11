@@ -41,7 +41,6 @@ public class EdgeCreatorTool extends Tool {
                 actionManager.run(createEdgeAction);
                 source = null;
             }
-            //TODO check if edge already exists and potentially remove it
         });
     }
 }

@@ -262,8 +262,8 @@ public class EditorViewModel {
             return false;
         }
         if (zoomFactor < 1) {
-            return getViewPortSize().getX() / (getZoomScale()) <= getWorldSize().getX() * zoomFactor
-                && getViewPortSize().getY() / (getZoomScale()) <= getWorldSize().getY() * zoomFactor;
+            return getViewPortSize().getX() / getZoomScale() <= getWorldSize().getX() * zoomFactor
+                && getViewPortSize().getY() / getZoomScale() <= getWorldSize().getY() * zoomFactor;
         } else {
             return getZoomScale() * zoomFactor <= MAX_ZOOM_SCALE;
         }

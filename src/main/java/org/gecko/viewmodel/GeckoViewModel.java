@@ -140,4 +140,12 @@ public class GeckoViewModel {
             editorViewModel.addPositionableViewModelElements(getViewModelElements(currentSystem.getAllElements()));
         }
     }
+
+    public SystemViewModel getSystemViewModelWithPort(PortViewModel portViewModel) {
+        System system = geckoModel.getSystemWithVariable(portViewModel.getTarget());
+        if (system == null) {
+            return null;
+        }
+        return (SystemViewModel) getViewModelElement(system);
+    }
 }

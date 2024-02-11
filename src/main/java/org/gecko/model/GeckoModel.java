@@ -3,6 +3,7 @@ package org.gecko.model;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 
@@ -36,5 +37,22 @@ public class GeckoModel {
         result.add(root);
         result.addAll(root.getAllChildren());
         return result;
+    }
+
+    public System getSystemWithVariable(@NonNull Variable variable) {
+        return findSystemWithVariable(root, variable);
+    }
+
+    private System findSystemWithVariable(@NonNull System system, @NonNull Variable variable) {
+        if (system.getVariables().contains(variable)) {
+            return system;
+        }
+        for (System child : system.getChildren()) {
+            System result = findSystemWithVariable(child, variable);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
     }
 }

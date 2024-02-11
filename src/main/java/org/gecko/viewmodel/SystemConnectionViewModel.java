@@ -10,6 +10,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
 import org.gecko.model.SystemConnection;
+import org.gecko.model.Visibility;
 
 /**
  * Represents an abstraction of a {@link SystemConnection} model element. A {@link SystemConnectionViewModel} is
@@ -62,5 +63,24 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     @Override
     public void setEdgePoint(int index, Point2D point) {
         edgePoints.get(index).setValue(point);
+    }
+
+    public static boolean isConnectingAllowed(
+        @NonNull PortViewModel source, @NonNull PortViewModel destination, @NonNull SystemViewModel sourceSystem,
+        @NonNull SystemViewModel destinationSystem, @NonNull SystemViewModel parentSystem) {
+        if (destination.getTarget().isHasIncomingConnection()) {
+            return false;
+        }
+        if (sourceSystem.equals(destinationSystem)) {
+            return false;
+        }
+
+        if (!sourceSystem.equals(parentSystem) && !destinationSystem.equals(parentSystem)) {
+            return source.getVisibility() == Visibility.OUTPUT && destination.getVisibility() == Visibility.INPUT;
+        } else if (sourceSystem.equals(parentSystem)) {
+            return source.getVisibility() != Visibility.OUTPUT && destination.getVisibility() != Visibility.OUTPUT;
+        } else {
+            return source.getVisibility() != Visibility.INPUT && destination.getVisibility() != Visibility.INPUT;
+        }
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.model.Automaton;
@@ -56,10 +57,11 @@ public class ViewModelElementCreator {
         }
     }
 
-     /**
+    /**
      * Traverses the model that is beneath the given system and creates the corresponding view model elements.
      *
      * @param system the system to traverse
+     * @throws IOException if a view model element cannot be created or no correspondent property container was found
      */
     protected void traverseModel(System system) throws IOException {
         for (Variable variable : system.getVariables()) {
@@ -140,6 +142,8 @@ public class ViewModelElementCreator {
                 throw new IOException("Cannot create region view model for region " + region.getId());
             }
             setPositionAndSize(regionViewModel, container);
+            regionViewModel.setColor(Color.color(container.getRed(), container.getGreen(), container.getBlue()));
+
             updateHighestId(region);
         }
     }

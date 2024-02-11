@@ -348,10 +348,9 @@ public class EditorViewModel {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof EditorViewModel editorViewModel)) {
             return false;
         }
-        EditorViewModel editorViewModel = (EditorViewModel) o;
         return id == editorViewModel.id;
     }
 }

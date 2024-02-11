@@ -35,6 +35,7 @@ public class Variable extends Element implements Renamable {
         setType(type);
     }
 
+    @Override
     public void setName(@NonNull String name) throws ModelException {
         if (name.isEmpty()) {
             throw new ModelException("Variable's name is invalid.");

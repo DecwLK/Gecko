@@ -77,6 +77,7 @@ public class ActionManager {
 
     /**
      * Runs the given action and makes it undoable if applicable.
+     *
      * @param action The action to run.
      */
     public void run(Action action) {

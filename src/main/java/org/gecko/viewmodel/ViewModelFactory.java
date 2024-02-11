@@ -253,7 +253,7 @@ public class ViewModelFactory {
     }
 
     private Point2D calculateEndPortPosition(Point2D position, Point2D size, Visibility visibility, boolean isPort) {
-        int sign = (isPort) ? 1 : -1;
+        int sign = isPort ? 1 : -1;
         return position.add(size.multiply(0.5))
             .subtract((visibility == Visibility.INPUT ? 1 : -1) * sign * size.getX() / 2, 0);
     }

@@ -24,8 +24,6 @@ import org.gecko.viewmodel.StateViewModel;
 public class StateViewElement extends BlockViewElement implements ViewElement<StateViewModel> {
 
     private static final int Z_PRIORITY = 30;
-    private static final int CORNER_RADIUS = 10;
-    private static final int INNER_CORNER_RADIUS = 20;
     private static final int SPACING = 5;
     private static final int MAX_CONTRACT_CNT = 4;
 

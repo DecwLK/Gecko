@@ -1,7 +1,7 @@
 /**
- * Groups classes which model tools that can be used in Gecko. They are outlined by a {@link org.gecko.tools.Tool}
- * with access to the {@link org.gecko.actions.ActionManager ActionManager}, which provides a tool with the ability to
- * enable operations. Tools are defined by a {@link org.gecko.tools.ToolType} and fall into the following categories:
+ * Groups classes which model tools that can be used in Gecko. They are outlined by a {@link org.gecko.tools.Tool} with
+ * access to the {@link org.gecko.actions.ActionManager ActionManager}, which provides a tool with the ability to enable
+ * operations. Tools are defined by a {@link org.gecko.tools.ToolType} and fall into the following categories:
  * <ul>
  *     <li>
  *         <b>Creator Tools</b>: These tools run create-{@link org.gecko.actions.Action Actions} in order to create

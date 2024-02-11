@@ -118,7 +118,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         Point2D vec = last.subtract(first);
         double angle = Math.atan2(vec.getY(), vec.getX());
         boolean isVertical = Math.abs(Math.abs(angle) - Math.PI / 2) < Math.PI / 4;
-        boolean isPart = angle > 0 && angle < Math.PI / 2 || angle < -(1.0 / 2.0) * Math.PI && angle > -Math.PI;
+        boolean isPart = (angle > 0 && angle < Math.PI / 2) || (angle < -(1.0 / 2.0) * Math.PI && angle > -Math.PI);
 
         Point2D p;
         Point2D newPos;
@@ -150,7 +150,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
     private void maskPathSource() {
         // If source and destination are the same, draw a loop
-        if (edgeViewModel.getSource() == edgeViewModel.getDestination() && getEdgePoints().size() == 2) {
+        if (edgeViewModel.getSource().equals(edgeViewModel.getDestination()) && getEdgePoints().size() == 2) {
             setLoop(true);
             setEdgePoint(0, edgeViewModel.getSource().getPosition());
             setEdgePoint(getEdgePoints().size() - 1, edgeViewModel.getSource()

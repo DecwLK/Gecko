@@ -31,6 +31,7 @@ public class Contract extends Element implements Renamable {
         setPostCondition(postCondition);
     }
 
+    @Override
     public void setName(@NonNull String name) throws ModelException {
         if (name.isEmpty()) {
             throw new ModelException("Contract's name is invalid.");

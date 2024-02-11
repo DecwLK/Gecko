@@ -74,7 +74,6 @@ public class SystemViewModel extends BlockViewModelElement<System> {
             startState.setStartState(false);
         }
         startState = newStartState;
-        startState.setStartState(true);
     }
 
     @Override

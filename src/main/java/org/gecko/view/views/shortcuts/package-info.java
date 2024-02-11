@@ -10,6 +10,5 @@
  *     <li>{@link org.gecko.view.views.shortcuts.AutomatonEditorViewShortcutHandler} handles shortcuts in the automaton
  *     view.</li>
  * </ul>
- *
  */
 package org.gecko.view.views.shortcuts;

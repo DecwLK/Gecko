@@ -9,10 +9,8 @@ import org.gecko.viewmodel.EdgeViewModel;
 public class InspectorContractComboBox extends ComboBox<String> implements InspectorElement<ComboBox<String>> {
 
     private static final int PREF_WIDTH = 300;
-    private final EdgeViewModel viewModel;
 
     public InspectorContractComboBox(ActionManager actionManager, EdgeViewModel viewModel) {
-        this.viewModel = viewModel;
         setPrefWidth(PREF_WIDTH);
         getItems().setAll(viewModel.getSource().getContracts().stream().map(ContractViewModel::getName).toList());
         viewModel.getSource().getContractsProperty().addListener((observable, oldValue, newValue) -> {

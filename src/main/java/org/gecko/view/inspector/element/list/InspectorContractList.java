@@ -29,7 +29,7 @@ public class InspectorContractList extends AbstractInspectorList<InspectorContra
                     }
                 } else if (change.wasRemoved()) {
                     for (ContractViewModel item : change.getRemoved()) {
-                        items.removeIf(inspectorContractItem -> inspectorContractItem.getViewModel() == item);
+                        items.removeIf(inspectorContractItem -> inspectorContractItem.getViewModel().equals(item));
                     }
                 }
             }

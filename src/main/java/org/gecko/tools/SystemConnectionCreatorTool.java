@@ -58,7 +58,7 @@ public class SystemConnectionCreatorTool extends Tool {
     }
 
     private void setPortViewModel(PortViewModel portViewModel) {
-        if (firstPortViewModel == null || firstPortViewModel == portViewModel) {
+        if (firstPortViewModel == null || firstPortViewModel.equals(portViewModel)) {
             firstPortViewModel = portViewModel;
         } else {
             Action createAction = actionManager.getActionFactory()

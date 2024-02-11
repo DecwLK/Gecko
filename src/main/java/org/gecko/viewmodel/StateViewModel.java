@@ -77,10 +77,9 @@ public class StateViewModel extends BlockViewModelElement<State> {
                 edgeIndex = i;
             }
 
-            if ((edge.getSource() == edgeViewModel.getSource()
-                && edge.getDestination() == edgeViewModel.getDestination()) || (
-                edge.getSource() == edgeViewModel.getDestination()
-                    && edge.getDestination() == edgeViewModel.getSource())) {
+            if ((edge.getSource().equals(edgeViewModel.getSource()) && edge.getDestination()
+                .equals(edgeViewModel.getDestination())) || (edge.getSource().equals(edgeViewModel.getDestination())
+                && edge.getDestination().equals(edgeViewModel.getSource()))) {
                 edgeCount++;
             }
         }
@@ -88,8 +87,9 @@ public class StateViewModel extends BlockViewModelElement<State> {
     }
 
     public int getLoopOffset(EdgeViewModel edgeViewModel) {
-        List<EdgeViewModel> loops =
-            incomingEdges.stream().filter(edge -> edge.getSource() == this && edge.getDestination() == this).toList();
+        List<EdgeViewModel> loops = incomingEdges.stream()
+            .filter(edge -> edge.getSource().equals(this) && edge.getDestination().equals(this))
+            .toList();
 
         return loops.indexOf(edgeViewModel) + 1;
     }

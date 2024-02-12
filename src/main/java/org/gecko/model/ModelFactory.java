@@ -75,7 +75,8 @@ public class ModelFactory {
     public Edge copyEdge(@NonNull Edge edge) {
         int id = getNewElementId();
         try {
-            return new Edge(id, edge.getSource(), edge.getDestination(), edge.getContract(), edge.getKind(), edge.getPriority());
+            return new Edge(id, edge.getSource(), edge.getDestination(), edge.getContract(), edge.getKind(),
+                edge.getPriority());
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of an edge", e);
         }
@@ -152,7 +153,8 @@ public class ModelFactory {
     public Contract copyContract(@NonNull Contract contract) {
         int id = getNewElementId();
         try {
-            return new Contract(id, getDefaultName(id), new Condition(contract.getPreCondition().getCondition()), new Condition(contract.getPostCondition().getCondition()));
+            return new Contract(id, getDefaultName(id), new Condition(contract.getPreCondition().getCondition()),
+                new Condition(contract.getPostCondition().getCondition()));
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of a contract", e);
         }
@@ -168,7 +170,8 @@ public class ModelFactory {
     public Region copyRegion(@NonNull Region region) {
         int id = getNewElementId();
         try {
-            return new Region(id, getDefaultName(id), new Condition(region.getInvariant().getCondition()), copyContract(region.getPreAndPostCondition()));
+            return new Region(id, getDefaultName(id), new Condition(region.getInvariant().getCondition()),
+                copyContract(region.getPreAndPostCondition()));
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of a region", e);
         }

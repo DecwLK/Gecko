@@ -6,7 +6,10 @@ import org.gecko.view.inspector.element.combobox.InspectorVisibilityComboBox;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.viewmodel.PortViewModel;
 
-/** Represents a type of {@link LabeledInspectorElement}. Contains an {@link InspectorLabel} and an {@link InspectorVisibilityComboBox}. */
+/**
+ * Represents a type of {@link LabeledInspectorElement}. Contains an {@link InspectorLabel} and an
+ * {@link InspectorVisibilityComboBox}.
+ */
 public class InspectorVisibilityPicker extends LabeledInspectorElement {
 
     public InspectorVisibilityPicker(ActionManager actionManager, PortViewModel viewModel) {

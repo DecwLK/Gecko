@@ -72,7 +72,8 @@ public class GeckoViewModel {
         if (nextSystemViewModel.getTarget().getParent() != null) {
             parent = (SystemViewModel) getViewModelElement(nextSystemViewModel.getTarget().getParent());
         }
-        EditorViewModel editorViewModel = viewModelFactory.createEditorViewModel(nextSystemViewModel, parent, isAutomatonEditor);
+        EditorViewModel editorViewModel =
+            viewModelFactory.createEditorViewModel(nextSystemViewModel, parent, isAutomatonEditor);
         openedEditorsProperty.add(editorViewModel);
         setCurrentEditor(editorViewModel);
     }

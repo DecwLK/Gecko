@@ -13,7 +13,8 @@ public class CutPositionableViewModelElementAction extends ActionGroup {
         this.geckoViewModel = geckoViewModel;
         var copy = new CopyPositionableViewModelElementAction(geckoViewModel);
         getActions().add(copy);
-        delete = new DeletePositionableViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection());
+        delete = new DeletePositionableViewModelElementAction(geckoViewModel,
+            geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection());
         getActions().add(delete);
     }
 

@@ -7,7 +7,9 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SelectionManager;
 
-/** A concrete representation of an {@link Action} that selects a set of {link PositionableViewModelElement}s. */
+/**
+ * A concrete representation of an {@link Action} that selects a set of {@link PositionableViewModelElement}s.
+ */
 public class SelectAction extends Action {
     private final SelectionManager selectionManager;
     private final Set<PositionableViewModelElement<?>> elementsToSelect;

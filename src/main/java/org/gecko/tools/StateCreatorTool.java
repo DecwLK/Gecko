@@ -8,7 +8,10 @@ import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 
-/** A concrete representation of a state-creating-{@link Tool}, utilized for creating a {@link org.gecko.viewmodel.StateViewModel}. */
+/**
+ * A concrete representation of a state-creating-{@link Tool}, utilized for creating a
+ * {@link org.gecko.viewmodel.StateViewModel StateViewModel}.
+ */
 public class StateCreatorTool extends Tool {
 
     public StateCreatorTool(ActionManager actionManager) {

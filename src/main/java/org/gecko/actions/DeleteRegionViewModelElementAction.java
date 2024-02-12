@@ -6,7 +6,10 @@ import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.RegionViewModel;
 
-/** A concrete representation of an {@link Action} that removes a {@link RegionViewModel} from the {@link GeckoViewModel} and its target-{@link org.gecko.model.Region} from the given {@link Automaton}. */
+/**
+ * A concrete representation of an {@link Action} that removes a {@link RegionViewModel} from the {@link GeckoViewModel}
+ * and its target-{@link org.gecko.model.Region} from the given {@link Automaton}.
+ */
 public class DeleteRegionViewModelElementAction extends AbstractPositionableViewModelElementAction {
     private final GeckoViewModel geckoViewModel;
     private final RegionViewModel regionViewModel;

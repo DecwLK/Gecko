@@ -3,7 +3,10 @@ package org.gecko.actions;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 
-/** A concrete representation of an {@link Action} that zooms in or out from the center of a given {@link EditorViewModel} by a given zoom factor. */
+/**
+ * A concrete representation of an {@link Action} that zooms in or out from the center of a given
+ * {@link EditorViewModel} by a given zoom factor.
+ */
 public class ZoomCenterAction extends Action {
 
     private final EditorViewModel editorViewModel;

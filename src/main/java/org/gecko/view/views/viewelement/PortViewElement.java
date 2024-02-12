@@ -11,7 +11,10 @@ import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
 
-/** Represents a type of a {@link Pane} used for the vizualization of a {@link PortViewModel}, to which it holds a reference, along with its {@link String name} and {@link Visibility}. */
+/**
+ * Represents a type of a {@link Pane} used for the visualization of a {@link PortViewModel}, to which it holds a
+ * reference, along with its {@link String name} and {@link Visibility}.
+ */
 @Getter
 public class PortViewElement extends Pane {
 

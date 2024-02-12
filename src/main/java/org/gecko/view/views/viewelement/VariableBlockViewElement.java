@@ -16,7 +16,10 @@ import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
 
-/** Represents a type of {@link BlockViewElement} implementing the {@link ViewElement} interface, which encapsulates an {@link PortViewModel}. */
+/**
+ * Represents a type of {@link BlockViewElement} implementing the {@link ViewElement} interface, which encapsulates an
+ * {@link PortViewModel}.
+ */
 @Getter
 public class VariableBlockViewElement extends BlockViewElement implements ViewElement<PortViewModel> {
 

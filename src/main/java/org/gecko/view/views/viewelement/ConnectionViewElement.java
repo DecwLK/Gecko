@@ -17,7 +17,10 @@ import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
 
-/** An abstract representation of a {@link Path} type view element, that is a connection in a Gecko project. Contains a list of {@link Point2D path point}s. */
+/**
+ * An abstract representation of a {@link Path} type view element, that is a connection in a Gecko project. Contains a
+ * list of {@link Point2D path point}s.
+ */
 @Getter
 public abstract class ConnectionViewElement extends Path {
     private static final String STYLE_CLASS = "path";

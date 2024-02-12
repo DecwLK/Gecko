@@ -22,7 +22,14 @@ import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
-/** Represents a type of {@link VBox} implementing the {@link InspectorElement} interface. Holds a reference to a {@link ContractViewModel} and provides separate constructurs for both a contract item of a state-specific-{@link org.gecko.view.inspector.Inspector Inspector} and a region-specific-{@link org.gecko.view.inspector.Inspector Inspector}. The {@link InspectorContractItem} contains thus {@link InspectorPreconditionField}s, {@link InspectorPostconditionField}s and an {link InspectorInvariantField} in the case of a region. */
+/**
+ * Represents a type of {@link VBox} implementing the {@link InspectorElement} interface. Holds a reference to a
+ * {@link ContractViewModel} and provides separate constructors for both a contract item of a
+ * state-specific-{@link org.gecko.view.inspector.Inspector Inspector} and a
+ * region-specific-{@link org.gecko.view.inspector.Inspector Inspector}. The {@link InspectorContractItem} contains thus
+ * {@link InspectorPreconditionField}s, {@link InspectorPostconditionField}s and an {link InspectorInvariantField} in
+ * the case of a region.
+ */
 public class InspectorContractItem extends VBox implements InspectorElement<VBox> {
     @Getter
     private ContractViewModel viewModel;

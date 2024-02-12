@@ -7,7 +7,10 @@ import javafx.scene.paint.Color;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.view.views.viewelement.ViewElementVisitor;
 
-/** Represents a type of {@link ElementScalerViewElementDecorator} following the decorator pattern for scaling purposes of a connection. */
+/**
+ * Represents a type of {@link ElementScalerViewElementDecorator} following the decorator pattern for scaling purposes
+ * of a connection.
+ */
 public class ConnectionElementScalerViewElementDecorator extends ElementScalerViewElementDecorator {
     private static final double SCALER_SIZE = 10;
     private static final int IGNORE_Z_PRIORITY = 10000;

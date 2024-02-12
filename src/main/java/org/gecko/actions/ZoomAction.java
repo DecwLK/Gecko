@@ -4,7 +4,10 @@ import javafx.geometry.Point2D;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 
-/** A concrete representation of an {@link Action} that zooms in or out in the given {@link EditorViewModel} from a given {link Point2D pivot} by a given zoom factor. */
+/**
+ * A concrete representation of an {@link Action} that zooms in or out in the given {@link EditorViewModel} from a given
+ * {link Point2D pivot} by a given zoom factor.
+ */
 public class ZoomAction extends Action {
 
     private final EditorViewModel editorViewModel;

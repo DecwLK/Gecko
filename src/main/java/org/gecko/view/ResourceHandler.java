@@ -6,7 +6,10 @@ import java.util.ResourceBundle;
 import lombok.Getter;
 import lombok.Setter;
 
-/** Provides methods for getting {@link String}s that are dependent on a given key and the Language currently used in the view. */
+/**
+ * Provides methods for getting {@link String}s that are dependent on a given key and the Language currently used in the
+ * view.
+ */
 public class ResourceHandler {
     @Getter
     @Setter

@@ -7,7 +7,9 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 
-/** An abstract representation of a {@link ComboBox} implementing the {@link InspectorElement} interface. */
+/**
+ * An abstract representation of a {@link ComboBox} implementing the {@link InspectorElement} interface.
+ */
 public abstract class InspectorComboBox<T> extends ComboBox<T> implements InspectorElement<ComboBox<T>> {
 
     public InspectorComboBox(ActionManager actionManager, List<T> items, Property<T> property) {

@@ -45,7 +45,10 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 
-/** Represents a displayable view in the Gecko Graphic Editor, holding a collection of displayed {@link ViewElement}s and other items specific to their vizualization. */
+/**
+ * Represents a displayable view in the Gecko Graphic Editor, holding a collection of displayed {@link ViewElement}s and
+ * other items specific to their vizualization.
+ */
 public class EditorView {
     private static final double RELATIVE_BORDER_SIZE = 0.25;
     private static final double MIN_WORLD_SIZE = 1000;
@@ -105,8 +108,8 @@ public class EditorView {
         this.currentView = new Tab("Error_Name", currentViewPane);
         currentView.textProperty().bind(Bindings.createStringBinding(() -> {
             String name = viewModel.getCurrentSystem().getName();
-            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
-                : " (" + ResourceHandler.getString("View", "system") + ")");
+            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")" :
+                " (" + ResourceHandler.getString("View", "system") + ")");
         }, viewModel.getCurrentSystem().getNameProperty()));
 
         this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {

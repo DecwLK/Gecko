@@ -5,7 +5,10 @@ import org.gecko.model.Kind;
 import org.gecko.viewmodel.EdgeViewModel;
 
 
-/** Represents a type of {@link Action} that changes the {@link Kind} of an {@link EdgeViewModel}, which it holds a references to. Additionally, holds the old and new {@link Kind}s of the edge for undo/redo purposes. */
+/**
+ * Represents a type of {@link Action} that changes the {@link Kind} of an {@link EdgeViewModel}, which it holds a
+ * references to. Additionally, holds the old and new {@link Kind}s of the edge for undo/redo purposes.
+ */
 public class ChangeKindEdgeViewModelAction extends Action {
 
     private final Kind kind;

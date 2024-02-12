@@ -5,7 +5,10 @@ import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewEle
 import org.gecko.view.views.viewelement.decorator.ElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
 
-/** Represents a visitor pattern for performing operations on {@link ViewElement}s. Concrete visitors must implement this interface to define specific behavior for each {@link ViewElement} and their decorators. */
+/**
+ * Represents a visitor pattern for performing operations on {@link ViewElement}s. Concrete visitors must implement this
+ * interface to define specific behavior for each {@link ViewElement} and their decorators.
+ */
 public interface ViewElementVisitor {
     void visit(StateViewElement stateViewElement);
 

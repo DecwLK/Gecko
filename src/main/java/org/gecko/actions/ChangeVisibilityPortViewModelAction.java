@@ -11,7 +11,11 @@ import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
-/** A concrete representation of an {@link Action} that changes the visibility of a {@link PortViewModel}, which it holds a reference to. Additionally holds the old and new {@link Visibility Visibilities} of the contract for undo/redo purposes. */
+/**
+ * A concrete representation of an {@link Action} that changes the visibility of a {@link PortViewModel}, which it holds
+ * a reference to. Additionally, holds the old and new {@link Visibility Visibilities} of the contract for undo/redo
+ * purposes.
+ */
 public class ChangeVisibilityPortViewModelAction extends Action {
 
     private final GeckoViewModel geckoViewModel;

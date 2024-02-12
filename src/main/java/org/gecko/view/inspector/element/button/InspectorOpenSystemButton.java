@@ -6,7 +6,10 @@ import org.gecko.view.ResourceHandler;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.SystemViewModel;
 
-/** Represents a type of {@link AbstractInspectorButton} used for opening a {@link SystemViewModel} by switching to the system view corresponding to the given system. */
+/**
+ * Represents a type of {@link AbstractInspectorButton} used for opening a {@link SystemViewModel} by switching to the
+ * system view corresponding to the given system.
+ */
 public class InspectorOpenSystemButton extends AbstractInspectorButton {
 
     private static final int WIDTH = 300;

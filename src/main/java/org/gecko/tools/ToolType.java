@@ -4,7 +4,10 @@ import javafx.scene.input.KeyCodeCombination;
 import lombok.Getter;
 import org.gecko.view.views.shortcuts.Shortcuts;
 
-/** Enumerates the types of tools used in the Gecko Graphic Editor. Each {@link ToolType} is described by a label, an icon and a {@link KeyCodeCombination}. */
+/**
+ * Enumerates the types of tools used in the Gecko Graphic Editor. Each {@link ToolType} is described by a label, an
+ * icon and a {@link KeyCodeCombination}.
+ */
 @Getter
 public enum ToolType {
     CURSOR("Cursor Tool", "cursor-icon", Shortcuts.CURSOR_TOOL.get()),

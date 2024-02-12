@@ -8,7 +8,11 @@ import org.gecko.actions.ActionManager;
 import org.gecko.model.Kind;
 import org.gecko.viewmodel.EdgeViewModel;
 
-/** Represents a type of {@link ViewContextMenuBuilder} for a {@link ContextMenu} specific to an {@link org.gecko.view.views.viewelement.EdgeViewElement EdgeViewElement}. Contains {@link MenuItem}s that run operations like changing the edge's kind or deleting the edge. */
+/**
+ * Represents a type of {@link ViewContextMenuBuilder} for a {@link ContextMenu} specific to an
+ * {@link org.gecko.view.views.viewelement.EdgeViewElement EdgeViewElement}. Contains {@link MenuItem}s that run
+ * operations like changing the edge's kind or deleting the edge.
+ */
 public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final EdgeViewModel edgeViewModel;

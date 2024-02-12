@@ -2,7 +2,10 @@ package org.gecko.actions;
 
 import org.gecko.exceptions.GeckoException;
 
-/** An abstract representation of an operation that can be executed in the Gecko Graphic Editor. An {@link Action} can be run or undone. The provided methods must be implemented by concrete actions. */
+/**
+ * An abstract representation of an operation that can be executed in the Gecko Graphic Editor. An {@link Action} can be
+ * run or undone. The provided methods must be implemented by concrete actions.
+ */
 public abstract class Action {
     /**
      * Runs the action.

@@ -10,7 +10,14 @@ import org.gecko.view.inspector.element.container.InspectorPriorityLabel;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.viewmodel.EdgeViewModel;
 
-/** Represents a type of {@link AbstractInspectorBuilder} of an {@link Inspector} for an {@link EdgeViewModel}. Adds to the list of {@link InspectorElement}s, which are added to a built {@link org.gecko.view.inspector.Inspector Inspector}, the following: an {@link InspectorKindPicker}, two {@link InspectorEdgeStateLabel}s for the source- and target-states, an {@link InspectorPriorityLabel} and an {@link InspectorContractComboBox}. */
+/**
+ * Represents a type of {@link AbstractInspectorBuilder} of an {@link org.gecko.view.inspector.Inspector Inspector} for
+ * an {@link EdgeViewModel}. Adds to the list of
+ * {@link org.gecko.view.inspector.element.InspectorElement InspectorElement}s, which are added to a built
+ * {@link org.gecko.view.inspector.Inspector Inspector}, the following: an {@link InspectorKindPicker}, two
+ * {@link InspectorEdgeStateLabel}s for the source- and target-states, an {@link InspectorPriorityLabel} and an
+ * {@link InspectorContractComboBox}.
+ */
 public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel> {
 
     public EdgeInspectorBuilder(ActionManager actionManager, EdgeViewModel viewModel) {

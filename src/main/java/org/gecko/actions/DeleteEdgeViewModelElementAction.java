@@ -6,7 +6,11 @@ import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
-/** A concrete representation of an {@link Action} that removes the target of an {@link EdgeViewModel} from the given {@link Automaton} and the afferent {@link EdgeViewModel} from the list of outgoing- and ingoing-{@link EdgeViewModel}s of its source- and destination-{@link org.gecko.viewmodel.StateViewModel}s. */
+/**
+ * A concrete representation of an {@link Action} that removes the target of an {@link EdgeViewModel} from the given
+ * {@link Automaton} and the afferent {@link EdgeViewModel} from the list of outgoing- and
+ * ingoing-{@link EdgeViewModel}s of its source- and destination-{@link org.gecko.viewmodel.StateViewModel}s.
+ */
 public class DeleteEdgeViewModelElementAction extends AbstractPositionableViewModelElementAction {
     private final GeckoViewModel geckoViewModel;
     private final EdgeViewModel edgeViewModel;

@@ -20,7 +20,10 @@ import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
-/** Represents a type of {@link BlockViewElement} implementing the {@link ViewElement} interface, which encapsulates an {@link RegionViewModel}. */
+/**
+ * Represents a type of {@link BlockViewElement} implementing the {@link ViewElement} interface, which encapsulates an
+ * {@link RegionViewModel}.
+ */
 @Getter
 public class RegionViewElement extends BlockViewElement implements ViewElement<RegionViewModel> {
 

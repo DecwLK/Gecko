@@ -6,7 +6,11 @@ import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
-/** A concrete representation of an {@link Action} that creates a {@link PortViewModel} in a given {@link SystemViewModel} through the {@link org.gecko.viewmodel.ViewModelFactory} of the {@link GeckoViewModel}. */
+/**
+ * A concrete representation of an {@link Action} that creates a {@link PortViewModel} in a given
+ * {@link SystemViewModel} through the {@link org.gecko.viewmodel.ViewModelFactory ViewModelFactory} of the
+ * {@link GeckoViewModel}.
+ */
 public class CreatePortViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;

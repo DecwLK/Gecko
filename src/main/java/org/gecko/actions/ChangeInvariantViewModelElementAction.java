@@ -3,7 +3,11 @@ package org.gecko.actions;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.RegionViewModel;
 
-/** A concrete representation of an {@link Action} that changes the invariant of a {@link RegionViewModel}, which it holds a reference to. Additionally holds the old and new {@link String invariants}s of the region for undo/redo purposes*/
+/**
+ * A concrete representation of an {@link Action} that changes the invariant of a {@link RegionViewModel}, which it
+ * holds a reference to. Additionally, holds the old and new {@link String invariants}s of the region for undo/redo
+ * purposes
+ */
 public class ChangeInvariantViewModelElementAction extends Action {
 
     private final RegionViewModel regionViewModel;

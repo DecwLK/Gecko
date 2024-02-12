@@ -6,7 +6,11 @@ import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.PortViewModel;
 
-/** Represents a type of {@link ViewContextMenuBuilder} for a {@link ContextMenu} specific to a {@link org.gecko.view.views.viewelement.PortViewElement PortViewElement}. Contains {@link MenuItem}s that run operations like deleting the port. */
+/**
+ * Represents a type of {@link ViewContextMenuBuilder} for a {@link ContextMenu} specific to a
+ * {@link org.gecko.view.views.viewelement.PortViewElement PortViewElement}. Contains {@link MenuItem}s that run
+ * operations like deleting the port.
+ */
 public class VariableBlockViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final PortViewModel portViewModel;

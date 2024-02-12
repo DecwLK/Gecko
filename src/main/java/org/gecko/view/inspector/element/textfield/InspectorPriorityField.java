@@ -6,7 +6,10 @@ import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.viewmodel.EdgeViewModel;
 
-/** Represents a type of {@link Spinner} encapsulating an {@link Integer} and implementing the {@link InspectorElement} interface. Used to change the priority of an {@link EdgeViewModel}. */
+/**
+ * Represents a type of {@link Spinner} encapsulating an {@link Integer} and implementing the {@link InspectorElement}
+ * interface. Used to change the priority of an {@link EdgeViewModel}.
+ */
 public class InspectorPriorityField extends Spinner<Integer> implements InspectorElement<Spinner<Integer>> {
     private static final int MAX_PRIORITY = 100;
     private static final int MIN_PRIORITY = 0;

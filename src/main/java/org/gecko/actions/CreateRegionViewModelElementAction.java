@@ -7,7 +7,12 @@ import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
-/** A concrete representation of an {@link Action} that creates a {@link RegionViewModel} in the current-{@link SystemViewModel} through the {@link org.gecko.viewmodel.ViewModelFactory} of the {@link GeckoViewModel}. Additionally holds the current {@link org.gecko.viewmodel.EditorViewModel} for setting the correct size and position for the created region. */
+/**
+ * A concrete representation of an {@link Action} that creates a {@link RegionViewModel} in the
+ * current-{@link SystemViewModel} through the {@link org.gecko.viewmodel.ViewModelFactory} of the
+ * {@link GeckoViewModel}. Additionally, holds the current {@link org.gecko.viewmodel.EditorViewModel EditorViewModel}
+ * for setting the correct size and position for the created region.
+ */
 public class CreateRegionViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;

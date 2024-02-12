@@ -4,7 +4,10 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.RegionViewModel;
 
-/** A concrete representation of an {@link InspectorAreaField} for a {@link RegionViewModel}, through which the invariant of the region can be changed. */
+/**
+ * A concrete representation of an {@link InspectorAreaField} for a {@link RegionViewModel}, through which the invariant
+ * of the region can be changed.
+ */
 public class InspectorInvariantField extends InspectorAreaField {
     private final ActionManager actionManager;
     private final RegionViewModel regionViewModel;

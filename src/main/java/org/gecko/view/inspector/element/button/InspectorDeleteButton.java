@@ -6,7 +6,9 @@ import org.gecko.view.ResourceHandler;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
-/** Represents a type of {@link AbstractInspectorButton} used for deleting a {@link PositionableViewModelElement}. */
+/**
+ * Represents a type of {@link AbstractInspectorButton} used for deleting a {@link PositionableViewModelElement}.
+ */
 public class InspectorDeleteButton extends AbstractInspectorButton {
 
     private static final String STYLE = "inspector-delete-button";

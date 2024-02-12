@@ -6,7 +6,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 
-/** A concrete representation of a pan-{@link Tool}, utilized for moving the view. */
+/**
+ * A concrete representation of a pan-{@link Tool}, utilized for moving the view.
+ */
 public class PanTool extends Tool {
 
     public PanTool(ActionManager actionManager) {

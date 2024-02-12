@@ -7,7 +7,10 @@ import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SystemViewModel;
 
-/** A concrete representation of a {@link ShortcutHandler} that manages the shortcuts corresponding to the navigation of and the selection of creator tools specific to a system editor view. */
+/**
+ * A concrete representation of a {@link ShortcutHandler} that manages the shortcuts corresponding to the navigation of
+ * and the selection of creator tools specific to a system editor view.
+ */
 public class SystemEditorViewShortcutHandler extends ShortcutHandler {
 
     public SystemEditorViewShortcutHandler(ActionManager actionManager, EditorView editorView) {

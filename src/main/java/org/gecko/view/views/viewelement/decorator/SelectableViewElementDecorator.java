@@ -5,7 +5,10 @@ import javafx.scene.Node;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.view.views.viewelement.ViewElementVisitor;
 
-/** A concrete representation of a {@link ViewElementDecorator} following the decorator pattern for selection purposes. It holds a reference to a {@link Group} containing the drawn target and borderline {@link Path}. */
+/**
+ * A concrete representation of a {@link ViewElementDecorator} following the decorator pattern for selection purposes.
+ * It holds a reference to a Group containing the drawn target and borderline Path
+ */
 public class SelectableViewElementDecorator extends ViewElementDecorator {
 
     public SelectableViewElementDecorator(ViewElement<?> decoratorTarget) {

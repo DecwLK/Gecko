@@ -28,7 +28,10 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SelectionManager;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
-/** A concrete representation of an area-{@link Tool}, utilized for marking a rectangle-formed area in the view. Holds the {@Point2D starting position}  and the afferent {@link javafx.scene.shape.Rectangle}. */
+/**
+ * A concrete representation of an area-{@link Tool}, utilized for marking a rectangle-formed area in the view. Holds
+ * the {@link Point2D starting position}  and the afferent {@link javafx.scene.shape.Rectangle}.
+ */
 public class CursorTool extends Tool {
 
     private boolean isDragging = false;

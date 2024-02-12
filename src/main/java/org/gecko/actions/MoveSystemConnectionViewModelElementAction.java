@@ -14,7 +14,10 @@ import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
-/** A concrete representation of an {@link Action} that moves a {@link SystemConnectionViewModel} with a given {@link Point2D delta value}.  */
+/**
+ * A concrete representation of an {@link Action} that moves a {@link SystemConnectionViewModel} with a given
+ * {@link Point2D delta value}.
+ */
 public class MoveSystemConnectionViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;

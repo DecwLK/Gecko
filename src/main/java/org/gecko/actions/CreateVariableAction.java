@@ -6,7 +6,13 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
 
-/** A concrete representation of an {@link Action} that creates a {@link PortViewModel} in the current-{@link org.gecko.viewmodel.SystemViewModel} through the {@link org.gecko.viewmodel.ViewModelFactory} of the {@link GeckoViewModel}. Additionally, holds the {@link Point2D position} and the current {@link EditorViewModel} for setting the correct position for the created port. */
+/**
+ * A concrete representation of an {@link Action} that creates a {@link PortViewModel} in the
+ * current-{@link org.gecko.viewmodel.SystemViewModel SystemViewModel} through the
+ * {@link org.gecko.viewmodel.ViewModelFactory ViewModelFactory} of the {@link GeckoViewModel}. Additionally, holds the
+ * {@link Point2D position} and the current {@link EditorViewModel} for setting the correct position for the created
+ * port.
+ */
 public class CreateVariableAction extends Action {
 
     private final GeckoViewModel geckoViewModel;

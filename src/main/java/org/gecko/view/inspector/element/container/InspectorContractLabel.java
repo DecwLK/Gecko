@@ -6,7 +6,10 @@ import org.gecko.view.inspector.element.button.InspectorAddContractButton;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.viewmodel.StateViewModel;
 
-/** Represents a type of {@link LabeledInspectorElement}. Contains an {@link InspectorLabel} and an {@link InspectorAddContractButton}. */
+/**
+ * Represents a type of {@link LabeledInspectorElement}. Contains an {@link InspectorLabel} and an
+ * {@link InspectorAddContractButton}.
+ */
 public class InspectorContractLabel extends LabeledInspectorElement {
 
     public InspectorContractLabel(ActionManager actionManager, StateViewModel viewModel) {

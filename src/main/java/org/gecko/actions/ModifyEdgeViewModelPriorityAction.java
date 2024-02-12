@@ -3,7 +3,10 @@ package org.gecko.actions;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EdgeViewModel;
 
-/** A concrete representation of an {@link Action} that changes the priority of an {@link EdgeViewModel}. Holds the old and new priorities of the edge. */
+/**
+ * A concrete representation of an {@link Action} that changes the priority of an {@link EdgeViewModel}. Holds the old
+ * and new priorities of the edge.
+ */
 public class ModifyEdgeViewModelPriorityAction extends Action {
 
     private final EdgeViewModel edgeViewModel;

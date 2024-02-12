@@ -8,7 +8,11 @@ import javafx.scene.shape.Rectangle;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
-/** A concrete representation of a region-creating-{@link AreaTool}, utilized for creating a rectangle-formed-{@link org.gecko.viewmodel.RegionViewModel}. Holds the {@link Color} of the drawn region. */
+/**
+ * A concrete representation of a region-creating-{@link AreaTool}, utilized for creating a
+ * rectangle-formed-{@link org.gecko.viewmodel.RegionViewModel RegionViewModel}. Holds the {@link Color} of the drawn
+ * region.
+ */
 public class RegionCreatorTool extends AreaTool {
     private Color color;
 

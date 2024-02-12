@@ -19,7 +19,9 @@ import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
-/** Represents a factory for actions. Provides a method for the creation of each subtype of {@link Action}. */
+/**
+ * Represents a factory for actions. Provides a method for the creation of each subtype of {@link Action}.
+ */
 public class ActionFactory {
     private final GeckoViewModel geckoViewModel;
 

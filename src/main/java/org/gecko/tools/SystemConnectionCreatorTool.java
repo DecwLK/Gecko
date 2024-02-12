@@ -12,7 +12,12 @@ import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.viewmodel.PortViewModel;
 
-/** A concrete representation of a system-connection-creating-{@link Tool}, utilized for connecting a source- and a destination-{@link PortViewModel} through a {@link org.gecko.viewmodel.SystemConnectionViewModel}. Holds the source-{@link PortViewModel}. */
+/**
+ * A concrete representation of a system-connection-creating-{@link Tool}, utilized for connecting a source- and a
+ * destination-{@link PortViewModel} through a
+ * {@link org.gecko.viewmodel.SystemConnectionViewModel SystemConnectionViewModel}. Holds the
+ * source-{@link PortViewModel}.
+ */
 public class SystemConnectionCreatorTool extends Tool {
 
     private PortViewModel firstPortViewModel;

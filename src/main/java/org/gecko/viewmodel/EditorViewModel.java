@@ -34,7 +34,12 @@ import org.gecko.tools.VariableBlockCreatorTool;
 import org.gecko.tools.ZoomTool;
 import org.gecko.view.views.ViewElementSearchVisitor;
 
-/** Represents the view model correspondent to an {@link org.gecko.view.views.EditorView EditorView}, holding relevant items like the {@link ActionManager}, the current- and parent-{@link SystemViewModel SystemsViewModel}s, the contained {@link PositionableViewModelElement}s, the {@link SelectionManager} and others, updating the view model of the Gecko project. */
+/**
+ * Represents the view model correspondent to an {@link org.gecko.view.views.EditorView EditorView}, holding relevant
+ * items like the {@link ActionManager}, the current- and parent-{@link SystemViewModel SystemsViewModel}s, the
+ * contained {@link PositionableViewModelElement}s, the {@link SelectionManager} and others, updating the view model of
+ * the Gecko project.
+ */
 @Data
 public class EditorViewModel {
     private static final double MAX_ZOOM_SCALE = 5;

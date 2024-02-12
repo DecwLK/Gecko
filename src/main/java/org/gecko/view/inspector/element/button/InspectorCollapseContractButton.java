@@ -3,6 +3,10 @@ package org.gecko.view.inspector.element.button;
 import java.util.List;
 import org.gecko.view.inspector.element.textfield.InspectorAreaField;
 
+/**
+ * Represents a type of {@link AbstractInspectorButton} used for expanding or collapsing a list of
+ * {@link org.gecko.view.inspector.element.container.InspectorContractItem InspectorContractItem}.
+ */
 public class InspectorCollapseContractButton extends AbstractInspectorButton {
     private static final String ICON_STYLE_NAME = "inspector-contract-expand-button";
     private static final String ICON_STYLE_NAME_EXPANDED = "inspector-contract-expanded-button";

@@ -6,6 +6,11 @@ import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.StateViewModel;
 
+/**
+ * Represents a type of {@link ViewContextMenuBuilder} for a {@link ContextMenu} specific to a
+ * {@link org.gecko.view.views.viewelement.StateViewElement StateViewElement}. Contains {@link MenuItem}s that run
+ * operations like setting the state as start-state or deleting the state.
+ */
 public class StateViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final StateViewModel stateViewModel;

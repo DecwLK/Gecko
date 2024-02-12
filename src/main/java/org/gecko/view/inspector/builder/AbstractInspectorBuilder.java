@@ -12,6 +12,11 @@ import org.gecko.view.inspector.element.textfield.InspectorRenameField;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.Renamable;
 
+/**
+ * An abstract representation of a generic builder for an {@link Inspector} that corresponds to a
+ * {@link PositionableViewModelElement}. Holds a reference to the {@link ActionManager}, which allows for operations to
+ * be run from the inspector, and a list of {@link InspectorElement}s, which are added to a built {@link Inspector}.
+ */
 public abstract class AbstractInspectorBuilder<T extends PositionableViewModelElement<?>> {
     @Getter
     private final T viewModel;

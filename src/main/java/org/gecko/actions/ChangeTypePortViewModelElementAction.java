@@ -3,6 +3,10 @@ package org.gecko.actions;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.PortViewModel;
 
+/**
+ * A concrete representation of an {@link Action} that changes the type of a {@link PortViewModel}, which it holds a
+ * reference to. Additionally, holds the old and new {@link String type}s of the contract for undo/redo purposes.
+ */
 public class ChangeTypePortViewModelElementAction extends Action {
 
     private final PortViewModel portViewModel;

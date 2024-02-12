@@ -20,6 +20,10 @@ import lombok.Getter;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
+/**
+ * Represents a type of {@link BlockViewElement} implementing the {@link ViewElement} interface, which encapsulates an
+ * {@link StateViewModel}.
+ */
 @Getter
 public class StateViewElement extends BlockViewElement implements ViewElement<StateViewModel> {
 

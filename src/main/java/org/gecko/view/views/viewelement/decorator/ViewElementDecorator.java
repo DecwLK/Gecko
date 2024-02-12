@@ -8,6 +8,10 @@ import lombok.Setter;
 import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/**
+ * An abstract representation of a {@link ViewElement} implementation following the decorator pattern and targeting a
+ * decorated {@link ViewElement}, which can be selected and encapsulates a {@link PositionableViewModelElement}.
+ */
 @Getter
 public abstract class ViewElementDecorator implements ViewElement<PositionableViewModelElement<?>> {
 

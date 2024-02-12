@@ -3,6 +3,9 @@ package org.gecko.view.inspector.element.button;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/**
+ * Represents a type of {@link AbstractInspectorButton} used for focusing on a {@link PositionableViewModelElement}.
+ */
 public class InspectorFocusButton extends AbstractInspectorButton {
 
     private static final String ICON_STYLE_NAME = "inspector-focus-element-button";

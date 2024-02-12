@@ -9,6 +9,10 @@ import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 
+/**
+ * A concrete representation of a variable-block-creating-{@link Tool}, utilized for creating a
+ * {@link org.gecko.viewmodel.PortViewModel PortViewModel}.
+ */
 public class VariableBlockCreatorTool extends Tool {
 
     public VariableBlockCreatorTool(ActionManager actionManager) {

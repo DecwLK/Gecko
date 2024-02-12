@@ -5,6 +5,10 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/**
+ * A concrete representation of an {@link Action} that switches between {@link EditorViewModel}s depending on whether
+ * the current {@link EditorViewModel} is an automaton view.
+ */
 public class ViewSwitchAction extends Action {
     private final SystemViewModel systemViewModel;
     private final boolean isAutomaton;

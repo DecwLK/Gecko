@@ -10,6 +10,10 @@ import lombok.Getter;
 import org.gecko.model.Element;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/**
+ * An abstract representation of a {@link Pane} view element, that is an element with a rectangular shape in a Gecko
+ * project. Contains a list of {@link Point2D edge point}s.
+ */
 public abstract class BlockViewElement extends Pane {
 
     @Getter

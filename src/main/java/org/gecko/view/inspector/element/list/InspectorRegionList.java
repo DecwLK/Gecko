@@ -5,6 +5,9 @@ import javafx.collections.ObservableList;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.viewmodel.RegionViewModel;
 
+/**
+ * A concrete representation of an {@link AbstractInspectorList} encapsulating an {@link InspectorLabel}.
+ */
 public class InspectorRegionList extends AbstractInspectorList<InspectorLabel> {
     private static final double PREF_HEIGHT = 100;
 

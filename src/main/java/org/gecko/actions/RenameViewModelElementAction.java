@@ -5,6 +5,10 @@ import org.gecko.model.GeckoModel;
 import org.gecko.viewmodel.AbstractViewModelElement;
 import org.gecko.viewmodel.Renamable;
 
+/**
+ * A concrete representation of an {@link Action} that changes the name of a {@link Renamable}.  Additionally, holds the
+ * old and new {@link String name}s of the element.
+ */
 public class RenameViewModelElementAction extends Action {
     private final GeckoModel geckoModel;
     private final Renamable renamable;

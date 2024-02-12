@@ -18,6 +18,10 @@ import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/**
+ * Represents a factory for inspectors. Provides a method for the creation of an {@link Inspector} built by each of the
+ * {@link AbstractInspectorBuilder}s.
+ */
 public class InspectorFactory {
 
     private final EditorViewModel editorViewModel;

@@ -7,6 +7,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 
+/**
+ * A concrete representation of a zoom-{@link Tool}, utilized for zooming in and out in the view.
+ */
 public class ZoomTool extends Tool {
     private static final double ZOOM_SCALE = 1.1;
 

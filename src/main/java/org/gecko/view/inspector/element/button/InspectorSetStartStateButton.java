@@ -6,6 +6,9 @@ import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.viewmodel.StateViewModel;
 
+/**
+ * Represents a type of {@link AbstractInspectorButton} used for setting a {@link StateViewModel} as start-state.
+ */
 public class InspectorSetStartStateButton extends ToggleButton implements InspectorElement<ToggleButton> {
     public InspectorSetStartStateButton(ActionManager actionManager, StateViewModel stateViewModel) {
         setMaxWidth(Double.MAX_VALUE);

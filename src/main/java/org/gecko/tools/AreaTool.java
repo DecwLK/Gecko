@@ -12,6 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import org.gecko.actions.ActionManager;
 
+/**
+ * A concrete representation of an area-{@link Tool}, utilized for marking a rectangle-formed area in the view. Holds
+ * the starting position and the afferent {@link Rectangle}.
+ */
 public abstract class AreaTool extends Tool {
 
     private Point2D startPosition;

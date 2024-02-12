@@ -5,6 +5,10 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.gecko.exceptions.ModelException;
 
+/**
+ * Represents a manager for the active {@link Gecko}. Additionally, holds a reference to the {@link Stage} of the
+ * application.
+ */
 public class GeckoManager {
     @Getter
     private Gecko gecko;

@@ -24,6 +24,10 @@ import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/**
+ * Represents a type of {@link BlockViewElement} implementing the {@link ViewElement} interface, which encapsulates an
+ * {@link SystemViewModel}.
+ */
 public class SystemViewElement extends BlockViewElement implements ViewElement<SystemViewModel> {
 
     private static final int Z_PRIORITY = 30;

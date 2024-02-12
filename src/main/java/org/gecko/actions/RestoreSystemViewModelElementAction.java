@@ -5,6 +5,10 @@ import org.gecko.model.System;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/**
+ * A concrete representation of an {@link Action} that restores a deleted {@link SystemViewModel} in a given
+ * {@link SystemViewModel}.
+ */
 public class RestoreSystemViewModelElementAction extends Action {
     private final GeckoViewModel geckoViewModel;
     private final SystemViewModel systemViewModel;

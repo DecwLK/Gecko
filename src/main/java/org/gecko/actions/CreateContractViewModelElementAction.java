@@ -5,6 +5,11 @@ import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
 
+/**
+ * A concrete representation of an {@link Action} that creates a {@link ContractViewModel} in a given
+ * {@link StateViewModel} through the {@link ViewModelFactory} of the
+ * {@link org.gecko.viewmodel.GeckoViewModel GeckoViewModel}.
+ */
 public class CreateContractViewModelElementAction extends Action {
 
     private final ViewModelFactory viewModelFactory;

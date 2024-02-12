@@ -105,6 +105,7 @@ public class GeckoIOManager {
         }
         Gecko newGecko = new Gecko(gvm);
         geckoManager.setGecko(newGecko);
+        this.file = null;
     }
 
     /**

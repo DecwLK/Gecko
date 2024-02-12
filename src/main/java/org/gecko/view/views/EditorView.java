@@ -108,8 +108,8 @@ public class EditorView {
         this.currentView = new Tab("Error_Name", currentViewPane);
         currentView.textProperty().bind(Bindings.createStringBinding(() -> {
             String name = viewModel.getCurrentSystem().getName();
-            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")" :
-                " (" + ResourceHandler.getString("View", "system") + ")");
+            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
+                : " (" + ResourceHandler.getString("View", "system") + ")");
         }, viewModel.getCurrentSystem().getNameProperty()));
 
         this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {

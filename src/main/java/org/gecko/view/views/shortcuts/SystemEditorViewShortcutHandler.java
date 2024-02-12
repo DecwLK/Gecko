@@ -29,7 +29,8 @@ public class SystemEditorViewShortcutHandler extends ShortcutHandler {
             try {
                 SystemViewModel systemViewModel = (SystemViewModel) focusedElement;
                 actionManager.run(actionFactory.createViewSwitchAction(systemViewModel, false));
-            } catch (ClassCastException ignored) {
+            } catch (ClassCastException e) {
+                e.printStackTrace();
             }
         });
     }

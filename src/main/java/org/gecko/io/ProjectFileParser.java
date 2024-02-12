@@ -41,11 +41,19 @@ public class ProjectFileParser implements FileParser {
 
         ViewModelElementCreator creator = new ViewModelElementCreator(viewModel, newViewModelProperties);
         creator.traverseModel(root);
+        updateSystemParents(root);
 
         if (creator.isFoundNullContainer()) {
             throw new IOException("Not all elements have view model properties.");
         }
         viewModel.getGeckoModel().getModelFactory().setElementId(creator.getHighestId() + 1);
         return viewModel;
+    }
+
+    private void updateSystemParents(System system) {
+        for (System child : system.getChildren()) {
+            child.setParent(system);
+            updateSystemParents(child);
+        }
     }
 }

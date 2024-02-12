@@ -3,6 +3,7 @@ package org.gecko.actions;
 import java.util.ArrayDeque;
 import javafx.scene.control.Alert;
 import lombok.Getter;
+import lombok.Setter;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.GeckoViewModel;
 
@@ -18,7 +19,8 @@ public class ActionManager {
     private final ArrayDeque<Action> redoStack;
 
     @Getter
-    private final CopyPositionableViewModelElementVisitor copyVisitor = new CopyPositionableViewModelElementVisitor();
+    @Setter
+    private CopyPositionableViewModelElementVisitor copyVisitor = null;
 
     public ActionManager(GeckoViewModel geckoViewModel) {
         this.actionFactory = new ActionFactory(geckoViewModel);

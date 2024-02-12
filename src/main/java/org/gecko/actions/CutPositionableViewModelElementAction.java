@@ -1,26 +1,24 @@
 package org.gecko.actions;
 
-import org.gecko.exceptions.GeckoException;
+import java.util.ArrayList;
+import org.gecko.viewmodel.GeckoViewModel;
 
-public class CutPositionableViewModelElementAction extends Action {
-    CopyPositionableViewModelElementAction copyAction;
-    ActionGroup deleteActions;
+public class CutPositionableViewModelElementAction extends ActionGroup {
 
-    CutPositionableViewModelElementAction(
-        CopyPositionableViewModelElementAction copyAction, ActionGroup deleteActions) {
-        this.copyAction = copyAction;
-        this.deleteActions = deleteActions;
-    }
+    GeckoViewModel geckoViewModel;
+    Action delete;
 
-    @Override
-    boolean run() throws GeckoException {
-        copyAction.run();
-        boolean delete = deleteActions.run();
-        return delete;
+    CutPositionableViewModelElementAction(GeckoViewModel geckoViewModel) {
+        super(new ArrayList<>());
+        this.geckoViewModel = geckoViewModel;
+        var copy = new CopyPositionableViewModelElementAction(geckoViewModel);
+        getActions().add(copy);
+        delete = new DeletePositionableViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection());
+        getActions().add(delete);
     }
 
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
-        return null;
+        return delete.getUndoAction(actionFactory);
     }
 }

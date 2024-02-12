@@ -123,8 +123,7 @@ public class MenuBarBuilder {
         // Data transfer commands:
         MenuItem cutMenuItem = new MenuItem("Cut");
         cutMenuItem.setOnAction(e -> {
-            actionManager.run(actionManager.getActionFactory().createCopyPositionableViewModelElementAction());
-            actionManager.run(actionManager.getActionFactory().createDeletePositionableViewModelElementAction());
+            actionManager.run(actionManager.getActionFactory().createCutPositionableViewModelElementAction());
         });
         cutMenuItem.setAccelerator(Shortcuts.CUT.get());
 

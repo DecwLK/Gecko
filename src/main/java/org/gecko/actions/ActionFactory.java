@@ -230,7 +230,11 @@ public class ActionFactory {
         return new ZoomCenterAction(geckoViewModel.getCurrentEditor(), factor);
     }
 
-    public Action createChangeCodeSystemViewModelAction(SystemViewModel systemViewModel, String newCode) {
+    public ChangeCodeSystemViewModelAction createChangeCodeSystemViewModelAction(SystemViewModel systemViewModel, String newCode) {
         return new ChangeCodeSystemViewModelAction(systemViewModel, newCode);
+    }
+
+    public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction() {
+        return new CutPositionableViewModelElementAction(geckoViewModel);
     }
 }

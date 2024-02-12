@@ -15,6 +15,9 @@ import org.gecko.model.Element;
 @Getter
 public abstract class BlockViewModelElement<T extends Element & org.gecko.model.Renamable>
     extends PositionableViewModelElement<T> implements Renamable {
+    public static final double MIN_WIDTH = 100;
+    public static final double MIN_HEIGHT = 100;
+
     private final StringProperty nameProperty;
 
     BlockViewModelElement(int id, @NonNull T target) {
@@ -40,13 +43,20 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
      * @param firstCornerPoint  the first corner point
      * @param secondCornerPoint the second corner point that is diagonally opposite to the first corner point
      */
-    public void manipulate(@NonNull Point2D firstCornerPoint, @NonNull Point2D secondCornerPoint) {
+    public boolean manipulate(@NonNull Point2D firstCornerPoint, @NonNull Point2D secondCornerPoint) {
         Point2D newStartPosition = new Point2D(Math.min(firstCornerPoint.getX(), secondCornerPoint.getX()),
             Math.min(firstCornerPoint.getY(), secondCornerPoint.getY()));
         Point2D newEndPosition = new Point2D(Math.max(firstCornerPoint.getX(), secondCornerPoint.getX()),
             Math.max(firstCornerPoint.getY(), secondCornerPoint.getY()));
+
+        if (Math.abs(newEndPosition.getX() - newStartPosition.getX()) < MIN_WIDTH
+            || Math.abs(newEndPosition.getY() - newStartPosition.getY()) < MIN_HEIGHT) {
+            return false;
+        }
+
         setPosition(newStartPosition);
         setSize(newEndPosition.subtract(newStartPosition));
+        return true;
     }
 
     @Override

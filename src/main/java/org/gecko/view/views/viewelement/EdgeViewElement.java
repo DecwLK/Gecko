@@ -190,8 +190,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     @Override
-    public void setEdgePoint(int index, Point2D point) {
+    public boolean setEdgePoint(int index, Point2D point) {
         edgeViewModel.setEdgePoint(index, point);
+        return true;
     }
 
     @Override

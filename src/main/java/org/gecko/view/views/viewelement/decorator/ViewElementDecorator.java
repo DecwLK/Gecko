@@ -39,7 +39,7 @@ public abstract class ViewElementDecorator implements ViewElement<PositionableVi
     }
 
     @Override
-    public void setEdgePoint(int index, Point2D point) {
-        getDecoratorTarget().setEdgePoint(index, point);
+    public boolean setEdgePoint(int index, Point2D point) {
+        return getDecoratorTarget().setEdgePoint(index, point);
     }
 }

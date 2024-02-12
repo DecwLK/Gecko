@@ -18,10 +18,6 @@ import org.gecko.model.Element;
 @Getter
 @Setter
 public abstract class PositionableViewModelElement<T extends Element> extends AbstractViewModelElement<T> {
-    /**
-     * The minimum area of a {@link PositionableViewModelElement} that can be resized.
-     */
-    public static final double MIN_AREA = 10000;
     protected final Property<Point2D> positionProperty;
     protected final Property<Point2D> sizeProperty;
     private boolean isCurrentlyModified;
@@ -62,8 +58,4 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     }
 
     public abstract Object accept(@NonNull PositionableViewModelElementVisitor visitor);
-
-    public double getArea() {
-        return getSize().getX() * getSize().getY();
-    }
 }

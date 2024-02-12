@@ -43,10 +43,6 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
     }
 
     @Override
-    public void setEdgePoint(int index, Point2D point) {
-    }
-
-    @Override
     public PortViewModel getTarget() {
         return portViewModel;
     }

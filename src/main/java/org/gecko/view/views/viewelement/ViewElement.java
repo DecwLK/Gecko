@@ -32,8 +32,11 @@ public interface ViewElement<T extends PositionableViewModelElement<?>> {
      *
      * @param index the index
      * @param point new point
+     * @return true if the edge point was set, false if the edge point could not be set due to size limitations
      */
-    void setEdgePoint(int index, Point2D point);
+    default boolean setEdgePoint(int index, Point2D point) {
+        return true;
+    }
 
     /**
      * Set the selected state of the element.

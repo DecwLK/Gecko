@@ -70,12 +70,14 @@ public class ElementScalerBlock extends Rectangle {
      *
      * @param point The new center of the scaler block.
      */
-    public void setCenter(Point2D point) {
-        Point2D center = new Point2D(point.getX() - (getWidth() / 2), point.getY() - (getHeight() / 2));
-        setLayoutX(center.getX());
-        setLayoutY(center.getY());
-
-        decoratorTarget.setEdgePoint(index, point);
+    public boolean setCenter(Point2D point) {
+        if (decoratorTarget.setEdgePoint(index, point)) {
+            Point2D center = new Point2D(point.getX() - (getWidth() / 2), point.getY() - (getHeight() / 2));
+            setLayoutX(center.getX());
+            setLayoutY(center.getY());
+            return true;
+        }
+        return false;
     }
 
     /**

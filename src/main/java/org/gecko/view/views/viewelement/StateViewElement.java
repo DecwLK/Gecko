@@ -55,10 +55,6 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
     }
 
     @Override
-    public void setEdgePoint(int index, Point2D point) {
-    }
-
-    @Override
     public StateViewModel getTarget() {
         return stateViewModel;
     }

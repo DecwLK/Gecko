@@ -50,12 +50,35 @@ public class ModelFactory {
         return state;
     }
 
+    public State copyState(@NonNull State state) {
+        int id = getNewElementId();
+        State copy;
+        try {
+            copy = new State(id, getDefaultName(id));
+            for (Contract contract : state.getContracts()) {
+                copy.addContract(contract);
+            }
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to create a copy of the state", e);
+        }
+        return copy;
+    }
+
     public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull State destination)
         throws ModelException {
         int id = getNewElementId();
-        Edge edge = new Edge(id, source, destination, null, DEFAULT_KIND, DEFAULT_PRIORITY);
+        Edge edge = new Edge(id, source, destination, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
         automaton.addEdge(edge);
         return edge;
+    }
+
+    public Edge copyEdge(@NonNull Edge edge) {
+        int id = getNewElementId();
+        try {
+            return new Edge(id, edge.getSource(), edge.getDestination(), edge.getContract(), edge.getKind(), edge.getPriority());
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to create a copy of an edge", e);
+        }
     }
 
     public System createSystem(@NonNull System parentSystem) throws ModelException {
@@ -64,6 +87,20 @@ public class ModelFactory {
         parentSystem.addChild(system);
         system.setParent(parentSystem);
         return system;
+    }
+
+    public System copySystem(@NonNull System system) {
+        int id = getNewElementId();
+        System copy;
+        try {
+            copy = new System(id, getDefaultName(id), DEFAULT_CODE, system.getAutomaton());
+            for (Variable variable : system.getVariables()) {
+                copy.addVariable(variable);
+            }
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to create a copy of the system", e);
+        }
+        return copy;
     }
 
     public System createRoot() throws ModelException {
@@ -78,12 +115,30 @@ public class ModelFactory {
         return variable;
     }
 
+    public Variable copyVariable(Variable variable) {
+        int id = getNewElementId();
+        try {
+            return new Variable(id, getDefaultName(id), variable.getType(), variable.getVisibility());
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to create a copy of a variable", e);
+        }
+    }
+
     public SystemConnection createSystemConnection(
         @NonNull System system, @NonNull Variable source, @NonNull Variable destination) throws ModelException {
         int id = getNewElementId();
         SystemConnection connection = new SystemConnection(id, source, destination);
         system.addConnection(connection);
         return connection;
+    }
+
+    public SystemConnection copySystemConnection(SystemConnection connection) {
+        int id = getNewElementId();
+        try {
+            return new SystemConnection(id, connection.getSource(), connection.getDestination());
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to create a copy of a system connection", e);
+        }
     }
 
     public Contract createContract(@NonNull State state) throws ModelException {
@@ -94,11 +149,29 @@ public class ModelFactory {
         return contract;
     }
 
+    public Contract copyContract(@NonNull Contract contract) {
+        int id = getNewElementId();
+        try {
+            return new Contract(id, getDefaultName(id), new Condition(contract.getPreCondition().getCondition()), new Condition(contract.getPostCondition().getCondition()));
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to create a copy of a contract", e);
+        }
+    }
+
     public Region createRegion(@NonNull Automaton automaton) throws ModelException {
         int id = getNewElementId();
         Region region = new Region(id, getDefaultName(id), new Condition(DEFAULT_CONDITION), getDefaultContract());
         automaton.addRegion(region);
         return region;
+    }
+
+    public Region copyRegion(@NonNull Region region) {
+        int id = getNewElementId();
+        try {
+            return new Region(id, getDefaultName(id), new Condition(region.getInvariant().getCondition()), copyContract(region.getPreAndPostCondition()));
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to create a copy of a region", e);
+        }
     }
 
     public Condition createCondition(@NonNull String init) throws ModelException {

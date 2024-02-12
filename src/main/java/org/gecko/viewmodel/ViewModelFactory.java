@@ -163,6 +163,25 @@ public class ViewModelFactory {
         return result;
     }
 
+    public void createSystemViewModelForChildren(System system) {
+        system.getChildren().forEach(child -> {
+            if (geckoViewModel.getViewModelElement(child) != null) {
+                return;
+            }
+            SystemViewModel childViewModel = createSystemViewModelFrom(child);
+            geckoViewModel.addViewModelElement(childViewModel);
+            createSystemViewModelForChildren(child);
+        });
+
+        system.getAutomaton().getStates().forEach(state -> {
+            if (geckoViewModel.getViewModelElement(state) != null) {
+                return;
+            }
+            StateViewModel stateViewModel = createStateViewModelFrom(state);
+            geckoViewModel.addViewModelElement(stateViewModel);
+        });
+    }
+
     public RegionViewModel createRegionViewModelIn(SystemViewModel parentSystem) throws ModelException {
         Region region = modelFactory.createRegion(parentSystem.getTarget().getAutomaton());
         RegionViewModel result = new RegionViewModel(getNewViewModelElementId(), region,

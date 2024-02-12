@@ -73,9 +73,8 @@ public class ActionFactory {
             systemConnectionDeleteActionGroup);
     }
 
-    public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction(
-        CopyPositionableViewModelElementVisitor copyVisitor) {
-        return new CopyPositionableViewModelElementAction(geckoViewModel, copyVisitor);
+    public CopyPositionableViewModelElementAction createCopyPositionableViewModelElementAction() {
+        return new CopyPositionableViewModelElementAction(geckoViewModel);
     }
 
     public CreateContractViewModelElementAction createCreateContractViewModelElementAction(
@@ -129,6 +128,11 @@ public class ActionFactory {
         return new DeletePositionableViewModelElementAction(geckoViewModel, elements);
     }
 
+    public DeletePositionableViewModelElementAction createDeletePositionableViewModelElementAction() {
+        return new DeletePositionableViewModelElementAction(geckoViewModel,
+            geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection());
+    }
+
     public MoveBlockViewModelElementAction createMoveBlockViewModelElementAction(Point2D delta) {
         return new MoveBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), delta);
     }
@@ -149,9 +153,8 @@ public class ActionFactory {
             elementScalerBlock, delta);
     }
 
-    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(
-        CopyPositionableViewModelElementVisitor elementsToPaste) {
-        return new PastePositionableViewModelElementAction(geckoViewModel, elementsToPaste);
+    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction() {
+        return new PastePositionableViewModelElementAction(geckoViewModel);
     }
 
     public RenameViewModelElementAction createRenameViewModelElementAction(Renamable renamable, String name) {
@@ -227,7 +230,11 @@ public class ActionFactory {
         return new ZoomCenterAction(geckoViewModel.getCurrentEditor(), factor);
     }
 
-    public Action createChangeCodeSystemViewModelAction(SystemViewModel systemViewModel, String newCode) {
+    public ChangeCodeSystemViewModelAction createChangeCodeSystemViewModelAction(SystemViewModel systemViewModel, String newCode) {
         return new ChangeCodeSystemViewModelAction(systemViewModel, newCode);
+    }
+
+    public CutPositionableViewModelElementAction createCutPositionableViewModelElementAction() {
+        return new CutPositionableViewModelElementAction(geckoViewModel);
     }
 }

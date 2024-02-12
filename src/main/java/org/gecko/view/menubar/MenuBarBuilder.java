@@ -122,15 +122,19 @@ public class MenuBarBuilder {
 
         // Data transfer commands:
         MenuItem cutMenuItem = new MenuItem("Cut");
-        cutMenuItem.setOnAction(e -> actionManager.cut());
+        cutMenuItem.setOnAction(e -> {
+            actionManager.run(actionManager.getActionFactory().createCutPositionableViewModelElementAction());
+        });
         cutMenuItem.setAccelerator(Shortcuts.CUT.get());
 
         MenuItem copyMenuItem = new MenuItem("Copy");
-        copyMenuItem.setOnAction(e -> actionManager.copy());
+        copyMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createCopyPositionableViewModelElementAction()));
         copyMenuItem.setAccelerator(Shortcuts.COPY.get());
 
         MenuItem pasteMenuItem = new MenuItem("Paste");
-        pasteMenuItem.setOnAction(e -> actionManager.paste());
+        pasteMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createPastePositionableViewModelElementAction()));
         pasteMenuItem.setAccelerator(Shortcuts.PASTE.get());
 
         // General selection commands:

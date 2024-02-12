@@ -38,11 +38,9 @@ public class DeleteStateViewModelElementAction extends AbstractPositionableViewM
     boolean run() throws GeckoException {
         if (wasStartState && automaton.getStates().size() > 1) {
             Set<State> states = automaton.getStates();
-            states.forEach(s -> System.out.println("State: " + s.getName()));
             State newStartState = states.stream().filter(s -> !s.equals(stateViewModel.getTarget())).findFirst().get();
             StateViewModel newStartStateViewModel = (StateViewModel) geckoViewModel.getViewModelElement(newStartState);
             systemViewModel.setStartState(newStartStateViewModel);
-            System.out.println("New start state: " + newStartState.getName());
         }
 
         // remove from region if it is in one

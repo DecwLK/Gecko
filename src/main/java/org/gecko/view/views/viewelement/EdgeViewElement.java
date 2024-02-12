@@ -19,6 +19,10 @@ import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
+/**
+ * Represents a type of {@link ConnectionViewElement} implementing the {@link ViewElement} interface, which encapsulates
+ * an {@link EdgeViewModel}.
+ */
 @Getter
 public class EdgeViewElement extends ConnectionViewElement implements ViewElement<EdgeViewModel> {
 

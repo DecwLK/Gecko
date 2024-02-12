@@ -6,6 +6,9 @@ import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents a type of {@link Rectangle} used for displaying the scaling of elements.
+ */
 @Getter
 public class ElementScalerBlock extends Rectangle {
     private final ElementScalerViewElementDecorator decoratorTarget;

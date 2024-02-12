@@ -17,6 +17,10 @@ import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/**
+ * Represents a builder for floating UI elements in the view, like different kinds of {@link Button}s and
+ * {@link Label}s.
+ */
 public class FloatingUIBuilder {
 
     private static final double ZOOM_SCALE = 1.1;

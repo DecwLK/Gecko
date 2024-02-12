@@ -7,6 +7,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import lombok.Data;
 
+/**
+ * Represents a manager for the selection history of an editor view, allowing the navigation through the history of
+ * selected elements.
+ */
 @Data
 public class SelectionManager {
     private ArrayDeque<Set<PositionableViewModelElement<?>>> undoSelectionStack;

@@ -4,6 +4,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
+/**
+ * Enumerates the types of keyboard shortcuts used in the Gecko Graphic Editor. Each {@link Shortcuts Shortcut} is
+ * described by a {@link KeyCode} and a {@link KeyCombination.Modifier Modifier}.
+ */
 public enum Shortcuts {
     NEW(KeyCode.N, KeyCombination.SHORTCUT_DOWN), OPEN(KeyCode.O, KeyCombination.SHORTCUT_DOWN),
     SAVE(KeyCode.S, KeyCombination.SHORTCUT_DOWN),

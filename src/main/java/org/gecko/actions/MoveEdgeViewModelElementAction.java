@@ -9,6 +9,10 @@ import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
+/**
+ * A concrete representation of an {@link Action} that moves an {link EdgeViewModelElement} with a given
+ * {@link Point2D delta value}.
+ */
 public class MoveEdgeViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;

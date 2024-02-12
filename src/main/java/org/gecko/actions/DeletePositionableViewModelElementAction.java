@@ -8,6 +8,10 @@ import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/**
+ * A concrete representation of an {@link Action} that deletes a set of {@link PositionableViewModelElement}s and their
+ * dependencies from the {@link GeckoViewModel}.
+ */
 public class DeletePositionableViewModelElementAction extends Action {
 
     private final GeckoViewModel geckoViewModel;

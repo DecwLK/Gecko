@@ -7,6 +7,11 @@ import org.gecko.actions.ActionManager;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.SystemViewModel;
 
+/**
+ * Represents a type of {@link ViewContextMenuBuilder} for a {@link ContextMenu} specific to a
+ * {@link org.gecko.view.views.viewelement.SystemViewElement SystemViewElement}. Contains {@link MenuItem}s that run
+ * operations like opening or deleting the system.
+ */
 public class SystemViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final SystemViewModel systemViewModel;

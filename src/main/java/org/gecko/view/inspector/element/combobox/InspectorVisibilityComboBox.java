@@ -6,6 +6,10 @@ import org.gecko.actions.ActionManager;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
 
+/**
+ * Represents a type of {@link InspectorComboBox} encapsulating a {@link Visibility}. Holds a reference to a current
+ * {@link PortViewModel} and the current {@link ActionManager}.
+ */
 public class InspectorVisibilityComboBox extends InspectorComboBox<Visibility> {
     private final PortViewModel viewModel;
     private final ActionManager actionManager;

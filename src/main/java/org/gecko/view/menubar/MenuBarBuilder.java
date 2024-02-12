@@ -3,8 +3,6 @@ package org.gecko.view.menubar;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -20,7 +18,19 @@ import org.gecko.tools.ToolType;
 import org.gecko.view.GeckoView;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.PositionableViewModelElement;
+import org.gecko.viewmodel.SystemViewModel;
 
+/**
+ * Represents a builder for the {@link MenuBar} displayed in the view, containing {@link MenuItem}s in {@link Menu}s
+ * grouped by category. Holds a reference to the built {@link MenuBar}, the current {@link GeckoView} and the
+ * {@link ActionManager}, which allow for actions to be run from the menu bar. Relevant menus for the Gecko Graphic
+ * Editor are "File" (running operations like creating, saving, loading, importing and exporting files), "Edit" (running
+ * operations like undoing and redoing actions, cutting, copying and pasting or selecting and deselecting all elements),
+ * "View" (running operations like changing the view, opening the parent system or zooming in and out of the view),
+ * "Tools" (providing the active tools which can be selected in the current view) and "Help" (running operations like
+ * finding an element by name matches, opening a comprehensive list of all shortcuts available or reading more
+ * information about Gecko).
+ */
 public class MenuBarBuilder {
     private final MenuBar menuBar;
     private final GeckoView view;
@@ -157,17 +167,9 @@ public class MenuBarBuilder {
 
         MenuItem goToParentSystemMenuItem = new MenuItem("Go To Parent System");
         goToParentSystemMenuItem.setOnAction(e -> {
-            if (view.getCurrentView().getViewModel().getCurrentSystem().getName().equals("root")) {
-                Alert alert =
-                    new Alert(Alert.AlertType.INFORMATION, "The root system does not have a parent.", ButtonType.OK);
-                alert.showAndWait();
-            } else {
-                if (view.getCurrentView().getViewModel().isAutomatonEditor()) {
-                    changeViewMenuItem.fire();
-                }
-                actionManager.run(actionManager.getActionFactory()
-                    .createViewSwitchAction(view.getCurrentView().getViewModel().getParentSystem(), false));
-            }
+            boolean isAutomatonEditor = view.getCurrentView().getViewModel().isAutomatonEditor();
+            SystemViewModel parentSystem = view.getCurrentView().getViewModel().getParentSystem();
+            actionManager.run(actionManager.getActionFactory().createViewSwitchAction(parentSystem, isAutomatonEditor));
         });
         goToParentSystemMenuItem.setAccelerator(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get());
 

@@ -7,6 +7,10 @@ import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SystemViewModel;
 
+/**
+ * A concrete representation of a {@link ShortcutHandler} that manages the shortcuts corresponding to the navigation of
+ * and the selection of creator tools specific to a system editor view.
+ */
 public class SystemEditorViewShortcutHandler extends ShortcutHandler {
 
     public SystemEditorViewShortcutHandler(ActionManager actionManager, EditorView editorView) {
@@ -25,17 +29,8 @@ public class SystemEditorViewShortcutHandler extends ShortcutHandler {
             try {
                 SystemViewModel systemViewModel = (SystemViewModel) focusedElement;
                 actionManager.run(actionFactory.createViewSwitchAction(systemViewModel, false));
-            } catch (ClassCastException e) {
-                return;
+            } catch (ClassCastException ignored) {
             }
-        });
-
-        shortcuts.put(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get(), () -> {
-            SystemViewModel parentSystem = editorView.getViewModel().getParentSystem();
-            if (parentSystem == null) {
-                return;
-            }
-            actionManager.run(actionFactory.createViewSwitchAction(parentSystem, false));
         });
     }
 

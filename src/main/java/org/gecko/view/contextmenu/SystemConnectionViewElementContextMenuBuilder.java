@@ -6,6 +6,11 @@ import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
+/**
+ * Represents a type of {@link ViewContextMenuBuilder} for a {@link ContextMenu} specific to a
+ * {@link org.gecko.view.views.viewelement.SystemConnectionViewElement SystemConnectionViewElement}. Contains
+ * {@link MenuItem}s that run operations like deleting the connection.
+ */
 public class SystemConnectionViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final SystemConnectionViewModel systemConnectionViewModel;

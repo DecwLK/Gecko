@@ -6,6 +6,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/**
+ * Provides methods used in the visualization of an element in the view. Any such view element corresponds to a
+ * view-model element, which is why the interface is generic, encapsulating a type of
+ * {@link PositionableViewModelElement}. Concrete visitors must implement this interface to define specific behavior for
+ * each view element.
+ */
 public interface ViewElement<T extends PositionableViewModelElement<?>> {
 
     /**

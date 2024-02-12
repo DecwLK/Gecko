@@ -12,13 +12,17 @@ import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
+/**
+ * A concrete representation of an {@link Action} that removes a {@link StateViewModel} from the {@link GeckoViewModel}
+ * and its target-{@link State} from the given {@link Automaton}.
+ */
 public class DeleteStateViewModelElementAction extends AbstractPositionableViewModelElementAction {
     private final GeckoViewModel geckoViewModel;
     private final EditorViewModel editorViewModel;
     private final StateViewModel stateViewModel;
     private final Automaton automaton;
     private final SystemViewModel systemViewModel;
-    private boolean wasStartState;
+    private final boolean wasStartState;
 
     DeleteStateViewModelElementAction(
         GeckoViewModel geckoViewModel, StateViewModel stateViewModel, SystemViewModel systemViewModel) {
@@ -52,6 +56,7 @@ public class DeleteStateViewModelElementAction extends AbstractPositionableViewM
             systemViewModel.setStartState(null);
         }
         systemViewModel.updateTarget();
+        automaton.removeState(stateViewModel.getTarget());
         geckoViewModel.deleteViewModelElement(stateViewModel);
         return true;
     }

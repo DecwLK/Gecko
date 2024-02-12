@@ -13,6 +13,10 @@ import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
+/**
+ * Represents a type of {@link ConnectionViewElement} implementing the {@link ViewElement} interface, which encapsulates
+ * an {@link SystemConnectionViewModel}.
+ */
 @Getter
 public class SystemConnectionViewElement extends ConnectionViewElement
     implements ViewElement<SystemConnectionViewModel> {

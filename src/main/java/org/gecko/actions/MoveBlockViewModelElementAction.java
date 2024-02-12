@@ -7,6 +7,10 @@ import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/**
+ * A concrete representation of an {@link Action} that moves a set of {link PositionableViewModelElement}s with a given
+ * {@link Point2D delta value}.
+ */
 public class MoveBlockViewModelElementAction extends Action {
 
     private final EditorViewModel editorViewModel;

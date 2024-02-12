@@ -4,6 +4,9 @@ import org.gecko.exceptions.GeckoException;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
+/**
+ * A concrete representation of an {@link Action} that selects and focuses on a {link PositionableViewModelElement}.
+ */
 public class FocusPositionableViewModelElementAction extends Action {
 
     private final EditorViewModel editorViewModel;

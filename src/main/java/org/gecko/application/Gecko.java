@@ -6,6 +6,10 @@ import org.gecko.model.GeckoModel;
 import org.gecko.view.GeckoView;
 import org.gecko.viewmodel.GeckoViewModel;
 
+/**
+ * Represents a Gecko, integrating the three architectural pattern levels of the graphic editor: a {@link GeckoModel}, a
+ * {@link GeckoView} and a {@link GeckoViewModel}.
+ */
 @Getter
 public class Gecko {
     private final GeckoModel model;

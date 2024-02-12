@@ -19,6 +19,11 @@ import org.gecko.io.ProjectFileParser;
 import org.gecko.io.ProjectFileSerializer;
 import org.gecko.viewmodel.GeckoViewModel;
 
+/**
+ * Represents a manager for the I/O functionalities of the Gecko Graphic Editor, following the singleton pattern.
+ * Provides methods for creating, loading and saving project files or importing and exporting a project to another file
+ * format. Uses the IO package for serialization and parsing.
+ */
 @Getter
 @Setter
 public class GeckoIOManager {

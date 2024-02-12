@@ -46,8 +46,10 @@ public class ScaleBlockViewModelElementAction extends Action {
             element.setSize(oldSizeCopy);
             element.setPosition(oldPosCopy);
         } else {
-            elementScalerBlock.getDecoratorTarget()
-                .setEdgePoint(elementScalerBlock.getIndex(), elementScalerBlock.getCenter());
+            if (!elementScalerBlock.getDecoratorTarget()
+                .setEdgePoint(elementScalerBlock.getIndex(), elementScalerBlock.getCenter())) {
+                return false;
+            }
         }
 
         editorViewModel.updateRegions();

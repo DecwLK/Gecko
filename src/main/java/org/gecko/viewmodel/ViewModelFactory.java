@@ -140,6 +140,15 @@ public class ViewModelFactory {
         return result;
     }
 
+    /**
+     * Expects the source and destination of the system connection to be in the view model.
+     */
+    public SystemConnectionViewModel createSystemConnectionViewModelFrom(
+        SystemConnection systemConnection) throws MissingViewModelElementException {
+        return createSystemConnectionViewModelFrom(geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget(),
+            systemConnection);
+    }
+
     public SystemViewModel createSystemViewModelIn(SystemViewModel parentSystem) throws ModelException {
         System system = modelFactory.createSystem(parentSystem.getTarget());
         SystemViewModel result = new SystemViewModel(getNewViewModelElementId(), system);

@@ -143,12 +143,9 @@ public class CursorTool extends Tool {
                 return;
             }
             Point2D newPosition = scaler.localToParent(scaler.sceneToLocal(event.getSceneX(), event.getSceneY()));
-            scaler.setCenter(newPosition);
-            PositionableViewModelElement<?> target = scaler.getDecoratorTarget().getTarget();
-            if (target.getArea() < PositionableViewModelElement.MIN_AREA) {
-                scaler.setCenter(previousDragPosition);
-            } else {
-                previousDragPosition = newPosition;
+
+            if (!scaler.setCenter(newPosition)) {
+                cancelDrag(scaler);
             }
         });
 
@@ -170,9 +167,7 @@ public class CursorTool extends Tool {
                     (BlockViewModelElement<?>) scaler.getDecoratorTarget().getTarget(), scaler);
             actionManager.run(resizeAction);
 
-            scaler.setDragging(false);
-            oldPosition = null;
-            oldSize = null;
+            cancelDrag(scaler);
         });
     }
 
@@ -214,9 +209,7 @@ public class CursorTool extends Tool {
             }
 
             actionManager.run(moveAction);
-            startDragPosition = null;
-            draggedElement = null;
-            scaler.setDragging(false);
+            cancelDrag(scaler);
         });
     }
 
@@ -256,7 +249,6 @@ public class CursorTool extends Tool {
         if (!isDragging) {
             return;
         }
-        isDragging = false;
         Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
         selectionManager.getCurrentSelection().forEach(element -> {
             element.setCurrentlyModified(false);
@@ -265,8 +257,7 @@ public class CursorTool extends Tool {
         Action moveAction = actionManager.getActionFactory()
             .createMoveBlockViewModelElementAction(endWorldPos.subtract(startDragPosition));
         actionManager.run(moveAction);
-        startDragPosition = null;
-        draggedElement = null;
+        cancelDrag();
     }
 
     private void selectElement(ViewElement<?> viewElement, boolean newSelection) {
@@ -296,5 +287,16 @@ public class CursorTool extends Tool {
 
         return editorViewModel.transformViewPortToWorldCoordinates(
             new Point2D(parentX + point.getX(), parentY + point.getY()).multiply(editorViewModel.getZoomScale()));
+    }
+
+    private void cancelDrag(ElementScalerBlock scaler) {
+        scaler.setDragging(false);
+        cancelDrag();
+    }
+
+    private void cancelDrag() {
+        startDragPosition = null;
+        draggedElement = null;
+        isDragging = false;
     }
 }

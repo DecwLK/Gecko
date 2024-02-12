@@ -54,10 +54,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         this.inputPortsAligner = new VBox();
         this.outputPortsAligner = new VBox();
 
-        inputPortsAligner.layoutBoundsProperty()
-            .addListener((observable, oldValue, newValue) -> updatePortViewModels());
-        outputPortsAligner.layoutBoundsProperty()
-            .addListener((observable, oldValue, newValue) -> updatePortViewModels());
         bindViewModel();
         constructVisualization();
     }
@@ -65,10 +61,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     @Override
     public Node drawElement() {
         return this;
-    }
-
-    @Override
-    public void setEdgePoint(int index, Point2D point) {
     }
 
     @Override
@@ -145,6 +137,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     private void addPort(PortViewModel portViewModel) {
         portViewModel.getVisibilityProperty().addListener(this::onVisibilityChanged);
         PortViewElement portViewElement = new PortViewElement(portViewModel);
+        portViewElement.layoutYProperty().addListener((observable, oldValue, newValue) -> updatePortViewModels());
         portViewElements.add(portViewElement);
         if (portViewModel.getVisibility() == Visibility.INPUT) {
             inputPortsAligner.getChildren().add(portViewElement);

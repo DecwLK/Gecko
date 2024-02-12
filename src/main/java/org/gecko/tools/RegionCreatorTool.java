@@ -6,6 +6,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.gecko.actions.ActionManager;
+import org.gecko.viewmodel.BlockViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
 /**
@@ -31,12 +32,12 @@ public class RegionCreatorTool extends AreaTool {
 
     @Override
     void onAreaCreated(MouseEvent event, Bounds worldAreaBounds) {
-        if (worldAreaBounds.getWidth() * worldAreaBounds.getHeight() < PositionableViewModelElement.MIN_AREA) {
+        if (worldAreaBounds.getWidth() < BlockViewModelElement.MIN_WIDTH
+            || worldAreaBounds.getHeight() < BlockViewModelElement.MIN_HEIGHT) {
             return;
         }
         actionManager.run(actionManager.getActionFactory()
             .createCreateRegionViewModelElementAction(new Point2D(worldAreaBounds.getMinX(), worldAreaBounds.getMinY()),
                 new Point2D(worldAreaBounds.getWidth(), worldAreaBounds.getHeight()), color));
-
     }
 }

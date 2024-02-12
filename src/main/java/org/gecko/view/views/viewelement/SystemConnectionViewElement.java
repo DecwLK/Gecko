@@ -48,8 +48,9 @@ public class SystemConnectionViewElement extends ConnectionViewElement
     }
 
     @Override
-    public void setEdgePoint(int index, Point2D point) {
+    public boolean setEdgePoint(int index, Point2D point) {
         systemConnectionViewModel.setEdgePoint(index, point);
+        return true;
     }
 
     @Override

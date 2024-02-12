@@ -155,7 +155,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     private void maskPathSource() {
         // If source and destination are the same, draw a loop
         if (edgeViewModel.getSource().equals(edgeViewModel.getDestination()) && getEdgePoints().size() == 2) {
-            setLoop(true);
+            if (!isLoop()) {
+                setLoop(true);
+            }
             setEdgePoint(0, edgeViewModel.getSource().getPosition());
             setEdgePoint(getEdgePoints().size() - 1, edgeViewModel.getSource()
                 .getPosition()
@@ -163,6 +165,11 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
                     edgeViewModel.getSource().getLoopOffset(edgeViewModel) * LOOP_RADIUS + FIRST_LOOP_RADIUS)));
             updatePathVisualization();
             return;
+        }
+
+        if (isLoop()) {
+            setLoop(false);
+            updatePathVisualization();
         }
 
         double sourceEdgeOffset = edgeViewModel.getSource().getEdgeOffset(edgeViewModel);
@@ -194,8 +201,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     }
 
     @Override
-    public void setEdgePoint(int index, Point2D point) {
+    public boolean setEdgePoint(int index, Point2D point) {
         edgeViewModel.setEdgePoint(index, point);
+        return true;
     }
 
     @Override

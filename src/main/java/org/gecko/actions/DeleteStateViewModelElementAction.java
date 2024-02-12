@@ -22,7 +22,7 @@ public class DeleteStateViewModelElementAction extends AbstractPositionableViewM
     private final StateViewModel stateViewModel;
     private final Automaton automaton;
     private final SystemViewModel systemViewModel;
-    private boolean wasStartState;
+    private final boolean wasStartState;
 
     DeleteStateViewModelElementAction(
         GeckoViewModel geckoViewModel, StateViewModel stateViewModel, SystemViewModel systemViewModel) {
@@ -56,6 +56,7 @@ public class DeleteStateViewModelElementAction extends AbstractPositionableViewM
             systemViewModel.setStartState(null);
         }
         systemViewModel.updateTarget();
+        automaton.removeState(stateViewModel.getTarget());
         geckoViewModel.deleteViewModelElement(stateViewModel);
         return true;
     }

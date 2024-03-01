@@ -96,5 +96,5 @@ class CursorToolTest {
         robot.clickOn(sourceViewElement.drawElement(), MouseButton.PRIMARY);
         robot.drag(sourceViewElement.drawElement(), MouseButton.PRIMARY).dropTo(destinationViewElement.drawElement());
     }
-    */
+     */
 }

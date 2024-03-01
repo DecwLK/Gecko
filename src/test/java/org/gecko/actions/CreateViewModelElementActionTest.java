@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import org.gecko.exceptions.ModelException;
+import org.gecko.model.Visibility;
 import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
+import org.gecko.viewmodel.PortViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
@@ -31,102 +33,147 @@ class CreateViewModelElementActionTest {
     }
 
     @Test
-    void run() throws ModelException {
-        Action createStateViewModelElementAction =
-            actionFactory.createCreateStateViewModelElementAction(new Point2D(100, 100));
-        actionManager.run(createStateViewModelElementAction);
-
-        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 1);
-
-        StateViewModel stateViewModel1 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
-        StateViewModel stateViewModel2 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
-        Action createContractAction = actionFactory.createCreateContractViewModelElementAction(stateViewModel1);
+    void createContractAction() throws ModelException {
+        StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        Action createContractAction = actionFactory.createCreateContractViewModelElementAction(stateViewModel);
         actionManager.run(createContractAction);
-
-        assertEquals(stateViewModel1.getContracts().size(), 1);
-
-        Action createRegionViewModelElementAction =
-            actionFactory.createCreateRegionViewModelElementAction(new Point2D(100, 100), new Point2D(200, 200),
-                Color.RED);
-        actionManager.run(createRegionViewModelElementAction);
-
-        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 4);
-        assertEquals(geckoViewModel.getCurrentEditor().getRegionViewModels(stateViewModel1).size(), 1);
-
-        Action createEdgeViewModelElementAction =
-            actionFactory.createCreateEdgeViewModelElementAction(stateViewModel1, stateViewModel2);
-        actionManager.run(createEdgeViewModelElementAction);
-
-        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 5);
-        assertEquals(stateViewModel1.getOutgoingEdges().size(), 1);
-        assertEquals(stateViewModel2.getIncomingEdges().size(), 1);
-
-        geckoViewModel.switchEditor(rootSystemViewModel, false);
-
-        Action createSystemViewModelElementAction =
-            actionFactory.createCreateSystemViewModelElementAction(new Point2D(100, 100));
-        actionManager.run(createSystemViewModelElementAction);
-
-        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 1);
-
-        SystemViewModel systemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
-        SystemViewModel systemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
-
-        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 3);
-
-        Action createPortViewModelElementAction1 =
-            actionFactory.createCreatePortViewModelElementAction(systemViewModel1);
-        actionManager.run(createPortViewModelElementAction1);
-        Action createPortViewModelElementAction2 =
-            actionFactory.createCreatePortViewModelElementAction(systemViewModel2);
-        actionManager.run(createPortViewModelElementAction2);
-
-        Action createSystemConnectionViewModelElementAction =
-            actionFactory.createCreateSystemConnectionViewModelElementAction(systemViewModel1.getPorts().getFirst(),
-                systemViewModel2.getPorts().getFirst());
-        actionManager.run(createSystemConnectionViewModelElementAction);
-        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 3);
+        assertEquals(stateViewModel.getContracts().size(), 1);
     }
 
     @Test
-    void getUndoAction() throws ModelException {
-        Action createStateViewModelElementAction =
-            actionFactory.createCreateStateViewModelElementAction(new Point2D(100, 100));
-        actionManager.run(createStateViewModelElementAction);
-
-        StateViewModel stateViewModel1 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
-        StateViewModel stateViewModel2 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
-
-        Action createContractAction = actionFactory.createCreateContractViewModelElementAction(stateViewModel1);
+    void undoContractAction() throws ModelException {
+        StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        Action createContractAction = actionFactory.createCreateContractViewModelElementAction(stateViewModel);
         actionManager.run(createContractAction);
+        actionManager.undo();
+        assertEquals(stateViewModel.getContracts().size(), 0);
+    }
 
+    @Test
+    void createRegionViewModelElementAction() throws ModelException {
+        StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         Action createRegionViewModelElementAction =
             actionFactory.createCreateRegionViewModelElementAction(new Point2D(100, 100), new Point2D(200, 200),
                 Color.RED);
         actionManager.run(createRegionViewModelElementAction);
+        assertEquals(geckoViewModel.getCurrentEditor().getRegionViewModels(stateViewModel).size(), 1);
+    }
 
+    @Test
+    void undoRegionViewModelElementAction() throws ModelException {
+        StateViewModel stateViewModel = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        Action createRegionViewModelElementAction =
+            actionFactory.createCreateRegionViewModelElementAction(new Point2D(100, 100), new Point2D(200, 200),
+                Color.RED);
+        actionManager.run(createRegionViewModelElementAction);
+        actionManager.undo();
+        assertEquals(geckoViewModel.getCurrentEditor().getRegionViewModels(stateViewModel).size(), 0);
+    }
+
+    @Test
+    void createEdgeViewModelElementAction() throws ModelException {
+        StateViewModel stateViewModel1 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        StateViewModel stateViewModel2 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         Action createEdgeViewModelElementAction =
             actionFactory.createCreateEdgeViewModelElementAction(stateViewModel1, stateViewModel2);
         actionManager.run(createEdgeViewModelElementAction);
+        assertEquals(stateViewModel1.getOutgoingEdges().size(), 1);
+        assertEquals(stateViewModel2.getIncomingEdges().size(), 1);
+    }
 
-        actionManager.run(createEdgeViewModelElementAction.getUndoAction(actionFactory));
+    @Test
+    void undoEdgeViewModelElementAction() throws ModelException {
+        StateViewModel stateViewModel1 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        StateViewModel stateViewModel2 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        Action createEdgeViewModelElementAction =
+            actionFactory.createCreateEdgeViewModelElementAction(stateViewModel1, stateViewModel2);
+        actionManager.run(createEdgeViewModelElementAction);
+        actionManager.undo();
         assertEquals(stateViewModel1.getOutgoingEdges().size(), 0);
         assertEquals(stateViewModel2.getIncomingEdges().size(), 0);
+    }
 
-        actionManager.run(createContractAction.getUndoAction(actionFactory));
-        assertEquals(stateViewModel1.getContracts().size(), 0);
-
-        actionManager.run(createStateViewModelElementAction.getUndoAction(actionFactory));
-        actionManager.run(createRegionViewModelElementAction.getUndoAction(actionFactory));
-        assertEquals(geckoViewModel.getCurrentEditor().getRegionViewModels(stateViewModel1).size(), 0);
-
+    @Test
+    void createSystemViewModelElementAction() throws ModelException {
         geckoViewModel.switchEditor(rootSystemViewModel, false);
-
         Action createSystemViewModelElementAction =
             actionFactory.createCreateSystemViewModelElementAction(new Point2D(100, 100));
         actionManager.run(createSystemViewModelElementAction);
-        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 4);
-        actionManager.run(createSystemViewModelElementAction.getUndoAction(actionFactory));
-        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 3);
+        assertEquals(rootSystemViewModel.getTarget().getChildren().size(), 5);
+    }
+
+    @Test
+    void undoSystemViewModelElementAction() throws ModelException {
+        geckoViewModel.switchEditor(rootSystemViewModel, false);
+        Action createSystemViewModelElementAction =
+            actionFactory.createCreateSystemViewModelElementAction(new Point2D(100, 100));
+        actionManager.run(createSystemViewModelElementAction);
+        actionManager.undo();
+        assertEquals(rootSystemViewModel.getTarget().getChildren().size(), 7);
+    }
+
+    @Test
+    void createPortViewModelElementAction() throws ModelException {
+        SystemViewModel systemViewModel = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
+        Action createPortViewModelElementAction = actionFactory.createCreatePortViewModelElementAction(systemViewModel);
+        actionManager.run(createPortViewModelElementAction);
+        assertEquals(systemViewModel.getPorts().size(), 1);
+    }
+
+    @Test
+    void undoPortViewModelElementAction() throws ModelException {
+        SystemViewModel systemViewModel = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
+        Action createPortViewModelElementAction = actionFactory.createCreatePortViewModelElementAction(systemViewModel);
+        actionManager.run(createPortViewModelElementAction);
+        actionManager.undo();
+        assertEquals(systemViewModel.getPorts().size(), 0);
+    }
+
+    @Test
+    void createSystemConnectionViewModelElementAction() throws ModelException {
+        SystemViewModel systemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
+        SystemViewModel systemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
+        PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
+        portViewModel1.setVisibility(Visibility.OUTPUT);
+        PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
+        portViewModel2.setVisibility(Visibility.INPUT);
+        Action createSystemConnectionViewModelElementAction =
+            actionFactory.createCreateSystemConnectionViewModelElementAction(portViewModel1, portViewModel2);
+        actionManager.run(createSystemConnectionViewModelElementAction);
+        assertEquals(rootSystemViewModel.getTarget().getConnections().size(), 1);
+    }
+
+    @Test
+    void undoSystemConnectionViewModelElementAction() throws ModelException {
+        SystemViewModel systemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
+        SystemViewModel systemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
+        PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
+        portViewModel1.setVisibility(Visibility.OUTPUT);
+        PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
+        portViewModel2.setVisibility(Visibility.INPUT);
+        Action createSystemConnectionViewModelElementAction =
+            actionFactory.createCreateSystemConnectionViewModelElementAction(portViewModel1, portViewModel2);
+        actionManager.run(createSystemConnectionViewModelElementAction);
+        actionManager.undo();
+        assertEquals(rootSystemViewModel.getTarget().getConnections().size(), 0);
+    }
+
+    @Test
+    void createStateViewModel() throws ModelException {
+        Action createStateViewModelElementAction =
+            actionFactory.createCreateStateViewModelElementAction(new Point2D(100, 100));
+        actionManager.run(createStateViewModelElementAction);
+
+        assertEquals(rootSystemViewModel.getTarget().getAutomaton().getStates().size(), 7);
+    }
+
+    @Test
+    void undoStateViewModel() throws ModelException {
+        Action createStateViewModelElementAction =
+            actionFactory.createCreateStateViewModelElementAction(new Point2D(100, 100));
+        actionManager.run(createStateViewModelElementAction);
+        actionManager.undo();
+
+        assertEquals(rootSystemViewModel.getTarget().getAutomaton().getStates().size(), 2);
     }
 }

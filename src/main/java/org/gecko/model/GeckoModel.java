@@ -28,7 +28,7 @@ public class GeckoModel {
         this.root = modelFactory.createRoot();
     }
 
-    public GeckoModel(System root) {
+    public GeckoModel(@NonNull System root) {
         this.modelFactory = new ModelFactory(this);
         this.root = root;
     }
@@ -73,7 +73,8 @@ public class GeckoModel {
         }
 
         Automaton automaton = system.getAutomaton();
-        if (automaton.getRegions().stream().anyMatch(region -> region.getName().equals(name))) {
+        if (automaton.getRegions().stream().anyMatch(region -> region.getName().equals(name)
+            || region.getPreAndPostCondition().getName().equals(name))) {
             return false;
         }
         for (State state : automaton.getStates()) {

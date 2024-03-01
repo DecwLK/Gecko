@@ -148,6 +148,8 @@ public class AutomatonTest {
 
     @Test
     void testManagingStates() {
+        assertDoesNotThrow(() -> automatonWithStartState.removeState(startState));
+
         assertTrue(defaultAutomaton.getStates().isEmpty());
 
         defaultAutomaton.addState(startState);
@@ -159,6 +161,7 @@ public class AutomatonTest {
         assertDoesNotThrow(() -> defaultAutomaton.removeState(startState));
         assertEquals(1, defaultAutomaton.getStates().size());
         assertFalse(defaultAutomaton.getStates().contains(startState));
+        assertDoesNotThrow(() -> defaultAutomaton.removeState(startState));
 
         assertDoesNotThrow(() -> defaultAutomaton.removeState(ordinaryState));
         assertTrue(defaultAutomaton.getStates().isEmpty());
@@ -250,7 +253,19 @@ public class AutomatonTest {
     void isEmpty() {
         automatonWithStartState.getAllElements().forEach(e -> java.lang.System.out.println(e.getId()));
         assertTrue(defaultAutomaton.isEmpty());
-        assertTrue(automatonWithStartState.isEmpty()); // JsonCreator does not add startState to states
+        assertTrue(automatonWithStartState.isEmpty());
+
+        defaultAutomaton.addState(startState);
+        assertFalse(defaultAutomaton.isEmpty());
+        assertDoesNotThrow(() -> defaultAutomaton.removeState(startState));
+
+        defaultAutomaton.addEdge(edge1);
+        assertFalse(defaultAutomaton.isEmpty());
+        assertDoesNotThrow(() -> defaultAutomaton.removeEdge(edge1));
+
+        defaultAutomaton.addRegion(region1);
+        assertFalse(defaultAutomaton.isEmpty());
+        assertDoesNotThrow(() -> defaultAutomaton.removeRegion(region1));
     }
 
     @Test

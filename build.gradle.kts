@@ -1,6 +1,7 @@
 import net.ltgt.gradle.errorprone.errorprone
 
 plugins {
+    jacoco
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("java")
     id("application")
@@ -27,6 +28,8 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.testfx:testfx-junit5:4.0.18")
+    testImplementation("org.hamcrest:hamcrest:2.2")
 
     errorprone("com.google.errorprone:error_prone_core:2.23.0")
 
@@ -54,6 +57,11 @@ tasks.getByName("compileJava").dependsOn(generateGrammarSource)
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
 }
 
 application {

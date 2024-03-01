@@ -1,7 +1,7 @@
 package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.gecko.exceptions.ModelException;
 import org.gecko.util.TestHelper;
@@ -12,11 +12,10 @@ import org.gecko.viewmodel.ViewModelFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class CreateContractViewModelElementActionTest {
-
-    private static StateViewModel state;
+public class ChangeCodeSystemViewModelElementActionTest {
     private static ActionManager actionManager;
     private static ActionFactory actionFactory;
+    private static SystemViewModel systemViewModel;
 
     @BeforeAll
     static void setUp() throws ModelException {
@@ -24,28 +23,30 @@ class CreateContractViewModelElementActionTest {
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        SystemViewModel rootSystemViewModel =
+        systemViewModel =
             viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
-        try {
-            state = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
-        } catch (Exception e) {
-            fail();
-        }
-        geckoViewModel.switchEditor(rootSystemViewModel, true);
     }
 
     @Test
     void run() {
-        Action createContractAction = actionFactory.createCreateContractViewModelElementAction(state);
-        actionManager.run(createContractAction);
-        assertEquals(1, state.getContractsProperty().size());
-        assertEquals(1, state.getTarget().getContracts().size());
+        Action changeCodeAction =
+            actionFactory.createChangeCodeSystemViewModelAction(systemViewModel, "newCode");
+        actionManager.run(changeCodeAction);
+        assertEquals("newCode", systemViewModel.getCode());
+
+        Action changeCodeAction2 =
+            actionFactory.createChangeCodeSystemViewModelAction(systemViewModel, "");
+        actionManager.run(changeCodeAction2);
+        assertNull(systemViewModel.getCode());
     }
 
     @Test
     void getUndoAction() {
+        Action changeCodeAction = actionFactory.createChangeCodeSystemViewModelAction(systemViewModel, "newCode2");
+        String beforeChangeCode = systemViewModel.getCode();
+        actionManager.run(changeCodeAction);
+        assertEquals("newCode2", systemViewModel.getCode());
         actionManager.undo();
-        assertEquals(0, state.getContractsProperty().size());
-        assertEquals(0, state.getTarget().getContracts().size());
+        assertEquals(beforeChangeCode, systemViewModel.getCode());
     }
 }

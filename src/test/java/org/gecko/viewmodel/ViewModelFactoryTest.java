@@ -15,6 +15,7 @@ import org.gecko.model.ModelFactory;
 import org.gecko.model.Region;
 import org.gecko.model.State;
 import org.gecko.model.System;
+import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
 import org.gecko.util.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,6 +89,23 @@ class ViewModelFactoryTest {
         assertEquals(systemConnectionViewModel.getTarget().getDestination(), portViewModel2.getTarget());
         assertEquals(systemConnectionViewModel.getSource(), portViewModel1);
         assertEquals(systemConnectionViewModel.getDestination(), portViewModel2);
+    }
+
+    @Test
+    void testAddSystemConnectionFrom() throws MissingViewModelElementException, ModelException {
+        assertTrue(root.getTarget().getConnections().isEmpty());
+        PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
+        PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
+        SystemConnectionViewModel systemConnectionViewModel = null;
+        try {
+            systemConnectionViewModel =
+                viewModelFactory.createSystemConnectionViewModelIn(root, portViewModel1, portViewModel2);
+        } catch (ModelException e) {
+            fail();
+        }
+
+        viewModelFactory.createSystemConnectionViewModelFrom(systemConnectionViewModel.getTarget());
+        assertEquals(1, root.getTarget().getConnections().size());
     }
 
     @Test

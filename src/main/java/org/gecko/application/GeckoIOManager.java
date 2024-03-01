@@ -183,7 +183,7 @@ public class GeckoIOManager {
     }
 
 
-    void setStage(Stage stage) {
+    public void setStage(Stage stage) {
         this.stage = stage;
         stage.setOnCloseRequest(e -> {
             try {

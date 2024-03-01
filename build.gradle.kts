@@ -28,6 +28,8 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.testfx:testfx-junit5:4.0.18")
+    testImplementation("org.hamcrest:hamcrest:2.2")
 
     errorprone("com.google.errorprone:error_prone_core:2.23.0")
 

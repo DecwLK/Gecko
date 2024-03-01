@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Set;
 import org.gecko.exceptions.ModelException;
-import org.gecko.model.Kind;
 import org.gecko.util.TestHelper;
+import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -37,6 +37,8 @@ public class DeletePositionableViewModelElementActionTest {
         StateViewModel stateViewModel2 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         EdgeViewModel edge =
             viewModelFactory.createEdgeViewModelIn(rootSystemViewModel, stateViewModel1, stateViewModel2);
+        ContractViewModel contractViewModel = viewModelFactory.createContractViewModelIn(stateViewModel1);
+        edge.setContract(contractViewModel);
         RegionViewModel regionViewModel = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
         SystemViewModel systemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         SystemViewModel systemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
@@ -69,11 +71,15 @@ public class DeletePositionableViewModelElementActionTest {
         geckoViewModel.switchEditor(rootSystemViewModel, false);
         assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 0);
 
-        Action undoAction = deleteAction.getUndoAction(actionFactory);
-        actionManager.run(undoAction);
+        actionManager.undo();
 
         assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 3);
         geckoViewModel.switchEditor(rootSystemViewModel, false);
         assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 3);
+
+        actionManager.redo();
+        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 0);
+        geckoViewModel.switchEditor(rootSystemViewModel, false);
+        assertEquals(geckoViewModel.getCurrentEditor().getPositionableViewModelElements().size(), 0);
     }
 }

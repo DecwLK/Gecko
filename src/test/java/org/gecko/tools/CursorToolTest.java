@@ -1,26 +1,12 @@
 package org.gecko.tools;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import javafx.geometry.Point2D;
-import javafx.scene.input.MouseButton;
-import javafx.stage.Stage;
-import org.gecko.application.GeckoIOManager;
-import org.gecko.application.GeckoManager;
-import org.gecko.exceptions.ModelException;
 import org.gecko.view.GeckoView;
-import org.gecko.view.views.viewelement.StateViewElement;
-import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
 
 @ExtendWith(ApplicationExtension.class)
 class CursorToolTest {

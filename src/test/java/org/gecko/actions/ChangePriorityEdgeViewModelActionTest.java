@@ -1,11 +1,10 @@
 package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.gecko.exceptions.ModelException;
+import org.gecko.model.Kind;
 import org.gecko.util.TestHelper;
-import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -14,11 +13,10 @@ import org.gecko.viewmodel.ViewModelFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ChangeContractEdgeViewModelActionTest {
+public class ChangePriorityEdgeViewModelActionTest {
     private EdgeViewModel edge;
     private ActionManager actionManager;
     private ActionFactory actionFactory;
-    private ContractViewModel contractViewModel;
 
     @BeforeEach
     void setUp() throws ModelException {
@@ -33,23 +31,22 @@ public class ChangeContractEdgeViewModelActionTest {
         StateViewModel stateViewModel2 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
 
         edge = viewModelFactory.createEdgeViewModelIn(rootSystemViewModel, stateViewModel1, stateViewModel2);
-        contractViewModel = viewModelFactory.createContractViewModelIn(stateViewModel1);
     }
 
     @Test
     void run() {
-        Action changeContractAction = actionFactory.createChangeContractEdgeViewModelAction(edge, contractViewModel);
-        actionManager.run(changeContractAction);
-        assertEquals(contractViewModel, edge.getContract());
-        assertEquals(contractViewModel.getTarget(), edge.getTarget().getContract());
+        Action changePriorityAction = actionFactory.createModifyEdgeViewModelPriorityAction(edge, 4);
+        actionManager.run(changePriorityAction);
+        assertEquals(4, edge.getPriority());
     }
 
     @Test
     void getUndoAction() {
-        Action changeContractAction = actionFactory.createChangeContractEdgeViewModelAction(edge, contractViewModel);
-        ContractViewModel beforeChangeContract = edge.getContract();
-        actionManager.run(changeContractAction);
+        Action changePriorityAction = actionFactory.createModifyEdgeViewModelPriorityAction(edge, 4);
+        int beforePriority = edge.getPriority();
+        actionManager.run(changePriorityAction);
         actionManager.undo();
-        assertNull(edge.getContract());
+        assertEquals(beforePriority, edge.getPriority());
+        assertEquals(beforePriority, edge.getTarget().getPriority());
     }
 }

@@ -15,7 +15,7 @@ import org.gecko.exceptions.ModelException;
  * data.
  */
 @Getter
-@Setter(onMethod_ = {@NonNull})
+@Setter(onParam_ = {@NonNull})
 public class Region extends Element implements Renamable {
     private String name;
     private Condition invariant;
@@ -24,8 +24,9 @@ public class Region extends Element implements Renamable {
 
     @JsonCreator
     public Region(
-        @JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("invariant") Condition invariant,
-        @JsonProperty("preAndPostCondition") Contract preAndPostCondition) throws ModelException {
+        @JsonProperty("id") int id, @JsonProperty("name") String name,
+        @JsonProperty("invariant") @NonNull Condition invariant,
+        @JsonProperty("preAndPostCondition") @NonNull Contract preAndPostCondition) throws ModelException {
         super(id);
         setName(name);
         this.states = new HashSet<>();
@@ -39,11 +40,6 @@ public class Region extends Element implements Renamable {
             throw new ModelException("Region's name is invalid.");
         }
         this.name = name;
-    }
-
-    @Override
-    public void accept(ElementVisitor visitor) throws MatchException, ModelException {
-        visitor.visit(this);
     }
 
     public void addState(@NonNull State state) {

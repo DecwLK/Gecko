@@ -14,7 +14,7 @@ import org.gecko.exceptions.ModelException;
  */
 
 @Getter
-@Setter(onMethod_ = {@NonNull})
+@Setter(onParam_ = {@NonNull})
 public class Contract extends Element implements Renamable {
     private String name;
     private Condition preCondition;
@@ -37,11 +37,6 @@ public class Contract extends Element implements Renamable {
             throw new ModelException("Contract's name is invalid.");
         }
         this.name = name;
-    }
-
-    @Override
-    public void accept(ElementVisitor visitor) {
-        visitor.visit(this);
     }
 
     @JsonIgnore

@@ -48,9 +48,4 @@ public class SystemConnection extends Element {
         this.destination = destination;
         this.destination.setHasIncomingConnection(true);
     }
-
-    @Override
-    public void accept(ElementVisitor visitor) throws ModelException {
-        visitor.visit(this);
-    }
 }

@@ -25,10 +25,10 @@ public class System extends Element implements Renamable {
     private final Set<Variable> variables;
     private String name;
     @JsonIgnore
-    @Setter(onMethod_ = {@NonNull})
+    @Setter(onParam_ = {@NonNull})
     private System parent;
     private String code;
-    @Setter(onMethod_ = {@NonNull})
+    @Setter(onParam_ = {@NonNull})
     private Automaton automaton;
 
     @JsonCreator
@@ -138,11 +138,6 @@ public class System extends Element implements Renamable {
         return children.stream()
             .flatMap(child -> Stream.concat(Stream.of(child), child.getAllChildren().stream()))
             .toList();
-    }
-
-    @Override
-    public void accept(ElementVisitor visitor) throws ModelException {
-        visitor.visit(this);
     }
 
     @JsonIgnore

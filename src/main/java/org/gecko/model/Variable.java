@@ -14,7 +14,7 @@ import org.gecko.exceptions.ModelException;
  * {@link Visibility}.
  */
 @Getter
-@Setter(onMethod_ = {@NonNull})
+@Setter(onParam_ = {@NonNull})
 public class Variable extends Element implements Renamable {
     private String name;
     private String type;
@@ -61,10 +61,5 @@ public class Variable extends Element implements Renamable {
             throw new ModelException("Variable's value is invalid.");
         }
         this.value = value;
-    }
-
-    @Override
-    public void accept(ElementVisitor visitor) throws ModelException {
-        visitor.visit(this);
     }
 }

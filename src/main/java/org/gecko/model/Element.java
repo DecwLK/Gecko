@@ -5,8 +5,7 @@ import lombok.Getter;
 import org.gecko.exceptions.ModelException;
 
 /**
- * Represents an abstraction of an element in the domain model of a Gecko project. An {@link Element} has an id and
- * accepts {@link ElementVisitor}s.
+ * Represents an abstraction of an element in the domain model of a Gecko project. An {@link Element} has an id.
  */
 @Getter
 public abstract class Element {
@@ -18,8 +17,6 @@ public abstract class Element {
         }
         this.id = id;
     }
-
-    public abstract void accept(ElementVisitor visitor) throws ModelException;
 
     @Override
     public int hashCode() {

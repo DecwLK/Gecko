@@ -13,7 +13,7 @@ import org.gecko.exceptions.ModelException;
  * priority and a {@link Kind}, which informs about how the associated {@link Contract} is handled.
  */
 @Getter
-@Setter(onMethod_ = {@NonNull})
+@Setter(onParam_ = {@NonNull})
 public class Edge extends Element {
     private Contract contract;
     private Kind kind;
@@ -39,10 +39,5 @@ public class Edge extends Element {
             throw new ModelException("Negative edge priorities are not allowed.");
         }
         this.priority = priority;
-    }
-
-    @Override
-    public void accept(ElementVisitor visitor) throws ModelException {
-        visitor.visit(this);
     }
 }

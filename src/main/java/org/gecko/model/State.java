@@ -52,9 +52,4 @@ public class State extends Element implements Renamable {
             removeContract(contract);
         }
     }
-
-    @Override
-    public void accept(ElementVisitor visitor) throws ModelException {
-        visitor.visit(this);
-    }
 }

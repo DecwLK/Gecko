@@ -349,7 +349,7 @@
 }
 
 .combo-box .arrow, .combo-box .arrow-button {
-    -fx-background-color: -fx-fg0;
+    -fx-background-color: -fx-fg2;
     -fx-background-radius: 2;
     -fx-border-radius: 0;
     -fx-border-color: -fx-text;
@@ -374,6 +374,39 @@
 
 .inspector-delete-button {
     -fx-background-color: -fx-highlight;
+}
+
+.inspector-delete-button:hover {
+    -fx-background-color: -fx-highlight-hover;
+}
+
+/* remove-button is used for variable/contract */
+.inspector-remove-button {
+    -fx-background-color: -fx-highlight;
+}
+
+.inspector-remove-button:hover {
+    -fx-background-color: -fx-highlight-hover;
+}
+
+.inspector-start-state-button {
+    -fx-background-color: -fx-green;
+}
+
+.inspector-open-system-button {
+    -fx-background-color: -fx-highlight2;
+}
+
+.inspector-open-system-button:hover {
+    -fx-background-color: -fx-highlight2-hover;
+}
+
+.inspector-add-button {
+    -fx-background-color: -fx-highlight3;
+}
+
+.inspector-add-button:hover {
+    -fx-background-color: -fx-highlight3-hover;
 }
 
 .state-view-element-start {

@@ -11,11 +11,12 @@ import org.gecko.viewmodel.SystemViewModel;
  * {@link SystemViewModel} with a given {@link Visibility}.
  */
 public class InspectorAddVariableButton extends AbstractInspectorButton {
-
+    private static final String STYLE = "inspector-add-button";
     private static final int WIDTH = 70;
 
     public InspectorAddVariableButton(
         ActionManager actionManager, SystemViewModel systemViewModel, Visibility visibility) {
+        getStyleClass().add(STYLE);
         setText(ResourceHandler.getString("Buttons", "inspector_add_variable"));
         setPrefWidth(WIDTH);
         setOnAction(event -> {

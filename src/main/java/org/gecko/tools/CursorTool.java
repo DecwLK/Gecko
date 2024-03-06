@@ -34,6 +34,8 @@ import org.gecko.viewmodel.SystemConnectionViewModel;
  */
 public class CursorTool extends Tool {
 
+    private static final double DRAG_THRESHOLD = 4;
+
     private boolean isDragging = false;
     private final SelectionManager selectionManager;
     private final EditorViewModel editorViewModel;
@@ -219,10 +221,20 @@ public class CursorTool extends Tool {
                 return;
             }
             startDraggingElementHandler(event, element.drawElement());
-            selectElement(element, !event.isShiftDown());
+
+            if (!element.isSelected()) {
+                selectElement(element, !event.isShiftDown());
+            }
         });
         element.drawElement().setOnMouseDragged(this::dragElementsHandler);
-        element.drawElement().setOnMouseReleased(this::stopDraggingElementHandler);
+        element.drawElement().setOnMouseReleased(event -> {
+            stopDraggingElementHandler(event);
+
+            if (event.getButton() == MouseButton.PRIMARY && element.isSelected()
+                && startDragPosition.distance(previousDragPosition) * editorViewModel.getZoomScale() < DRAG_THRESHOLD) {
+                selectElement(element, !event.isShiftDown());
+            }
+        });
     }
 
     private void startDraggingElementHandler(MouseEvent event, Node element) {
@@ -295,7 +307,6 @@ public class CursorTool extends Tool {
     }
 
     private void cancelDrag() {
-        startDragPosition = null;
         draggedElement = null;
         isDragging = false;
     }

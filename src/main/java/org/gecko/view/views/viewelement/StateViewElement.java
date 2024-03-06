@@ -11,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -112,7 +113,7 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         contents.getChildren().add(new Separator());
 
         // Contracts
-        Label contracts = new Label("Contracts: " + stateViewModel.getContractsProperty().size());
+        Labeled contracts = new Label("Contracts: " + stateViewModel.getContractsProperty().size());
         contracts.textProperty()
             .bind(Bindings.createStringBinding(() -> "Contracts: " + stateViewModel.getContractsProperty().size(),
                 stateViewModel.getContractsProperty()));

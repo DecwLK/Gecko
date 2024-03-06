@@ -164,7 +164,6 @@ public class EditorView {
         // Set current tool
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
 
-
         // Viewport position listener
         viewModel.getRequestedViewPortPositionProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {

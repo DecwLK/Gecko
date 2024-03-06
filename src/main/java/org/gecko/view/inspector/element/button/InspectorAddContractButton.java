@@ -9,9 +9,11 @@ import org.gecko.viewmodel.StateViewModel;
  * {@link org.gecko.viewmodel.ContractViewModel ContractViewModel} to a given {@link StateViewModel}.
  */
 public class InspectorAddContractButton extends AbstractInspectorButton {
+    private static final String STYLE = "inspector-add-button";
     private static final int WIDTH = 70;
 
     public InspectorAddContractButton(ActionManager actionManager, StateViewModel stateViewModel) {
+        getStyleClass().add(STYLE);
         setText(ResourceHandler.getString("Buttons", "inspector_add_contract"));
         setPrefWidth(WIDTH);
         setOnAction(event -> {

@@ -16,8 +16,8 @@ public class InspectorCodeSystemField extends InspectorAreaField {
         this.systemViewModel = systemViewModel;
 
         prefHeightProperty().bind(
-            Bindings.createDoubleBinding(() -> getFont().getSize() * getParagraphs().size() + HEIGHT_THRESHOLD, fontProperty(),
-                textProperty()));
+            Bindings.createDoubleBinding(() -> getFont().getSize() * getParagraphs().size() + HEIGHT_THRESHOLD,
+                fontProperty(), textProperty()));
     }
 
     @Override

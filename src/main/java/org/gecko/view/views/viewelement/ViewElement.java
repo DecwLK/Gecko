@@ -49,8 +49,14 @@ public interface ViewElement<T extends PositionableViewModelElement<?>> {
      *
      * @param selected the selected state
      */
-    default void setSelected(boolean selected) {
-    }
+    void setSelected(boolean selected);
+
+    /**
+     * Get the selected state of the element.
+     *
+     * @return the selected state
+     */
+    boolean isSelected();
 
     /**
      * Get the target view model of the element.

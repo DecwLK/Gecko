@@ -15,8 +15,10 @@ public class ElementTest {
 
     @BeforeAll
     static void setUp() {
-        assertThrows(ModelException.class, () -> element = new Element(-1){});
-        assertDoesNotThrow(() -> element = new Element(0) {});
+        assertThrows(ModelException.class, () -> element = new Element(-1) {
+        });
+        assertDoesNotThrow(() -> element = new Element(0) {
+        });
     }
 
     @Test
@@ -29,8 +31,10 @@ public class ElementTest {
         assertTrue(element.equals(element));
 
         final Element[] other = new Element[4];
-        assertDoesNotThrow(() -> other[0] = new Element(1) {});
-        assertDoesNotThrow(() -> other[1] = new Element(0) {});
+        assertDoesNotThrow(() -> other[0] = new Element(1) {
+        });
+        assertDoesNotThrow(() -> other[1] = new Element(0) {
+        });
 
         assertDoesNotThrow(() -> other[2] = new State(2, "state"));
         assertDoesNotThrow(() -> other[3] = new State(0, "state"));

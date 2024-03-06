@@ -1,8 +1,6 @@
 package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.gecko.exceptions.ModelException;
 import org.gecko.tools.ToolType;

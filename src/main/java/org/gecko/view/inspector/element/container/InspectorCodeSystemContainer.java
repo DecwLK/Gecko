@@ -14,7 +14,6 @@ public class InspectorCodeSystemContainer extends VBox implements InspectorEleme
         getChildren().add(new InspectorLabel("Code"));
         InspectorAreaField codeField = new InspectorCodeSystemField(actionManager, viewModel);
         codeField.prefWidthProperty().bind(widthProperty().subtract(50));
-        codeField.setPrefHeight(100);
         getChildren().add(codeField);
     }
 

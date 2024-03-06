@@ -7,7 +7,7 @@ import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorElement;
 
 public abstract class InspectorAreaField extends TextArea implements InspectorElement<TextArea> {
-    private static final int MAX_HEIGHT = 30;
+    private static final int MAX_HEIGHT = 40;
     private static final int EXPANDED_MAX_HEIGHT = 90;
 
     protected InspectorAreaField(ActionManager actionManager, StringProperty stringProperty, boolean isEmptyAllowed) {
@@ -16,7 +16,7 @@ public abstract class InspectorAreaField extends TextArea implements InspectorEl
         setPrefHeight(MAX_HEIGHT);
         setWrapText(true);
 
-        setOnMouseExited(event -> {
+        focusedProperty().addListener(event -> {
             if ((getText() == null && stringProperty.get() == null) || (getText() != null && getText().equals(
                 stringProperty.get())) || (stringProperty.get() != null && stringProperty.get().equals(getText()))) {
                 return;

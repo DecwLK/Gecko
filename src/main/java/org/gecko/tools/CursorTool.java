@@ -182,7 +182,7 @@ public class CursorTool extends Tool {
                 return;
             }
             Point2D eventPosition =
-                viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
+                viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
             Point2D delta = eventPosition.subtract(previousDragPosition);
             scaler.setPosition(scaler.getPosition().add(delta));
             previousDragPosition = eventPosition;
@@ -192,7 +192,7 @@ public class CursorTool extends Tool {
                 return;
             }
             Point2D endWorldPos =
-                viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
+                viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
             scaler.setPosition(scaler.getPosition().add(startDragPosition.subtract(endWorldPos)));
             Action moveAction;
 
@@ -236,7 +236,7 @@ public class CursorTool extends Tool {
 
     private void startDraggingElementHandler(MouseEvent event) {
         isDragging = true;
-        startDragPosition = viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
+        startDragPosition = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
         previousDragPosition = startDragPosition;
     }
 
@@ -244,7 +244,7 @@ public class CursorTool extends Tool {
         if (!isDragging) {
             return;
         }
-        Point2D eventPosition = viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
+        Point2D eventPosition = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
         Point2D delta = eventPosition.subtract(previousDragPosition);
         selectionManager.getCurrentSelection().forEach(element -> {
             element.setCurrentlyModified(true);
@@ -257,7 +257,7 @@ public class CursorTool extends Tool {
         if (!isDragging) {
             return;
         }
-        Point2D endWorldPos = viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
+        Point2D endWorldPos = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
         selectionManager.getCurrentSelection().forEach(element -> {
             element.setCurrentlyModified(false);
             element.setPosition(element.getPosition().add(startDragPosition.subtract(endWorldPos)));

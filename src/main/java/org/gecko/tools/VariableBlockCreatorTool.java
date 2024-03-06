@@ -26,7 +26,7 @@ public class VariableBlockCreatorTool extends Tool {
                 return;
             }
 
-            Point2D position = pane.screenToWorldCoordinates(new Point2D(event.getX(), event.getY()));
+            Point2D position = pane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
             Action createVariableBlockAction = actionManager.getActionFactory().createCreateVariableAction(position);
             actionManager.run(createVariableBlockAction);
         });

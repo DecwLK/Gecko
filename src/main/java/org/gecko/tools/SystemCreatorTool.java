@@ -22,11 +22,10 @@ public class SystemCreatorTool extends Tool {
             if (event.isConsumed()) {
                 return;
             }
-
             if (event.getButton() != MouseButton.PRIMARY) {
                 return;
             }
-            Point2D point = pane.screenToWorldCoordinates(new Point2D(event.getX(), event.getY()));
+            Point2D point = pane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
             Action createSystemAction =
                 actionManager.getActionFactory().createCreateSystemViewModelElementAction(point);
             actionManager.run(createSystemAction);

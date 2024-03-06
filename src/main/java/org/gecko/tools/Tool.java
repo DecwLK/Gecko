@@ -45,6 +45,7 @@ public abstract class Tool implements ViewElementVisitor {
     public void visitView(ViewElementPane pane) {
         pane.draw().setCursor(Cursor.DEFAULT);
         setAllHandlers(pane.draw(), null);
+        setAllHandlers(pane.getWorld(), null);
     }
 
     /**

@@ -302,6 +302,7 @@ public class EditorView {
 
         oldValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(false));
         newValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(true));
+        viewElementPane.onSelectionChanged();
     }
 
     protected void switchToCursorTool() {

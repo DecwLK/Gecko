@@ -45,8 +45,8 @@ import org.gecko.view.views.ViewElementSearchVisitor;
  */
 @Data
 public class EditorViewModel {
-    private static final double MAX_ZOOM_SCALE = 5;
-    private static final double MIN_ZOOM_SCALE = 0.05;
+    private static final double MAX_ZOOM_SCALE = 3;
+    private static final double MIN_ZOOM_SCALE = 0.1;
     private final int id;
     private final ActionManager actionManager;
     private final SystemViewModel currentSystem;
@@ -262,8 +262,7 @@ public class EditorViewModel {
         if (factor < 0) {
             throw new IllegalArgumentException("Zoom factor must be positive");
         }
-        zoomScaleProperty.set(
-            Math.round(Math.clamp(zoomScaleProperty.get() * factor, MIN_ZOOM_SCALE, MAX_ZOOM_SCALE) * 1000) / 1000.0);
+        zoomScaleProperty.set((Math.clamp(zoomScaleProperty.get() * factor, MIN_ZOOM_SCALE, MAX_ZOOM_SCALE)));
         pivot = pivot.multiply(1 / zoomScaleProperty.get());
         double newX = pivot.getX() * (factor - 1) + factor * pivotProperty.getValue().getX();
         double newY = pivot.getY() * (factor - 1) + factor * pivotProperty.getValue().getY();

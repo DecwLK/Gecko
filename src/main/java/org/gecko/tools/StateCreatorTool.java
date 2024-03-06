@@ -24,9 +24,8 @@ public class StateCreatorTool extends Tool {
                 return;
             }
 
-            Point2D position = new Point2D(event.getX(), event.getY());
-            Action createStateAction = actionManager.getActionFactory()
-                .createCreateStateViewModelElementAction(pane.screenToWorldCoordinates(position));
+            Point2D position = pane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
+            Action createStateAction = actionManager.getActionFactory().createCreateStateViewModelElementAction(position);
             actionManager.run(createStateAction);
         });
     }

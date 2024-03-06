@@ -19,7 +19,9 @@ import org.gecko.view.views.ViewElementPane;
 public abstract class AreaTool extends Tool {
 
     private Point2D startPosition;
+    private Point2D startScreenPosition;
     private Rectangle area;
+    private ScrollPane view;
 
     public AreaTool(ActionManager actionManager, ToolType toolType) {
         super(actionManager, toolType);
@@ -28,31 +30,29 @@ public abstract class AreaTool extends Tool {
     @Override
     public void visitView(ViewElementPane pane) {
         super.visitView(pane);
-        ScrollPane view = pane.draw();
+        view = pane.draw();
+        Pane world = pane.getWorld();
         view.setPannable(false);
         view.setCursor(Cursor.CROSSHAIR);
         startPosition = null;
-        Pane world = (Pane) view.getContent();
 
-        view.setOnMousePressed(event -> {
-            System.out.println("pressed");
+        world.setOnMousePressed(event -> {
             if (event.getButton() != MouseButton.PRIMARY) {
                 return;
             }
-
-            startPosition = world.sceneToLocal(event.getSceneX(), event.getSceneY());
+            startPosition = pane.screenToLocalCoordinates(event.getScreenX(), event.getScreenY());
+            startScreenPosition = new Point2D(event.getScreenX(), event.getScreenY());
             area = createNewArea();
             area.setX(startPosition.getX());
             area.setY(startPosition.getY());
             world.getChildren().add(area);
         });
 
-        view.setOnMouseDragged(event -> {
-            System.out.println("dragged");
+        world.setOnMouseDragged(event -> {
             if (startPosition == null) {
                 return;
             }
-            Point2D dragPosition = world.sceneToLocal(event.getSceneX(), event.getSceneY());
+            Point2D dragPosition = pane.screenToLocalCoordinates(event.getScreenX(), event.getScreenY());
             Bounds areaBounds = calculateAreaBounds(startPosition, dragPosition);
             area.setX(areaBounds.getMinX());
             area.setY(areaBounds.getMinY());
@@ -60,33 +60,28 @@ public abstract class AreaTool extends Tool {
             area.setHeight(areaBounds.getHeight());
         });
 
-        view.setOnMouseReleased(event -> {
-            System.out.println("released");
+        world.setOnMouseReleased(event -> {
             if (startPosition == null) {
                 return;
             }
-            world.getChildren().remove(area); //TODO
-            Bounds areaBounds =
-                calculateAreaBounds(startPosition, world.sceneToLocal(event.getSceneX(), event.getSceneY()));
-            onAreaCreated(event, areaBounds);
+            world.getChildren().remove(area);
+            Point2D endPos = pane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
+            onAreaCreated(event, calculateAreaBounds(pane.screenToWorldCoordinates(startScreenPosition), endPos));
             startPosition = null;
+            startScreenPosition = null;
         });
     }
 
-    abstract Rectangle createNewArea();
-
-    protected Bounds calculateAreaBounds(Point2D startPosition, Point2D eventPosition) {
-        Point2D topLeft = new Point2D(Math.min(startPosition.getX(), eventPosition.getX()),
-            Math.min(startPosition.getY(), eventPosition.getY()));
-        Point2D bottomRight = new Point2D(Math.max(startPosition.getX(), eventPosition.getX()),
-            Math.max(startPosition.getY(), eventPosition.getY()));
+    protected Bounds calculateAreaBounds(Point2D startPosition, Point2D endPosition) {
+        Point2D topLeft = new Point2D(Math.min(startPosition.getX(), endPosition.getX()),
+            Math.min(startPosition.getY(), endPosition.getY()));
+        Point2D bottomRight = new Point2D(Math.max(startPosition.getX(), endPosition.getX()),
+            Math.max(startPosition.getY(), endPosition.getY()));
         return new BoundingBox(topLeft.getX(), topLeft.getY(), bottomRight.getX() - topLeft.getX(),
             bottomRight.getY() - topLeft.getY());
     }
 
-    abstract void onAreaCreated(MouseEvent event, Bounds worldAreaBounds);
+    abstract Rectangle createNewArea();
 
-    protected Point2D getStartPosition() {
-        return startPosition;
-    }
+    abstract void onAreaCreated(MouseEvent event, Bounds worldBounds);
 }

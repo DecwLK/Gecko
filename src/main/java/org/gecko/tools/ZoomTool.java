@@ -21,7 +21,7 @@ public class ZoomTool extends Tool {
         pane.draw().setCursor(Cursor.CROSSHAIR);
 
         pane.draw().setOnMouseClicked(event -> {
-            Point2D position = pane.screenToWorldCoordinates(new Point2D(event.getX(), event.getY()));
+            Point2D position = pane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
 
             if (event.isShiftDown()) {
                 actionManager.run(actionManager.getActionFactory().createZoomAction(position, 1 / ZOOM_SCALE));

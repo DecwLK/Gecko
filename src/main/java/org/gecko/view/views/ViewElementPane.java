@@ -1,23 +1,8 @@
-/*
- * Copyright (c) 2024.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package org.gecko.view.views;
 
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -44,9 +29,8 @@ public class ViewElementPane {
     private Point2D maxWorldPosition;
 
     private final ScrollPane pane;
+    @Getter
     private final Pane world;
-
-    private final Pane origin;
 
     @Getter
     private final Set<ViewElement<?>> elements;
@@ -64,27 +48,18 @@ public class ViewElementPane {
 
         setupListeners();
 
-        widthPadding.bind(
-            Bindings.createDoubleBinding(() -> pane.getViewportBounds().getWidth(), pane.viewportBoundsProperty()));
-        heightPadding.bind(
-            Bindings.createDoubleBinding(() -> pane.getViewportBounds().getHeight(), pane.viewportBoundsProperty()));
-
-        origin = new Pane();
-        origin.setPrefSize(10, 10);
-        origin.setStyle("-fx-background-color: #ff000088;");
-        origin.layoutXProperty()
-            .bind(Bindings.createDoubleBinding(() -> worldTolocalCoordinates(new Point2D(0, 0)).getX(), offset,
-                evm.getZoomScaleProperty()));
-        origin.layoutYProperty()
-            .bind(Bindings.createDoubleBinding(() -> worldTolocalCoordinates(new Point2D(0, 0)).getY(), offset,
-                evm.getZoomScaleProperty()));
-        world.getChildren().add(origin);
+        widthPadding.bind(pane.widthProperty());
+        heightPadding.bind(pane.heightProperty());
 
         pane.setContent(world);
     }
 
     public ScrollPane draw() {
         return pane;
+    }
+
+    public void onSelectionChanged() {
+        orderChildren();
     }
 
     public void addElement(ViewElement<?> element) {
@@ -116,6 +91,7 @@ public class ViewElementPane {
             }
             updateWorldSize(evm.getPivot());
         });
+        orderChildren();
         updateWorldSize(oldPivot);
     }
 
@@ -134,17 +110,52 @@ public class ViewElementPane {
         focusLocalCoordinates(worldTolocalCoordinates(worldCoords));
     }
 
+    private Point2D localToWorldCoordinates(Point2D screenCoords) {
+        return screenCoords.subtract(offset.getValue()).multiply(1 / evm.getZoomScale());
+    }
+
+    public Point2D screenToLocalCoordinates(Point2D screenCoords) {
+        return pane.screenToLocal(screenCoords).add(localViewPortPosition());
+    }
+
+    public Point2D screenToLocalCoordinates(double x, double y) {
+        return screenToLocalCoordinates(new Point2D(x, y));
+    }
+
+    private Point2D localToScreenCoordinates(Point2D localCoords) {
+        return pane.localToScreen(localCoords.subtract(localViewPortPosition()));
+    }
+
+    @SuppressWarnings("unused")
+    public Point2D worldToScreenCoordinates(Point2D worldCoords) {
+        return localToScreenCoordinates(worldTolocalCoordinates(worldCoords));
+    }
+
+    @SuppressWarnings("unused")
+    public Point2D worldToScreenCoordinates(double x, double y) {
+        return worldToScreenCoordinates(new Point2D(x, y));
+    }
+
+    public Point2D screenToWorldCoordinates(Point2D screenCoords) {
+        return localToWorldCoordinates(screenToLocalCoordinates(screenCoords));
+    }
+
+    public Point2D screenToWorldCoordinates(double x, double y) {
+        return screenToWorldCoordinates(new Point2D(x, y));
+    }
+
     private void focusLocalCoordinates(Point2D localCoords) {
-        double x = (localCoords.getX() - pane.getWidth() / 2) / (world.getWidth() - pane.getWidth());
-        double y = (localCoords.getY() - pane.getHeight() / 2) / (world.getHeight() - pane.getHeight());
-        pane.setHvalue(x);
-        pane.setVvalue(y);
+        double h = (localCoords.getX() - pane.getViewportBounds().getWidth() / 2) / (world.getWidth()
+            - pane.getViewportBounds().getWidth());
+        double v = (localCoords.getY() - pane.getViewportBounds().getHeight() / 2) / (world.getHeight()
+            - pane.getViewportBounds().getHeight());
+        pane.setHvalue(h);
+        pane.setVvalue(v);
     }
 
     private void updateWorldSize(Point2D oldPivot) {
         updateWorldSize();
-        evm.updatePivot(oldPivot);
-        focusWorldCoordinates(evm.getPivot());
+        evm.setPivot(oldPivot);
     }
 
     private void updateWorldSize() {
@@ -164,45 +175,26 @@ public class ViewElementPane {
         return worldCoords.multiply(evm.getZoomScale()).add(offset.getValue());
     }
 
-    private Point2D localToWorldCoordinates(Point2D screenCoords) {
-        return screenCoords.subtract(offset.getValue()).multiply(1 / evm.getZoomScale());
-    }
-
-    private Point2D screenToLocalCoordinates(Point2D screenCoords) {
-        return screenCoords.add(localViewPortPosition());
-    }
-
-    private Point2D localToScreenCoordinates(Point2D localCoords) {
-        return localCoords.subtract(localViewPortPosition());
-    }
-
-    @SuppressWarnings("unused")
-    public Point2D worldToScreenCoordinates(Point2D worldCoords) {
-        return localToScreenCoordinates(worldTolocalCoordinates(worldCoords));
-    }
-
-    public Point2D screenToWorldCoordinates(Point2D screenCoords) {
-        return localToWorldCoordinates(screenToLocalCoordinates(screenCoords));
-    }
-
     private Point2D localViewPortPosition() {
         double h = Double.isNaN(pane.getHvalue()) ? 0 : pane.getHvalue();
         double v = Double.isNaN(pane.getVvalue()) ? 0 : pane.getVvalue();
-        double x = h * (world.getWidth() - pane.getWidth());
-        double y = v * (world.getHeight() - pane.getHeight());
+        double x = h * (world.getWidth() - pane.getViewportBounds().getWidth());
+        double y = v * (world.getHeight() - pane.getViewportBounds().getHeight());
         return new Point2D(x, y);
+    }
+
+    private Point2D screenCenterWorldCoords() {
+        //Can't use screenToLocal because we don't want the pane.localToScreen() offset
+        Point2D screenCenter =
+            new Point2D(pane.getViewportBounds().getWidth() / 2, pane.getViewportBounds().getHeight() / 2);
+        Point2D localScreenCenter = screenCenter.add(localViewPortPosition());
+        return localToWorldCoordinates(localScreenCenter);
     }
 
     private void updateOffset() {
         double x = Math.max(0, -minWorldPosition.getX()) + widthPadding.get();
         double y = Math.max(0, -minWorldPosition.getY()) + heightPadding.get();
         offset.setValue(new Point2D(x, y));
-    }
-
-    public Point2D screenCenterWorldCoords() {
-        double x = pane.getWidth() / 2.0;
-        double y = pane.getHeight() / 2.0;
-        return screenToWorldCoordinates(new Point2D(x, y));
     }
 
     private void setupListeners() {
@@ -222,10 +214,10 @@ public class ViewElementPane {
             evm.updatePivot(screenCenterWorldCoords());
         });
         widthPadding.addListener((obs, oldV, newV) -> {
-            updateWorldSize();
+            updateWorldSize(evm.getPivot());
         });
         heightPadding.addListener((obs, oldV, newV) -> {
-            updateWorldSize();
+            updateWorldSize(evm.getPivot());
         });
     }
 
@@ -254,5 +246,13 @@ public class ViewElementPane {
         }
         minWorldPosition = new Point2D(minX, minY);
         maxWorldPosition = new Point2D(maxX, maxY);
+    }
+
+    private void orderChildren() {
+        List<Node> sortedElements = elements.stream()
+            .sorted(Comparator.comparingInt(ViewElement::getZPriority))
+            .map(ViewElement::drawElement)
+            .toList();
+        world.getChildren().setAll(sortedElements);
     }
 }

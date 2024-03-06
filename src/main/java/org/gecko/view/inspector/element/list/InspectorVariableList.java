@@ -74,7 +74,7 @@ public class InspectorVariableList extends AbstractInspectorList<InspectorVariab
         getItems().add(field);
     }
 
-   private void removePortItem(PortViewModel port) {
+    private void removePortItem(PortViewModel port) {
         getItems().removeIf(field -> field.getViewModel().equals(port));
     }
 

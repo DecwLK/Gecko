@@ -8,9 +8,9 @@ import org.gecko.actions.ActionManager;
 import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.button.InspectorRemoveVariableButton;
+import org.gecko.view.inspector.element.combobox.InspectorTypeComboBox;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.view.inspector.element.textfield.InspectorRenameField;
-import org.gecko.view.inspector.element.combobox.InspectorTypeComboBox;
 import org.gecko.viewmodel.PortViewModel;
 
 /**

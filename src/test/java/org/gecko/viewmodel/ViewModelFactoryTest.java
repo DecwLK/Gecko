@@ -15,7 +15,6 @@ import org.gecko.model.ModelFactory;
 import org.gecko.model.Region;
 import org.gecko.model.State;
 import org.gecko.model.System;
-import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
 import org.gecko.util.TestHelper;
 import org.junit.jupiter.api.BeforeEach;

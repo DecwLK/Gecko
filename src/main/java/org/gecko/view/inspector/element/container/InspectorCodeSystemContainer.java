@@ -11,10 +11,13 @@ import org.gecko.viewmodel.SystemViewModel;
 public class InspectorCodeSystemContainer extends VBox implements InspectorElement<VBox> {
 
     public InspectorCodeSystemContainer(ActionManager actionManager, SystemViewModel viewModel) {
+        if (!viewModel.getTarget().getChildren().isEmpty()) {
+            return;
+        }
+
         getChildren().add(new InspectorLabel("Code"));
         InspectorAreaField codeField = new InspectorCodeSystemField(actionManager, viewModel);
         codeField.prefWidthProperty().bind(widthProperty().subtract(50));
-        codeField.setPrefHeight(100);
         getChildren().add(codeField);
     }
 

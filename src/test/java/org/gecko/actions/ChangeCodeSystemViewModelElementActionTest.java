@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.gecko.exceptions.ModelException;
 import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;
-import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,19 +22,16 @@ public class ChangeCodeSystemViewModelElementActionTest {
         actionManager = new ActionManager(geckoViewModel);
         actionFactory = new ActionFactory(geckoViewModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        systemViewModel =
-            viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
+        systemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
     }
 
     @Test
     void run() {
-        Action changeCodeAction =
-            actionFactory.createChangeCodeSystemViewModelAction(systemViewModel, "newCode");
+        Action changeCodeAction = actionFactory.createChangeCodeSystemViewModelAction(systemViewModel, "newCode");
         actionManager.run(changeCodeAction);
         assertEquals("newCode", systemViewModel.getCode());
 
-        Action changeCodeAction2 =
-            actionFactory.createChangeCodeSystemViewModelAction(systemViewModel, "");
+        Action changeCodeAction2 = actionFactory.createChangeCodeSystemViewModelAction(systemViewModel, "");
         actionManager.run(changeCodeAction2);
         assertNull(systemViewModel.getCode());
     }

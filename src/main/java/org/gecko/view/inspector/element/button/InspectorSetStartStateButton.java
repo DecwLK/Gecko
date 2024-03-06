@@ -10,7 +10,10 @@ import org.gecko.viewmodel.StateViewModel;
  * Represents a type of {@link AbstractInspectorButton} used for setting a {@link StateViewModel} as start-state.
  */
 public class InspectorSetStartStateButton extends ToggleButton implements InspectorElement<ToggleButton> {
+    private static final String START_STATE_STYLE = "inspector-start-state-button";
+
     public InspectorSetStartStateButton(ActionManager actionManager, StateViewModel stateViewModel) {
+        getStyleClass().add(START_STATE_STYLE);
         setMaxWidth(Double.MAX_VALUE);
         setText(ResourceHandler.getString("Buttons", "inspector_set_start_state"));
         update(stateViewModel.getIsStartState());

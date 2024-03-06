@@ -59,7 +59,7 @@ public class AutomatonTest {
             edge1 = new Edge(5, startState, ordinaryState, contract, Kind.HIT, 0);
             edge2 = new Edge(6, startState, ordinaryState, contract, Kind.MISS, 1);
         } catch (ModelException e) {
-                fail("Edges for testing purposes of the automaton could not be initialized.");
+            fail("Edges for testing purposes of the automaton could not be initialized.");
         }
     }
 

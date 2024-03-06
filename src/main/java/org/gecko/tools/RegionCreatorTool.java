@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.gecko.actions.ActionManager;
 import org.gecko.viewmodel.BlockViewModelElement;
-import org.gecko.viewmodel.PositionableViewModelElement;
 
 /**
  * A concrete representation of a region-creating-{@link AreaTool}, utilized for creating a

@@ -92,8 +92,8 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
         rectangle.heightProperty().bind(heightProperty());
         rectangle.fillProperty().bind(Bindings.createObjectBinding(() -> switch (visibilityProperty.getValue()) {
             case INPUT -> Color.LIGHTGREEN;
-            case OUTPUT -> Color.LIGHTCORAL;
-            case STATE -> Color.LIGHTSKYBLUE;
+            case OUTPUT -> Color.LIGHTGOLDENRODYELLOW;
+            case STATE -> Color.LIGHTSEAGREEN;
         }, visibilityProperty));
         rectangle.setArcWidth(BACKGROUND_ROUNDING);
         rectangle.setArcHeight(BACKGROUND_ROUNDING);

@@ -32,6 +32,10 @@ public abstract class ConnectionViewElement extends Path {
     @Setter
     private boolean isLoop;
 
+    @Getter
+    @Setter
+    private boolean selected;
+
     /**
      * The render path source is a list of pairs of double properties. The first element of the pair is the x property
      * of the point, and the second element is the y property of the point. This list represents the actual points that

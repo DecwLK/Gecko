@@ -1,10 +1,14 @@
 package org.gecko.view.inspector.builder;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Visibility;
+import org.gecko.view.inspector.element.InspectorElement;
+import org.gecko.view.inspector.element.container.InspectorVariableField;
 import org.gecko.view.inspector.element.container.InspectorVariableLabel;
 import org.gecko.view.inspector.element.list.InspectorVariableList;
 import org.gecko.viewmodel.SystemViewModel;
@@ -12,7 +16,6 @@ import org.gecko.viewmodel.SystemViewModel;
 public class AutomatonVariablePaneBuilder {
 
     private static final int VARIABLE_PANE_WIDTH = 320;
-    private static final int LIST_HEIGHT = 100;
     private static final int ELEMENT_SPACING = 10;
 
     private final ScrollPane scrollPane;
@@ -22,14 +25,14 @@ public class AutomatonVariablePaneBuilder {
         scrollPane.setPrefWidth(VARIABLE_PANE_WIDTH);
 
         VBox content = new VBox();
-        InspectorVariableLabel inputLabel =
+        InspectorElement<HBox> inputLabel =
             new InspectorVariableLabel(actionManager, systemViewModel, Visibility.INPUT);
-        InspectorVariableList inputList = new InspectorVariableList(actionManager, systemViewModel, Visibility.INPUT);
-        InspectorVariableLabel outputLabel =
+        InspectorElement<ListView<InspectorVariableField>> inputList =
+            new InspectorVariableList(actionManager, systemViewModel, Visibility.INPUT);
+        InspectorElement<HBox> outputLabel =
             new InspectorVariableLabel(actionManager, systemViewModel, Visibility.OUTPUT);
-        InspectorVariableList outputList = new InspectorVariableList(actionManager, systemViewModel, Visibility.OUTPUT);
-        inputList.getControl().setPrefHeight(LIST_HEIGHT);
-        outputList.getControl().setPrefHeight(LIST_HEIGHT);
+        InspectorElement<ListView<InspectorVariableField>> outputList =
+            new InspectorVariableList(actionManager, systemViewModel, Visibility.OUTPUT);
 
         content.getChildren()
             .addAll(inputLabel.getControl(), inputList.getControl(), outputLabel.getControl(), outputList.getControl());

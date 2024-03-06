@@ -15,6 +15,11 @@ public class ResourceHandler {
     @Setter
     private static Locale currentLocale = Locale.getDefault();
 
+    private static final String BUNDLE_PATH = "lang/";
+
+    private ResourceHandler() {
+    }
+
     /**
      * Returns the localized string for the given key from the given bundle.
      *
@@ -27,12 +32,11 @@ public class ResourceHandler {
     }
 
     private static ResourceBundle getBundle(String bundleName) {
-        String bundlePath = "lang/";
         ResourceBundle bundle;
         try {
-            bundle = ResourceBundle.getBundle(bundlePath + bundleName, currentLocale);
+            bundle = ResourceBundle.getBundle(BUNDLE_PATH + bundleName, currentLocale);
         } catch (MissingResourceException e) {
-            bundle = ResourceBundle.getBundle(bundlePath + bundleName, Locale.US);
+            bundle = ResourceBundle.getBundle(BUNDLE_PATH + bundleName, Locale.US);
         }
         return bundle;
     }

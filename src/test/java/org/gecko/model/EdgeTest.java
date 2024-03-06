@@ -29,8 +29,7 @@ public class EdgeTest {
 
         // Edge can get null source / destination. @nonnull onParam!!
 
-        assertThrows(ModelException.class,
-            () -> edge = new Edge(2, source, destination, contract, Kind.HIT, -5));
+        assertThrows(ModelException.class, () -> edge = new Edge(2, source, destination, contract, Kind.HIT, -5));
 
         try {
             edge = new Edge(2, source, destination, contract, Kind.HIT, 0);

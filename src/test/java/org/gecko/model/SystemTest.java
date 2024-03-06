@@ -28,14 +28,12 @@ public class SystemTest {
 
     @BeforeAll
     static void setUp() {
-        assertThrows(NullPointerException.class,
-            () -> system = new System(0, null, null, new Automaton()));
+        assertThrows(NullPointerException.class, () -> system = new System(0, null, null, new Automaton()));
         assertThrows(ModelException.class, () -> system = new System(0, "", null, new Automaton()));
 
         assertThrows(ModelException.class, () -> system = new System(0, "system", "", new Automaton()));
 
-        assertThrows(NullPointerException.class,
-            () -> system = new System(0, "system", null, null));
+        assertThrows(NullPointerException.class, () -> system = new System(0, "system", null, null));
 
         assertDoesNotThrow(() -> system = new System(0, "system", null, new Automaton()));
         assertDoesNotThrow(() -> child1 = new System(1, "child1", null, new Automaton()));

@@ -3,7 +3,6 @@ package org.gecko.actions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.gecko.exceptions.ModelException;
-import org.gecko.model.Kind;
 import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;

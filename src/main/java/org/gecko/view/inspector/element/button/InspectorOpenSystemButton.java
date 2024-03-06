@@ -11,10 +11,11 @@ import org.gecko.viewmodel.SystemViewModel;
  * system view corresponding to the given system.
  */
 public class InspectorOpenSystemButton extends AbstractInspectorButton {
-
+    private static final String STYLE = "inspector-open-system-button";
     private static final int WIDTH = 300;
 
     public InspectorOpenSystemButton(ActionManager actionManager, SystemViewModel systemViewModel) {
+        getStyleClass().add(STYLE);
         setText(ResourceHandler.getString("Buttons", "inspector_open_system"));
         setPrefWidth(WIDTH);
         setOnAction(event -> actionManager.run(

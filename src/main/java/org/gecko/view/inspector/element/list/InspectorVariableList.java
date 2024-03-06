@@ -1,5 +1,6 @@
 package org.gecko.view.inspector.element.list;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import org.gecko.actions.ActionManager;
@@ -13,6 +14,9 @@ import org.gecko.viewmodel.SystemViewModel;
  */
 public class InspectorVariableList extends AbstractInspectorList<InspectorVariableField> {
 
+    private static final double listCellHeight = 43;
+    private static final int MIN_HEIGHT = 60;
+
     private final ActionManager actionManager;
     private final SystemViewModel viewModel;
     private final Visibility visibility;
@@ -21,6 +25,10 @@ public class InspectorVariableList extends AbstractInspectorList<InspectorVariab
         this.actionManager = actionManager;
         this.viewModel = viewModel;
         this.visibility = visibility;
+
+        setMinHeight(MIN_HEIGHT);
+        prefHeightProperty().bind(Bindings.size(getItems()).multiply(listCellHeight));
+
         viewModel.getPortsProperty().addListener(this::onPortsListChanged);
         viewModel.getPorts().stream().filter(port -> port.getVisibility() == visibility).forEach(this::addPortItem);
         viewModel.getPorts().forEach(port -> port.getVisibilityProperty().addListener(this::onVisibilityChanged));

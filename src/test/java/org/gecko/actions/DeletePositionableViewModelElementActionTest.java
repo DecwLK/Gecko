@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 public class DeletePositionableViewModelElementActionTest {
     private Set<PositionableViewModelElement<?>> elements;
+    private StateViewModel stateViewModel1;
     private ActionManager actionManager;
     private ActionFactory actionFactory;
     private GeckoViewModel geckoViewModel;
@@ -33,7 +34,7 @@ public class DeletePositionableViewModelElementActionTest {
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
         rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoViewModel.getGeckoModel().getRoot());
 
-        StateViewModel stateViewModel1 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
+        stateViewModel1 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         StateViewModel stateViewModel2 = viewModelFactory.createStateViewModelIn(rootSystemViewModel);
         EdgeViewModel edge =
             viewModelFactory.createEdgeViewModelIn(rootSystemViewModel, stateViewModel1, stateViewModel2);

@@ -30,7 +30,6 @@ public class GeckoView {
     private static final String STYLE_SHEET_LIGHT = "/styles/gecko.css";
     private static final String STYLE_SHEET_DARK = "/styles/gecko-dark.css";
 
-
     @Getter
     private final BorderPane mainPane;
     private final TabPane centerPane;

@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import lombok.Getter;
+import lombok.Setter;
 import org.gecko.model.Element;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
@@ -18,6 +19,10 @@ public abstract class BlockViewElement extends Pane {
 
     @Getter
     private final ObservableList<Property<Point2D>> edgePoints;
+
+    @Getter
+    @Setter
+    private boolean selected;
 
     protected static final int BACKGROUND_ROUNDING = 15;
 

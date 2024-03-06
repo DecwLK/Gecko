@@ -2,7 +2,6 @@ package org.gecko.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import javafx.geometry.Point2D;
 import org.gecko.exceptions.ModelException;
 import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.GeckoViewModel;

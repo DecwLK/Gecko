@@ -41,7 +41,6 @@ public class Inspector extends ScrollPane {
         inspectorDecorations.getChildren().addAll(selectionButtons);
 
         vBox.getChildren().add(inspectorDecorations);
-        setFitToHeight(true);
 
         for (InspectorElement<?> element : elements) {
             vBox.getChildren().add(element.getControl());

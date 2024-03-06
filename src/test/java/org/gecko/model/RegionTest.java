@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -27,8 +26,8 @@ public class RegionTest {
         assertDoesNotThrow(() -> condition = new Condition("true"));
         assertDoesNotThrow(() -> preAndPostCondition = new Contract(0, "contract", condition, condition));
 
-        assertDoesNotThrow(() -> regionWithValidConditions = new Region(2, "region", condition,
-            new Contract(3, "preAndPost", condition, condition)));
+        assertDoesNotThrow(() -> regionWithValidConditions =
+            new Region(2, "region", condition, new Contract(3, "preAndPost", condition, condition)));
 
         assertDoesNotThrow(() -> state1 = new State(4, "state1"));
         assertDoesNotThrow(() -> state2 = new State(5, "state2"));
@@ -38,9 +37,8 @@ public class RegionTest {
     void testInitializationOfRegionWithNullConditions() {
         assertThrows(NullPointerException.class,
             () -> regionWithNullConditions = new Region(1, "region", condition, null));
-        assertThrows(NullPointerException.class,
-            () -> regionWithNullConditions = new Region(1, "region", null,
-                new Contract(3, "preAndPost", condition, condition)));
+        assertThrows(NullPointerException.class, () -> regionWithNullConditions =
+            new Region(1, "region", null, new Contract(3, "preAndPost", condition, condition)));
     }
 
     @Test

@@ -14,15 +14,12 @@ public class VariableTest {
 
     @BeforeAll
     static void setUp() {
-        assertThrows(NullPointerException.class,
-            () -> variable = new Variable(0, null, "int", Visibility.INPUT));
-        assertThrows(NullPointerException.class,
-            () -> variable = new Variable(0, "variable", null, Visibility.INPUT));
+        assertThrows(NullPointerException.class, () -> variable = new Variable(0, null, "int", Visibility.INPUT));
+        assertThrows(NullPointerException.class, () -> variable = new Variable(0, "variable", null, Visibility.INPUT));
 
 
         assertThrows(ModelException.class, () -> variable = new Variable(0, "", null, Visibility.INPUT));
-        assertThrows(ModelException.class,
-            () -> variable = new Variable(0, "variable", "", Visibility.INPUT));
+        assertThrows(ModelException.class, () -> variable = new Variable(0, "variable", "", Visibility.INPUT));
 
         assertDoesNotThrow(() -> variable = new Variable(0, "variable", "int", Visibility.INPUT));
     }

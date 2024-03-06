@@ -8,11 +8,9 @@ import javafx.beans.property.Property;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.Shape;
 import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,62 +54,11 @@ public abstract class ConnectionViewElement extends Path {
         getStyleClass().add(STYLE_CLASS);
     }
 
-    /**
-     * Mask the end position of the block with the given size and position. The mask is calculated by the intersection
-     * of the block and the line defined by the start and end points.
-     *
-     * @param blockPosition The position of the block
-     * @param blockSize     The size of the block
-     * @param start         The start point of the line
-     * @param end           The end point of the line
-     * @param edgeOffset    The offset to apply to the intersection point
-     * @return The masked position of the block (end point)
-     */
-    protected Point2D maskBlock(
-        Point2D blockPosition, Point2D blockSize, Point2D start, Point2D end, double edgeOffset) {
-        List<Point2D> blockCorners = new ArrayList<>();
-        blockCorners.add(blockPosition);
-        blockCorners.add(blockPosition.add(new Point2D(blockSize.getX(), 0)));
-        blockCorners.add(blockPosition.add(new Point2D(blockSize.getX(), blockSize.getY())));
-        blockCorners.add(blockPosition.add(new Point2D(0, blockSize.getY())));
-
-        // loop through the block corners and find the intersection point with the line
-        Point2D intersection = null;
-
-        Line path = new Line(start.getX(), start.getY(), end.getX(), end.getY());
-        for (int i = 0; i < blockCorners.size(); i++) {
-            Point2D corner = blockCorners.get(i);
-            Point2D nextCorner = blockCorners.get((i + 1) % blockCorners.size());
-
-            Line border = new Line(corner.getX(), corner.getY(), nextCorner.getX(), nextCorner.getY());
-            Shape intersectionShape = Shape.intersect(path, border);
-
-            if (intersectionShape.getBoundsInLocal().getMaxX() <= 0
-                || intersectionShape.getBoundsInLocal().getMaxY() <= 0) {
-                // No intersection
-                continue;
-            }
-
-            Point2D edgePosition = new Point2D(intersectionShape.getBoundsInLocal().getMinX(),
-                intersectionShape.getBoundsInLocal().getMinY());
-
-            if (edgeOffset <= -1) {
-                intersection = edgePosition;
-            } else {
-                intersection = corner.interpolate(nextCorner, edgeOffset);
-            }
-            break;
-        }
-
-        return intersection;
-    }
 
     /**
      * Update the visualization of the path. Path is drawn using the path source points. Path is automatically updated
-     * upon change of individual path source points.
-     * <p>
-     * If this connection view element is a loop, the path will be drawn as a loop by adding extra points to render path
-     * source.
+     * upon change of individual path source points. If this connection view element is a loop, the path will be drawn
+     * as a loop by adding extra points to render path source.
      */
     protected void updatePathVisualization() {
         getElements().clear();

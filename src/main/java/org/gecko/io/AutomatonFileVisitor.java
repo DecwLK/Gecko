@@ -178,6 +178,10 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         if (!ctx.use_contracts().isEmpty()) {
             warnings.add("Automaton %s has use_contracts, which are be ignored".formatted(ctx.ident().getText()));
         }
+        if (ctx.transition().isEmpty()) {
+            warnings.add("Automaton %s has no transitions".formatted(ctx.ident().getText()));
+            return null;
+        }
         for (SystemDefParser.TransitionContext transition : ctx.transition()) {
             String result = transition.accept(this);
             if (result != null) {
@@ -196,6 +200,13 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                 currentSystem.getAutomaton().setStartState(startStateCandidates.getFirst());
             } catch (ModelException e) {
                 return e.getMessage();
+            }
+        } else {
+            try {
+                //this should always work because if we have a transition, we have a state
+                currentSystem.getAutomaton().setStartState(currentSystem.getAutomaton().getStates().iterator().next());
+            } catch (ModelException e) {
+                throw new RuntimeException(e);
             }
         }
         return null;
@@ -355,7 +366,9 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
     }
 
     private Contract buildContract(State state, SystemDefParser.PrepostContext contract) throws GeckoException {
-        return buildContract(state, contract.pre.getText(), contract.post.getText());
+        Contract c = buildContract(state, contract.pre.getText(), contract.post.getText());
+        c.setName(contract.name.getText());
+        return c;
     }
 
     private Contract buildContract(State state, String pre, String post) throws GeckoException {

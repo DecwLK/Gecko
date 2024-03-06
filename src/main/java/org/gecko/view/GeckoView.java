@@ -76,14 +76,10 @@ public class GeckoView {
 
     private void onUpdateCurrentEditorFromViewModel(
         ObservableValue<? extends EditorViewModel> observable, EditorViewModel oldValue, EditorViewModel newValue) {
-        for (EditorView editorView : openedViews) {
-            if (editorView.getViewModel().equals(newValue)) {
-                currentView = editorView;
-                currentView.updateWorldSize();
-                break;
-            }
-        }
-
+        currentView = openedViews.stream()
+            .filter(editorView -> editorView.getViewModel().equals(newValue))
+            .findFirst()
+            .orElseThrow();
         refreshView();
     }
 
@@ -153,7 +149,6 @@ public class GeckoView {
         viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(),
             currentView.getViewModel().isAutomatonEditor());
 
-        currentView.updateWorldSize();
         currentView.focus();
 
         MenuBarBuilder.updateToolsMenu(menuBar, currentView.getViewModel().getTools());

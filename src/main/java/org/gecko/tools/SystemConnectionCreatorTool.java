@@ -1,12 +1,10 @@
 package org.gecko.tools;
 
 import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.views.ViewElementPane;
 import org.gecko.view.views.viewelement.PortViewElement;
 import org.gecko.view.views.viewelement.SystemViewElement;
 import org.gecko.view.views.viewelement.VariableBlockViewElement;
@@ -28,9 +26,9 @@ public class SystemConnectionCreatorTool extends Tool {
     }
 
     @Override
-    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
-        super.visitView(vbox, view, worldGroup, containerGroup);
-        view.setCursor(Cursor.CROSSHAIR);
+    public void visitView(ViewElementPane pane) {
+        super.visitView(pane);
+        pane.draw().setCursor(Cursor.CROSSHAIR);
     }
 
     @Override

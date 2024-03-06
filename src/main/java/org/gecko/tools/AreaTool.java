@@ -4,13 +4,13 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.views.ViewElementPane;
 
 /**
  * A concrete representation of an area-{@link Tool}, utilized for marking a rectangle-formed area in the view. Holds
@@ -26,46 +26,49 @@ public abstract class AreaTool extends Tool {
     }
 
     @Override
-    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
-        super.visitView(vbox, view, worldGroup, containerGroup);
+    public void visitView(ViewElementPane pane) {
+        super.visitView(pane);
+        ScrollPane view = pane.draw();
         view.setPannable(false);
         view.setCursor(Cursor.CROSSHAIR);
-        worldGroup.setMouseTransparent(true);
         startPosition = null;
+        Pane world = (Pane) view.getContent();
 
-        vbox.setOnMousePressed(event -> {
+        view.setOnMousePressed(event -> {
+            System.out.println("pressed");
             if (event.getButton() != MouseButton.PRIMARY) {
                 return;
             }
 
-            startPosition = containerGroup.sceneToLocal(event.getSceneX(), event.getSceneY());
+            startPosition = world.sceneToLocal(event.getSceneX(), event.getSceneY());
             area = createNewArea();
             area.setX(startPosition.getX());
             area.setY(startPosition.getY());
-            containerGroup.getChildren().add(area);
+            world.getChildren().add(area);
         });
 
-        vbox.setOnMouseDragged(event -> {
+        view.setOnMouseDragged(event -> {
+            System.out.println("dragged");
             if (startPosition == null) {
                 return;
             }
-            Bounds areaBounds = calculateAreaBounds(startPosition,
-                containerGroup.sceneToLocal(new Point2D(event.getSceneX(), event.getSceneY())));
+            Point2D dragPosition = world.sceneToLocal(event.getSceneX(), event.getSceneY());
+            Bounds areaBounds = calculateAreaBounds(startPosition, dragPosition);
             area.setX(areaBounds.getMinX());
             area.setY(areaBounds.getMinY());
             area.setWidth(areaBounds.getWidth());
             area.setHeight(areaBounds.getHeight());
         });
 
-        vbox.setOnMouseReleased(event -> {
+        view.setOnMouseReleased(event -> {
+            System.out.println("released");
             if (startPosition == null) {
                 return;
             }
-            containerGroup.getChildren().remove(area);
-            Bounds areaBounds = calculateAreaBounds(getStartPosition(),
-                containerGroup.sceneToLocal(new Point2D(event.getSceneX(), event.getSceneY())));
-            Bounds worldAreaBounds = worldGroup.sceneToLocal(containerGroup.localToScene(areaBounds));
-            onAreaCreated(event, worldAreaBounds);
+            world.getChildren().remove(area); //TODO
+            Bounds areaBounds =
+                calculateAreaBounds(startPosition, world.sceneToLocal(event.getSceneX(), event.getSceneY()));
+            onAreaCreated(event, areaBounds);
             startPosition = null;
         });
     }

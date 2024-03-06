@@ -178,10 +178,6 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         nameProperty.bind(stateViewModel.getNameProperty());
         isStartStateProperty.bind(stateViewModel.getIsStartStateProperty());
         contractsProperty.bind(stateViewModel.getContractsProperty());
-        layoutXProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getX(),
-            stateViewModel.getPositionProperty()));
-        layoutYProperty().bind(Bindings.createDoubleBinding(() -> stateViewModel.getPosition().getY(),
-            stateViewModel.getPositionProperty()));
         prefWidthProperty().bind(
             Bindings.createDoubleBinding(() -> stateViewModel.getSize().getX(), stateViewModel.getSizeProperty()));
         prefHeightProperty().bind(

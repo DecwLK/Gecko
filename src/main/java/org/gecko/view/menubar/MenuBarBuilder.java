@@ -177,6 +177,12 @@ public class MenuBarBuilder {
         });
         goToParentSystemMenuItem.setAccelerator(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get());
 
+        MenuItem focusSelectedElementMenuItem = new MenuItem("Focus Selected Element");
+        focusSelectedElementMenuItem.setOnAction(e -> {
+            view.getCurrentView().getViewModel().moveToFocusedElement();
+        });
+        focusSelectedElementMenuItem.setAccelerator(Shortcuts.FOCUS_SELECTED_ELEMENT.get());
+
         SeparatorMenuItem viewSwitchToZoomSeparator = new SeparatorMenuItem();
 
         // Zooming commands:
@@ -198,8 +204,9 @@ public class MenuBarBuilder {
         toggleAppearanceMenuItem.setAccelerator(Shortcuts.TOGGLE_APPEARANCE.get());
 
         viewMenu.getItems()
-            .addAll(changeViewMenuItem, goToParentSystemMenuItem, viewSwitchToZoomSeparator, zoomInMenuItem,
-                zoomOutMenuItem, zoomToAppearanceSeparator, toggleAppearanceMenuItem);
+            .addAll(changeViewMenuItem, goToParentSystemMenuItem, focusSelectedElementMenuItem,
+                viewSwitchToZoomSeparator, zoomInMenuItem, zoomOutMenuItem, zoomToAppearanceSeparator,
+                toggleAppearanceMenuItem);
 
         return viewMenu;
     }

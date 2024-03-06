@@ -1,23 +1,13 @@
 package org.gecko.view.views;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.SetChangeListener;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ScrollPane;
@@ -26,11 +16,9 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.transform.Scale;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
@@ -50,14 +38,8 @@ import org.gecko.viewmodel.PositionableViewModelElementVisitor;
  * other items specific to their vizualization.
  */
 public class EditorView {
-    private static final double RELATIVE_BORDER_SIZE = 0.25;
-    private static final double MIN_WORLD_SIZE = 1000;
-    private static final double MAX_WORLD_SIZE = 15000;
-    private static final double WORLD_SIZE_DELTA = 1000;
     private static final double AUTOMATON_INSPECTOR_HEIGHT = 680;
 
-    @Getter
-    private final Collection<ViewElement<?>> currentViewElements;
     private final ViewFactory viewFactory;
     @Getter
     private final EditorViewModel viewModel;
@@ -68,15 +50,10 @@ public class EditorView {
     private final ToolBar toolBar;
     private final ToolBarBuilder toolBarBuilder;
     private final InspectorFactory inspectorFactory;
-    private final ScrollPane viewElementsScrollPane;
-    private final VBox viewElementsVBoxContainer;
-    private final Group viewElementsGroupContainer;
-    private final Group viewElementsGroup;
-    private final Pane placeholder;
-    private final Property<Point2D> viewPortPositionViewProperty;
-    private final ChangeListener<Point2D> worldSizeUpdateListener;
     private final Inspector emptyInspector;
     private final Node searchWindow;
+
+    private final ViewElementPane viewElementPane;
 
     @Getter
     private ObjectProperty<Inspector> currentInspector;
@@ -92,19 +69,12 @@ public class EditorView {
         this.toolBar = toolBarBuilder.build();
         this.inspectorFactory = new InspectorFactory(actionManager, viewModel);
 
-        this.viewElementsGroup = new Group();
-        this.viewElementsGroupContainer = new Group(viewElementsGroup);
-        this.viewElementsVBoxContainer = new VBox(viewElementsGroupContainer);
-        this.viewElementsScrollPane = new ScrollPane(viewElementsVBoxContainer);
-        this.placeholder = new Pane();
         this.currentViewPane = new StackPane();
-        this.viewPortPositionViewProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
-
         this.currentInspector = new SimpleObjectProperty<>(null);
 
         this.emptyInspector = new Inspector(new ArrayList<>(), actionManager);
         this.currentInspector = new SimpleObjectProperty<>(emptyInspector);
-        this.currentViewElements = new HashSet<>();
+        this.viewElementPane = new ViewElementPane(viewModel);
         this.currentView = new Tab("Error_Name", currentViewPane);
         currentView.textProperty().bind(Bindings.createStringBinding(() -> {
             String name = viewModel.getCurrentSystem().getName();
@@ -112,26 +82,8 @@ public class EditorView {
                 : " (" + ResourceHandler.getString("View", "system") + ")");
         }, viewModel.getCurrentSystem().getNameProperty()));
 
-        this.worldSizeUpdateListener = (observable, oldValue, newValue) -> {
-            updateWorldSize();
-        };
-
-        // Construct view elements pane container
-        viewElementsVBoxContainer.setAlignment(Pos.CENTER);
-        viewElementsGroup.getChildren().add(placeholder);
-
-        viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            double width = newValue.getWidth();
-            double height = newValue.getHeight();
-            placeholder.setMinSize(Math.max(width, MIN_WORLD_SIZE), Math.max(height, MIN_WORLD_SIZE));
-            viewElementsScrollPane.layout();
-        });
-
-        placeholder.setMouseTransparent(true);
-        viewElementsScrollPane.layout();
-
         // Floating UI
-        FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
+        FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel, viewElementPane);
         Node zoomButtons = floatingUIBuilder.buildZoomButtons();
         AnchorPane.setBottomAnchor(zoomButtons, 18.0);
         AnchorPane.setRightAnchor(zoomButtons, 18.0);
@@ -152,7 +104,7 @@ public class EditorView {
         floatingUI.setPickOnBounds(false);
 
         // Build stack pane
-        currentViewPane.getChildren().addAll(viewElementsScrollPane, floatingUI);
+        currentViewPane.getChildren().addAll(viewElementPane.draw(), floatingUI);
 
         // View element creator listener
         viewModel.getContainedPositionableViewModelElementsProperty().addListener(this::onUpdateViewElements);
@@ -163,37 +115,6 @@ public class EditorView {
 
         // Set current tool
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
-
-        // Viewport position listener
-        viewModel.getRequestedViewPortPositionProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                return;
-            }
-            setViewPortPosition(newValue);
-            viewPortPositionViewProperty.setValue(newValue);
-            viewModel.getRequestedViewPortPositionProperty().setValue(null);
-        });
-        viewElementsScrollPane.hvalueProperty().addListener((observable, oldValue, newValue) -> {
-            calculateViewPortPosition();
-        });
-        viewElementsScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            calculateViewPortPosition();
-        });
-        viewModel.getViewPortPositionProperty().bindBidirectional(viewPortPositionViewProperty);
-
-        viewModel.getZoomScaleProperty().addListener((observable, oldValue, newValue) -> {
-            Scale scale = new Scale(newValue.doubleValue(), newValue.doubleValue(), 0, 0);
-            viewElementsGroup.getTransforms().setAll(scale);
-            viewElementsScrollPane.layout();
-        });
-
-        viewElementsScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.getViewPortSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
-        });
-
-        viewElementsGroup.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.getWorldSizeProperty().setValue(new Point2D(newValue.getWidth(), newValue.getHeight()));
-        });
 
         ViewContextMenuBuilder contextMenuBuilder = new ViewContextMenuBuilder(viewModel.getActionManager(), viewModel);
         this.contextMenu = contextMenuBuilder.build();
@@ -291,34 +212,6 @@ public class EditorView {
     }
 
     /**
-     * Request newer world size to fit more elements.
-     */
-    public void updateWorldSize() {
-        if (currentViewElements.stream().anyMatch(viewElement -> viewElement.getTarget().isCurrentlyModified())) {
-            return;
-        }
-
-        boolean elementInBorder = currentViewElements.stream().anyMatch(viewElement -> {
-            Point2D position = viewElement.getTarget().getPosition();
-            Point2D size = viewElement.getTarget().getSize();
-            return isElementInGroupBorder(position, size);
-        });
-        if (elementInBorder && !worldWouldHaveMaxSize()) {
-            changeWorldSize(WORLD_SIZE_DELTA);
-            return;
-        }
-
-        boolean wouldElementBeInBorder = currentViewElements.stream().anyMatch(viewElement -> {
-            Point2D position = viewElement.getTarget().getPosition();
-            Point2D size = viewElement.getTarget().getSize();
-            return wouldElementBeInBorder(position, size);
-        });
-        if (!wouldElementBeInBorder && !worldWouldHaveMinSize()) {
-            changeWorldSize(-WORLD_SIZE_DELTA);
-        }
-    }
-
-    /**
      * Activate or deactivate the floating search window.
      *
      * @param activate true if the search window should be activated, false otherwise
@@ -334,37 +227,6 @@ public class EditorView {
         activateSearchWindow(!searchWindow.isVisible());
     }
 
-    private void setViewPortPosition(Point2D point) {
-        Point2D viewPortSize = convertParentToLocal(new Point2D(viewElementsScrollPane.getViewportBounds().getWidth(),
-            viewElementsScrollPane.getViewportBounds().getHeight()));
-        Point2D worldSize = new Point2D(viewElementsGroup.getLayoutBounds().getWidth(),
-            viewElementsGroup.getLayoutBounds().getHeight());
-        Point2D worldOffset = getWorldOffset();
-        point = point.subtract(worldOffset);
-        double hValue = point.getX() / (worldSize.getX() + worldOffset.getX() - viewPortSize.getX());
-        double vValue = point.getY() / (worldSize.getY() + worldOffset.getY() - viewPortSize.getY());
-        viewElementsScrollPane.setHvalue(hValue);
-        viewElementsScrollPane.setVvalue(vValue);
-        viewElementsScrollPane.layout();
-    }
-
-    private void calculateViewPortPosition() {
-        Point2D viewPortSize = convertParentToLocal(new Point2D(viewElementsScrollPane.getViewportBounds().getWidth(),
-            viewElementsScrollPane.getViewportBounds().getHeight()));
-        Point2D worldSize = new Point2D(viewElementsGroup.getLayoutBounds().getWidth(),
-            viewElementsGroup.getLayoutBounds().getHeight());
-        Point2D worldOffset = getWorldOffset();
-        double hValue = viewElementsScrollPane.getHvalue();
-        double vValue = viewElementsScrollPane.getVvalue();
-        viewPortPositionViewProperty.setValue(
-            new Point2D(hValue * (worldSize.getX() + worldOffset.getX() - viewPortSize.getX()),
-                vValue * (worldSize.getY() + worldOffset.getY() - viewPortSize.getY())).add(worldOffset));
-    }
-
-    private Point2D getWorldOffset() {
-        return viewElementsGroup.parentToLocal(viewElementsGroupContainer.parentToLocal(new Point2D(0, 0)));
-    }
-
     private void onUpdateViewElements(SetChangeListener.Change<? extends PositionableViewModelElement<?>> change) {
         if (change.wasAdded()) {
             addElement(change.getElementAdded());
@@ -372,23 +234,18 @@ public class EditorView {
             // Find corresponding view element and remove it
             ViewElement<?> viewElement = findViewElement(change.getElementRemoved());
             if (viewElement != null) {
-                currentViewElements.remove(viewElement);
-                updateWorldSize();
+                viewElementPane.removeElement(viewElement);
             }
         }
         postUpdate();
     }
 
     private void postUpdate() {
-        orderChildren();
-        viewElementsScrollPane.layout();
-        calculateViewPortPosition();
         if (viewModel.getCurrentToolType() != null) {
-            for (ViewElement<?> viewElement : currentViewElements) {
+            for (ViewElement<?> viewElement : viewElementPane.getElements()) {
                 viewElement.accept(getViewModel().getCurrentTool());
             }
         }
-        viewElementsScrollPane.requestLayout();
     }
 
     private void initializeViewElements() {
@@ -401,20 +258,14 @@ public class EditorView {
         ViewElement<?> viewElement = (ViewElement<?>) element.accept(visitor);
 
         // Add view element to current view elements
-        currentViewElements.add(viewElement);
+        viewElementPane.addElement(viewElement);
         if (viewModel.getCurrentToolType() != null) {
             viewElement.accept(getViewModel().getCurrentTool());
         }
-
-        // TODO: not center
-        viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener);
     }
 
     private ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
-        return currentViewElements.stream()
-            .filter(viewElement -> viewElement.getTarget().equals(element))
-            .findFirst()
-            .orElse(null);
+        return viewElementPane.findViewElement(element);
     }
 
     private void onToolChanged(ObservableValue<? extends Tool> observable, Tool oldValue, Tool newValue) {
@@ -422,9 +273,8 @@ public class EditorView {
     }
 
     private void acceptTool(Tool tool) {
-        tool.visitView(viewElementsVBoxContainer, viewElementsScrollPane, viewElementsGroup,
-            viewElementsGroupContainer);
-        currentViewElements.forEach(viewElement -> viewElement.accept(tool));
+        tool.visitView(viewElementPane);
+        viewElementPane.getElements().forEach(element -> element.accept(tool));
     }
 
     private void focusedElementChanged(
@@ -452,91 +302,6 @@ public class EditorView {
 
         oldValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(false));
         newValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(true));
-        orderChildren();
-    }
-
-    private void orderChildren() {
-        List<Node> currentElements = currentViewElements.stream()
-            .sorted(Comparator.comparingInt(ViewElement::getZPriority))
-            .map(ViewElement::drawElement)
-            .collect(Collectors.toList());
-
-        currentElements.add(placeholder);
-        viewElementsGroup.getChildren().setAll(currentElements);
-        viewElementsScrollPane.layout();
-    }
-
-    private Point2D convertParentToLocal(Point2D point) {
-        return viewElementsGroup.parentToLocal(
-            viewElementsGroupContainer.parentToLocal(viewElementsVBoxContainer.parentToLocal(point)));
-    }
-
-    private boolean worldWouldHaveMinSize() {
-        Bounds viewportBounds = viewElementsScrollPane.getViewportBounds();
-        return viewElementsGroup.getLayoutBounds().getWidth() - WORLD_SIZE_DELTA <= Math.max(MIN_WORLD_SIZE,
-            viewportBounds.getWidth())
-            || viewElementsGroup.getLayoutBounds().getHeight() - WORLD_SIZE_DELTA <= Math.max(MIN_WORLD_SIZE,
-            viewportBounds.getHeight());
-    }
-
-    private boolean worldWouldHaveMaxSize() {
-        return viewElementsGroup.getLayoutBounds().getWidth() + WORLD_SIZE_DELTA >= MAX_WORLD_SIZE
-            || viewElementsGroup.getLayoutBounds().getHeight() + WORLD_SIZE_DELTA >= MAX_WORLD_SIZE;
-    }
-
-    private void changeWorldSize(double delta) {
-        if (delta >= 0) {
-            placeholder.setPrefSize(viewElementsGroup.getLayoutBounds().getWidth() + delta,
-                viewElementsGroup.getLayoutBounds().getHeight() + delta);
-            viewElementsScrollPane.layout();
-            setViewPortPosition(new Point2D(viewPortPositionViewProperty.getValue().getX() + delta / 2,
-                viewPortPositionViewProperty.getValue().getY() + delta / 2));
-        } else {
-            setViewPortPosition(new Point2D(viewPortPositionViewProperty.getValue().getX() + delta / 2,
-                viewPortPositionViewProperty.getValue().getY() + delta / 2));
-            placeholder.setPrefSize(viewElementsGroup.getLayoutBounds().getWidth() + delta,
-                viewElementsGroup.getLayoutBounds().getHeight() + delta);
-            viewElementsScrollPane.layout();
-        }
-        moveAllElements(new Point2D(delta, delta).multiply(0.5));
-    }
-
-    private void moveAllElements(Point2D delta) {
-        currentViewElements.forEach(
-            viewElement -> viewElement.getTarget().getPositionProperty().removeListener(worldSizeUpdateListener));
-        currentViewElements.forEach(viewElement -> {
-            Point2D position = viewElement.getTarget().getPosition();
-            viewElement.getTarget()
-                .setPosition(new Point2D(position.getX() + delta.getX(), position.getY() + delta.getY()));
-        });
-        currentViewElements.forEach(
-            viewElement -> viewElement.getTarget().getPositionProperty().addListener(worldSizeUpdateListener));
-    }
-
-    private boolean wouldElementBeInBorder(Point2D position, Point2D size) {
-        Bounds bound = viewElementsGroup.getLayoutBounds();
-        Point2D minPoint = new Point2D(bound.getMinX() + WORLD_SIZE_DELTA / 2, bound.getMinY() + WORLD_SIZE_DELTA / 2);
-        Point2D maxPoint = new Point2D(bound.getMaxX() - WORLD_SIZE_DELTA / 2, bound.getMaxY() - WORLD_SIZE_DELTA / 2);
-        double widthBorder = viewElementsScrollPane.getViewportBounds().getWidth() * RELATIVE_BORDER_SIZE;
-        double heightBorder = viewElementsScrollPane.getViewportBounds().getHeight() * RELATIVE_BORDER_SIZE;
-        return isElementInBorder(position, size, minPoint, maxPoint, new Point2D(widthBorder, heightBorder));
-    }
-
-    private boolean isElementInGroupBorder(Point2D position, Point2D size) {
-        Bounds bound = viewElementsGroup.getLayoutBounds();
-        Point2D minPoint = new Point2D(bound.getMinX(), bound.getMinY());
-        Point2D maxPoint = new Point2D(bound.getMaxX(), bound.getMaxY());
-        double widthBorder = viewElementsScrollPane.getViewportBounds().getWidth() * RELATIVE_BORDER_SIZE;
-        double heightBorder = viewElementsScrollPane.getViewportBounds().getHeight() * RELATIVE_BORDER_SIZE;
-        return isElementInBorder(position, size, minPoint, maxPoint, new Point2D(widthBorder, heightBorder));
-    }
-
-    private boolean isElementInBorder(
-        Point2D position, Point2D size, Point2D minPoint, Point2D maxPoint, Point2D borderSize) {
-        return position.getX() <= minPoint.getX() + borderSize.getX()
-            || position.getX() + size.getX() >= maxPoint.getX() - borderSize.getX()
-            || position.getY() <= minPoint.getY() + borderSize.getY()
-            || position.getY() + size.getY() >= maxPoint.getY() - borderSize.getY();
     }
 
     protected void switchToCursorTool() {

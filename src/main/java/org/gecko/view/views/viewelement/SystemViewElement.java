@@ -87,10 +87,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     private void bindViewModel() {
         nameProperty.bind(systemViewModel.getNameProperty());
         codeProperty.bind(systemViewModel.getCodeProperty());
-        layoutXProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getPosition().getX(),
-            systemViewModel.getPositionProperty()));
-        layoutYProperty().bind(Bindings.createDoubleBinding(() -> systemViewModel.getPosition().getY(),
-            systemViewModel.getPositionProperty()));
         prefWidthProperty().bind(
             Bindings.createDoubleBinding(() -> systemViewModel.getSize().getX(), systemViewModel.getSizeProperty()));
         prefHeightProperty().bind(

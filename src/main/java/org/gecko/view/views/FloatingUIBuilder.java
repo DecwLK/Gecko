@@ -3,6 +3,7 @@ package org.gecko.view.views;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.binding.Bindings;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,9 +35,13 @@ public class FloatingUIBuilder {
     private final ActionManager actionManager;
     private final EditorViewModel editorViewModel;
 
-    public FloatingUIBuilder(ActionManager actionManager, EditorViewModel editorViewModel) {
+    //TODO TODO TODO TODO TODO
+    private final ViewElementPane p;
+
+    public FloatingUIBuilder(ActionManager actionManager, EditorViewModel editorViewModel, ViewElementPane p) {
         this.actionManager = actionManager;
         this.editorViewModel = editorViewModel;
+        this.p = p;
     }
 
     public Node buildZoomButtons() {
@@ -66,11 +71,22 @@ public class FloatingUIBuilder {
     }
 
     public Node buildCurrentViewLabel() {
+        VBox infoBox = new VBox();
         Label currentViewLabel = new Label();
         currentViewLabel.textProperty()
-            .bind(Bindings.createStringBinding(() -> editorViewModel.getCurrentSystem().getName(),
-                editorViewModel.getCurrentSystem().getNameProperty()));
-        return currentViewLabel;
+            .bind(Bindings.createStringBinding(() -> editorViewModel.getPivot().toString(),
+                editorViewModel.getPivotProperty(), p.draw().hvalueProperty(), p.draw().vvalueProperty()));
+
+        Label screenCenterLabel = new Label();
+        screenCenterLabel.textProperty()
+            .bind(Bindings.createStringBinding(() -> p.screenCenterWorldCoords().toString(),
+                editorViewModel.getPivotProperty(), p.draw().hvalueProperty(), p.draw().vvalueProperty()));
+
+        Button focusButton = new Button("Focus");
+        focusButton.setOnAction(event -> p.focusWorldCoordinates(new Point2D(0, 0)));
+
+        infoBox.getChildren().addAll(currentViewLabel, screenCenterLabel, focusButton);
+        return infoBox;
     }
 
     public Node buildSearchWindow(EditorView editorView) {

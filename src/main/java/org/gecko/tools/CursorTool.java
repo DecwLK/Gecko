@@ -1,16 +1,12 @@
 package org.gecko.tools;
 
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.views.ViewElementPane;
 import org.gecko.view.views.viewelement.EdgeViewElement;
 import org.gecko.view.views.viewelement.RegionViewElement;
 import org.gecko.view.views.viewelement.StateViewElement;
@@ -43,9 +39,8 @@ public class CursorTool extends Tool {
     private Point2D previousDragPosition;
     private Point2D oldPosition;
     private Point2D oldSize;
-    private Node draggedElement;
 
-    private ScrollPane viewPane;
+    private ViewElementPane viewPane;
 
     public CursorTool(ActionManager actionManager, SelectionManager selectionManager, EditorViewModel editorViewModel) {
         super(actionManager, ToolType.CURSOR);
@@ -54,11 +49,11 @@ public class CursorTool extends Tool {
     }
 
     @Override
-    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
-        super.visitView(vbox, view, worldGroup, containerGroup);
-        view.setCursor(Cursor.DEFAULT);
-        view.setPannable(false);
-        viewPane = view;
+    public void visitView(ViewElementPane pane) {
+        super.visitView(pane);
+        pane.draw().setCursor(Cursor.DEFAULT);
+        pane.draw().setPannable(false);
+        viewPane = pane;
     }
 
     @Override
@@ -131,7 +126,7 @@ public class CursorTool extends Tool {
                 return;
             }
 
-            startDraggingElementHandler(event, scaler);
+            startDraggingElementHandler(event);
             scaler.setDragging(true);
             oldPosition = scaler.getDecoratorTarget().getTarget().getPosition();
             oldSize = scaler.getDecoratorTarget().getTarget().getSize();
@@ -179,14 +174,15 @@ public class CursorTool extends Tool {
                 return;
             }
 
-            startDraggingElementHandler(event, scaler);
+            startDraggingElementHandler(event);
             scaler.setDragging(true);
         });
         scaler.setOnMouseDragged(event -> {
             if (!isDragging) {
                 return;
             }
-            Point2D eventPosition = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
+            Point2D eventPosition =
+                viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
             Point2D delta = eventPosition.subtract(previousDragPosition);
             scaler.setPosition(scaler.getPosition().add(delta));
             previousDragPosition = eventPosition;
@@ -195,7 +191,8 @@ public class CursorTool extends Tool {
             if (!isDragging) {
                 return;
             }
-            Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
+            Point2D endWorldPos =
+                viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
             scaler.setPosition(scaler.getPosition().add(startDragPosition.subtract(endWorldPos)));
             Action moveAction;
 
@@ -220,7 +217,7 @@ public class CursorTool extends Tool {
             if (event.getButton() != MouseButton.PRIMARY) {
                 return;
             }
-            startDraggingElementHandler(event, element.drawElement());
+            startDraggingElementHandler(event);
 
             if (!element.isSelected()) {
                 selectElement(element, !event.isShiftDown());
@@ -237,10 +234,9 @@ public class CursorTool extends Tool {
         });
     }
 
-    private void startDraggingElementHandler(MouseEvent event, Node element) {
-        draggedElement = element;
+    private void startDraggingElementHandler(MouseEvent event) {
         isDragging = true;
-        startDragPosition = getWorldCoordinates(element).add(new Point2D(event.getX(), event.getY()));
+        startDragPosition = viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
         previousDragPosition = startDragPosition;
     }
 
@@ -248,7 +244,7 @@ public class CursorTool extends Tool {
         if (!isDragging) {
             return;
         }
-        Point2D eventPosition = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
+        Point2D eventPosition = viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
         Point2D delta = eventPosition.subtract(previousDragPosition);
         selectionManager.getCurrentSelection().forEach(element -> {
             element.setCurrentlyModified(true);
@@ -261,7 +257,7 @@ public class CursorTool extends Tool {
         if (!isDragging) {
             return;
         }
-        Point2D endWorldPos = getWorldCoordinates(draggedElement).add(new Point2D(event.getX(), event.getY()));
+        Point2D endWorldPos = viewPane.screenToWorldCoordinates(new Point2D(event.getScreenX(), event.getScreenY()));
         selectionManager.getCurrentSelection().forEach(element -> {
             element.setCurrentlyModified(false);
             element.setPosition(element.getPosition().add(startDragPosition.subtract(endWorldPos)));
@@ -277,37 +273,12 @@ public class CursorTool extends Tool {
         actionManager.run(select);
     }
 
-    private Point2D getWorldCoordinates(Node node) {
-        Bounds nodeBounds = node.getBoundsInLocal();
-        return getWorldCoordinates(node, new Point2D(nodeBounds.getMinX(), nodeBounds.getMinY()));
-    }
-
-    private Point2D getWorldCoordinates(Node node, Point2D point) {
-        double parentX = 0;
-        double parentY = 0;
-        Node current = node;
-
-        while (current != null && current != viewPane) {
-            parentX += current.getLocalToParentTransform().getTx();
-            parentY += current.getLocalToParentTransform().getTy();
-            current = current.getParent();
-        }
-
-        if (current == null) {
-            return null;
-        }
-
-        return editorViewModel.transformViewPortToWorldCoordinates(
-            new Point2D(parentX + point.getX(), parentY + point.getY()).multiply(editorViewModel.getZoomScale()));
-    }
-
     private void cancelDrag(ElementScalerBlock scaler) {
         scaler.setDragging(false);
         cancelDrag();
     }
 
     private void cancelDrag() {
-        draggedElement = null;
         isDragging = false;
     }
 }

@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -43,6 +46,7 @@ import org.gecko.view.views.ViewElementSearchVisitor;
 @Data
 public class EditorViewModel {
     private static final double MAX_ZOOM_SCALE = 5;
+    private static final double MIN_ZOOM_SCALE = 0.05;
     private final int id;
     private final ActionManager actionManager;
     private final SystemViewModel currentSystem;
@@ -51,11 +55,11 @@ public class EditorViewModel {
     private final List<List<Tool>> tools;
     private final SelectionManager selectionManager;
 
-    private final SimpleDoubleProperty zoomScaleProperty;
-    private final Property<Point2D> viewPortPositionProperty;
-    private final Property<Point2D> requestedViewPortPositionProperty;
-    private final Property<Point2D> viewPortSizeProperty;
-    private final Property<Point2D> worldSizeProperty;
+    private final Property<Point2D> pivotProperty;
+    private final DoubleProperty zoomScaleProperty;
+    private final BooleanProperty needsRefocusProperty;
+
+
     private final Property<Tool> currentToolProperty;
     private final Property<PositionableViewModelElement<?>> focusedElementProperty;
     private final boolean isAutomatonEditor;
@@ -71,13 +75,11 @@ public class EditorViewModel {
         this.id = id;
         this.tools = FXCollections.observableArrayList();
         this.selectionManager = new SelectionManager();
-        this.zoomScaleProperty = new SimpleDoubleProperty(1);
         this.currentToolProperty = new SimpleObjectProperty<>();
         this.focusedElementProperty = new SimpleObjectProperty<>();
-        this.viewPortPositionProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
-        this.requestedViewPortPositionProperty = new SimpleObjectProperty<>();
-        this.viewPortSizeProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
-        this.worldSizeProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
+        this.pivotProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
+        this.zoomScaleProperty = new SimpleDoubleProperty(1);
+        this.needsRefocusProperty = new SimpleBooleanProperty(false);
         initializeTools();
 
         selectionManager.getCurrentSelectionProperty().addListener((observable, oldValue, newValue) -> {
@@ -162,58 +164,6 @@ public class EditorViewModel {
         }
     }
 
-    /**
-     * Transforms view port coordinates to world coordinates. This works by adjusting the coordinates by the zoom sclae
-     * and adding the current view port position to the view port coordinates.
-     *
-     * @param viewPortCoordinates the view port coordinates to transform
-     * @return the world coordinates
-     */
-    public Point2D transformViewPortToWorldCoordinates(Point2D viewPortCoordinates) {
-        return viewPortCoordinates.multiply(1 / getZoomScale()).add(viewPortPositionProperty.getValue());
-    }
-
-    /**
-     * Focuses the focused element of this {@link EditorViewModel} by moving the view port to the center of the focused
-     * element.
-     */
-    public void moveToFocusedElement() {
-        if (focusedElementProperty.getValue() != null) {
-            focusWorldPoint(focusedElementProperty.getValue().getCenter());
-        }
-    }
-
-    private void focusWorldPoint(Point2D point) {
-        requestedViewPortPositionProperty.setValue(point.subtract(getViewPortSize().multiply(0.5)));
-    }
-
-    /**
-     * Zooms the view port by the given zoom factor. The pivot is the point in the view port that should stay at the
-     * same position after the zoom.
-     *
-     * @param pivot      the pivot point
-     * @param zoomFactor the zoom factor
-     */
-    public void zoom(Point2D pivot, double zoomFactor) {
-        if (!isZoomAllowed(zoomFactor)) {
-            return;
-        }
-        zoomScaleProperty.set(getZoomScale() * zoomFactor);
-        pivot = pivot.multiply(1 / getZoomScale());
-        Point2D viewPortPosition = viewPortPositionProperty.getValue();
-        double newX = pivot.getX() * (zoomFactor - 1) + zoomFactor * viewPortPosition.getX();
-        double newY = pivot.getY() * (zoomFactor - 1) + zoomFactor * viewPortPosition.getY();
-        requestedViewPortPositionProperty.setValue(new Point2D(newX, newY));
-    }
-
-    public void zoomCenter(double zoomFactor) {
-        zoom(getCenterOfViewPort(), zoomFactor);
-    }
-
-    private Point2D getCenterOfViewPort() {
-        return new Point2D(viewPortSizeProperty.getValue().getX() / 2, viewPortSizeProperty.getValue().getY() / 2);
-    }
-
     public ToolType getCurrentToolType() {
         return currentToolProperty.getValue().getToolType();
     }
@@ -281,28 +231,47 @@ public class EditorViewModel {
         }
     }
 
+    public void moveToFocusedElement() {
+        if (focusedElementProperty.getValue() != null) {
+            setPivot(focusedElementProperty.getValue().getCenter());
+        }
+    }
+
+    public Point2D getPivot() {
+        return pivotProperty.getValue();
+    }
+
+    public void setPivot(Point2D pivot) {
+        pivotProperty.setValue(pivot);
+        needsRefocus();
+    }
+
+    public void updatePivot(Point2D pivot) {
+        pivotProperty.setValue(pivot);
+    }
+
+    public void needsRefocus() {
+        needsRefocusProperty.set(true);
+    }
+
     public double getZoomScale() {
         return zoomScaleProperty.get();
     }
 
-    public Point2D getViewPortSize() {
-        return viewPortSizeProperty.getValue();
+    public void zoom(double factor, Point2D pivot) {
+        if (factor < 0) {
+            throw new IllegalArgumentException("Zoom factor must be positive");
+        }
+        zoomScaleProperty.set(
+            Math.round(Math.clamp(zoomScaleProperty.get() * factor, MIN_ZOOM_SCALE, MAX_ZOOM_SCALE) * 1000) / 1000.0);
+        pivot = pivot.multiply(1 / zoomScaleProperty.get());
+        double newX = pivot.getX() * (factor - 1) + factor * pivotProperty.getValue().getX();
+        double newY = pivot.getY() * (factor - 1) + factor * pivotProperty.getValue().getY();
+        setPivot(new Point2D(newX, newY));
     }
 
-    public Point2D getWorldSize() {
-        return worldSizeProperty.getValue();
-    }
-
-    private boolean isZoomAllowed(double zoomFactor) {
-        if (zoomFactor <= 0) {
-            return false;
-        }
-        if (zoomFactor < 1) {
-            return getViewPortSize().getX() / getZoomScale() <= getWorldSize().getX() * zoomFactor
-                && getViewPortSize().getY() / getZoomScale() <= getWorldSize().getY() * zoomFactor;
-        } else {
-            return getZoomScale() * zoomFactor <= MAX_ZOOM_SCALE;
-        }
+    public void zoomCenter(double factor) {
+        zoom(factor, pivotProperty.getValue());
     }
 
     public List<PositionableViewModelElement<?>> getElementsByName(String name) {

@@ -16,13 +16,11 @@ import org.gecko.viewmodel.PortViewModel;
 public class CreateVariableAction extends Action {
 
     private final GeckoViewModel geckoViewModel;
-    private final EditorViewModel editorViewModel;
     private final Point2D position;
     private PortViewModel createdPortViewModel;
 
-    CreateVariableAction(GeckoViewModel geckoViewModel, EditorViewModel editorViewModel, Point2D position) {
+    CreateVariableAction(GeckoViewModel geckoViewModel, Point2D position) {
         this.geckoViewModel = geckoViewModel;
-        this.editorViewModel = editorViewModel;
         this.position = position;
     }
 
@@ -30,7 +28,7 @@ public class CreateVariableAction extends Action {
     boolean run() throws GeckoException {
         createdPortViewModel = geckoViewModel.getViewModelFactory()
             .createPortViewModelIn(geckoViewModel.getCurrentEditor().getCurrentSystem());
-        createdPortViewModel.setCenter(editorViewModel.transformViewPortToWorldCoordinates(position));
+        createdPortViewModel.setCenter(position);
         ActionManager actionManager = geckoViewModel.getActionManager();
         actionManager.run(actionManager.getActionFactory().createSelectAction(createdPortViewModel, true));
         return true;

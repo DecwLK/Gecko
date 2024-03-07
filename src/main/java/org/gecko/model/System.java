@@ -25,7 +25,7 @@ public class System extends Element implements Renamable {
     private final Set<Variable> variables;
     private String name;
     @JsonIgnore
-    @Setter(onParam_ = {@NonNull})
+    @Setter
     private System parent;
     private String code;
     @Setter(onParam_ = {@NonNull})

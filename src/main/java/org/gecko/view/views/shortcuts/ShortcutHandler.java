@@ -89,6 +89,9 @@ public abstract class ShortcutHandler implements EventHandler<KeyEvent> {
         shortcuts.put(Shortcuts.SELECTION_BACK.get(), () -> {
             actionManager.run(actionFactory.createSelectionHistoryBackAction());
         });
+        shortcuts.put(Shortcuts.FOCUS_SELECTED_ELEMENT.get(), () -> {
+            editorView.getViewModel().moveToFocusedElement();
+        });
     }
 
     private void addDeleteShortcuts() {

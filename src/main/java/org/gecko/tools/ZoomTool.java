@@ -2,10 +2,8 @@ package org.gecko.tools;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.views.ViewElementPane;
 
 /**
  * A concrete representation of a zoom-{@link Tool}, utilized for zooming in and out in the view.
@@ -18,13 +16,12 @@ public class ZoomTool extends Tool {
     }
 
     @Override
-    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
-        super.visitView(vbox, view, worldGroup, containerGroup);
-        view.setCursor(Cursor.CROSSHAIR);
-        worldGroup.setMouseTransparent(true);
+    public void visitView(ViewElementPane pane) {
+        super.visitView(pane);
+        pane.draw().setCursor(Cursor.CROSSHAIR);
 
-        view.setOnMouseClicked(event -> {
-            Point2D position = new Point2D(event.getX(), event.getY());
+        pane.draw().setOnMouseClicked(event -> {
+            Point2D position = pane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
 
             if (event.isShiftDown()) {
                 actionManager.run(actionManager.getActionFactory().createZoomAction(position, 1 / ZOOM_SCALE));

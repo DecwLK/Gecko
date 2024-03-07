@@ -22,7 +22,7 @@ public class ZoomAction extends Action {
 
     @Override
     boolean run() throws GeckoException {
-        editorViewModel.zoom(pivot, factor);
+        editorViewModel.zoom(factor, pivot);
         return true;
     }
 

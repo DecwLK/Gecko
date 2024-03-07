@@ -91,10 +91,6 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
             }
         };
         regionViewModel.getStatesProperty().addListener(listener);
-        layoutXProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getX(),
-            regionViewModel.getPositionProperty()));
-        layoutYProperty().bind(Bindings.createDoubleBinding(() -> regionViewModel.getPosition().getY(),
-            regionViewModel.getPositionProperty()));
         prefWidthProperty().bind(
             Bindings.createDoubleBinding(() -> regionViewModel.getSize().getX(), regionViewModel.getSizeProperty()));
         prefHeightProperty().bind(

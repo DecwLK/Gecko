@@ -57,7 +57,7 @@ public class MoveEdgeViewModelElementAction extends Action {
     }
 
     private StateViewModel attemptRelocation() {
-        return getStateViewModelAt(elementScalerBlock.getPosition().add(delta));
+        return getStateViewModelAt(elementScalerBlock.getLayoutPosition().add(delta));
     }
 
     private StateViewModel getStateViewModelAt(Point2D point) {

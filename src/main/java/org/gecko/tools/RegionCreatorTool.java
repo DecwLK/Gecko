@@ -30,13 +30,13 @@ public class RegionCreatorTool extends AreaTool {
     }
 
     @Override
-    void onAreaCreated(MouseEvent event, Bounds worldAreaBounds) {
-        if (worldAreaBounds.getWidth() < BlockViewModelElement.MIN_WIDTH
-            || worldAreaBounds.getHeight() < BlockViewModelElement.MIN_HEIGHT) {
+    void onAreaCreated(MouseEvent event, Bounds worldBounds) {
+        if (worldBounds.getWidth() < BlockViewModelElement.MIN_WIDTH
+            || worldBounds.getHeight() < BlockViewModelElement.MIN_HEIGHT) {
             return;
         }
         actionManager.run(actionManager.getActionFactory()
-            .createCreateRegionViewModelElementAction(new Point2D(worldAreaBounds.getMinX(), worldAreaBounds.getMinY()),
-                new Point2D(worldAreaBounds.getWidth(), worldAreaBounds.getHeight()), color));
+            .createCreateRegionViewModelElementAction(new Point2D(worldBounds.getMinX(), worldBounds.getMinY()),
+                new Point2D(worldBounds.getWidth(), worldBounds.getHeight()), color));
     }
 }

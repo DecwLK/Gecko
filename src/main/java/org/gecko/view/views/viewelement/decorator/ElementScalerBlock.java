@@ -40,8 +40,7 @@ public class ElementScalerBlock extends Rectangle {
 
         ChangeListener<Point2D> newListener = (observable, oldValue, newValue) -> {
             if (!isDragging) {
-                setLayoutX(newValue.getX() - (getWidth() / 2));
-                setLayoutY(newValue.getY() - (getHeight() / 2));
+                updatePosition();
             }
         };
         decoratorTarget.getEdgePoints().get(index).addListener(newListener);
@@ -52,8 +51,12 @@ public class ElementScalerBlock extends Rectangle {
      * Updates the position of the scaler block to match the edge point.
      */
     public void updatePosition() {
-        setLayoutX(decoratorTarget.getEdgePoints().get(index).getValue().getX() - (getWidth() / 2));
-        setLayoutY(decoratorTarget.getEdgePoints().get(index).getValue().getY() - (getHeight() / 2));
+        setLayoutX(
+            decoratorTarget.getEdgePoints().get(index).getValue().getX() - getDecoratorTarget().getPosition().getX() - (
+                getWidth() / 2));
+        setLayoutY(
+            decoratorTarget.getEdgePoints().get(index).getValue().getY() - getDecoratorTarget().getPosition().getY() - (
+                getHeight() / 2));
     }
 
     /**
@@ -61,7 +64,7 @@ public class ElementScalerBlock extends Rectangle {
      *
      * @param point The new position of the scaler block.
      */
-    public void setPosition(Point2D point) {
+    public void setLayoutPosition(Point2D point) {
         setLayoutX(point.getX());
         setLayoutY(point.getY());
 
@@ -69,12 +72,13 @@ public class ElementScalerBlock extends Rectangle {
     }
 
     /**
-     * Sets the center position of the scaler block and updates the edge point.
+     * Sets the center position of the scaler in world coordinates block and updates the edge point.
      *
      * @param point The new center of the scaler block.
      */
     public boolean setCenter(Point2D point) {
         if (decoratorTarget.setEdgePoint(index, point)) {
+            point = point.subtract(getDecoratorTarget().getPosition());
             Point2D center = new Point2D(point.getX() - (getWidth() / 2), point.getY() - (getHeight() / 2));
             setLayoutX(center.getX());
             setLayoutY(center.getY());
@@ -88,7 +92,7 @@ public class ElementScalerBlock extends Rectangle {
      *
      * @return The position of the scaler block.
      */
-    public Point2D getPosition() {
+    public Point2D getLayoutPosition() {
         return new Point2D(getLayoutX(), getLayoutY());
     }
 

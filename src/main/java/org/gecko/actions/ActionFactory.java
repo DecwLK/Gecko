@@ -106,11 +106,11 @@ public class ActionFactory {
     }
 
     public CreateSystemViewModelElementAction createCreateSystemViewModelElementAction(Point2D position) {
-        return new CreateSystemViewModelElementAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
+        return new CreateSystemViewModelElementAction(geckoViewModel, position);
     }
 
     public CreateVariableAction createCreateVariableAction(Point2D position) {
-        return new CreateVariableAction(geckoViewModel, geckoViewModel.getCurrentEditor(), position);
+        return new CreateVariableAction(geckoViewModel, position);
     }
 
     public DeleteContractViewModelAction createDeleteContractViewModelAction(

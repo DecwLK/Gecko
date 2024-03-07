@@ -3,13 +3,11 @@ package org.gecko.tools;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.views.ViewElementPane;
 import org.gecko.view.views.viewelement.EdgeViewElement;
 import org.gecko.view.views.viewelement.PortViewElement;
 import org.gecko.view.views.viewelement.RegionViewElement;
@@ -42,16 +40,12 @@ public abstract class Tool implements ViewElementVisitor {
     /**
      * Applies listeners to the given view, which is assumed to be the current view of the application.
      *
-     * @param vbox           the container around the container group
-     * @param view           the scroll pane that contains the world group
-     * @param worldGroup     the group that contains all the elements of the view
-     * @param containerGroup the container group outside the world group
+     * @param pane the view to visit
      */
-    public void visitView(VBox vbox, ScrollPane view, Group worldGroup, Group containerGroup) {
-        view.setCursor(Cursor.DEFAULT);
-        worldGroup.setMouseTransparent(false);
-        setAllHandlers(view, null);
-        setAllHandlers(vbox, null);
+    public void visitView(ViewElementPane pane) {
+        pane.draw().setCursor(Cursor.DEFAULT);
+        setAllHandlers(pane.draw(), null);
+        setAllHandlers(pane.getWorld(), null);
     }
 
     /**

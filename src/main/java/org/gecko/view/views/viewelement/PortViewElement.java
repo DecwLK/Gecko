@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
@@ -66,14 +65,8 @@ public class PortViewElement extends Pane {
     }
 
     private void updateBackgroundColor() {
-        System.out.println(
-            "PortViewElement.constructVisualization: visibilityProperty.getValue() = " + visibilityProperty.getValue());
-        Color backgroundColor = switch (visibilityProperty.getValue()) {
-            case INPUT -> Color.LIGHTGREEN;
-            case OUTPUT -> Color.LIGHTCORAL;
-            case STATE -> Color.LIGHTSKYBLUE;
-        };
-        Background background = new Background(new BackgroundFill(backgroundColor, null, null));
+        Background background = new Background(new BackgroundFill(PortViewModel.getBackgroundColor(
+            viewModel.getVisibility() == Visibility.INPUT ? Visibility.OUTPUT : Visibility.INPUT), null, null));
         setBackground(background);
     }
 }

@@ -12,6 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.util.Pair;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.gecko.model.Kind;
@@ -26,8 +27,7 @@ import org.gecko.viewmodel.EdgeViewModel;
 public class EdgeViewElement extends ConnectionViewElement implements ViewElement<EdgeViewModel> {
 
     private static final int Z_PRIORITY = 20;
-    private static final double LOOP_RADIUS = 40;
-    private static final double FIRST_LOOP_RADIUS = 120;
+    private static final double LABEL_OFFSET = 15.0;
 
     @Getter(AccessLevel.NONE)
     private final EdgeViewModel edgeViewModel;
@@ -90,34 +90,9 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
         Point2D first;
         Point2D last;
         if (edgeViewModel.isLoop()) {
-            double minY = Math.min(edgeViewModel.getStartPoint().getY(), edgeViewModel.getEndPoint().getY());
-            double maxY = Math.max(edgeViewModel.getStartPoint().getY(), edgeViewModel.getEndPoint().getY());
-            double offsetY = maxY - minY;
-            double minX = Math.min(edgeViewModel.getStartPoint().getX(), edgeViewModel.getEndPoint().getX());
-            double maxX = Math.max(edgeViewModel.getStartPoint().getX(), edgeViewModel.getEndPoint().getX());
-            double offsetX = maxX - minX;
-            switch (orientationProperty.get()) {
-                case 0:
-                    first = new Point2D(minX, minY - offsetY);
-                    last = new Point2D(maxX + offsetX, minY - offsetY);
-                    break;
-                case 1:
-                    first = new Point2D(minX, maxY + offsetY + 15);
-                    last = new Point2D(maxX + offsetX, maxY + offsetY + 15);
-                    break;
-                case 2:
-                    first = new Point2D(minX - offsetX, maxY + offsetY + 15);
-                    last = new Point2D(maxX, maxY + offsetY + 15);
-                    break;
-                case 3:
-                    first = new Point2D(minX - offsetX, minY - offsetY);
-                    last = new Point2D(maxX, minY - offsetY);
-                    break;
-                default:
-                    first = Point2D.ZERO;
-                    last = Point2D.ZERO;
-            }
-
+            Pair<Point2D, Point2D> loopPoints = getLoopPoints();
+            first = loopPoints.getKey();
+            last = loopPoints.getValue();
         } else {
             first = edgeViewModel.getStartPoint();
             last = edgeViewModel.getEndPoint();
@@ -145,6 +120,24 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
         label.setLayoutX(newPos.getX());
         label.setLayoutY(newPos.getY());
+    }
+
+    private Pair<Point2D, Point2D> getLoopPoints() {
+        double minY = Math.min(edgeViewModel.getStartPoint().getY(), edgeViewModel.getEndPoint().getY());
+        double maxY = Math.max(edgeViewModel.getStartPoint().getY(), edgeViewModel.getEndPoint().getY());
+        double offsetY = maxY - minY;
+        double minX = Math.min(edgeViewModel.getStartPoint().getX(), edgeViewModel.getEndPoint().getX());
+        double maxX = Math.max(edgeViewModel.getStartPoint().getX(), edgeViewModel.getEndPoint().getX());
+        double offsetX = maxX - minX;
+        return switch (orientationProperty.get()) {
+            case 0 -> new Pair<>(new Point2D(minX, minY - offsetY), new Point2D(maxX + offsetX, minY - offsetY));
+            case 1 -> new Pair<>(new Point2D(minX, maxY + offsetY + LABEL_OFFSET),
+                new Point2D(maxX + offsetX, maxY + offsetY + LABEL_OFFSET));
+            case 2 -> new Pair<>(new Point2D(minX - offsetX, maxY + offsetY + LABEL_OFFSET),
+                new Point2D(maxX, maxY + offsetY + LABEL_OFFSET));
+            case 3 -> new Pair<>(new Point2D(minX - offsetX, minY - offsetY), new Point2D(maxX, minY - offsetY));
+            default -> new Pair<>(Point2D.ZERO, Point2D.ZERO);
+        };
     }
 
     @Override

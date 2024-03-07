@@ -19,6 +19,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Pair;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * An abstract representation of a {@link Path} type view element, that is a connection in a Gecko project. Contains a
@@ -29,11 +30,13 @@ public abstract class ConnectionViewElement extends Path {
     private static final String STYLE_CLASS = "path";
     private static final double ARROW_HEAD_LENGTH = 25;
     private static final double ARROW_HEAD_ANGLE = 10;
+    private static final Point2D ANGLE_OFFSET_HELPER = new Point2D(50, 10);
 
     private final ObservableList<Property<Point2D>> pathSource;
     private MoveTo startElement;
     protected BooleanProperty isLoopProperty;
     protected IntegerProperty orientationProperty;
+
 
     @Getter
     @Setter
@@ -70,7 +73,6 @@ public abstract class ConnectionViewElement extends Path {
      * as a loop by adding extra points to render path source.
      */
     protected void updatePathVisualization() {
-        System.out.println("updatePathVisualization");
         getElements().clear();
 
         renderPathSource = new ArrayList<>();
@@ -90,7 +92,6 @@ public abstract class ConnectionViewElement extends Path {
         renderPathSource.add(new Pair<>(startElement.xProperty(), startElement.yProperty()));
 
         if (isLoopProperty.get()) {
-            System.out.println("Loop");
             // If source and destination are the same, draw a loop
             ArcTo arcTo = new ArcTo();
             arcTo.radiusXProperty()
@@ -109,50 +110,6 @@ public abstract class ConnectionViewElement extends Path {
             arcTo.sweepFlagProperty().setValue(true);
             getElements().add(arcTo);
             renderPathSource.add(new Pair<>(arcTo.xProperty(), arcTo.yProperty()));
-
-
-
-
-            /*LineTo lineTo =
-                new LineTo(pathSource.getFirst().getValue().getX() - radius, pathSource.getFirst().getValue().getY());
-            lineTo.xProperty()
-                .bind(Bindings.createDoubleBinding(() -> pathSource.getFirst().getValue().getX() - radius,
-                    pathSource.getFirst()));
-            lineTo.yProperty()
-                .bind(
-                    Bindings.createDoubleBinding(() -> pathSource.getFirst().getValue().getY(), pathSource.getFirst()));
-            getElements().add(lineTo);
-            renderPathSource.add(new Pair<>(lineTo.xProperty(), lineTo.yProperty()));
-
-            LineTo lineTo2 =
-                new LineTo(pathSource.getFirst().getValue().getX(), pathSource.getFirst().getValue().getY() + radius);
-            lineTo2.xProperty()
-                .bind(
-                    Bindings.createDoubleBinding(() -> pathSource.getFirst().getValue().getX(), pathSource.getFirst()));
-            lineTo2.yProperty()
-                .bind(Bindings.createDoubleBinding(() -> pathSource.getFirst().getValue().getY() + radius,
-                    pathSource.getFirst()));
-            getElements().add(lineTo2);
-            renderPathSource.add(new Pair<>(lineTo2.xProperty(), lineTo2.yProperty()));
-
-            LineTo lineTo3 =
-                new LineTo(pathSource.getFirst().getValue().getX(), pathSource.getFirst().getValue().getY() + radius);
-            lineTo2.xProperty()
-                .bind(Bindings.createDoubleBinding(() -> pathSource.getLast().getValue().getX() - radius,
-                    pathSource.getFirst()));
-            lineTo2.yProperty()
-                .bind(
-                    Bindings.createDoubleBinding(() -> pathSource.getLast().getValue().getY(), pathSource.getFirst()));
-            getElements().add(lineTo3);
-            renderPathSource.add(new Pair<>(lineTo3.xProperty(), lineTo3.yProperty()));
-
-            LineTo endPoint =
-                new LineTo(pathSource.getLast().getValue().getX(), pathSource.getLast().getValue().getY());
-            endPoint.xProperty()
-                .bind(Bindings.createDoubleBinding(() -> pathSource.getLast().getValue().getX(), pathSource.getLast()));
-            endPoint.yProperty()
-                .bind(Bindings.createDoubleBinding(() -> pathSource.getLast().getValue().getY(), pathSource.getLast()));
-            getElements().add(endPoint);*/
         } else {
             // Elements in the middle
             for (Property<Point2D> point : pathSource) {
@@ -175,23 +132,22 @@ public abstract class ConnectionViewElement extends Path {
         if (isLoopProperty.get()) {
             secondLastY.unbind();
             secondLastX.unbind();
-            System.out.println(orientationProperty.get());
             switch (orientationProperty.get()) {
                 case 0:
-                    secondLastX.bind(lastX.add(50));
-                    secondLastY.bind(lastY.subtract(10));
+                    secondLastX.bind(lastX.add(ANGLE_OFFSET_HELPER.getX()));
+                    secondLastY.bind(lastY.subtract(ANGLE_OFFSET_HELPER.getY()));
                     break;
                 case 1:
-                    secondLastX.bind(lastX.add(10));
-                    secondLastY.bind(lastY.add(50));
+                    secondLastX.bind(lastX.add(ANGLE_OFFSET_HELPER.getY()));
+                    secondLastY.bind(lastY.add(ANGLE_OFFSET_HELPER.getX()));
                     break;
                 case 2:
-                    secondLastX.bind(lastX.subtract(50));
-                    secondLastY.bind(lastY.add(10));
+                    secondLastX.bind(lastX.subtract(ANGLE_OFFSET_HELPER.getX()));
+                    secondLastY.bind(lastY.add(ANGLE_OFFSET_HELPER.getY()));
                     break;
                 case 3:
-                    secondLastX.bind(lastX.subtract(10));
-                    secondLastY.bind(lastY.subtract(50));
+                    secondLastX.bind(lastX.subtract(ANGLE_OFFSET_HELPER.getY()));
+                    secondLastY.bind(lastY.subtract(ANGLE_OFFSET_HELPER.getX()));
                     break;
                 default:
                     break;

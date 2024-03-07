@@ -4,6 +4,7 @@ import javafx.geometry.Point2D;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.model.State;
 import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
+import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
@@ -19,7 +20,11 @@ public class MoveEdgeViewModelElementAction extends Action {
     private final EditorViewModel editorViewModel;
     private final EdgeViewModel edgeViewModel;
     private final ElementScalerBlock elementScalerBlock;
-    private final Point2D delta;
+    private Point2D delta;
+    private StateViewModel stateViewModel;
+    private StateViewModel previousStateViewModel;
+    private ContractViewModel contractViewModel;
+    private ContractViewModel previousContractViewModel;
 
     MoveEdgeViewModelElementAction(
         GeckoViewModel geckoViewModel, EdgeViewModel edgeViewModel, ElementScalerBlock elementScalerBlock,
@@ -31,19 +36,36 @@ public class MoveEdgeViewModelElementAction extends Action {
         this.delta = delta;
     }
 
+    MoveEdgeViewModelElementAction(
+        GeckoViewModel geckoViewModel, EdgeViewModel edgeViewModel, ElementScalerBlock elementScalerBlock,
+        StateViewModel stateViewModel, ContractViewModel contractViewModel) {
+        this.geckoViewModel = geckoViewModel;
+        this.editorViewModel = geckoViewModel.getCurrentEditor();
+        this.edgeViewModel = edgeViewModel;
+        this.elementScalerBlock = elementScalerBlock;
+        this.stateViewModel = stateViewModel;
+        this.contractViewModel = contractViewModel;
+    }
+
+
     @Override
     boolean run() throws GeckoException {
-        StateViewModel newStateViewModel = attemptRelocation();
-
-        if (newStateViewModel == null) {
-            edgeViewModel.setBindings();
-            return false;
+        previousStateViewModel =
+            elementScalerBlock.getIndex() == 0 ? edgeViewModel.getSource() : edgeViewModel.getDestination();
+        if (stateViewModel == null) {
+            stateViewModel = attemptRelocation();
+            if (stateViewModel == null) {
+                edgeViewModel.setBindings();
+                return false;
+            }
         }
 
         if (elementScalerBlock.getIndex() == 0) {
-            edgeViewModel.setSource(newStateViewModel);
+            edgeViewModel.setSource(stateViewModel);
+            previousContractViewModel = edgeViewModel.getContract();
+            edgeViewModel.setContract(contractViewModel);
         } else {
-            edgeViewModel.setDestination(newStateViewModel);
+            edgeViewModel.setDestination(stateViewModel);
         }
 
         elementScalerBlock.updatePosition();
@@ -54,7 +76,7 @@ public class MoveEdgeViewModelElementAction extends Action {
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
         return actionFactory.createMoveEdgeViewModelElementAction(edgeViewModel, elementScalerBlock,
-            delta.multiply(-1));
+            previousStateViewModel, previousContractViewModel);
     }
 
     private StateViewModel attemptRelocation() {

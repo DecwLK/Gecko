@@ -45,11 +45,12 @@ public abstract class BlockViewElement extends Pane {
     }
 
     private void calculateEdgePoints(PositionableViewModelElement<?> target) {
+        Point2D position = target.getPosition();
         double width = target.getSize().getX();
         double height = target.getSize().getY();
-        edgePoints.get(0).setValue(new Point2D(0, 0));
-        edgePoints.get(1).setValue(new Point2D(width, 0));
-        edgePoints.get(2).setValue(new Point2D(width, height));
-        edgePoints.get(3).setValue(new Point2D(0, height));
+        edgePoints.get(0).setValue(position.add(new Point2D(0, 0)));
+        edgePoints.get(1).setValue(position.add(new Point2D(width, 0)));
+        edgePoints.get(2).setValue(position.add(new Point2D(width, height)));
+        edgePoints.get(3).setValue(position.add(new Point2D(0, height)));
     }
 }

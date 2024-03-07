@@ -96,7 +96,8 @@ public class ViewElementPane {
     }
 
     public void removeElement(ViewElement<?> element) {
-        world.getChildren().remove(element.drawElement());
+        elements.remove(element);
+        orderChildren();
     }
 
     public ViewElement<?> findViewElement(PositionableViewModelElement<?> element) {
@@ -160,12 +161,12 @@ public class ViewElementPane {
 
     private void updateWorldSize() {
         updateMinAndMaxWorldPosition();
-        double newMinX = Math.min(minWorldPosition.getX(), 0) - widthPadding.get();
-        double newMinY = Math.min(minWorldPosition.getY(), 0) - heightPadding.get();
-        double newMaxX = Math.max(maxWorldPosition.getX(), 0) + widthPadding.get();
-        double newMaxY = Math.max(maxWorldPosition.getY(), 0) + heightPadding.get();
-        double newWidth = newMaxX - newMinX;
-        double newHeight = newMaxY - newMinY;
+        Point2D localMin = worldTolocalCoordinates(minWorldPosition);
+        Point2D localMax = worldTolocalCoordinates(maxWorldPosition);
+        double newWidth =
+            Math.max(pane.getViewportBounds().getWidth(), localMax.getX() - localMin.getX() + widthPadding.get() * 2);
+        double newHeight =
+            Math.max(pane.getViewportBounds().getHeight(), localMax.getY() - localMin.getY() + heightPadding.get() * 2);
         world.setMinSize(newWidth, newHeight);
         pane.layout();
         updateOffset();
@@ -205,7 +206,7 @@ public class ViewElementPane {
             }
         });
         evm.getZoomScaleProperty().addListener((obs, oldV, newV) -> {
-            updateWorldSize();
+            updateWorldSize(evm.getPivot());
         });
         pane.hvalueProperty().addListener((obs, oldH, newH) -> {
             evm.updatePivot(screenCenterWorldCoords());

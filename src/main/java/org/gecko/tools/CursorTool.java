@@ -130,7 +130,7 @@ public class CursorTool extends Tool {
             scaler.setDragging(true);
             oldPosition = scaler.getDecoratorTarget().getTarget().getPosition();
             oldSize = scaler.getDecoratorTarget().getTarget().getSize();
-            startDragPosition = scaler.localToParent(scaler.sceneToLocal(event.getSceneX(), event.getSceneY()));
+            startDragPosition = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
             previousDragPosition = startDragPosition;
             isDragging = true;
         });
@@ -139,7 +139,7 @@ public class CursorTool extends Tool {
             if (!isDragging) {
                 return;
             }
-            Point2D newPosition = scaler.localToParent(scaler.sceneToLocal(event.getSceneX(), event.getSceneY()));
+            Point2D newPosition = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
 
             if (!scaler.setCenter(newPosition)) {
                 cancelDrag(scaler);
@@ -184,7 +184,7 @@ public class CursorTool extends Tool {
             Point2D eventPosition =
                 viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
             Point2D delta = eventPosition.subtract(previousDragPosition);
-            scaler.setPosition(scaler.getPosition().add(delta));
+            scaler.setLayoutPosition(scaler.getLayoutPosition().add(delta));
             previousDragPosition = eventPosition;
         });
         scaler.setOnMouseReleased(event -> {
@@ -193,7 +193,7 @@ public class CursorTool extends Tool {
             }
             Point2D endWorldPos =
                 viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
-            scaler.setPosition(scaler.getPosition().add(startDragPosition.subtract(endWorldPos)));
+            scaler.setLayoutPosition(scaler.getLayoutPosition().add(startDragPosition.subtract(endWorldPos)));
             Action moveAction;
 
             if (editorViewModel.isAutomatonEditor()) {

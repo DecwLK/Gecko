@@ -78,6 +78,10 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
         pane.getChildren().add(label);
 
+        isLoopProperty.bind(edgeViewModel.getIsLoopProperty());
+        orientationProperty.bind(edgeViewModel.getOrientationProperty());
+
+
         constructVisualization();
         calculateLabelPosition();
     }
@@ -85,11 +89,35 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     private void calculateLabelPosition() {
         Point2D first;
         Point2D last;
-        if (edgeViewModel.getSource().equals(edgeViewModel.getDestination()) && renderPathSource.size() >= 4) {
-            first =
-                new Point2D(renderPathSource.get(2).getKey().getValue(), renderPathSource.get(2).getValue().getValue());
-            last =
-                new Point2D(renderPathSource.get(3).getKey().getValue(), renderPathSource.get(3).getValue().getValue());
+        if (edgeViewModel.isLoop()) {
+            double minY = Math.min(edgeViewModel.getStartPoint().getY(), edgeViewModel.getEndPoint().getY());
+            double maxY = Math.max(edgeViewModel.getStartPoint().getY(), edgeViewModel.getEndPoint().getY());
+            double offsetY = maxY - minY;
+            double minX = Math.min(edgeViewModel.getStartPoint().getX(), edgeViewModel.getEndPoint().getX());
+            double maxX = Math.max(edgeViewModel.getStartPoint().getX(), edgeViewModel.getEndPoint().getX());
+            double offsetX = maxX - minX;
+            switch (orientationProperty.get()) {
+                case 0:
+                    first = new Point2D(minX, minY - offsetY);
+                    last = new Point2D(maxX + offsetX, minY - offsetY);
+                    break;
+                case 1:
+                    first = new Point2D(minX, maxY + offsetY + 15);
+                    last = new Point2D(maxX + offsetX, maxY + offsetY + 15);
+                    break;
+                case 2:
+                    first = new Point2D(minX - offsetX, maxY + offsetY + 15);
+                    last = new Point2D(maxX, maxY + offsetY + 15);
+                    break;
+                case 3:
+                    first = new Point2D(minX - offsetX, minY - offsetY);
+                    last = new Point2D(maxX, minY - offsetY);
+                    break;
+                default:
+                    first = Point2D.ZERO;
+                    last = Point2D.ZERO;
+            }
+
         } else {
             first = edgeViewModel.getStartPoint();
             last = edgeViewModel.getEndPoint();
@@ -117,7 +145,6 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
         label.setLayoutX(newPos.getX());
         label.setLayoutY(newPos.getY());
-
     }
 
     @Override
@@ -154,5 +181,18 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     public ObservableList<Property<Point2D>> getEdgePoints() {
         return FXCollections.observableArrayList(edgeViewModel.getStartPointProperty(),
             edgeViewModel.getEndPointProperty());
+    }
+
+    @Override
+    public boolean setEdgePoint(int index, Point2D point) {
+        if (index == 0) {
+
+            edgeViewModel.setStartPoint(point);
+            return true;
+        } else if (index == 1) {
+            edgeViewModel.setEndPoint(point);
+            return true;
+        }
+        return false;
     }
 }

@@ -27,6 +27,8 @@ import org.gecko.model.State;
 @Setter
 @Getter
 public class StateViewModel extends BlockViewModelElement<State> {
+    private static final int LOOPS = 4;
+    private static final int ORIENTATIONS = 4;
     private final BooleanProperty isStartStateProperty;
     private final ListProperty<ContractViewModel> contractsProperty;
 
@@ -93,25 +95,46 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
     public void setEdgeOffsets() {
         Map<Integer, List<EdgeViewModel>> intersectionOrientationEdges = getIntersectionOrientationEdges();
-        for (int orientation : intersectionOrientationEdges.keySet()) {
+        int loopOrientation = 0;
+        int min = Integer.MAX_VALUE;
+        for (int orientation = 0; orientation < ORIENTATIONS; orientation++) {
+            int count = intersectionOrientationEdges.get(orientation).size() + intersectionOrientationEdges.get(
+                (orientation + 1) % ORIENTATIONS).size();
+            if (count < min) {
+                min = count;
+                loopOrientation = orientation;
+            }
+        }
+
+        for (EdgeViewModel edge : intersectionOrientationEdges.get(LOOPS)) {
+            intersectionOrientationEdges.get(loopOrientation).addLast(edge);
+            intersectionOrientationEdges.get((loopOrientation + 1) % ORIENTATIONS).addFirst(edge);
+            edge.setOrientation(loopOrientation);
+        }
+
+        for (int orientation = 0; orientation < ORIENTATIONS; orientation++) {
             int count = intersectionOrientationEdges.get(orientation).size();
             double width = getSize().getX();
             double height = getSize().getY();
             double part = (orientation % 2 == 0 ? width : height) / (count + 1);
             double offset = part;
             for (EdgeViewModel edge : intersectionOrientationEdges.get(orientation)) {
+                boolean isSource = edge.getSource().equals(this);
+                if (edge.isLoop()) {
+                    isSource = loopOrientation == orientation;
+                }
                 switch (orientation) {
                     case 0:
-                        setOffset(edge, -width / 2 + offset, -height / 2);
+                        setOffset(edge, isSource, -width / 2 + offset, -height / 2);
                         break;
                     case 1:
-                        setOffset(edge, width / 2, -height / 2 + offset);
+                        setOffset(edge, isSource, width / 2, -height / 2 + offset);
                         break;
                     case 2:
-                        setOffset(edge, width / 2 - offset, height / 2);
+                        setOffset(edge, isSource, width / 2 - offset, height / 2);
                         break;
                     case 3:
-                        setOffset(edge, -width / 2, height / 2 - offset);
+                        setOffset(edge, isSource, -width / 2, height / 2 - offset);
                         break;
                     default:
                         continue;
@@ -121,8 +144,8 @@ public class StateViewModel extends BlockViewModelElement<State> {
         }
     }
 
-    private void setOffset(EdgeViewModel edge, double x, double y) {
-        if (edge.getSource().equals(this)) {
+    private void setOffset(EdgeViewModel edge, boolean isSource, double x, double y) {
+        if (isSource) {
             edge.setStartOffsetProperty(new Point2D(x, y));
         } else {
             edge.setEndOffsetProperty(new Point2D(x, y));
@@ -131,12 +154,16 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
     private Map<Integer, List<EdgeViewModel>> getIntersectionOrientationEdges() {
         Map<Integer, List<EdgeViewModel>> intersectionOrientationEdges = new HashMap<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < ORIENTATIONS + 1; i++) {
             intersectionOrientationEdges.put(i, new ArrayList<>());
         }
         List<EdgeViewModel> edges = new ArrayList<>(getIncomingEdges());
         edges.addAll(getOutgoingEdges().reversed());
         for (EdgeViewModel edge : edges) {
+            if (edge.isLoop() && !intersectionOrientationEdges.get(LOOPS).contains(edge)) {
+                intersectionOrientationEdges.get(LOOPS).add(edge);
+                continue;
+            }
             Point2D p1 = edge.getSource().getCenter();
             Point2D p2 = edge.getDestination().getCenter();
             int orientation = getIntersectionOrientation(p1, p2);
@@ -155,7 +182,6 @@ public class StateViewModel extends BlockViewModelElement<State> {
             Point2D p3 = edgePoints.get(i);
             Point2D p4 = edgePoints.get((i + 1) % 4);
             if (lineIntersectsLine(p1, p2, p3, p4)) {
-                System.out.println("State " + getName() + ":" + i);
                 return i;
             }
         }

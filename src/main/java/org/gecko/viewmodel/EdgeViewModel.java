@@ -1,8 +1,10 @@
 package org.gecko.viewmodel;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
@@ -29,6 +31,8 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     private final Property<ContractViewModel> contractProperty;
     private final Property<StateViewModel> sourceProperty;
     private final Property<StateViewModel> destinationProperty;
+    private final BooleanProperty isLoopProperty;
+    private final IntegerProperty orientationProperty;
     /**
      * The list of edge points that define the path of the edge.
      */
@@ -46,6 +50,10 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         this.contractProperty = new SimpleObjectProperty<>();
         this.sourceProperty = new SimpleObjectProperty<>(source);
         this.destinationProperty = new SimpleObjectProperty<>(destination);
+        this.isLoopProperty = new SimpleBooleanProperty();
+        isLoopProperty.bind(Bindings.createBooleanBinding(() -> getSource().equals(getDestination()), sourceProperty,
+            destinationProperty));
+        this.orientationProperty = new SimpleIntegerProperty();
 
         this.startOffsetProperty = new SimpleObjectProperty<>(Point2D.ZERO);
         this.endOffsetProperty = new SimpleObjectProperty<>(Point2D.ZERO);
@@ -57,7 +65,7 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         getDestination().getIncomingEdges().add(this);
     }
 
-    private void setBindings() {
+    public void setBindings() {
         startPointProperty.bind(Bindings.createObjectBinding(() -> {
             return getSource().getCenter().add(startOffsetProperty.getValue());
         }, startOffsetProperty, getSource().getPositionProperty()));
@@ -164,5 +172,23 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
 
     public Point2D getEndPoint() {
         return endPointProperty.getValue();
+    }
+
+    public void setStartPoint(Point2D startPoint) {
+        removeBindings();
+        startPointProperty.setValue(startPoint);
+    }
+
+    public void setEndPoint(Point2D endPoint) {
+        removeBindings();
+        endPointProperty.setValue(endPoint);
+    }
+
+    public boolean isLoop() {
+        return isLoopProperty.getValue();
+    }
+
+    public void setOrientation(int orientation) {
+        orientationProperty.setValue(orientation);
     }
 }

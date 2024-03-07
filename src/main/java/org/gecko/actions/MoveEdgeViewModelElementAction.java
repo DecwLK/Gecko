@@ -36,6 +36,7 @@ public class MoveEdgeViewModelElementAction extends Action {
         StateViewModel newStateViewModel = attemptRelocation();
 
         if (newStateViewModel == null) {
+            edgeViewModel.setBindings();
             return false;
         }
 
@@ -70,7 +71,6 @@ public class MoveEdgeViewModelElementAction extends Action {
                 return stateViewModel;
             }
         }
-
         return null;
     }
 }

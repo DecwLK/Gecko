@@ -48,8 +48,10 @@ public class ViewElementPane {
 
         setupListeners();
 
-        widthPadding.bind(pane.widthProperty());
-        heightPadding.bind(pane.heightProperty());
+        widthPadding.bind(
+            Bindings.createDoubleBinding(() -> pane.getViewportBounds().getWidth(), pane.viewportBoundsProperty()));
+        heightPadding.bind(
+            Bindings.createDoubleBinding(() -> pane.getViewportBounds().getHeight(), pane.viewportBoundsProperty()));
 
         pane.setContent(world);
     }
@@ -161,8 +163,10 @@ public class ViewElementPane {
 
     private void updateWorldSize() {
         updateMinAndMaxWorldPosition();
-        Point2D localMin = worldTolocalCoordinates(minWorldPosition);
-        Point2D localMax = worldTolocalCoordinates(maxWorldPosition);
+        Point2D min = new Point2D(Math.min(0, minWorldPosition.getX()), Math.min(0, minWorldPosition.getY()));
+        Point2D max = new Point2D(Math.max(0, maxWorldPosition.getX()), Math.max(0, maxWorldPosition.getY()));
+        Point2D localMin = worldTolocalCoordinates(min);
+        Point2D localMax = worldTolocalCoordinates(max);
         double newWidth =
             Math.max(pane.getViewportBounds().getWidth(), localMax.getX() - localMin.getX() + widthPadding.get() * 2);
         double newHeight =

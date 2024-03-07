@@ -319,4 +319,8 @@ public class EditorView {
         }
         this.contextMenu = contextMenu;
     }
+
+    public Set<ViewElement<?>> getCurrentViewElements() {
+        return viewElementPane.getElements();
+    }
 }

@@ -133,9 +133,12 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         contractsPane.getChildren().clear();
         contractsPane.setSpacing(SPACING);
 
-        int contractCount = 0;
+        for (int i = 0; i < MAX_CONTRACT_CNT; i++) {
+            if (i >= stateViewModel.getContractsProperty().size()) {
+                break;
+            }
 
-        for (ContractViewModel contract : stateViewModel.getContracts()) {
+            ContractViewModel contract = stateViewModel.getContractsProperty().get(i);
             VBox contractBox = new VBox();
             contractBox.getStyleClass().add(INNER_INNER_STYLE);
 
@@ -155,11 +158,6 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
             postconditionBox.getChildren().addAll(postconditionLabel, postcondition);
 
             contractBox.getChildren().addAll(contractLabel, preconditionBox, postconditionBox);
-            if (contractCount >= MAX_CONTRACT_CNT) {
-                return;
-            }
-
-            contractCount++;
             contractsPane.getChildren().add(contractBox);
         }
     }

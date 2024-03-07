@@ -251,10 +251,6 @@ public class ViewElementPane {
         }
         minWorldPosition = new Point2D(minX, minY);
         maxWorldPosition = new Point2D(maxX, maxY);
-        System.out.println("--------------------------");
-        System.out.println("minWorldPosition: " + minWorldPosition);
-        System.out.println("maxWorldPosition: " + maxWorldPosition);
-        System.out.println("--------------------------");
     }
 
     private void orderChildren() {

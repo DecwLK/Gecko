@@ -13,7 +13,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import org.gecko.exceptions.GeckoException;
 import org.gecko.exceptions.ModelException;
 import org.gecko.model.Automaton;
 import org.gecko.model.Condition;
@@ -30,7 +29,7 @@ import org.gecko.model.Visibility;
  * the sys file format. The entire {@link GeckoModel} can be built by calling {@link #visitModel} and passing it the
  * {@link SystemDefParser.ModelContext} of a sys file.
  */
-public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
+public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
 
     @Getter
     private GeckoModel model;
@@ -52,10 +51,10 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
     }
 
     @Override
-    public String visitModel(SystemDefParser.ModelContext ctx) {
+    public Void visitModel(SystemDefParser.ModelContext ctx) {
         scout = new AutomatonFileScout(ctx);
         if (hasCyclicChildSystems(ctx)) {
-            return "Cyclic child systems found";
+            throw new RuntimeException("Cyclic child systems found");
         }
         String rootName;
         if (scout.getRootChildren().size() == 1) {
@@ -64,15 +63,12 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             List<String> rootNames = scout.getRootChildren().stream().map(ctx1 -> ctx1.ident().getText()).toList();
             rootName = makeUserChooseSystem(rootNames);
             if (rootName == null) {
-                return "Must choose a root system to continue";
+                throw new RuntimeException("No root system chosen");
             }
         } else {
-            return "No root system found";
+            throw new RuntimeException("No root system found");
         }
-        String result = scout.getSystem(rootName).accept(this);
-        if (result != null) {
-            return result;
-        }
+        scout.getSystem(rootName).accept(this);
         System newRoot = model.getRoot()
             .getChildren()
             .iterator()
@@ -89,89 +85,63 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
     }
 
     @Override
-    public String visitSystem(SystemDefParser.SystemContext ctx) {
-        System system;
-        try {
-            system = buildSystem(ctx);
-        } catch (GeckoException e) {
-            return e.getMessage();
-        }
+    public Void visitSystem(SystemDefParser.SystemContext ctx) {
+        System system = buildSystem(ctx);
         currentSystem = system;
         for (SystemDefParser.IoContext io : ctx.io()) {
-            String result = io.accept(this);
-            if (result != null) {
-                return result;
-            }
+            io.accept(this);
         }
         for (AutomatonFileScout.SystemInfo child : scout.getChildSystemInfos(ctx)) {
             if (scout.getSystem(child.type()) == null) {
-                return "System %s not found".formatted(child.name());
+                throw new RuntimeException("System %s not found".formatted(child.type()));
             }
             SystemDefParser.SystemContext childCtx = scout.getSystem(child.type());
             nextSystemName = child.name();
-            String result = childCtx.accept(this);
-            if (result != null) {
-                return result;
-            }
+            childCtx.accept(this);
         }
         for (SystemDefParser.ConnectionContext connection : ctx.connection()) {
-            String result = connection.accept(this);
-            if (result != null) {
-                return result;
-            }
+            connection.accept(this);
         }
         if (!ctx.use_contracts().isEmpty()) {
             if (ctx.use_contracts().size() > 1 || ctx.use_contracts().getFirst().use_contract().size() > 1) {
-                return "Multiple automata in one system not supported";
+                throw new RuntimeException("Multiple automata in one system are not supported");
             }
-            String result = ctx.use_contracts().getFirst().use_contract().getFirst().accept(this);
-            if (result != null) {
-                return result;
-            }
+            ctx.use_contracts().getFirst().use_contract().getFirst().accept(this);
         }
         currentSystem = system.getParent();
         return null;
     }
 
     @Override
-    public String visitUse_contract(SystemDefParser.Use_contractContext ctx) {
+    public Void visitUse_contract(SystemDefParser.Use_contractContext ctx) {
         SystemDefParser.AutomataContext automata = scout.getAutomaton(ctx.ident().getText());
         if (automata == null) {
-            return "Automaton %s not found".formatted(ctx.ident().getText());
+            throw new RuntimeException("Automaton %s not found".formatted(ctx.ident().getText()));
         }
-        String result = automata.accept(this);
-        if (result != null) {
-            return result;
-        }
+        automata.accept(this);
         for (SystemDefParser.SubstContext subst : ctx.subst()) {
-            result = subst.accept(this);
-            if (result != null) {
-                return result;
-            }
+            subst.accept(this);
         }
         return null;
     }
 
     @Override
-    public String visitSubst(SystemDefParser.SubstContext ctx) {
+    public Void visitSubst(SystemDefParser.SubstContext ctx) {
         String toReplace = ctx.local.getText();
         if (ctx.from.inst != null) {
-            return "Variables to substitute can only be from the same system";
+            throw new RuntimeException("Variables to substitute can only be from the same system");
         }
         String toReplaceWith = ctx.from.port.getText();
         if (currentSystem.getVariables().stream().noneMatch(variable -> variable.getName().equals(toReplaceWith))) {
-            return "Variable %s not found not found in system %s".formatted(toReplace, currentSystem.getName());
+            throw new RuntimeException(
+                "Variable %s not found not found in system %s".formatted(toReplace, currentSystem.getName()));
         }
-        try {
-            applySubstitution(currentSystem, toReplace, toReplaceWith);
-        } catch (ModelException e) {
-            return e.getMessage();
-        }
+        applySubstitution(currentSystem, toReplace, toReplaceWith);
         return null;
     }
 
     @Override
-    public String visitAutomata(SystemDefParser.AutomataContext ctx) {
+    public Void visitAutomata(SystemDefParser.AutomataContext ctx) {
         if (!ctx.history().isEmpty()) {
             warnings.add("Automaton %s has history, which is ignored".formatted(ctx.ident().getText()));
         }
@@ -183,10 +153,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             return null;
         }
         for (SystemDefParser.TransitionContext transition : ctx.transition()) {
-            String result = transition.accept(this);
-            if (result != null) {
-                return result;
-            }
+            transition.accept(this);
         }
         List<State> startStateCandidates = currentSystem.getAutomaton()
             .getStates()
@@ -194,28 +161,28 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             .filter(state -> state.getName().matches(START_STATE_REGEX))
             .toList();
         if (startStateCandidates.size() > 1) {
-            return "Found multiple start states in automaton %s".formatted(ctx.ident().getText());
+            throw new RuntimeException("Multiple start states found in automaton %s".formatted(ctx.ident().getText()));
         } else if (startStateCandidates.size() == 1) {
             try {
                 currentSystem.getAutomaton().setStartState(startStateCandidates.getFirst());
             } catch (ModelException e) {
-                return e.getMessage();
+                throw new RuntimeException(e.getMessage());
             }
         } else {
             try {
                 //this should always work because if we have a transition, we have a state
                 currentSystem.getAutomaton().setStartState(currentSystem.getAutomaton().getStates().iterator().next());
             } catch (ModelException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException(e.getMessage());
             }
         }
         return null;
     }
 
     @Override
-    public String visitTransition(SystemDefParser.TransitionContext ctx) {
+    public Void visitTransition(SystemDefParser.TransitionContext ctx) {
         if (ctx.vvguard() != null) {
-            return "Vvguards are not supported";
+            warnings.add("Transition %s has a vvguard, which is ignored".formatted(ctx.getText()));
         }
         String startName = ctx.from.getText();
         String endName = ctx.to.getText();
@@ -225,7 +192,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                 start = model.getModelFactory().createState(currentSystem.getAutomaton());
                 start.setName(startName);
             } catch (ModelException e) {
-                return e.getMessage();
+                throw new RuntimeException(e.getMessage());
             }
         }
         State end = currentSystem.getAutomaton().getStateByName(endName);
@@ -234,35 +201,27 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                 end = model.getModelFactory().createState(currentSystem.getAutomaton());
                 end.setName(endName);
             } catch (ModelException e) {
-                return e.getMessage();
+                throw new RuntimeException(e.getMessage());
             }
         }
         Contract contract;
         if (ctx.contr != null) {
-            try {
-                contract = buildContract(start, scout.getContract(ctx.contr.getText()));
-            } catch (GeckoException e) {
-                return e.getMessage();
-            }
+            contract = buildContract(start, scout.getContract(ctx.contr.getText()));
         } else {
-            try {
-                contract = buildContract(start, ctx.pre.getText(), ctx.post.getText());
-            } catch (GeckoException e) {
-                return e.getMessage();
-            }
+            contract = buildContract(start, ctx.pre.getText(), ctx.post.getText());
         }
         Edge edge;
         try {
             edge = model.getModelFactory().createEdge(currentSystem.getAutomaton(), start, end);
-            edge.setContract(contract);
         } catch (ModelException e) {
-            return e.getMessage();
+            throw new RuntimeException(e.getMessage());
         }
+        edge.setContract(contract);
         return null;
     }
 
     @Override
-    public String visitIo(SystemDefParser.IoContext ctx) {
+    public Void visitIo(SystemDefParser.IoContext ctx) {
         Visibility visibility = switch (ctx.type.getType()) {
             case SystemDefParser.INPUT -> Visibility.INPUT;
             case SystemDefParser.OUTPUT -> Visibility.OUTPUT;
@@ -275,10 +234,10 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                     if (scout.getSystem(variable.t.getText()) != null) {
                         return null;
                     } else {
-                        return "State type must be a system or builin type";
+                        throw new RuntimeException("State type must be a system or builtin type");
                     }
                 } else {
-                    return "Input and Output types must be built-in types";
+                    throw new RuntimeException("Input and Output type must be a builtin type");
                 }
             }
             for (SystemDefParser.IdentContext ident : variable.n) {
@@ -296,7 +255,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
                         var.setValue(variable.init.getText());
                     }
                 } catch (ModelException e) {
-                    return e.getMessage();
+                    throw new RuntimeException(e.getMessage());
                 }
             }
         }
@@ -304,74 +263,76 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
     }
 
     @Override
-    public String visitConnection(SystemDefParser.ConnectionContext ctx) {
+    public Void visitConnection(SystemDefParser.ConnectionContext ctx) {
         if (ctx.from.inst == null || ctx.to.stream().anyMatch(ident -> ident.inst == null)) {
-            return "Invalid system in system connection";
+            throw new RuntimeException("Invalid System in connection");
         }
-        System startSystem;
-        try {
-            startSystem = parseSystemReference(ctx.from.inst.getText());
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+        System startSystem = parseSystemReference(ctx.from.inst.getText());
         Variable start = startSystem.getVariableByName(ctx.from.port.getText());
         if (start == null) {
-            return "Could not find variable %s".formatted(ctx.from.port.getText());
+            throw new RuntimeException("Could not find variable %s".formatted(ctx.from.port.getText()));
         }
         Set<Variable> end = new HashSet<>();
         for (SystemDefParser.IoportContext ident : ctx.to) {
-            System endSystem;
-            try {
-                endSystem = parseSystemReference(ident.inst.getText());
-            } catch (Exception e) {
-                return e.getMessage();
-            }
+            System endSystem = parseSystemReference(ident.inst.getText());
             Variable endVar = endSystem.getVariableByName(ident.port.getText());
             if (endVar == null) {
-                return "Could not find variable %s".formatted(ident.port.getText());
+                throw new RuntimeException("Could not find variable %s".formatted(ident.port.getText()));
             }
             end.add(endVar);
         }
         try {
             for (Variable variable : end) {
-                model.getModelFactory().createSystemConnection(currentSystem, start, variable); //TODO this should throw
+                model.getModelFactory().createSystemConnection(currentSystem, start, variable);
             }
         } catch (ModelException e) {
-            return e.getMessage();
+            throw new RuntimeException(e.getMessage());
         }
         return null;
     }
 
-    private System buildSystem(SystemDefParser.SystemContext ctx) throws GeckoException {
+    private System buildSystem(SystemDefParser.SystemContext ctx) {
         System system;
         try {
             system = model.getModelFactory().createSystem(currentSystem);
         } catch (ModelException e) {
-            throw new GeckoException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
         if (nextSystemName != null) {
             try {
                 system.setName(nextSystemName);
             } catch (ModelException e) {
-                throw new GeckoException(e.getMessage());
+                throw new RuntimeException(e.getMessage());
             }
             nextSystemName = null;
         } else {
-            system.setName(ctx.ident().Ident().getText());
+            try {
+                system.setName(ctx.ident().Ident().getText());
+            } catch (ModelException e) {
+                throw new RuntimeException(e.getMessage());
+            }
         }
         if (ctx.reaction() != null) {
-            system.setCode(cleanCode(ctx.reaction().getText()));
+            try {
+                system.setCode(cleanCode(ctx.reaction().getText()));
+            } catch (ModelException e) {
+                throw new RuntimeException(e.getMessage());
+            }
         }
         return system;
     }
 
-    private Contract buildContract(State state, SystemDefParser.PrepostContext contract) throws GeckoException {
+    private Contract buildContract(State state, SystemDefParser.PrepostContext contract) {
         Contract c = buildContract(state, contract.pre.getText(), contract.post.getText());
-        c.setName(contract.name.getText());
+        try {
+            c.setName(contract.name.getText());
+        } catch (ModelException e) {
+            throw new RuntimeException(e.getMessage());
+        }
         return c;
     }
 
-    private Contract buildContract(State state, String pre, String post) throws GeckoException {
+    private Contract buildContract(State state, String pre, String post) {
         Contract newContract;
         Condition preCondition;
         Condition postCondition;
@@ -382,12 +343,12 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
             newContract.setPreCondition(preCondition);
             newContract.setPostCondition(postCondition);
         } catch (ModelException e) {
-            throw new GeckoException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
         return newContract;
     }
 
-    private void applySubstitution(System currentSystem, String toReplace, String toReplaceWith) throws ModelException {
+    private void applySubstitution(System currentSystem, String toReplace, String toReplaceWith) {
         Automaton automaton = currentSystem.getAutomaton();
         for (State state : automaton.getStates()) {
             for (Contract contract : state.getContracts()) {
@@ -397,13 +358,17 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         }
     }
 
-    private void applySubstitution(Condition condition, String toReplace, String toReplaceWith) throws ModelException {
+    private void applySubstitution(Condition condition, String toReplace, String toReplaceWith) {
         String con = condition.getCondition();
         //replace normal occurrences (var -> newVar)
         con = con.replaceAll("\\b" + toReplace + "\\b", toReplaceWith);
         //replace history occurrences (h_var_\d -> h_newVar_\d)
         con = con.replaceAll("\\bh_" + toReplace + "_(\\d+)\\b", "h_" + toReplaceWith + "_$1");
-        condition.setCondition(con);
+        try {
+            condition.setCondition(con);
+        } catch (ModelException e) {
+            throw new RuntimeException("Failed to apply substitution");
+        }
     }
 
     private String cleanCode(String code) {
@@ -411,14 +376,14 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<String> {
         return code.substring(2, code.length() - 2);
     }
 
-    private System parseSystemReference(String name) throws GeckoException {
+    private System parseSystemReference(String name) {
         System system;
         if (name.equals(SELF_REFERENCE_TOKEN)) {
             system = currentSystem;
         } else {
             system = currentSystem.getChildByName(name);
             if (system == null) {
-                throw new GeckoException("Could not find system %s".formatted(name));
+                throw new RuntimeException("Could not find system %s".formatted(name));
             }
         }
         return system;

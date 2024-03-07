@@ -38,9 +38,10 @@ public class AutomatonFileParser implements FileParser {
             throw new RuntimeException("Failed to create an instance of an empty model");
         }
 
-        String result = visitor.visitModel(parser.model());
-        if (result != null) {
-            throw new IOException(result);
+        try {
+            visitor.visitModel(parser.model());
+        } catch (RuntimeException e) {
+            throw new IOException(e.getMessage());
         }
         if (listener.syntaxError) {
             throw new IOException(listener.errorMessage);

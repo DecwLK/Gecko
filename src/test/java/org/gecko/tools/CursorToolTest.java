@@ -1,6 +1,5 @@
 package org.gecko.tools;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import javafx.scene.input.MouseButton;

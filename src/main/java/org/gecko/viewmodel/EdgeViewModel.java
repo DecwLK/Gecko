@@ -1,11 +1,12 @@
 package org.gecko.viewmodel;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.NonNull;
@@ -23,17 +24,23 @@ import org.gecko.model.Kind;
  */
 @Getter
 @Setter
-public class EdgeViewModel extends PositionableViewModelElement<Edge> implements ConnectionViewModel {
+public class EdgeViewModel extends PositionableViewModelElement<Edge> {
 
     private final Property<Kind> kindProperty;
     private final IntegerProperty priorityProperty;
     private final Property<ContractViewModel> contractProperty;
     private final Property<StateViewModel> sourceProperty;
     private final Property<StateViewModel> destinationProperty;
+    private final BooleanProperty isLoopProperty;
+    private final IntegerProperty orientationProperty;
     /**
      * The list of edge points that define the path of the edge.
      */
-    private final ObservableList<Property<Point2D>> edgePoints;
+
+    private final Property<Point2D> startPointProperty;
+    private final Property<Point2D> endPointProperty;
+    private final Property<Point2D> startOffsetProperty;
+    private final Property<Point2D> endOffsetProperty;
 
     public EdgeViewModel(
         int id, @NonNull Edge target, @NonNull StateViewModel source, @NonNull StateViewModel destination) {
@@ -43,18 +50,41 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
         this.contractProperty = new SimpleObjectProperty<>();
         this.sourceProperty = new SimpleObjectProperty<>(source);
         this.destinationProperty = new SimpleObjectProperty<>(destination);
-        this.edgePoints = FXCollections.observableArrayList();
+        this.isLoopProperty = new SimpleBooleanProperty();
+        isLoopProperty.bind(Bindings.createBooleanBinding(() -> getSource().equals(getDestination()), sourceProperty,
+            destinationProperty));
+        this.orientationProperty = new SimpleIntegerProperty();
 
-        Property<Point2D> startPoint = new SimpleObjectProperty<>(getSource().getCenter());
-        Property<Point2D> endPoint = new SimpleObjectProperty<>(getDestination().getCenter());
-
-        updateConnectionListener();
+        this.startOffsetProperty = new SimpleObjectProperty<>(Point2D.ZERO);
+        this.endOffsetProperty = new SimpleObjectProperty<>(Point2D.ZERO);
+        this.startPointProperty = new SimpleObjectProperty<>();
+        this.endPointProperty = new SimpleObjectProperty<>();
+        setBindings();
 
         getSource().getOutgoingEdges().add(this);
         getDestination().getIncomingEdges().add(this);
+    }
 
-        edgePoints.add(startPoint);
-        edgePoints.add(endPoint);
+    public void setBindings() {
+        startPointProperty.bind(Bindings.createObjectBinding(() -> {
+            return getSource().getCenter().add(startOffsetProperty.getValue());
+        }, startOffsetProperty, getSource().getPositionProperty()));
+        endPointProperty.bind(Bindings.createObjectBinding(() -> {
+            return getDestination().getCenter().add(endOffsetProperty.getValue());
+        }, endOffsetProperty, getDestination().getPositionProperty()));
+    }
+
+    private void removeBindings() {
+        startPointProperty.unbind();
+        endPointProperty.unbind();
+    }
+
+    public void setStartOffsetProperty(Point2D startOffset) {
+        this.startOffsetProperty.setValue(startOffset);
+    }
+
+    public void setEndOffsetProperty(Point2D endOffset) {
+        this.endOffsetProperty.setValue(endOffset);
     }
 
     public void setPriority(int priority) {
@@ -82,11 +112,11 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
     }
 
     public void setSource(@NonNull StateViewModel source) {
-        clearConnectionListener();
         getSource().getOutgoingEdges().remove(this);
+        removeBindings();
         sourceProperty.setValue(source);
-        getSource().getOutgoingEdges().add(this);
-        updateConnectionListener();
+        setBindings();
+        source.getOutgoingEdges().add(this);
     }
 
     public StateViewModel getSource() {
@@ -94,34 +124,15 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
     }
 
     public void setDestination(@NonNull StateViewModel destination) {
-        clearConnectionListener();
         getDestination().getIncomingEdges().remove(this);
+        removeBindings();
         destinationProperty.setValue(destination);
-        getDestination().getIncomingEdges().add(this);
-        updateConnectionListener();
+        setBindings();
+        destination.getIncomingEdges().add(this);
     }
 
     public StateViewModel getDestination() {
         return destinationProperty.getValue();
-    }
-
-    private void clearConnectionListener() {
-        getSource().getPositionProperty()
-            .removeListener(
-                (observable, oldValue, newValue) -> edgePoints.getFirst().setValue(getSource().getCenter()));
-
-        getDestination().getPositionProperty()
-            .removeListener(
-                (observable, oldValue, newValue) -> edgePoints.getLast().setValue(getDestination().getCenter()));
-    }
-
-    private void updateConnectionListener() {
-        getSource().getPositionProperty()
-            .addListener((observable, oldValue, newValue) -> edgePoints.getFirst().setValue(getSource().getCenter()));
-
-        getDestination().getPositionProperty()
-            .addListener(
-                (observable, oldValue, newValue) -> edgePoints.getLast().setValue(getDestination().getCenter()));
     }
 
     @Override
@@ -140,11 +151,6 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
         return visitor.visit(this);
     }
 
-    @Override
-    public void setEdgePoint(int index, Point2D newPosition) {
-        edgePoints.get(index).setValue(newPosition);
-    }
-
     /**
      * Returns a string representation of this {@link EdgeViewModel} in the form of "priority. kind(contract)".
      *
@@ -158,5 +164,31 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> implements
             representation += "(" + getContract().getName() + ")";
         }
         return representation;
+    }
+
+    public Point2D getStartPoint() {
+        return startPointProperty.getValue();
+    }
+
+    public Point2D getEndPoint() {
+        return endPointProperty.getValue();
+    }
+
+    public void setStartPoint(Point2D startPoint) {
+        removeBindings();
+        startPointProperty.setValue(startPoint);
+    }
+
+    public void setEndPoint(Point2D endPoint) {
+        removeBindings();
+        endPointProperty.setValue(endPoint);
+    }
+
+    public boolean isLoop() {
+        return isLoopProperty.getValue();
+    }
+
+    public void setOrientation(int orientation) {
+        orientationProperty.setValue(orientation);
     }
 }

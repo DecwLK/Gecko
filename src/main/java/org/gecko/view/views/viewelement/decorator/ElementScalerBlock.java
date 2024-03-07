@@ -68,7 +68,7 @@ public class ElementScalerBlock extends Rectangle {
         setLayoutX(point.getX());
         setLayoutY(point.getY());
 
-        decoratorTarget.setEdgePoint(index, point);
+        decoratorTarget.setEdgePoint(index, point.add(getWidth() / 2, getHeight() / 2));
     }
 
     /**

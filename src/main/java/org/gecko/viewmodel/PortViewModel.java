@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -68,5 +69,21 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
     @Override
     public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
+    }
+
+    public Color getBackgroundColor() {
+        return switch (visibilityProperty.getValue()) {
+            case INPUT -> Color.LIGHTGREEN;
+            case OUTPUT -> Color.LIGHTGOLDENRODYELLOW;
+            case STATE -> Color.LIGHTSEAGREEN;
+        };
+    }
+
+    public static Color getBackgroundColor(Visibility visibility) {
+        return switch (visibility) {
+            case INPUT -> Color.LIGHTGREEN;
+            case OUTPUT -> Color.LIGHTGOLDENRODYELLOW;
+            case STATE -> Color.LIGHTSEAGREEN;
+        };
     }
 }

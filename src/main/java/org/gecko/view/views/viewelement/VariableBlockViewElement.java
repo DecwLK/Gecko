@@ -9,7 +9,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -86,11 +85,8 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
         Rectangle rectangle = new Rectangle();
         rectangle.widthProperty().bind(widthProperty());
         rectangle.heightProperty().bind(heightProperty());
-        rectangle.fillProperty().bind(Bindings.createObjectBinding(() -> switch (visibilityProperty.getValue()) {
-            case INPUT -> Color.LIGHTGREEN;
-            case OUTPUT -> Color.LIGHTGOLDENRODYELLOW;
-            case STATE -> Color.LIGHTSEAGREEN;
-        }, visibilityProperty));
+        rectangle.fillProperty()
+            .bind(Bindings.createObjectBinding(portViewModel::getBackgroundColor, visibilityProperty));
         rectangle.setArcWidth(BACKGROUND_ROUNDING);
         rectangle.setArcHeight(BACKGROUND_ROUNDING);
         container.getChildren().add(rectangle);

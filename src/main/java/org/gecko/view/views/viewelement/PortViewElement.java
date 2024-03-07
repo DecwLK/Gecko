@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import lombok.Getter;
 import org.gecko.model.Visibility;
@@ -52,11 +54,19 @@ public class PortViewElement extends Pane {
     private void bindToViewModel() {
         nameProperty.bind(viewModel.getNameProperty());
         visibilityProperty.bind(viewModel.getVisibilityProperty());
+        visibilityProperty.addListener((observable, oldValue, newValue) -> updateBackgroundColor());
     }
 
     private void constructVisualization() {
         Label nameLabel = new Label();
         nameLabel.textProperty().bind(nameProperty);
+        updateBackgroundColor();
         getChildren().add(nameLabel);
+    }
+
+    private void updateBackgroundColor() {
+        Background background = new Background(new BackgroundFill(PortViewModel.getBackgroundColor(
+            viewModel.getVisibility() == Visibility.INPUT ? Visibility.OUTPUT : Visibility.INPUT), null, null));
+        setBackground(background);
     }
 }

@@ -147,10 +147,24 @@ public class ActionFactory {
         return new MoveEdgeViewModelElementAction(geckoViewModel, edgeViewModel, elementScalerBlock, delta);
     }
 
+    public MoveEdgeViewModelElementAction createMoveEdgeViewModelElementAction(
+        EdgeViewModel edgeViewModel, ElementScalerBlock elementScalerBlock, StateViewModel stateViewModel,
+        ContractViewModel contractViewModel) {
+        return new MoveEdgeViewModelElementAction(geckoViewModel, edgeViewModel, elementScalerBlock, stateViewModel,
+            contractViewModel);
+    }
+
     public MoveSystemConnectionViewModelElementAction createMoveSystemConnectionViewModelElementAction(
         SystemConnectionViewModel systemConnectionViewModel, ElementScalerBlock elementScalerBlock, Point2D delta) {
         return new MoveSystemConnectionViewModelElementAction(geckoViewModel, systemConnectionViewModel,
             elementScalerBlock, delta);
+    }
+
+    public MoveSystemConnectionViewModelElementAction createMoveSystemConnectionViewModelElementAction(
+        SystemConnectionViewModel systemConnectionViewModel, ElementScalerBlock elementScalerBlock,
+        PortViewModel portViewModel, boolean isVariableBlock) {
+        return new MoveSystemConnectionViewModelElementAction(geckoViewModel, systemConnectionViewModel,
+            elementScalerBlock, portViewModel, isVariableBlock);
     }
 
     public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction() {

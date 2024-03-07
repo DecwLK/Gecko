@@ -181,8 +181,7 @@ public class CursorTool extends Tool {
             if (!isDragging) {
                 return;
             }
-            Point2D eventPosition =
-                viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
+            Point2D eventPosition = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
             Point2D delta = eventPosition.subtract(previousDragPosition);
             scaler.setLayoutPosition(scaler.getLayoutPosition().add(delta));
             previousDragPosition = eventPosition;
@@ -191,8 +190,7 @@ public class CursorTool extends Tool {
             if (!isDragging) {
                 return;
             }
-            Point2D endWorldPos =
-                viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
+            Point2D endWorldPos = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
             scaler.setLayoutPosition(scaler.getLayoutPosition().add(startDragPosition.subtract(endWorldPos)));
             Action moveAction;
 

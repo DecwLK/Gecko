@@ -2,6 +2,7 @@ package org.gecko.view.inspector.builder;
 
 import org.gecko.actions.ActionManager;
 import org.gecko.view.ResourceHandler;
+import org.gecko.view.inspector.Inspector;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.container.InspectorContractItem;
 import org.gecko.view.inspector.element.container.InspectorRegionColorItem;

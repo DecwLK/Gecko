@@ -1,0 +1,58 @@
+contract Interval {
+    output y : int
+    a -> a :: TRUE ==> -0sd32_128 <= y & y <= 0sd32_128
+}
+
+contract UpDown {
+    input  tick : bool
+    output cnt  : int
+
+    history cnt(1)
+
+    uP -> uP ::  tick ==> -0sd32_128 < cnt & h_cnt_1 < cnt & cnt < 0sd32_128
+    uP -> uP :: ! tick ==> h_cnt_1 = cnt
+
+    DOWN -> DOWN ::  tick ==> h_cnt_1 > cnt & cnt > -0sd32_128
+    DOWN -> DOWN :: ! tick ==> h_cnt_1 = cnt
+
+    uP -> DOWN :: tick ==> cnt = 0sd32_128
+    DOWN -> uP :: tick ==> cnt =-0sd32_128
+
+    contract Interval[y <- cnt]
+}
+
+
+reactor Counter  {
+    input  tick : bool
+    output val : int
+    state  down : bool
+
+    contract UpDown[cnt <- val, tick <- tick]
+
+    {=
+        if(tick) {
+        if(!down) {
+            val += 1;
+        } else {
+            val -= 1;
+        }
+
+        if(val == 128 || val == -128) down = !down;
+        }
+    =}
+}
+
+
+reactor CounterBroken  {
+    input  tick : bool
+    output val : int
+    state  down : bool
+
+    contract UpDown[cnt <- val, tick <- tick]
+
+    {=
+        if(!down) val += 1;
+        else      val -= 1;
+        if(val == 128 || val == -128) down = !down;
+    =}
+}

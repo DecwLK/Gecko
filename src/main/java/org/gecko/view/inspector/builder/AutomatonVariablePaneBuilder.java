@@ -1,7 +1,6 @@
 package org.gecko.view.inspector.builder;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -10,6 +9,7 @@ import org.gecko.model.Visibility;
 import org.gecko.view.inspector.element.InspectorElement;
 import org.gecko.view.inspector.element.container.InspectorVariableField;
 import org.gecko.view.inspector.element.container.InspectorVariableLabel;
+import org.gecko.view.inspector.element.list.AbstractInspectorList;
 import org.gecko.view.inspector.element.list.InspectorVariableList;
 import org.gecko.viewmodel.SystemViewModel;
 
@@ -27,11 +27,11 @@ public class AutomatonVariablePaneBuilder {
         VBox content = new VBox();
         InspectorElement<HBox> inputLabel =
             new InspectorVariableLabel(actionManager, systemViewModel, Visibility.INPUT);
-        InspectorElement<ListView<InspectorVariableField>> inputList =
+        AbstractInspectorList<InspectorVariableField> inputList =
             new InspectorVariableList(actionManager, systemViewModel, Visibility.INPUT);
         InspectorElement<HBox> outputLabel =
             new InspectorVariableLabel(actionManager, systemViewModel, Visibility.OUTPUT);
-        InspectorElement<ListView<InspectorVariableField>> outputList =
+        AbstractInspectorList<InspectorVariableField> outputList =
             new InspectorVariableList(actionManager, systemViewModel, Visibility.OUTPUT);
 
         content.getChildren()

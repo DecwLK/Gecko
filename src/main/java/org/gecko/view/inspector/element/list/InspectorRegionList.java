@@ -9,16 +9,18 @@ import org.gecko.viewmodel.RegionViewModel;
  * A concrete representation of an {@link AbstractInspectorList} encapsulating an {@link InspectorLabel}.
  */
 public class InspectorRegionList extends AbstractInspectorList<InspectorLabel> {
-    private static final double PREF_HEIGHT = 100;
+
+    private static final double MIN_HEIGHT = 50;
 
     public InspectorRegionList(ObservableList<RegionViewModel> regionViewModelList) {
+        super();
         for (RegionViewModel regionViewModel : regionViewModelList) {
             InspectorLabel regionLabel = new InspectorLabel(regionViewModel.getName());
             getItems().add(regionLabel);
         }
 
         regionViewModelList.addListener(this::updateRegionList);
-        setPrefHeight(PREF_HEIGHT);
+        setMinHeight(MIN_HEIGHT);
     }
 
     private void updateRegionList(ListChangeListener.Change<? extends RegionViewModel> c) {

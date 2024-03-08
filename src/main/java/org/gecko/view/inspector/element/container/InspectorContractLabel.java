@@ -13,7 +13,7 @@ import org.gecko.viewmodel.StateViewModel;
 public class InspectorContractLabel extends LabeledInspectorElement {
 
     public InspectorContractLabel(ActionManager actionManager, StateViewModel viewModel) {
-        super(new InspectorLabel(ResourceHandler.getString("Inspector", "contract")),
+        super(new InspectorLabel(ResourceHandler.getString("Inspector", "contract_plural")),
             new InspectorAddContractButton(actionManager, viewModel));
     }
 }

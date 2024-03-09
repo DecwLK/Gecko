@@ -3,21 +3,29 @@ package org.gecko.view.menubar;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 import org.gecko.application.GeckoIOManager;
 import org.gecko.io.FileTypes;
 import org.gecko.tools.Tool;
 import org.gecko.tools.ToolType;
 import org.gecko.view.GeckoView;
+import org.gecko.view.inspector.element.label.InspectorLabel;
+import org.gecko.view.inspector.element.textfield.InspectorRenameField;
 import org.gecko.view.views.shortcuts.Shortcuts;
+import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
+import org.gecko.viewmodel.Renamable;
 import org.gecko.viewmodel.SystemViewModel;
 
 /**
@@ -152,11 +160,29 @@ public class MenuBarBuilder {
 
         SeparatorMenuItem dataTransferToSelectionSeparator = new SeparatorMenuItem();
 
+        SeparatorMenuItem renameRootSystemSeparator = new SeparatorMenuItem();
+
+        CustomMenuItem renameRootSystemCustomMenuItem = getRenameRootSystemCustomMenuItem();
+
         editMenu.getItems()
             .addAll(undoMenuItem, redoMenuItem, historyToDataTransferSeparator, cutMenuItem, copyMenuItem,
-                pasteMenuItem, dataTransferToSelectionSeparator, selectAllMenuItem, deselectAllMenuItem);
+                pasteMenuItem, dataTransferToSelectionSeparator, selectAllMenuItem, deselectAllMenuItem,
+                renameRootSystemSeparator, renameRootSystemCustomMenuItem);
 
         return editMenu;
+    }
+
+    private CustomMenuItem getRenameRootSystemCustomMenuItem() {
+        GeckoViewModel viewModel = view.getViewModel();
+        TextField renameRootSystemTextField = new InspectorRenameField(actionManager,
+            (Renamable) viewModel.getViewModelElement(viewModel.getGeckoModel().getRoot()));
+        Label renameRootSystemLabel = new InspectorLabel("Rename Root System");
+        VBox renameRootSystemContainer = new VBox(renameRootSystemLabel, renameRootSystemTextField);
+        CustomMenuItem renameRootSystemCustomMenuItem = new CustomMenuItem(renameRootSystemContainer, false);
+        renameRootSystemCustomMenuItem.setOnAction(e -> {
+            renameRootSystemTextField.requestFocus();
+        });
+        return renameRootSystemCustomMenuItem;
     }
 
     private Menu setupViewMenu() {

@@ -33,6 +33,7 @@ public class GeckoView {
     @Getter
     private final BorderPane mainPane;
     private final TabPane centerPane;
+    @Getter
     private final GeckoViewModel viewModel;
     private final ViewFactory viewFactory;
     private final MenuBar menuBar;

@@ -86,7 +86,8 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
         rectangle.widthProperty().bind(widthProperty());
         rectangle.heightProperty().bind(heightProperty());
         rectangle.fillProperty()
-            .bind(Bindings.createObjectBinding(portViewModel::getBackgroundColor, visibilityProperty));
+            .bind(Bindings.createObjectBinding(() -> PortViewModel.getBackgroundColor(visibilityProperty.getValue()),
+                visibilityProperty));
         rectangle.setArcWidth(BACKGROUND_ROUNDING);
         rectangle.setArcHeight(BACKGROUND_ROUNDING);
         container.getChildren().add(rectangle);

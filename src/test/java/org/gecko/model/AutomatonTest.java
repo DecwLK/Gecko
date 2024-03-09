@@ -46,7 +46,10 @@ public class AutomatonTest {
         } catch (ModelException e) {
             fail("States for testing purposes of the automaton could not be initialized.");
         }
-        automatonWithStartState = new Automaton(startState);
+        automatonWithStartState = new Automaton();
+        automatonWithStartState.addState(startState);
+        assertDoesNotThrow(() -> automatonWithStartState.setStartState(startState));
+        assertNotNull(automatonWithStartState.getStartState());
 
         try {
             region1 = new Region(3, "region1", condition, contract);
@@ -149,6 +152,8 @@ public class AutomatonTest {
     @Test
     void testManagingStates() {
         assertDoesNotThrow(() -> automatonWithStartState.removeState(startState));
+        automatonWithStartState.addState(startState);
+        assertDoesNotThrow(() -> automatonWithStartState.setStartState(startState));
 
         assertTrue(defaultAutomaton.getStates().isEmpty());
 
@@ -253,7 +258,7 @@ public class AutomatonTest {
     void isEmpty() {
         automatonWithStartState.getAllElements().forEach(e -> java.lang.System.out.println(e.getId()));
         assertTrue(defaultAutomaton.isEmpty());
-        assertTrue(automatonWithStartState.isEmpty());
+        assertFalse(automatonWithStartState.isEmpty());
 
         defaultAutomaton.addState(startState);
         assertFalse(defaultAutomaton.isEmpty());
@@ -271,6 +276,6 @@ public class AutomatonTest {
     @Test
     void getAllElements() {
         assertTrue(defaultAutomaton.getAllElements().isEmpty());
-        assertTrue(automatonWithStartState.getAllElements().isEmpty()); // JsonCreator does not add startState to states
+        assertFalse(automatonWithStartState.getAllElements().isEmpty());
     }
 }

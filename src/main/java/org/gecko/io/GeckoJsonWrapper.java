@@ -12,5 +12,6 @@ import lombok.Setter;
 @Setter
 public class GeckoJsonWrapper {
     private String model;
+    private String startStates;
     private String viewModelProperties;
 }

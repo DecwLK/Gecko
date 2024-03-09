@@ -69,8 +69,10 @@ public class ModelFactoryTest {
             () -> factory.createSystemConnection(new System(0, "system", null, new Automaton()),
                 new Variable(1, "var1", "type", Visibility.OUTPUT), null));
 
-        assertDoesNotThrow(() -> factory.createSystemConnection(new System(0, "system", null, new Automaton()),
-            new Variable(1, "var1", "type", Visibility.OUTPUT), new Variable(2, "var2", "type", Visibility.INPUT)));
+        assertDoesNotThrow(
+            () -> factory.createSystemConnection(new System(0, "system", null, new Automaton()),
+                new Variable(1, "var1", "type", Visibility.OUTPUT),
+                new Variable(2, "var2", "type", Visibility.INPUT)));
     }
 
     @Test

@@ -51,7 +51,7 @@ public class AutomatonFileParser implements FileParser {
         }
 
         GeckoViewModel gvm = new GeckoViewModel(visitor.getModel());
-        ViewModelElementCreator vmVisitor = new ViewModelElementCreator(gvm, List.of());
+        ViewModelElementCreator vmVisitor = new ViewModelElementCreator(gvm, List.of(), List.of());
         vmVisitor.traverseModel(gvm.getGeckoModel().getRoot());
         Graphlayouter graphlayouter = new Graphlayouter(gvm);
         graphlayouter.layout();

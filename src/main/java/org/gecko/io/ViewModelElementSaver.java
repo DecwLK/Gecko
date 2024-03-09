@@ -3,6 +3,7 @@ package org.gecko.io;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 import org.gecko.model.Automaton;
 import org.gecko.model.Edge;
 import org.gecko.model.Region;
@@ -22,10 +23,13 @@ import org.gecko.viewmodel.RegionViewModel;
 public class ViewModelElementSaver {
     private final GeckoViewModel geckoViewModel;
     private final List<ViewModelPropertiesContainer> viewModelProperties;
+    @Getter
+    private final List<StartStateContainer> startStates;
 
     ViewModelElementSaver(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
         viewModelProperties = new ArrayList<>();
+        startStates = new ArrayList<>();
     }
 
     protected List<ViewModelPropertiesContainer> getViewModelProperties(System root) {
@@ -43,6 +47,13 @@ public class ViewModelElementSaver {
         }
 
         Automaton automaton = system.getAutomaton();
+
+        if (automaton.getStartState() != null) {
+            StartStateContainer startStateContainer = new StartStateContainer();
+            startStateContainer.setSystemId(system.getId());
+            startStateContainer.setStartStateName(automaton.getStartState().getName());
+            startStates.add(startStateContainer);
+        }
 
         for (Region region : automaton.getRegions()) {
             this.saveRegionViewModelProperties(region);

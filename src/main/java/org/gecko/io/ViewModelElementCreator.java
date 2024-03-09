@@ -7,6 +7,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import org.gecko.exceptions.MissingViewModelElementException;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Automaton;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
@@ -36,19 +37,29 @@ public class ViewModelElementCreator {
     private int highestId;
     @Getter
     private boolean foundNullContainer;
+    @Getter
+    private boolean foundNonexistentStartState;
     private final GeckoViewModel viewModel;
     private final ViewModelFactory viewModelFactory;
     private final HashMap<Integer, ViewModelPropertiesContainer> viewModelProperties;
+    private final HashMap<Integer, StartStateContainer> startStates;
 
     ViewModelElementCreator(
-        GeckoViewModel viewModel, List<ViewModelPropertiesContainer> viewModelProperties) {
+        GeckoViewModel viewModel, List<ViewModelPropertiesContainer> viewModelProperties,
+        List<StartStateContainer> startStates) {
         highestId = 0;
         foundNullContainer = false;
+        foundNonexistentStartState = false;
         this.viewModel = viewModel;
         this.viewModelFactory = viewModel.getViewModelFactory();
         this.viewModelProperties = new HashMap<>();
+        this.startStates = new HashMap<>();
+
         for (ViewModelPropertiesContainer container : viewModelProperties) {
             this.viewModelProperties.put(container.getElementId(), container);
+        }
+        for (StartStateContainer container : startStates) {
+            this.startStates.put(container.getSystemId(), container);
         }
     }
 
@@ -76,6 +87,18 @@ public class ViewModelElementCreator {
         }
 
         Automaton automaton = system.getAutomaton();
+        if (startStates.get(system.getId()) != null) {
+            State startState = automaton.getStateByName(startStates.get(system.getId()).getStartStateName());
+            if (automaton.getStates().isEmpty() || startState == null) {
+                foundNonexistentStartState = true;
+            } else {
+                try {
+                    automaton.setStartState(startState);
+                } catch (ModelException e) {
+                    foundNonexistentStartState = true;
+                }
+            }
+        }
 
         for (State state : automaton.getStates()) {
             createStateViewModel(state);

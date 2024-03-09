@@ -3,6 +3,7 @@ package org.gecko.tools;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import org.gecko.application.GeckoIOManager;
@@ -72,29 +73,27 @@ class CursorToolTest {
         }
     }
 
-    /*
-    @Test
-    void drag(FxRobot robot) {
-        ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
-        rootSystemViewModel = geckoViewModel.getCurrentEditor().getCurrentSystem();
-        Point2D newPosition = destination.getPosition().add(new Point2D(100, 100));
-        destination.setPosition(newPosition);
-        ViewElement<?> sourceViewElement = geckoView.getCurrentView()
-            .getCurrentViewElements()
-            .stream()
-            .filter(viewElement -> viewElement.getTarget().equals(source))
-            .findFirst()
-            .orElse(null);
-        ViewElement<?> destinationViewElement = geckoView.getCurrentView()
-            .getCurrentViewElements()
-            .stream()
-            .filter(viewElement -> viewElement.getTarget().equals(destination))
-            .findFirst()
-            .orElse(null);
-
-
-        robot.clickOn(sourceViewElement.drawElement(), MouseButton.PRIMARY);
-        robot.drag(sourceViewElement.drawElement(), MouseButton.PRIMARY).dropTo(destinationViewElement.drawElement());
-    }
-     */
+//    @Test
+//    void drag(FxRobot robot) {
+//        ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
+//        rootSystemViewModel = geckoViewModel.getCurrentEditor().getCurrentSystem();
+//        Point2D newPosition = destination.getPosition().add(new Point2D(100, 100));
+//        destination.setPosition(newPosition);
+//        ViewElement<?> sourceViewElement = geckoView.getCurrentView()
+//            .getCurrentViewElements()
+//            .stream()
+//            .filter(viewElement -> viewElement.getTarget().equals(source))
+//            .findFirst()
+//            .orElse(null);
+//        ViewElement<?> destinationViewElement = geckoView.getCurrentView()
+//            .getCurrentViewElements()
+//            .stream()
+//            .filter(viewElement -> viewElement.getTarget().equals(destination))
+//            .findFirst()
+//            .orElse(null);
+//
+//
+//        robot.clickOn(sourceViewElement.drawElement(), MouseButton.PRIMARY);
+//        robot.drag(sourceViewElement.drawElement(), MouseButton.PRIMARY).dropTo(destinationViewElement.drawElement());
+//    }
 }

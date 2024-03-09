@@ -9,6 +9,7 @@ plugins {
     id("org.openjfx.javafxplugin") version "0.1.0"
     id("net.ltgt.errorprone") version "3.1.0"
     id("io.freefair.lombok") version "8.4"
+    id("pmd")
 }
 
 group = "org.gecko"
@@ -62,6 +63,16 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
+
+    // Exclude the package from the coverage report
+    val excludes = listOf("gecko/parser/*") // Add other packages if needed
+    classDirectories.setFrom(files(classDirectories.files.map {
+        fileTree(it).apply {
+            excludes.forEach { ex ->
+                exclude("**/$ex/**")
+            }
+        }
+    }))
 }
 
 application {

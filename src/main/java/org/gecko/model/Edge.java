@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -42,5 +43,10 @@ public class Edge extends Element {
             throw new ModelException("Negative edge priorities are not allowed.");
         }
         this.priority = priority;
+    }
+
+    @Override
+    public void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException {
+        visitor.visit(this);
     }
 }

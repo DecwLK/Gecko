@@ -10,7 +10,7 @@ import org.gecko.view.views.ViewElementPane;
 public class PanTool extends Tool {
 
     public PanTool(ActionManager actionManager) {
-        super(actionManager, ToolType.PAN);
+        super(actionManager, ToolType.PAN, true);
     }
 
     @Override

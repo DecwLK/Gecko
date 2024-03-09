@@ -18,7 +18,7 @@ public class MarqueeTool extends AreaTool {
     private final EditorViewModel editorViewModel;
 
     public MarqueeTool(ActionManager actionManager, EditorViewModel editorViewModel) {
-        super(actionManager, ToolType.MARQUEE_TOOL);
+        super(actionManager, ToolType.MARQUEE_TOOL, true);
         this.editorViewModel = editorViewModel;
     }
 

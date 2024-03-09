@@ -10,6 +10,7 @@ import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Element;
 
 /**

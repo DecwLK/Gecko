@@ -96,4 +96,14 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
             return source.getVisibility() != Visibility.INPUT && destination.getVisibility() != Visibility.INPUT;
         }
     }
+
+    @Override
+    public void setPosition(@NonNull Point2D position) {
+        return;
+    }
+
+    @Override
+    public void setSize(@NonNull Point2D position) {
+        return;
+    }
 }

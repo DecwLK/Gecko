@@ -17,7 +17,7 @@ public class RegionCreatorTool extends AreaTool {
     private Color color;
 
     public RegionCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.REGION_CREATOR);
+        super(actionManager, ToolType.REGION_CREATOR, false);
     }
 
     @Override

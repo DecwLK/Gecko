@@ -14,7 +14,7 @@ import org.gecko.view.views.ViewElementPane;
 public class VariableBlockCreatorTool extends Tool {
 
     public VariableBlockCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.VARIABLE_BLOCK_CREATOR);
+        super(actionManager, ToolType.VARIABLE_BLOCK_CREATOR, false);
     }
 
     @Override

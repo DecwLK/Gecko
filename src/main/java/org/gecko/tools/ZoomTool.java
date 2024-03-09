@@ -12,7 +12,7 @@ public class ZoomTool extends Tool {
     private static final double ZOOM_SCALE = 1.1;
 
     public ZoomTool(ActionManager actionManager) {
-        super(actionManager, ToolType.ZOOM_TOOL);
+        super(actionManager, ToolType.ZOOM_TOOL, true);
     }
 
     @Override

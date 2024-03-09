@@ -21,7 +21,7 @@ public class SystemConnectionCreatorTool extends Tool {
     private PortViewModel firstPortViewModel;
 
     public SystemConnectionCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.CONNECTION_CREATOR);
+        super(actionManager, ToolType.CONNECTION_CREATOR, false);
         firstPortViewModel = null;
     }
 

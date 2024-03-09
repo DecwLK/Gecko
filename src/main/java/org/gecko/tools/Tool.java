@@ -31,10 +31,12 @@ public abstract class Tool implements ViewElementVisitor {
     protected final ActionManager actionManager;
     @Getter
     private final ToolType toolType;
+    private final boolean transparentElements;
 
-    public Tool(ActionManager actionManager, ToolType toolType) {
+    protected Tool(ActionManager actionManager, ToolType toolType, boolean transparentElements) {
         this.actionManager = actionManager;
         this.toolType = toolType;
+        this.transparentElements = transparentElements;
     }
 
     /**
@@ -56,7 +58,7 @@ public abstract class Tool implements ViewElementVisitor {
     @Override
     public void visit(StateViewElement stateViewElement) {
         //We need to consume all events so that they don't propagate to the view
-        setAllHandlers(stateViewElement, Event::consume);
+        setAllHandlers(stateViewElement, transparentElements ? null : Event::consume);
     }
 
     /**
@@ -66,7 +68,7 @@ public abstract class Tool implements ViewElementVisitor {
      */
     @Override
     public void visit(EdgeViewElement edgeViewElement) {
-        setAllHandlers(edgeViewElement, Event::consume);
+        setAllHandlers(edgeViewElement, transparentElements ? null : Event::consume);
     }
 
     /**
@@ -87,7 +89,7 @@ public abstract class Tool implements ViewElementVisitor {
      */
     @Override
     public void visit(SystemViewElement systemViewElement) {
-        setAllHandlers(systemViewElement, Event::consume);
+        setAllHandlers(systemViewElement, transparentElements ? null : Event::consume);
     }
 
     /**
@@ -98,7 +100,7 @@ public abstract class Tool implements ViewElementVisitor {
      */
     @Override
     public void visit(SystemConnectionViewElement systemConnectionViewElement) {
-        setAllHandlers(systemConnectionViewElement, Event::consume);
+        setAllHandlers(systemConnectionViewElement, transparentElements ? null : Event::consume);
     }
 
     /**
@@ -109,7 +111,7 @@ public abstract class Tool implements ViewElementVisitor {
      */
     @Override
     public void visit(VariableBlockViewElement variableBlockViewElement) {
-        setAllHandlers(variableBlockViewElement, Event::consume);
+        setAllHandlers(variableBlockViewElement, transparentElements ? null : Event::consume);
     }
 
     /**
@@ -163,10 +165,10 @@ public abstract class Tool implements ViewElementVisitor {
      */
     @Override
     public void visit(PortViewElement portViewElement) {
-        setAllHandlers(portViewElement, Event::consume);
+        setAllHandlers(portViewElement, transparentElements ? null : Event::consume);
     }
 
-    private void setAllHandlers(Node node, EventHandler<MouseEvent> handler) {
+    protected void setAllHandlers(Node node, EventHandler<MouseEvent> handler) {
         node.setOnMousePressed(handler);
         node.setOnMouseDragged(handler);
         node.setOnMouseReleased(handler);

@@ -23,8 +23,8 @@ public abstract class AreaTool extends Tool {
     private Rectangle area;
     private ScrollPane view;
 
-    public AreaTool(ActionManager actionManager, ToolType toolType) {
-        super(actionManager, toolType);
+    public AreaTool(ActionManager actionManager, ToolType toolType, boolean transparentElements) {
+        super(actionManager, toolType, transparentElements);
     }
 
     @Override

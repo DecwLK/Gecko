@@ -20,7 +20,6 @@ import org.gecko.view.views.viewelement.decorator.ElementScalerBlock;
 import org.gecko.viewmodel.BlockViewModelElement;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.EditorViewModel;
-import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.SelectionManager;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
@@ -122,6 +121,9 @@ public class CursorTool extends Tool {
 
     private void setBlockScalerElementHandlers(ElementScalerBlock scaler) {
         scaler.setOnMousePressed(event -> {
+            if (isDragging) {
+                return;
+            }
             if (event.getButton() != MouseButton.PRIMARY) {
                 return;
             }
@@ -131,7 +133,6 @@ public class CursorTool extends Tool {
             oldPosition = scaler.getDecoratorTarget().getTarget().getPosition();
             oldSize = scaler.getDecoratorTarget().getTarget().getSize();
             startDragPosition = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
-            previousDragPosition = startDragPosition;
             isDragging = true;
         });
 
@@ -140,8 +141,8 @@ public class CursorTool extends Tool {
                 return;
             }
             Point2D newPosition = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
-
             if (!scaler.setCenter(newPosition)) {
+                runResizeAction(scaler);
                 cancelDrag(scaler);
             }
         });
@@ -150,22 +151,18 @@ public class CursorTool extends Tool {
             if (!isDragging) {
                 return;
             }
-            if (startDragPosition.equals(previousDragPosition)) {
-                scaler.setDragging(false);
-                return;
-            }
-            scaler.setCenter(previousDragPosition);
-            PositionableViewModelElement<?> target = scaler.getDecoratorTarget().getTarget();
-            target.setPosition(oldPosition);
-            target.setSize(oldSize);
-
-            Action resizeAction = actionManager.getActionFactory()
-                .createScaleBlockViewModelElementAction(
-                    (BlockViewModelElement<?>) scaler.getDecoratorTarget().getTarget(), scaler);
-            actionManager.run(resizeAction);
-
+            scaler.setCenter(viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY()));
+            runResizeAction(scaler);
             cancelDrag(scaler);
         });
+    }
+
+    private void runResizeAction(ElementScalerBlock scaler) {
+        scaler.setDragging(false);
+        BlockViewModelElement<?> target = (BlockViewModelElement<?>) scaler.getDecoratorTarget().getTarget();
+        Action resizeAction = actionManager.getActionFactory()
+            .createScaleBlockViewModelElementAction(target, scaler, oldPosition, oldSize, true);
+        actionManager.run(resizeAction);
     }
 
     private void setConnectionScalerElementsHandlers(ElementScalerBlock scaler) {

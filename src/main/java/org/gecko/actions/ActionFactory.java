@@ -181,10 +181,10 @@ public class ActionFactory {
     }
 
     public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(
-        BlockViewModelElement<?> blockViewModelElement, ElementScalerBlock elementScalerBlock, Point2D oldPos,
-        Point2D oldSize) {
+        BlockViewModelElement<?> blockViewModelElement, ElementScalerBlock elementScalerBlock, Point2D position,
+        Point2D size, boolean isPreviousScale) {
         return new ScaleBlockViewModelElementAction(geckoViewModel.getCurrentEditor(), blockViewModelElement,
-            elementScalerBlock, oldPos, oldSize);
+            elementScalerBlock, position, size, isPreviousScale);
     }
 
     public ScaleBlockViewModelElementAction createScaleBlockViewModelElementAction(

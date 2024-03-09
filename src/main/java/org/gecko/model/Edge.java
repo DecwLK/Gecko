@@ -13,12 +13,15 @@ import org.gecko.exceptions.ModelException;
  * priority and a {@link Kind}, which informs about how the associated {@link Contract} is handled.
  */
 @Getter
-@Setter(onParam_ = {@NonNull})
+@Setter
 public class Edge extends Element {
     private Contract contract;
+    @Setter(onParam_ = {@NonNull})
     private Kind kind;
     private int priority;
+    @Setter(onParam_ = {@NonNull})
     private State source;
+    @Setter(onParam_ = {@NonNull})
     private State destination;
 
     @JsonCreator

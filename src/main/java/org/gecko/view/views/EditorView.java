@@ -126,34 +126,6 @@ public class EditorView {
         this.contextMenu = contextMenuBuilder.build();
         currentViewPane.setOnContextMenuRequested(event -> {
             changeContextMenu(contextMenuBuilder.getContextMenu());
-            this.contextMenu.getItems()
-                .stream()
-                .filter(menuItem -> menuItem.getText().equals("Copy"))
-                .findAny()
-                .ifPresent(copyMenuItem -> copyMenuItem.setDisable(
-                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
-
-            this.contextMenu.getItems()
-                .stream()
-                .filter(menuItem -> menuItem.getText().equals("Cut"))
-                .findAny()
-                .ifPresent(cutMenuItem -> cutMenuItem.setDisable(
-                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
-
-            this.contextMenu.getItems()
-                .stream()
-                .filter(menuItem -> menuItem.getText().equals("Select All"))
-                .findAny()
-                .ifPresent(selectMenuItem -> selectMenuItem.setDisable(
-                    viewModel.getContainedPositionableViewModelElementsProperty().isEmpty()));
-
-            this.contextMenu.getItems()
-                .stream()
-                .filter(menuItem -> menuItem.getText().equals("Deselect All"))
-                .findAny()
-                .ifPresent(deselectMenuItem -> deselectMenuItem.setDisable(
-                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
-
             this.contextMenu.show(currentViewPane, event.getScreenX(), event.getScreenY());
             event.consume();
         });

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javafx.beans.Observable;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableSet;
 import javafx.scene.Node;
@@ -36,13 +38,12 @@ public class GeckoView {
     @Getter
     private final BorderPane mainPane;
     private final TabPane centerPane;
-    @Getter
     private final GeckoViewModel viewModel;
     private final ViewFactory viewFactory;
     private final MenuBar menuBar;
 
     @Getter
-    private EditorView currentView;
+    private Property<EditorView> currentViewProperty;
 
     private final ArrayList<EditorView> openedViews;
     private boolean darkMode = false;
@@ -53,6 +54,7 @@ public class GeckoView {
         this.centerPane = new TabPane();
         this.viewFactory = new ViewFactory(viewModel.getActionManager(), this);
         this.openedViews = new ArrayList<>();
+        this.currentViewProperty = new SimpleObjectProperty<>();
 
         mainPane.getStylesheets()
             .add(Objects.requireNonNull(GeckoView.class.getResource(STYLE_SHEET_LIGHT)).toString());
@@ -69,9 +71,9 @@ public class GeckoView {
         mainPane.setTop(menuBar);
 
         // Initial view
-        currentView = viewFactory.createEditorView(viewModel.getCurrentEditor(),
-            viewModel.getCurrentEditor().isAutomatonEditor());
-        constructTab(currentView, viewModel.getCurrentEditor());
+        currentViewProperty.setValue(viewFactory.createEditorView(viewModel.getCurrentEditor(),
+            viewModel.getCurrentEditor().isAutomatonEditor()));
+        constructTab(currentViewProperty.getValue(), viewModel.getCurrentEditor());
         centerPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
         centerPane.setPickOnBounds(false);
@@ -80,10 +82,10 @@ public class GeckoView {
 
     private void onUpdateCurrentEditorFromViewModel(
         ObservableValue<? extends EditorViewModel> observable, EditorViewModel oldValue, EditorViewModel newValue) {
-        currentView = openedViews.stream()
+        currentViewProperty.setValue(openedViews.stream()
             .filter(editorView -> editorView.getViewModel().equals(newValue))
             .findFirst()
-            .orElseThrow();
+            .orElseThrow());
         refreshView();
     }
 
@@ -123,7 +125,9 @@ public class GeckoView {
         List<EditorView> editorViewsToRemove = openedViews.stream()
             .filter(editorView -> editorViewModelsToRemove.contains(editorView.getViewModel()))
             .toList();
-        editorViewsToRemove.forEach(editorView -> centerPane.getTabs().remove(editorView.getCurrentView()));
+        editorViewsToRemove.forEach(editorView -> {
+            centerPane.getTabs().remove(editorView.getCurrentView());
+        });
         openedViews.removeAll(editorViewsToRemove);
     }
 
@@ -144,11 +148,11 @@ public class GeckoView {
         if (tab == centerPane.getSelectionModel().getSelectedItem()) {
             return;
         }
-        currentView = getView(tab);
-        SystemViewModel next = currentView.getViewModel().getCurrentSystem();
+        currentViewProperty.setValue(getView(tab));
+        SystemViewModel next = currentViewProperty.getValue().getViewModel().getCurrentSystem();
         Action switchAction = viewModel.getActionManager()
             .getActionFactory()
-            .createViewSwitchAction(next, currentView.getViewModel().isAutomatonEditor());
+            .createViewSwitchAction(next, currentViewProperty.getValue().getViewModel().isAutomatonEditor());
         viewModel.getActionManager().run(switchAction);
     }
 
@@ -156,18 +160,17 @@ public class GeckoView {
         mainPane.setCenter(centerPane);
 
         // Focus current view
-        centerPane.getSelectionModel().select(currentView.getCurrentView());
+        centerPane.getSelectionModel().select(currentViewProperty.getValue().getCurrentView());
 
-        mainPane.setLeft(currentView.drawToolbar());
-        mainPane.setRight(currentView.drawInspector());
-        currentView.getCurrentInspector()
-            .addListener((Observable observable) -> mainPane.setRight(currentView.drawInspector()));
-        viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(),
-            currentView.getViewModel().isAutomatonEditor());
+        mainPane.setLeft(currentViewProperty.getValue().drawToolbar());
+        mainPane.setRight(currentViewProperty.getValue().drawInspector());
+        currentViewProperty.getValue().getCurrentInspector().addListener((Observable observable) -> {
+            mainPane.setRight(currentViewProperty.getValue().drawInspector());
+        });
+        viewModel.switchEditor(currentViewProperty.getValue().getViewModel().getCurrentSystem(),
+            currentViewProperty.getValue().getViewModel().isAutomatonEditor());
 
-        currentView.focus();
-
-        MenuBarBuilder.updateToolsMenu(menuBar, currentView.getViewModel().getTools());
+        currentViewProperty.getValue().focus();
     }
 
     private void onUpdateCurrentEditorToViewModel(
@@ -194,5 +197,9 @@ public class GeckoView {
 
     private EditorView getView(Tab tab) {
         return openedViews.stream().filter(editorView -> editorView.getCurrentView() == tab).findFirst().orElseThrow();
+    }
+
+    public EditorView getCurrentView() {
+        return currentViewProperty.getValue();
     }
 }

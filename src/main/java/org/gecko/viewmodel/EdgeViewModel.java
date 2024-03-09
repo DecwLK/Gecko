@@ -191,4 +191,14 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     public void setOrientation(int orientation) {
         orientationProperty.setValue(orientation);
     }
+
+    @Override
+    public void setPosition(@NonNull Point2D position) {
+        return;
+    }
+
+    @Override
+    public void setSize(@NonNull Point2D position) {
+        return;
+    }
 }

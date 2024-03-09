@@ -72,8 +72,10 @@ public class GeckoModel {
         }
 
         Automaton automaton = system.getAutomaton();
-        if (automaton.getRegions().stream().anyMatch(region -> region.getName().equals(name)
-            || region.getPreAndPostCondition().getName().equals(name))) {
+        if (automaton.getRegions()
+            .stream()
+            .anyMatch(
+                region -> region.getName().equals(name) || region.getPreAndPostCondition().getName().equals(name))) {
             return false;
         }
         for (State state : automaton.getStates()) {

@@ -28,6 +28,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
     private PortViewModel portViewModel;
     private PortViewModel previousPortViewModel;
     private boolean isVariableBlock = false;
+    private boolean wasVariableBlock = false;
 
     MoveSystemConnectionViewModelElementAction(
         GeckoViewModel geckoViewModel, SystemConnectionViewModel systemConnectionViewModel,
@@ -64,8 +65,10 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
         PortViewModel destinationPortViewModel = systemConnectionViewModel.getDestination();
 
         if (isSource()) {
+            wasVariableBlock = geckoViewModel.getSystemViewModelWithPort(sourcePortViewModel).equals(parentSystem);
             sourcePortViewModel = portViewModel;
         } else {
+            wasVariableBlock = geckoViewModel.getSystemViewModelWithPort(destinationPortViewModel).equals(parentSystem);
             destinationPortViewModel = portViewModel;
         }
 
@@ -120,7 +123,7 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
     @Override
     Action getUndoAction(ActionFactory actionFactory) {
         return actionFactory.createMoveSystemConnectionViewModelElementAction(systemConnectionViewModel,
-            elementScalerBlock, previousPortViewModel, isVariableBlock);
+            elementScalerBlock, previousPortViewModel, wasVariableBlock);
     }
 
     private PortViewModel getPortViewModelAt() {

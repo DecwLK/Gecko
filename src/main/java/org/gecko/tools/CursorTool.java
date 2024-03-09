@@ -2,6 +2,7 @@ package org.gecko.tools;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.gecko.actions.Action;
@@ -53,6 +54,7 @@ public class CursorTool extends Tool {
         pane.draw().setCursor(Cursor.DEFAULT);
         pane.draw().setPannable(false);
         viewPane = pane;
+        setDeselectHandler(pane.draw());
     }
 
     @Override
@@ -77,6 +79,7 @@ public class CursorTool extends Tool {
             }
 
             selectElement(edgeViewElement, !event.isShiftDown());
+            event.consume();
         });
     }
 
@@ -100,6 +103,7 @@ public class CursorTool extends Tool {
                 return;
             }
             selectElement(systemConnectionViewElement, !event.isShiftDown());
+            event.consume();
         });
     }
 
@@ -120,6 +124,16 @@ public class CursorTool extends Tool {
         }
     }
 
+    private void setDeselectHandler(Node node) {
+        node.setOnMousePressed(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+            selectionManager.deselectAll();
+            event.consume();
+        });
+    }
+
     private void setBlockScalerElementHandlers(ElementScalerBlock scaler) {
         scaler.setOnMousePressed(event -> {
             if (isDragging) {
@@ -135,6 +149,7 @@ public class CursorTool extends Tool {
             oldSize = scaler.getDecoratorTarget().getTarget().getSize();
             startDragPosition = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
             isDragging = true;
+            event.consume();
         });
 
         scaler.setOnMouseDragged(event -> {
@@ -146,6 +161,7 @@ public class CursorTool extends Tool {
                 runResizeAction(scaler);
                 cancelDrag(scaler);
             }
+            event.consume();
         });
 
         scaler.setOnMouseReleased(event -> {
@@ -155,6 +171,7 @@ public class CursorTool extends Tool {
             scaler.setCenter(viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY()));
             runResizeAction(scaler);
             cancelDrag(scaler);
+            event.consume();
         });
     }
 
@@ -174,6 +191,7 @@ public class CursorTool extends Tool {
 
             startDraggingElementHandler(event);
             scaler.setDragging(true);
+            event.consume();
         });
         scaler.setOnMouseDragged(event -> {
             if (!isDragging) {
@@ -183,6 +201,7 @@ public class CursorTool extends Tool {
             Point2D delta = eventPosition.subtract(previousDragPosition);
             scaler.setLayoutPosition(scaler.getLayoutPosition().add(delta));
             previousDragPosition = eventPosition;
+            event.consume();
         });
         scaler.setOnMouseReleased(event -> {
             if (!isDragging) {
@@ -205,6 +224,7 @@ public class CursorTool extends Tool {
 
             actionManager.run(moveAction);
             cancelDrag(scaler);
+            event.consume();
         });
     }
 
@@ -218,6 +238,7 @@ public class CursorTool extends Tool {
                     actionManager.getActionFactory().createViewSwitchAction(systemViewElement.getTarget(), false);
                 actionManager.run(openSystemAction);
             }
+            event.consume();
         });
     }
 
@@ -231,8 +252,12 @@ public class CursorTool extends Tool {
             if (!element.isSelected()) {
                 selectElement(element, !event.isShiftDown());
             }
+            event.consume();
         });
-        element.drawElement().setOnMouseDragged(this::dragElementsHandler);
+        element.drawElement().setOnMouseDragged(event -> {
+            dragElementsHandler(event);
+            event.consume();
+        });
         element.drawElement().setOnMouseReleased(event -> {
             stopDraggingElementHandler(event);
 
@@ -240,6 +265,7 @@ public class CursorTool extends Tool {
                 && startDragPosition.distance(previousDragPosition) * editorViewModel.getZoomScale() < DRAG_THRESHOLD) {
                 selectElement(element, !event.isShiftDown());
             }
+            event.consume();
         });
     }
 
@@ -247,6 +273,7 @@ public class CursorTool extends Tool {
         isDragging = true;
         startDragPosition = viewPane.screenToWorldCoordinates(event.getScreenX(), event.getScreenY());
         previousDragPosition = startDragPosition;
+        event.consume();
     }
 
     private void dragElementsHandler(MouseEvent event) {
@@ -260,6 +287,7 @@ public class CursorTool extends Tool {
             element.setPosition(element.getPosition().add(delta));
         });
         previousDragPosition = eventPosition;
+        event.consume();
     }
 
     private void stopDraggingElementHandler(MouseEvent event) {
@@ -275,6 +303,7 @@ public class CursorTool extends Tool {
             .createMoveBlockViewModelElementAction(endWorldPos.subtract(startDragPosition));
         actionManager.run(moveAction);
         cancelDrag();
+        event.consume();
     }
 
     private void selectElement(ViewElement<?> viewElement, boolean newSelection) {

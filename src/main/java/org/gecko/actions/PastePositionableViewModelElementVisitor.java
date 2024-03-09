@@ -101,29 +101,39 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         if (systemFromClipboard.getParent() != null) {
             return;
         }
-        //System systemToPaste = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemFromClipboard);
-        System systemToPaste = systemFromClipboard;
-        systemToPaste.getVariables().clear();
-        for (Variable variable : systemFromClipboard.getVariables()) {
-            Variable copiedVariable = geckoViewModel.getGeckoModel().getModelFactory().copyVariable(variable);
-            clipboardToPasted.put(variable, copiedVariable);
-            systemToPaste.addVariable(copiedVariable);
-        }
+        System systemToPaste = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemFromClipboard);
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().addChild(systemToPaste);
         systemToPaste.setParent(geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget());
-        /*SystemViewModel systemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelFrom(systemToPaste);
-        systemViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(systemFromClipboard).getKey());*/
         createRecursiveSystemViewModels(systemToPaste);
         clipboardToPasted.put(systemFromClipboard, systemToPaste);
-        //pastedElements.add(systemViewModel);
     }
 
     private void createRecursiveSystemViewModels(System system) {
         SystemViewModel systemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelFrom(system);
         //systemViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(system).getKey());
         pastedElements.add(systemViewModel);
+        for (Variable variable : system.getVariables()) {
+            geckoViewModel.getViewModelFactory().createPortViewModelFrom(variable);
+        }
+        for (State state : system.getAutomaton().getStates()) {
+            geckoViewModel.getViewModelFactory().createStateViewModelFrom(state);
+        }
+        for (Edge edge : system.getAutomaton().getEdges()) {
+            try {
+                geckoViewModel.getViewModelFactory().createEdgeViewModelFrom(edge);
+            } catch (MissingViewModelElementException e) {
+                throw new RuntimeException(e);
+            }
+        }
         for (System child : system.getChildren()) {
             createRecursiveSystemViewModels(child);
+        }
+        for (SystemConnection connection : system.getConnections()) {
+            try {
+                geckoViewModel.getViewModelFactory().createSystemConnectionViewModelFrom(connection);
+            } catch (MissingViewModelElementException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

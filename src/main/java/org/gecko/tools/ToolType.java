@@ -24,6 +24,7 @@ public enum ToolType {
 
     private final String label;
     private final String icon;
+    @SuppressWarnings("ImmutableEnumChecker")
     private final KeyCodeCombination keyCodeCombination;
 
     ToolType(String label, String icon, KeyCodeCombination keyCodeCombination) {

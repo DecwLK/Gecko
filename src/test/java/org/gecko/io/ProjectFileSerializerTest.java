@@ -55,8 +55,8 @@ public class ProjectFileSerializerTest {
             fail();
         }
 
-        SystemViewModel oneLevelRoot = (SystemViewModel) oneLevelGeckoViewModel
-            .getViewModelElement(oneLevelGeckoViewModel.getGeckoModel().getRoot());
+        SystemViewModel oneLevelRoot = (SystemViewModel) oneLevelGeckoViewModel.getViewModelElement(
+            oneLevelGeckoViewModel.getGeckoModel().getRoot());
         ViewModelFactory oneLevelFactory = oneLevelGeckoViewModel.getViewModelFactory();
 
         assertDoesNotThrow(() -> {
@@ -72,10 +72,10 @@ public class ProjectFileSerializerTest {
         });
 
         // NOT OKAY, has to throw:
-//        assertThrows(ModelException.class, () -> oneLevelFactory.createSystemConnectionViewModelIn(oneLevelRoot,
-//            (PortViewModel) oneLevelGeckoViewModel.getViewModelElement(oneLevelRoot.getTarget()
-//                .getVariableByName("emptyVar1")), (PortViewModel) oneLevelGeckoViewModel
-//                .getViewModelElement(oneLevelRoot.getTarget().getVariableByName("emptyVar2"))));
+        //        assertThrows(ModelException.class, () -> oneLevelFactory.createSystemConnectionViewModelIn(oneLevelRoot,
+        //            (PortViewModel) oneLevelGeckoViewModel.getViewModelElement(oneLevelRoot.getTarget()
+        //                .getVariableByName("emptyVar1")), (PortViewModel) oneLevelGeckoViewModel
+        //                .getViewModelElement(oneLevelRoot.getTarget().getVariableByName("emptyVar2"))));
 
         assertDoesNotThrow(() -> {
             oneLevelFactory.createRegionViewModelIn(oneLevelRoot);
@@ -101,8 +101,8 @@ public class ProjectFileSerializerTest {
             fail();
         }
 
-        SystemViewModel treeRoot = (SystemViewModel) treeGeckoViewModel
-            .getViewModelElement(treeGeckoViewModel.getGeckoModel().getRoot());
+        SystemViewModel treeRoot =
+            (SystemViewModel) treeGeckoViewModel.getViewModelElement(treeGeckoViewModel.getGeckoModel().getRoot());
         ViewModelFactory treeFactory = treeGeckoViewModel.getViewModelFactory();
 
         assertDoesNotThrow(() -> {
@@ -167,11 +167,9 @@ public class ProjectFileSerializerTest {
             fail("File for one-level Gecko does not contain a JSON valid string.");
         }
 
-        assertTrue(oneLevel.toString().contains(NON_NULL_AUTOMATON_JSON)
-            && oneLevel.toString().contains(NON_NULL_START_STATE_JSON)
-            && oneLevel.toString().contains(NON_NULL_REGIONS_JSON)
-            && oneLevel.toString().contains(NON_NULL_REGION_STATES_JSON)
-            && oneLevel.toString().contains(NO_CHILDREN));
+        assertTrue(oneLevel.toString().contains(NON_NULL_AUTOMATON_JSON) && oneLevel.toString()
+            .contains(NON_NULL_START_STATE_JSON) && oneLevel.toString().contains(NON_NULL_REGIONS_JSON)
+            && oneLevel.toString().contains(NON_NULL_REGION_STATES_JSON) && oneLevel.toString().contains(NO_CHILDREN));
 
     }
 
@@ -187,10 +185,9 @@ public class ProjectFileSerializerTest {
             fail("File for tree-structured Gecko does not contain a JSON valid string.");
         }
 
-        assertTrue(tree.toString().contains(NON_NULL_AUTOMATON_JSON)
-            && tree.toString().contains(NON_NULL_START_STATE_JSON)
-            && tree.toString().contains(NON_NULL_REGIONS_JSON)
-            && tree.toString().contains(NON_NULL_REGION_STATES_JSON)
-            && tree.toString().contains(PRESENT_CHILDREN));
+        assertTrue(
+            tree.toString().contains(NON_NULL_AUTOMATON_JSON) && tree.toString().contains(NON_NULL_START_STATE_JSON)
+                && tree.toString().contains(NON_NULL_REGIONS_JSON) && tree.toString()
+                .contains(NON_NULL_REGION_STATES_JSON) && tree.toString().contains(PRESENT_CHILDREN));
     }
 }

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 public class AutomatonFileSerializerTest {
     static GeckoViewModel geckoViewModel;
+
     @BeforeAll
     static void setUp() {
         File aebFile = new File("src/test/java/org/gecko/io/files/AEB.sys");

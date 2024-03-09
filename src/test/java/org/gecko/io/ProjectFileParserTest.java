@@ -10,21 +10,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-import org.gecko.exceptions.ModelException;
-import org.gecko.model.GeckoModel;
-import org.gecko.model.Visibility;
 import org.gecko.viewmodel.GeckoViewModel;
-import org.gecko.viewmodel.PortViewModel;
-import org.gecko.viewmodel.RegionViewModel;
-import org.gecko.viewmodel.StateViewModel;
-import org.gecko.viewmodel.SystemViewModel;
-import org.gecko.viewmodel.ViewModelFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class ProjectFileParserTest {
     static ProjectFileParser projectFileParser;
     private static ObjectMapper mapper;
+
     @BeforeAll
     static void setUp() {
         mapper = new ObjectMapper();
@@ -35,8 +28,7 @@ public class ProjectFileParserTest {
     void parse() {
         GeckoViewModel parsedEmptyGeckoViewModel = null;
         File fileForEmpty = new File("src/test/java/org/gecko/io/files/emptyGecko.json");
-        File serializedParsedEmpty
-            = new File("src/test/java/org/gecko/io/files/serializedParsedEmptyGecko.json");
+        File serializedParsedEmpty = new File("src/test/java/org/gecko/io/files/serializedParsedEmptyGecko.json");
 
         try {
             parsedEmptyGeckoViewModel = projectFileParser.parse(fileForEmpty);
@@ -54,8 +46,7 @@ public class ProjectFileParserTest {
     void parseOneLevel() {
         GeckoViewModel parsedOneLevelGeckoViewModel = null;
         File fileForOneLevel = new File("src/test/java/org/gecko/io/files/oneLevelGecko.json");
-        File serializedParsedOneLevel
-            = new File("src/test/java/org/gecko/io/files/serializedParsedOneLevelGecko.json");
+        File serializedParsedOneLevel = new File("src/test/java/org/gecko/io/files/serializedParsedOneLevelGecko.json");
         try {
             parsedOneLevelGeckoViewModel = projectFileParser.parse(fileForOneLevel);
         } catch (IOException e) {
@@ -87,8 +78,7 @@ public class ProjectFileParserTest {
     void parseTree() {
         GeckoViewModel parsedTreeGeckoViewModel = null;
         File fileForTree = new File("src/test/java/org/gecko/io/files/treeGecko.json");
-        File serializedParsedTree
-            = new File("src/test/java/org/gecko/io/files/serializedParsedTreeGecko.json");
+        File serializedParsedTree = new File("src/test/java/org/gecko/io/files/serializedParsedTreeGecko.json");
         try {
             parsedTreeGeckoViewModel = projectFileParser.parse(fileForTree);
         } catch (IOException e) {

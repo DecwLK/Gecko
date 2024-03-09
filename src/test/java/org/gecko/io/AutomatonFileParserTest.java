@@ -2,7 +2,6 @@ package org.gecko.io;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,8 +28,7 @@ public class AutomatonFileParserTest {
 
     @Test
     void parseComplexGecko() {
-        File serializedExportedComplexFile
-            = new File("src/test/java/org/gecko/io/files/exportedComplexGecko.sys");
+        File serializedExportedComplexFile = new File("src/test/java/org/gecko/io/files/exportedComplexGecko.sys");
         try {
             automatonFileParser.parse(serializedExportedComplexFile);
         } catch (IOException e) {

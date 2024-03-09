@@ -20,6 +20,7 @@ public class SystemEditorViewShortcutHandler extends ShortcutHandler {
         addCreatorShortcuts();
     }
 
+    @SuppressWarnings("CatchAndPrintStackTrace")
     private void addNavigateSystemShortcuts() {
         shortcuts.put(Shortcuts.OPEN_CHILD_SYSTEM_EDITOR.get(), () -> {
             PositionableViewModelElement<?> focusedElement = editorView.getViewModel().getFocusedElement();

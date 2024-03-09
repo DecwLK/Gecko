@@ -374,10 +374,15 @@
     -fx-background-color: -fx-fg0;
 }
 
+.combo-box .text-field {
+    -fx-background-radius: 3 0 0 3;
+    -fx-border-radius: 3 0 0 3;
+}
+
 .combo-box .arrow, .combo-box .arrow-button {
     -fx-background-color: -fx-fg2;
-    -fx-background-radius: 2;
-    -fx-border-radius: 0;
+    -fx-background-radius: 0 3 3 0;
+    -fx-border-radius: 0 3 3 0;
     -fx-border-color: -fx-text;
     -fx-text-fill: -fx-text;
     -fx-font-size: 12px;

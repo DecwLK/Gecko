@@ -12,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -83,7 +82,7 @@ public class EditorView {
         }, viewModel.getCurrentSystem().getNameProperty()));
 
         // Floating UI
-        FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel, viewElementPane);
+        FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
         Node zoomButtons = floatingUIBuilder.buildZoomButtons();
         AnchorPane.setBottomAnchor(zoomButtons, 18.0);
         AnchorPane.setRightAnchor(zoomButtons, 18.0);
@@ -303,14 +302,6 @@ public class EditorView {
         oldValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(false));
         newValue.stream().map(this::findViewElement).forEach(viewElement -> viewElement.setSelected(true));
         viewElementPane.onSelectionChanged();
-    }
-
-    protected void switchToCursorTool() {
-        toolBar.getItems()
-            .stream()
-            .filter(button -> ((ToggleButton) button).getText().equals("Cursor Tool"))
-            .findFirst()
-            .ifPresent(cursorButton -> ((ToggleButton) cursorButton).fire());
     }
 
     public void changeContextMenu(ContextMenu contextMenu) {

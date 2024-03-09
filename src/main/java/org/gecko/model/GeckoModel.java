@@ -14,7 +14,6 @@ import org.gecko.exceptions.ModelException;
  */
 @Getter
 public class GeckoModel {
-    private static final String DEFAULT_NAME = "^Element_\\d+\\b";
     private final System root;
     private final ModelFactory modelFactory;
     @Setter

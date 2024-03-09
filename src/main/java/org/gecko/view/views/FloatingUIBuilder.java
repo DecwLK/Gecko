@@ -34,13 +34,9 @@ public class FloatingUIBuilder {
     private final ActionManager actionManager;
     private final EditorViewModel editorViewModel;
 
-    //TODO TODO TODO TODO TODO
-    private final ViewElementPane p;
-
-    public FloatingUIBuilder(ActionManager actionManager, EditorViewModel editorViewModel, ViewElementPane p) {
+    public FloatingUIBuilder(ActionManager actionManager, EditorViewModel editorViewModel) {
         this.actionManager = actionManager;
         this.editorViewModel = editorViewModel;
-        this.p = p;
     }
 
     public Node buildZoomButtons() {

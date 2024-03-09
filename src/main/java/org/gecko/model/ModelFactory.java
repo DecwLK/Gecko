@@ -99,6 +99,10 @@ public class ModelFactory {
     }
 
     public System copySystem(@NonNull System system) throws ModelException {
+        return copySystem(system, new HashMap<>());
+    }
+
+    public System copySystem(@NonNull System system, Map<Variable, Variable> variableToCopy) throws ModelException {
         int id = getNewElementId();
         System copy;
         try {
@@ -107,7 +111,6 @@ public class ModelFactory {
             throw new RuntimeException("Failed to create a copy of the system", e);
         }
         Map<State, State> stateToCopy = new HashMap<>();
-        Map<Variable, Variable> variableToCopy = new HashMap<>();
         for (State state : system.getAutomaton().getStates()) {
             State copiedState = copyState(state);
             copy.getAutomaton().addState(copiedState);
@@ -124,7 +127,7 @@ public class ModelFactory {
             copy.addVariable(copiedVariable);
         }
         for (System childSystem : system.getChildren()) {
-            copy.addChild(copySystem(childSystem));
+            copy.addChild(copySystem(childSystem, variableToCopy));
         }
         for (System childSystem : copy.getChildren()) {
             childSystem.setParent(copy);

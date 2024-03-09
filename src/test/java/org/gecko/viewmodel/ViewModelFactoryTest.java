@@ -16,6 +16,7 @@ import org.gecko.model.Region;
 import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.Variable;
+import org.gecko.model.Visibility;
 import org.gecko.util.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,6 +76,8 @@ class ViewModelFactoryTest {
     @Test
     void testAddSystemConnectionBetweenPorts() throws ModelException {
         PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
+        portViewModel1.setVisibility(Visibility.OUTPUT);
+        portViewModel1.updateTarget();
         PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
         SystemConnectionViewModel systemConnectionViewModel = null;
         try {
@@ -94,6 +97,8 @@ class ViewModelFactoryTest {
     void testAddSystemConnectionFrom() throws MissingViewModelElementException, ModelException {
         assertTrue(root.getTarget().getConnections().isEmpty());
         PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
+        portViewModel1.setVisibility(Visibility.OUTPUT);
+        portViewModel1.updateTarget();
         PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
         SystemConnectionViewModel systemConnectionViewModel = null;
         try {
@@ -127,10 +132,12 @@ class ViewModelFactoryTest {
 
     @Test
     void testAddEdgesToSystem() throws ModelException {
-        EdgeViewModel edgeViewModel1 = viewModelFactory.createEdgeViewModelIn(root, stateViewModel1, stateViewModel2);
-        EdgeViewModel edgeViewModel2 = viewModelFactory.createEdgeViewModelIn(root, stateViewModel1, stateViewModel1);
-        assertTrue(root.getTarget().getAutomaton().getEdges().contains(edgeViewModel1.getTarget()));
-        assertTrue(root.getTarget().getAutomaton().getEdges().contains(edgeViewModel2.getTarget()));
+        EdgeViewModel edgeViewModel1
+            = viewModelFactory.createEdgeViewModelIn(systemViewModel1, stateViewModel1, stateViewModel2);
+        EdgeViewModel edgeViewModel2
+            = viewModelFactory.createEdgeViewModelIn(systemViewModel1, stateViewModel1, stateViewModel1);
+        assertTrue(systemViewModel1.getTarget().getAutomaton().getEdges().contains(edgeViewModel1.getTarget()));
+        assertTrue(systemViewModel1.getTarget().getAutomaton().getEdges().contains(edgeViewModel2.getTarget()));
         assertEquals(stateViewModel2, edgeViewModel1.getDestination());
         assertEquals(stateViewModel1, edgeViewModel2.getDestination());
         assertEquals(stateViewModel1, edgeViewModel1.getSource());

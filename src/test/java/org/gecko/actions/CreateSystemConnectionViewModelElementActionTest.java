@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.gecko.exceptions.ModelException;
@@ -41,7 +42,10 @@ class CreateSystemConnectionViewModelElementActionTest {
         assertEquals(0, parent.getTarget().getConnections().size());
 
         port1.setVisibility(Visibility.OUTPUT);
+        assertDoesNotThrow(() -> port1.updateTarget());
         port2.setVisibility(Visibility.INPUT);
+        assertDoesNotThrow(() -> port2.updateTarget());
+
         actionManager.run(createSystemConnectionAction);
         assertEquals(1, parent.getTarget().getConnections().size());
     }

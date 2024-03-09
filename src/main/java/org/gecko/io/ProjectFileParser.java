@@ -1,11 +1,8 @@
 package org.gecko.io;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import org.gecko.model.GeckoModel;
 import org.gecko.model.System;
@@ -30,28 +27,14 @@ public class ProjectFileParser implements FileParser {
             throw new IOException();
         }
 
-        System root = objectMapper.readValue(geckoJsonWrapper.getModel(), System.class);
-        if (root == null) {
-            throw new IOException();
-        }
-
-        TypeReference<ArrayList<StartStateContainer>> typeRefStates = new TypeReference<>() {
-        };
-        List<StartStateContainer> newStartStates =
-            objectMapper.readValue(geckoJsonWrapper.getStartStates(), typeRefStates);
-
-        TypeReference<ArrayList<ViewModelPropertiesContainer>> typeRefViewModel = new TypeReference<>() {
-        };
-        List<ViewModelPropertiesContainer> newViewModelProperties =
-            objectMapper.readValue(geckoJsonWrapper.getViewModelProperties(), typeRefViewModel);
-
-        GeckoModel model = new GeckoModel(root);
+        GeckoModel model = new GeckoModel(geckoJsonWrapper.getModel());
         GeckoViewModel viewModel = new GeckoViewModel(model);
 
-        ViewModelElementCreator creator
-            = new ViewModelElementCreator(viewModel, newViewModelProperties, newStartStates);
-        creator.traverseModel(root);
-        updateSystemParents(root);
+        ViewModelElementCreator creator =
+            new ViewModelElementCreator(viewModel, geckoJsonWrapper.getViewModelProperties(),
+                geckoJsonWrapper.getStartStates());
+        creator.traverseModel(model.getRoot());
+        updateSystemParents(model.getRoot());
 
         if (creator.isFoundNonexistentStartState()) {
             throw new IOException("Not all start-states belong to the corresponding automaton's states.");

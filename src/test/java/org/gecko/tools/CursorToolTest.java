@@ -60,14 +60,14 @@ class CursorToolTest {
 
     @Test
     void select(FxRobot robot) {
-        assertEquals(geckoView.getCurrentViewProperty().getCurrentViewElements().size(), 4);
+        assertEquals(geckoView.getCurrentView().getCurrentViewElements().size(), 4);
 
-        for (ViewElement<?> viewElement : geckoView.getCurrentViewProperty().getCurrentViewElements()) {
+        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
             robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
         }
 
         geckoViewModel.switchEditor(rootSystemViewModel, false);
-        for (ViewElement<?> viewElement : geckoView.getCurrentViewProperty().getCurrentViewElements()) {
+        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
             robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
         }
     }

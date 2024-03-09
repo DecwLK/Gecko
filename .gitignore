@@ -3,7 +3,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-**/test/**/files/*.json
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -49,3 +48,5 @@ src/test/java/org/gecko/io/files/serializedParsedOneLevelGecko.json
 src/test/java/org/gecko/io/files/serializedParsedEmptyGecko.json
 src/test/java/org/gecko/io/files/oneLevelGecko.json
 src/test/java/org/gecko/io/files/emptyGecko.json
+src/test/java/org/gecko/io/files/exportedComplexGecko.sys
+src/test/java/org/gecko/io/files/serializedParsedAEB.sys

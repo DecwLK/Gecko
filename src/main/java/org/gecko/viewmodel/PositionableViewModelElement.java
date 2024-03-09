@@ -53,7 +53,7 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     }
 
     public void setCenter(@NonNull Point2D point) {
-        positionProperty.setValue(new Point2D(point.getX() - sizeProperty.getValue().getX() / 2,
+        setPosition(new Point2D(point.getX() - sizeProperty.getValue().getX() / 2,
             point.getY() - sizeProperty.getValue().getY() / 2));
     }
 

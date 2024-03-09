@@ -1,7 +1,9 @@
 package org.gecko.model;
 
+import static org.gecko.model.GeckoModelTest.NULL_PARAMETERS_FAIL;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -52,5 +54,39 @@ public class ContractTest {
     @Test
     void testToString() {
         assertEquals(contract.getName(), contract.toString());
+    }
+
+    @Test
+    void testNullParametersInContract() {
+        Contract contract = null;
+        try {
+            contract = new Contract(0, "contract", new Condition("true"), new Condition("true"));
+        } catch (ModelException e) {
+            fail("Failed to create conditions for testing purposes of a contract's setters.");
+        }
+
+        try {
+            contract.setName(null);
+        } catch (NullPointerException e) {
+            assertNotNull(contract.getName());
+        } catch (ModelException e) {
+            fail(NULL_PARAMETERS_FAIL);
+        }
+
+        try {
+            contract.setPreCondition(null);
+        } catch (NullPointerException e) {
+            assertNotNull(contract.getPreCondition());
+        }
+
+        try {
+            contract.setPostCondition(null);
+        } catch (NullPointerException e) {
+            assertNotNull(contract.getPostCondition());
+        }
+
+        assertNotNull(contract.getName());
+        assertNotNull(contract.getPreCondition());
+        assertNotNull(contract.getPostCondition());
     }
 }

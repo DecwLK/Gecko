@@ -1,9 +1,12 @@
 package org.gecko.model;
 
+import static org.gecko.model.GeckoModelTest.NULL_PARAMETERS_FAIL;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.gecko.exceptions.ModelException;
 import org.junit.jupiter.api.BeforeAll;
@@ -52,5 +55,41 @@ public class VariableTest {
     @Test
     void getBuiltinTypes() {
         assertEquals(15, Variable.getBuiltinTypes().size());
+    }
+
+    @Test
+    void testNullParametersInVariable() {
+        Variable variable = null;
+        try {
+            variable = new Variable(0, "variable", "bool", Visibility.INPUT);
+        } catch (ModelException e) {
+            fail("Failed to create variable for testing purposes of a its setters.");
+        }
+
+        try {
+            variable.setName(null);
+        } catch (NullPointerException e) {
+            assertNotNull(variable.getName());
+        } catch (ModelException e) {
+            fail(NULL_PARAMETERS_FAIL);
+        }
+
+        try {
+            variable.setType(null);
+        } catch (NullPointerException e) {
+            assertNotNull(variable.getType());
+        } catch (ModelException e) {
+            fail(NULL_PARAMETERS_FAIL);
+        }
+
+        try {
+            variable.setVisibility(null);
+        } catch (NullPointerException e) {
+            assertNotNull(variable.getVisibility());
+        }
+
+        assertNotNull(variable.getName());
+        assertNotNull(variable.getType());
+        assertNotNull(variable.getVisibility());
     }
 }

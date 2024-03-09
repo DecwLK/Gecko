@@ -1,11 +1,14 @@
 package org.gecko.model;
 
+import static org.gecko.model.GeckoModelTest.NULL_PARAMETERS_FAIL;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -103,5 +106,50 @@ public class RegionTest {
         assertThrows(NullPointerException.class, () -> regionWithValidConditions.addStates(null));
         assertThrows(NullPointerException.class, () -> regionWithValidConditions.removeState(null));
         assertThrows(NullPointerException.class, () -> regionWithValidConditions.removeStates(null));
+    }
+
+    @Test
+    void testNullParametersInRegion() {
+        Region region = null;
+        try {
+            region = new Region(0, "region", new Condition("true"),
+                new Contract(1, "preAndPost", new Condition("true"), new Condition("true")));
+        } catch (ModelException e) {
+            fail("Failed to create region for testing purposes of a its setters.");
+        }
+
+        try {
+            region.setName(null);
+        } catch (NullPointerException e) {
+            assertNotNull(region.getName());
+        } catch (ModelException e) {
+            fail(NULL_PARAMETERS_FAIL);
+        }
+
+        assertNotNull(region.getName());
+    }
+
+    @Test
+    void testNonNullPreventionForInvariantAndPreAndPostCondition() {
+        Region region = null;
+
+        try {
+            region = new Region(0, "region", null,
+                new Contract(1, "contract", new Condition("true"), new Condition("true")));
+        } catch (NullPointerException e) {
+            assertNull(region);
+        } catch (ModelException e) {
+            fail(NULL_PARAMETERS_FAIL);
+        }
+
+        try {
+            region = new Region(0, "region", new Condition("true"), null);
+        } catch (NullPointerException e) {
+            assertNull(region);
+        } catch (ModelException e) {
+            fail(NULL_PARAMETERS_FAIL);
+        }
+
+        assertNull(region);
     }
 }

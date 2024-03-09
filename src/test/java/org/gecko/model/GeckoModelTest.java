@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -19,6 +20,7 @@ public class GeckoModelTest {
     static System child;
     static System childOfChild;
     static Variable variable;
+    public static final String NULL_PARAMETERS_FAIL = "Setter to null should throw before model intervenes.";
 
     @BeforeAll
     static void setUp() {
@@ -88,5 +90,27 @@ public class GeckoModelTest {
         assertFalse(() -> defaultModel.isNameUnique("state"));
         assertFalse(() -> defaultModel.isNameUnique("contract1"));
         assertFalse(() -> defaultModel.isNameUnique("contract2"));
+    }
+
+    @Test
+    void testConsiderationOfPreAndPostConditionNamesOfRegionsInUniqueNameCheck() {
+        GeckoModel model = null;
+        System system;
+        Region region;
+        try {
+            model = new GeckoModel();
+            system = new System(8, "system", null, new Automaton());
+            region = new Region(9, "region", new Condition("true"),
+                new Contract(10, "contract10", new Condition("true"), new Condition("true")));
+            system.getAutomaton().addRegion(region);
+            model.getRoot().addChild(system);
+        } catch (ModelException e) {
+            fail("Failed to create system and / or region for testing purposes of the unique names check.");
+        }
+
+        assertNotNull(model);
+        assertFalse(model.isNameUnique("contract10"));
+        assertFalse(model.isNameUnique("region"));
+        assertTrue(model.isNameUnique("contract"));
     }
 }

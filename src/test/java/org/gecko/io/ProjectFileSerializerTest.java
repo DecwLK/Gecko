@@ -72,7 +72,7 @@ public class ProjectFileSerializerTest {
             port2.updateTarget();
         });
 
-        // NOT OKAY, has to throw:
+//        NOT OKAY, has to throw:
 //        assertThrows(ModelException.class, () -> oneLevelFactory.createSystemConnectionViewModelIn(oneLevelRoot,
 //            (PortViewModel) oneLevelGeckoViewModel.getViewModelElement(oneLevelRoot.getTarget()
 //                .getVariableByName("emptyVar1")), (PortViewModel) oneLevelGeckoViewModel

@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 public class ProjectFileParserTest {
     static ProjectFileParser projectFileParser;
     private static ObjectMapper mapper;
+
     @BeforeAll
     static void setUp() {
         mapper = new ObjectMapper();

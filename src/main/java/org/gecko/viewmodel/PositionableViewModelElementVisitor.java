@@ -1,5 +1,7 @@
 package org.gecko.viewmodel;
 
+import org.gecko.exceptions.ModelException;
+
 /**
  * Represents a visitor pattern for performing operations on {@link PositionableViewModelElement}s. Concrete visitors
  * must implement this interface to define specific behavior for each {@link PositionableViewModelElement}.

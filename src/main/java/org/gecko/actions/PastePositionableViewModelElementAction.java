@@ -30,9 +30,7 @@ public class PastePositionableViewModelElementAction extends Action {
         }
 
         PastePositionableViewModelElementVisitor pasteVisitor = new PastePositionableViewModelElementVisitor(geckoViewModel, copyVisitor);
-        List<Element> elementsToPaste =
-            new java.util.ArrayList<>(copyVisitor.getOriginalToClipboard().values().stream().toList());
-        for (Element element : elementsToPaste) {
+        for (Element element : copyVisitor.getOriginalToClipboard().values()) {
             element.accept(pasteVisitor);
         }
         while (!pasteVisitor.getUnsuccessfulPastes().isEmpty()) {

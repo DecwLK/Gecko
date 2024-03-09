@@ -3,6 +3,7 @@ package org.gecko.view.menubar;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
+import javafx.beans.binding.Bindings;
 import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -49,7 +50,7 @@ public class MenuBarBuilder {
         this.actionManager = actionManager;
         menuBar = new MenuBar();
 
-        menuBar.getMenus().addAll(setupFileMenu(), setupEditMenu(), setupViewMenu(), setupToolsMenu(), setupHelpMenu());
+        menuBar.getMenus().addAll(setupFileMenu(), setupEditMenu(), setupViewMenu(), setupToolsMenu());
     }
 
     public MenuBar build() {
@@ -224,10 +225,14 @@ public class MenuBarBuilder {
         toggleAppearanceMenuItem.setOnAction(e -> view.toggleAppearance());
         toggleAppearanceMenuItem.setAccelerator(Shortcuts.TOGGLE_APPEARANCE.get());
 
+        MenuItem searchElementsMenuItem = new MenuItem("Search Elements");
+        searchElementsMenuItem.setOnAction(e -> view.getCurrentView().toggleSearchWindow());
+        searchElementsMenuItem.setAccelerator(Shortcuts.TOGGLE_SEARCH.get());
+
         viewMenu.getItems()
             .addAll(changeViewMenuItem, goToParentSystemMenuItem, focusSelectedElementMenuItem,
                 viewSwitchToZoomSeparator, zoomInMenuItem, zoomOutMenuItem, zoomToAppearanceSeparator,
-                toggleAppearanceMenuItem);
+                toggleAppearanceMenuItem, searchElementsMenuItem);
 
         return viewMenu;
     }
@@ -254,42 +259,35 @@ public class MenuBarBuilder {
         SeparatorMenuItem generalFromSystemSeparator = new SeparatorMenuItem();
 
         // System view tools:
-        MenuItem systemCreatorMenuItem = new MenuItem(ToolType.SYSTEM_CREATOR.getLabel());
-        systemCreatorMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(ToolType.SYSTEM_CREATOR)));
-
-        MenuItem systemConnectionCreatorMenuItem = new MenuItem(ToolType.CONNECTION_CREATOR.getLabel());
-        systemConnectionCreatorMenuItem.setOnAction(e -> actionManager.run(
-            actionManager.getActionFactory().createSelectToolAction(ToolType.CONNECTION_CREATOR)));
-
-        MenuItem variableBlockCreatorMenuItem = new MenuItem(ToolType.VARIABLE_BLOCK_CREATOR.getLabel());
-        variableBlockCreatorMenuItem.setOnAction(e -> actionManager.run(
-            actionManager.getActionFactory().createSelectToolAction(ToolType.VARIABLE_BLOCK_CREATOR)));
+        MenuItem systemCreatorMenuItem = toolMenuItem(ToolType.SYSTEM_CREATOR, false);
+        MenuItem systemConnectionCreatorMenuItem = toolMenuItem(ToolType.CONNECTION_CREATOR, false);
+        MenuItem variableBlockCreatorMenuItem = toolMenuItem(ToolType.VARIABLE_BLOCK_CREATOR, false);
 
         SeparatorMenuItem systemFroAutomatonSeparator = new SeparatorMenuItem();
 
         // Automaton view tools:
-        MenuItem stateCreatorMenuItem = new MenuItem(ToolType.STATE_CREATOR.getLabel());
-        stateCreatorMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(ToolType.STATE_CREATOR)));
-        stateCreatorMenuItem.setDisable(true);
-
-        MenuItem edgeCreatorMenuItem = new MenuItem(ToolType.EDGE_CREATOR.getLabel());
-        edgeCreatorMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(ToolType.EDGE_CREATOR)));
-        edgeCreatorMenuItem.setDisable(true);
-
-        MenuItem regionCreatorMenuItem = new MenuItem(ToolType.REGION_CREATOR.getLabel());
-        regionCreatorMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(ToolType.REGION_CREATOR)));
-        regionCreatorMenuItem.setDisable(true);
-
+        MenuItem stateCreatorMenuItem = toolMenuItem(ToolType.STATE_CREATOR, true);
+        MenuItem edgeCreatorMenuItem = toolMenuItem(ToolType.EDGE_CREATOR, true);
+        MenuItem regionCreatorMenuItem = toolMenuItem(ToolType.REGION_CREATOR, true);
         toolsMenu.getItems()
             .addAll(cursorMenuItem, marqueeMenuItem, panMenuItem, generalFromSystemSeparator, systemCreatorMenuItem,
                 systemConnectionCreatorMenuItem, variableBlockCreatorMenuItem, systemFroAutomatonSeparator,
                 stateCreatorMenuItem, edgeCreatorMenuItem, regionCreatorMenuItem);
 
         return toolsMenu;
+    }
+
+    private MenuItem toolMenuItem(ToolType toolType, boolean isAutomatonTool) {
+        MenuItem toolMenuItem = new MenuItem(toolType.getLabel());
+        toolMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(toolType)));
+        toolMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> {
+            if (view.getCurrentView() == null) {
+                return true;
+            }
+            return view.getCurrentView().getViewModel().isAutomatonEditor() != isAutomatonTool;
+        }, view.getCurrentViewProperty()));
+        return toolMenuItem;
     }
 
     /**
@@ -319,17 +317,5 @@ public class MenuBarBuilder {
                     toolMenu.setDisable(activeTool == null);
                 }
             }));
-    }
-
-    private Menu setupHelpMenu() {
-        Menu helpMenu = new Menu("Help");
-
-        MenuItem searchElementsMenuItem = new MenuItem("Search Elements");
-        searchElementsMenuItem.setOnAction(e -> view.getCurrentView().toggleSearchWindow());
-        searchElementsMenuItem.setAccelerator(Shortcuts.TOGGLE_SEARCH.get());
-
-
-        helpMenu.getItems().add(searchElementsMenuItem);
-        return helpMenu;
     }
 }

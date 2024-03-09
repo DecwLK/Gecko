@@ -20,15 +20,11 @@ public class SystemConnectionTest {
     static void setUp() {
         assertDoesNotThrow(() -> source1 = new Variable(0, "source1", "type", Visibility.OUTPUT));
         assertDoesNotThrow(() -> source2 = new Variable(1, "source2", "type", Visibility.OUTPUT));
-        assertDoesNotThrow(
-            () -> destination1 = new Variable(2, "destination1", "type", Visibility.INPUT));
-        assertDoesNotThrow(
-            () -> destination2 = new Variable(3, "destination2", "type", Visibility.INPUT));
+        assertDoesNotThrow(() -> destination1 = new Variable(2, "destination1", "type", Visibility.INPUT));
+        assertDoesNotThrow(() -> destination2 = new Variable(3, "destination2", "type", Visibility.INPUT));
 
-        assertThrows(NullPointerException.class,
-            () -> connection = new SystemConnection(4, null, destination1));
-        assertThrows(NullPointerException.class,
-            () -> connection = new SystemConnection(4, source1, null));
+        assertThrows(NullPointerException.class, () -> connection = new SystemConnection(4, null, destination1));
+        assertThrows(NullPointerException.class, () -> connection = new SystemConnection(4, source1, null));
 
         assertDoesNotThrow(() -> connection = new SystemConnection(4, source1, destination1));
     }
@@ -51,9 +47,8 @@ public class SystemConnectionTest {
         assertNotNull(connection.getDestination());
         assertDoesNotThrow(() -> connection.setDestination(destination1));
 
-        SystemConnection incomingConnection;
         try {
-            incomingConnection = new SystemConnection(5, source2, destination2);
+            new SystemConnection(5, source2, destination2);
         } catch (ModelException e) {
             fail("Could not initialize connection for testing the behaviour of another connection.");
         }

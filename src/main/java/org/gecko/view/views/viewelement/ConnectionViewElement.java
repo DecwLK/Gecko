@@ -31,6 +31,7 @@ public abstract class ConnectionViewElement extends Path {
     private static final double ARROW_HEAD_LENGTH = 25;
     private static final double ARROW_HEAD_ANGLE = 10;
     private static final Point2D ANGLE_OFFSET_HELPER = new Point2D(50, 10);
+    private static final int MIN_REQUIRED_PATH_POINTS = 2;
 
     private final ObservableList<Property<Point2D>> pathSource;
     private MoveTo startElement;
@@ -78,7 +79,7 @@ public abstract class ConnectionViewElement extends Path {
         renderPathSource = new ArrayList<>();
 
         // If there are less than two points, there is no path to draw
-        if (pathSource.size() < 2) {
+        if (pathSource.size() < MIN_REQUIRED_PATH_POINTS) {
             return;
         }
 

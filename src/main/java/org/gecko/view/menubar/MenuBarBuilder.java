@@ -49,7 +49,7 @@ public class MenuBarBuilder {
         this.actionManager = actionManager;
         menuBar = new MenuBar();
 
-        menuBar.getMenus().addAll(setupFileMenu(), setupEditMenu(), setupViewMenu(), setupToolsMenu(), setupHelpMenu());
+        menuBar.getMenus().addAll(setupFileMenu(), setupEditMenu(), setupViewMenu(), setupToolsMenu());
     }
 
     public MenuBar build() {
@@ -224,10 +224,16 @@ public class MenuBarBuilder {
         toggleAppearanceMenuItem.setOnAction(e -> view.toggleAppearance());
         toggleAppearanceMenuItem.setAccelerator(Shortcuts.TOGGLE_APPEARANCE.get());
 
+        MenuItem searchElementsMenuItem = new MenuItem("Search Elements");
+        searchElementsMenuItem.setOnAction(e -> {
+            view.getCurrentView().toggleSearchWindow();
+        });
+        searchElementsMenuItem.setAccelerator(Shortcuts.TOGGLE_SEARCH.get());
+
         viewMenu.getItems()
             .addAll(changeViewMenuItem, goToParentSystemMenuItem, focusSelectedElementMenuItem,
                 viewSwitchToZoomSeparator, zoomInMenuItem, zoomOutMenuItem, zoomToAppearanceSeparator,
-                toggleAppearanceMenuItem);
+                toggleAppearanceMenuItem, searchElementsMenuItem);
 
         return viewMenu;
     }
@@ -319,17 +325,5 @@ public class MenuBarBuilder {
                     toolMenu.setDisable(activeTool == null);
                 }
             }));
-    }
-
-    private Menu setupHelpMenu() {
-        Menu helpMenu = new Menu("Help");
-
-        MenuItem searchElementsMenuItem = new MenuItem("Search Elements");
-        searchElementsMenuItem.setOnAction(e -> view.getCurrentView().toggleSearchWindow());
-        searchElementsMenuItem.setAccelerator(Shortcuts.TOGGLE_SEARCH.get());
-
-
-        helpMenu.getItems().add(searchElementsMenuItem);
-        return helpMenu;
     }
 }

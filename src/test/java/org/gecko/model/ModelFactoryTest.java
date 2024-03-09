@@ -35,17 +35,14 @@ public class ModelFactoryTest {
     @Test
     void createEdge() {
         assertThrows(NullPointerException.class,
-            () -> factory.createEdge(null, new State(0, "source"),
-                new State(1, "destination")));
+            () -> factory.createEdge(null, new State(0, "source"), new State(1, "destination")));
         assertThrows(NullPointerException.class,
-            () -> factory.createEdge(new Automaton(), null,
-                new State(1, "destination")));
+            () -> factory.createEdge(new Automaton(), null, new State(1, "destination")));
         assertThrows(NullPointerException.class,
-            () -> factory.createEdge(new Automaton(), new State(0, "source"),
-                null));
+            () -> factory.createEdge(new Automaton(), new State(0, "source"), null));
 
-        assertDoesNotThrow(() -> factory.createEdge(new Automaton(), new State(0, "source"),
-                new State(1, "destination")));
+        assertDoesNotThrow(
+            () -> factory.createEdge(new Automaton(), new State(0, "source"), new State(1, "destination")));
     }
 
     @Test
@@ -63,21 +60,17 @@ public class ModelFactoryTest {
     @Test
     void createSystemConnection() {
         assertThrows(NullPointerException.class,
-            () -> factory.createSystemConnection(null,
-                new Variable(1, "var1", "type", Visibility.OUTPUT),
+            () -> factory.createSystemConnection(null, new Variable(1, "var1", "type", Visibility.OUTPUT),
+                new Variable(2, "var2", "type", Visibility.INPUT)));
+        assertThrows(NullPointerException.class,
+            () -> factory.createSystemConnection(new System(0, "system", null, new Automaton()), null,
                 new Variable(2, "var2", "type", Visibility.INPUT)));
         assertThrows(NullPointerException.class,
             () -> factory.createSystemConnection(new System(0, "system", null, new Automaton()),
-                null, new Variable(2, "var2", "type", Visibility.INPUT)));
-        assertThrows(NullPointerException.class,
-            () -> factory.createSystemConnection(new System(0, "system", null, new Automaton()),
-                new Variable(1, "var1", "type", Visibility.OUTPUT),
-                null));
+                new Variable(1, "var1", "type", Visibility.OUTPUT), null));
 
-        assertDoesNotThrow(
-            () -> factory.createSystemConnection(new System(0, "system", null, new Automaton()),
-            new Variable(1, "var1", "type", Visibility.OUTPUT),
-            new Variable(2, "var2", "type", Visibility.INPUT)));
+        assertDoesNotThrow(() -> factory.createSystemConnection(new System(0, "system", null, new Automaton()),
+            new Variable(1, "var1", "type", Visibility.OUTPUT), new Variable(2, "var2", "type", Visibility.INPUT)));
     }
 
     @Test

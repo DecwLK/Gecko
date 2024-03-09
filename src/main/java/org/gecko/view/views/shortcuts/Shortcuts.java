@@ -31,6 +31,7 @@ public enum Shortcuts {
     TOGGLE_SEARCH(KeyCode.F, KeyCombination.SHORTCUT_DOWN),
     FOCUS_SELECTED_ELEMENT(KeyCode.F, KeyCombination.SHIFT_DOWN);
 
+    @SuppressWarnings("ImmutableEnumChecker")
     private final KeyCodeCombination keyCodeCombination;
 
     Shortcuts(KeyCode keyCode, KeyCombination.Modifier... modifiers) {

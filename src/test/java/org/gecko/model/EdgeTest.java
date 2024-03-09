@@ -2,6 +2,7 @@ package org.gecko.model;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -51,5 +52,11 @@ public class EdgeTest {
     void setPriority() {
         assertThrows(ModelException.class, () -> edge.setPriority(-1));
         assertDoesNotThrow(() -> edge.setPriority(3));
+    }
+
+    @Test
+    void setContractToNull() {
+        edge.setContract(null);
+        assertNull(edge.getContract());
     }
 }

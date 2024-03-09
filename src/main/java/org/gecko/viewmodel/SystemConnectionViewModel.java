@@ -80,8 +80,8 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
         @NonNull PortViewModel source, @NonNull PortViewModel destination, @NonNull SystemViewModel sourceSystem,
         @NonNull SystemViewModel destinationSystem, @NonNull SystemViewModel parentSystem,
         SystemConnectionViewModel systemConnection) {
-        if (destination.getTarget().isHasIncomingConnection() && systemConnection != null
-            && !systemConnection.getDestination().equals(destination)) {
+        if (destination.getTarget().isHasIncomingConnection() && !(systemConnection != null
+            && systemConnection.getDestination().equals(destination))) {
             return false;
         }
         if (sourceSystem.equals(destinationSystem)) {

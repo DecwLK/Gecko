@@ -47,7 +47,6 @@ public class ChangeContractEdgeViewModelActionTest {
     @Test
     void getUndoAction() {
         Action changeContractAction = actionFactory.createChangeContractEdgeViewModelAction(edge, contractViewModel);
-        ContractViewModel beforeChangeContract = edge.getContract();
         actionManager.run(changeContractAction);
         actionManager.undo();
         assertNull(edge.getContract());

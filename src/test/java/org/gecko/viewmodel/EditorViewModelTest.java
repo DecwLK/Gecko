@@ -77,7 +77,6 @@ class EditorViewModelTest {
         GeckoViewModel geckoViewModel = new GeckoViewModel(geckoModel);
         ViewModelFactory viewModelFactory = geckoViewModel.getViewModelFactory();
         SystemViewModel rootSystemViewModel = viewModelFactory.createSystemViewModelFrom(geckoModel.getRoot());
-        RegionViewModel regionViewModel = viewModelFactory.createRegionViewModelIn(rootSystemViewModel);
 
         geckoViewModel.switchEditor(rootSystemViewModel, true);
         EditorViewModel editorViewModel = geckoViewModel.getCurrentEditor();

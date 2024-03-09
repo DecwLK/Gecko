@@ -41,6 +41,7 @@ public class CreateRegionViewModelElementAction extends Action {
         createdRegionViewModel.updateTarget();
         ActionManager actionManager = geckoViewModel.getActionManager();
         actionManager.run(actionManager.getActionFactory().createSelectAction(createdRegionViewModel, true));
+        geckoViewModel.getCurrentEditor().updateRegions();
         return true;
     }
 

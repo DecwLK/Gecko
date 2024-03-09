@@ -115,6 +115,12 @@ public class FloatingUIBuilder {
             }
         });
 
+        searchBar.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                searchTextField.requestFocus();
+            }
+        });
+
         forwardButton.setOnAction(e -> {
             if (!matches.isEmpty()) {
                 searchNextResult(matches, matchesLabel, backwardButton, forwardButton, 1);

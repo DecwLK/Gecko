@@ -369,6 +369,7 @@
     -fx-background-color: -fx-editable;
     -fx-background-radius: 3 0 0 3;
 }
+
 .combo-box-popup .list-view .list-cell:selected {
     -fx-background-color: -fx-fg0;
 }

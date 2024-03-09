@@ -86,7 +86,6 @@ public class GeckoViewModel {
         Set<PositionableViewModelElement<?>> positionableViewModelElements = new HashSet<>();
         elements.forEach(element -> positionableViewModelElements.add(getViewModelElement(element)));
 
-        // Remove null elements TODO: THIS SHOULDN'T BE NECESSARY
         positionableViewModelElements.removeIf(Objects::isNull);
 
         return positionableViewModelElements;
@@ -145,6 +144,9 @@ public class GeckoViewModel {
     }
 
     private void setCurrentEditor(EditorViewModel editorViewModel) {
+        if (getCurrentEditor() != null) {
+            getCurrentEditor().getSelectionManager().deselectAll();
+        }
         currentEditorProperty.setValue(editorViewModel);
         updateEditors();
     }

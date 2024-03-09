@@ -7,18 +7,21 @@ import java.util.Set;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableSet;
+import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import lombok.Getter;
+import org.gecko.actions.Action;
 import org.gecko.view.menubar.MenuBarBuilder;
 import org.gecko.view.views.EditorView;
 import org.gecko.view.views.ViewFactory;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
+import org.gecko.viewmodel.SystemViewModel;
 
 /**
  * Represents the View component of a Gecko project. Holds a {@link ViewFactory}, a current {@link EditorView} and a
@@ -126,12 +129,27 @@ public class GeckoView {
 
     private void constructTab(EditorView editorView, EditorViewModel editorViewModel) {
         openedViews.add(editorView);
-        centerPane.getTabs().add(editorView.getCurrentView());
+        Tab tab = editorView.getCurrentView();
+        Node graphic = tab.getGraphic();
+        graphic.setOnMouseClicked(event -> handleUserTabChange(tab));
+        centerPane.getTabs().add(tab);
 
         editorView.getCurrentView().setOnClosed(event -> {
             openedViews.remove(editorView);
             viewModel.getOpenedEditorsProperty().remove(editorViewModel);
         });
+    }
+
+    private void handleUserTabChange(Tab tab) {
+        if (tab == centerPane.getSelectionModel().getSelectedItem()) {
+            return;
+        }
+        currentView = getView(tab);
+        SystemViewModel next = currentView.getViewModel().getCurrentSystem();
+        Action switchAction = viewModel.getActionManager()
+            .getActionFactory()
+            .createViewSwitchAction(next, currentView.getViewModel().isAutomatonEditor());
+        viewModel.getActionManager().run(switchAction);
     }
 
     private void refreshView() {
@@ -154,12 +172,6 @@ public class GeckoView {
 
     private void onUpdateCurrentEditorToViewModel(
         ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
-        if (newValue != null) {
-            currentView = openedViews.stream()
-                .filter(editorView -> editorView.getCurrentView() == newValue)
-                .findFirst()
-                .orElse(null);
-        }
         refreshView();
     }
 
@@ -178,5 +190,9 @@ public class GeckoView {
         mainPane.getStylesheets()
             .add(Objects.requireNonNull(GeckoView.class.getResource(darkMode ? STYLE_SHEET_DARK : STYLE_SHEET_LIGHT))
                 .toString());
+    }
+
+    private EditorView getView(Tab tab) {
+        return openedViews.stream().filter(editorView -> editorView.getCurrentView() == tab).findFirst().orElseThrow();
     }
 }

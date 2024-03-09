@@ -6,10 +6,13 @@ import java.util.Set;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.SetChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
@@ -74,12 +77,16 @@ public class EditorView {
         this.emptyInspector = new Inspector(new ArrayList<>(), actionManager);
         this.currentInspector = new SimpleObjectProperty<>(emptyInspector);
         this.viewElementPane = new ViewElementPane(viewModel);
-        this.currentView = new Tab("Error_Name", currentViewPane);
-        currentView.textProperty().bind(Bindings.createStringBinding(() -> {
+        this.currentView = new Tab("", currentViewPane);
+        StringProperty tabName = new SimpleStringProperty("Error_Name");
+        tabName.bind(Bindings.createStringBinding(() -> {
             String name = viewModel.getCurrentSystem().getName();
             return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
                 : " (" + ResourceHandler.getString("View", "system") + ")");
         }, viewModel.getCurrentSystem().getNameProperty()));
+        Label tabLabel = new Label();
+        tabLabel.textProperty().bind(tabName);
+        currentView.setGraphic(tabLabel);
 
         // Floating UI
         FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
@@ -119,34 +126,6 @@ public class EditorView {
         this.contextMenu = contextMenuBuilder.build();
         currentViewPane.setOnContextMenuRequested(event -> {
             changeContextMenu(contextMenuBuilder.getContextMenu());
-            this.contextMenu.getItems()
-                .stream()
-                .filter(menuItem -> menuItem.getText().equals("Copy"))
-                .findAny()
-                .ifPresent(copyMenuItem -> copyMenuItem.setDisable(
-                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
-
-            this.contextMenu.getItems()
-                .stream()
-                .filter(menuItem -> menuItem.getText().equals("Cut"))
-                .findAny()
-                .ifPresent(cutMenuItem -> cutMenuItem.setDisable(
-                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
-
-            this.contextMenu.getItems()
-                .stream()
-                .filter(menuItem -> menuItem.getText().equals("Select All"))
-                .findAny()
-                .ifPresent(selectMenuItem -> selectMenuItem.setDisable(
-                    viewModel.getContainedPositionableViewModelElementsProperty().isEmpty()));
-
-            this.contextMenu.getItems()
-                .stream()
-                .filter(menuItem -> menuItem.getText().equals("Deselect All"))
-                .findAny()
-                .ifPresent(deselectMenuItem -> deselectMenuItem.setDisable(
-                    viewModel.getSelectionManager().getCurrentSelection().isEmpty()));
-
             this.contextMenu.show(currentViewPane, event.getScreenX(), event.getScreenY());
             event.consume();
         });

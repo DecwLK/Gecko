@@ -1,6 +1,5 @@
 package org.gecko.io;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
@@ -26,40 +25,16 @@ public class ProjectFileSerializer implements FileSerializer {
 
     @Override
     public void writeToFile(File file) throws IOException {
-        GeckoJsonWrapper geckoJsonWrapper = new GeckoJsonWrapper();
         System root = viewModel.getGeckoModel().getRoot();
-
-        String rootInJson = this.getRootInJson(root);
-        geckoJsonWrapper.setModel(rootInJson);
-
         ViewModelElementSaver saver = new ViewModelElementSaver(viewModel);
-        List<ViewModelPropertiesContainer> viewModelProperties = saver.getViewModelProperties(root);
         List<StartStateContainer> startStates = saver.getStartStates();
-
-        String startStatesInJson = this.getStartStatesInJson(startStates);
-        geckoJsonWrapper.setStartStates(startStatesInJson);
-
-        String viewModelPropertiesInJson = this.getViewModelPropertiesInJson(viewModelProperties);
-        geckoJsonWrapper.setViewModelProperties(viewModelPropertiesInJson);
+        List<ViewModelPropertiesContainer> viewModelProperties = saver.getViewModelProperties(root);
+        GeckoJsonWrapper geckoJsonWrapper = new GeckoJsonWrapper(root, startStates, viewModelProperties);
 
         String finalJson = objectMapper.writeValueAsString(geckoJsonWrapper);
 
         Writer fileWriter = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8);
         fileWriter.write(finalJson);
         fileWriter.close();
-    }
-
-    private String getRootInJson(System root) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(root);
-    }
-
-    private String getStartStatesInJson(List<StartStateContainer> startStates)
-        throws JsonProcessingException {
-        return objectMapper.writeValueAsString(startStates);
-    }
-
-    private String getViewModelPropertiesInJson(List<ViewModelPropertiesContainer> viewModelProperties)
-        throws JsonProcessingException {
-        return objectMapper.writeValueAsString(viewModelProperties);
     }
 }

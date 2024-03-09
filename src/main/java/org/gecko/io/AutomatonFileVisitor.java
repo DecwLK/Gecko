@@ -39,6 +39,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
     private System currentSystem;
     private String nextSystemName;
     private AutomatonFileScout scout;
+    private int elementsCreated;
 
 
     private static final String START_STATE_REGEX = "[a-z].*";
@@ -75,6 +76,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
             .next(); //Because rootChildren had size 1, root now has exactly 1 child
         newRoot.setParent(null);
         model = new GeckoModel(newRoot);
+        model.getModelFactory().setElementId(elementsCreated + 1);
         if (ctx.globalCode != null) {
             model.setGlobalCode(cleanCode(ctx.globalCode.getText()));
         }
@@ -190,6 +192,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
         if (start == null) {
             try {
                 start = model.getModelFactory().createState(currentSystem.getAutomaton());
+                elementsCreated++;
                 start.setName(startName);
             } catch (ModelException e) {
                 throw new RuntimeException(e.getMessage());
@@ -199,6 +202,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
         if (end == null) {
             try {
                 end = model.getModelFactory().createState(currentSystem.getAutomaton());
+                elementsCreated++;
                 end.setName(endName);
             } catch (ModelException e) {
                 throw new RuntimeException(e.getMessage());
@@ -213,6 +217,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
         Edge edge;
         try {
             edge = model.getModelFactory().createEdge(currentSystem.getAutomaton(), start, end);
+            elementsCreated++;
         } catch (ModelException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -248,6 +253,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
                 Variable var;
                 try {
                     var = model.getModelFactory().createVariable(currentSystem);
+                    elementsCreated++;
                     var.setName(ident.Ident().getText());
                     var.setType(variable.t.getText());
                     var.setVisibility(visibility);
@@ -284,6 +290,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
         try {
             for (Variable variable : end) {
                 model.getModelFactory().createSystemConnection(currentSystem, start, variable);
+                elementsCreated++;
             }
         } catch (ModelException e) {
             throw new RuntimeException(e.getMessage());
@@ -295,6 +302,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
         System system;
         try {
             system = model.getModelFactory().createSystem(currentSystem);
+            elementsCreated++;
         } catch (ModelException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -338,8 +346,11 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
         Condition postCondition;
         try {
             newContract = model.getModelFactory().createContract(state);
+            elementsCreated++;
             preCondition = model.getModelFactory().createCondition(pre);
+            elementsCreated++;
             postCondition = model.getModelFactory().createCondition(post);
+            elementsCreated++;
             newContract.setPreCondition(preCondition);
             newContract.setPostCondition(postCondition);
         } catch (ModelException e) {

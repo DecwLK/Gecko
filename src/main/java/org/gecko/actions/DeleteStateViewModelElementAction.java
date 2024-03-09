@@ -22,7 +22,7 @@ public class DeleteStateViewModelElementAction extends AbstractPositionableViewM
     private final StateViewModel stateViewModel;
     private final Automaton automaton;
     private final SystemViewModel systemViewModel;
-    private final boolean wasStartState;
+    private boolean wasStartState;
 
     DeleteStateViewModelElementAction(
         GeckoViewModel geckoViewModel, StateViewModel stateViewModel, SystemViewModel systemViewModel) {
@@ -31,16 +31,17 @@ public class DeleteStateViewModelElementAction extends AbstractPositionableViewM
         this.stateViewModel = stateViewModel;
         this.automaton = systemViewModel.getTarget().getAutomaton();
         this.systemViewModel = systemViewModel;
-        this.wasStartState = stateViewModel.getTarget().equals(automaton.getStartState());
     }
 
     @Override
     boolean run() throws GeckoException {
+        wasStartState = stateViewModel.getTarget().equals(automaton.getStartState());
         if (wasStartState && automaton.getStates().size() > 1) {
             Set<State> states = automaton.getStates();
             State newStartState = states.stream().filter(s -> !s.equals(stateViewModel.getTarget())).findFirst().get();
             StateViewModel newStartStateViewModel = (StateViewModel) geckoViewModel.getViewModelElement(newStartState);
             systemViewModel.setStartState(newStartStateViewModel);
+            systemViewModel.updateTarget();
         }
 
         // remove from region if it is in one

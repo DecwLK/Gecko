@@ -9,7 +9,6 @@ import org.gecko.exceptions.ModelException;
  */
 public class ModelFactory {
 
-    //TODO defaults are temporary and need to be changed
     private final GeckoModel geckoModel;
     @Setter
     private int elementId = 0;

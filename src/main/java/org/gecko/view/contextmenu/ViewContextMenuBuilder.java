@@ -1,5 +1,6 @@
 package org.gecko.view.contextmenu;
 
+import javafx.beans.binding.Bindings;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -41,11 +42,23 @@ public class ViewContextMenuBuilder {
             actionManager.run(actionManager.getActionFactory().createDeletePositionableViewModelElementAction());
         });
         cutMenuItem.setAccelerator(Shortcuts.CUT.get());
+        if (editorViewModel != null) {
+            cutMenuItem.disableProperty()
+                .bind(Bindings.createBooleanBinding(
+                    () -> editorViewModel.getSelectionManager().getCurrentSelection().isEmpty(),
+                    editorViewModel.getSelectionManager().getCurrentSelectionProperty()));
+        }
 
         MenuItem copyMenuItem = new MenuItem("Copy");
         copyMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createCopyPositionableViewModelElementAction()));
         copyMenuItem.setAccelerator(Shortcuts.COPY.get());
+        if (editorViewModel != null) {
+            copyMenuItem.disableProperty()
+                .bind(Bindings.createBooleanBinding(
+                    () -> editorViewModel.getSelectionManager().getCurrentSelection().isEmpty(),
+                    editorViewModel.getSelectionManager().getCurrentSelectionProperty()));
+        }
 
         MenuItem pasteMenuItem = new MenuItem("Paste");
         pasteMenuItem.setOnAction(
@@ -59,10 +72,22 @@ public class ViewContextMenuBuilder {
         selectMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createSelectAction(editorViewModel.getPositionableViewModelElements(), true)));
         selectMenuItem.setAccelerator(Shortcuts.SELECT_ALL.get());
+        if (editorViewModel != null) {
+            selectMenuItem.disableProperty()
+                .bind(Bindings.createBooleanBinding(
+                    () -> editorViewModel.getContainedPositionableViewModelElementsProperty().isEmpty(),
+                    editorViewModel.getContainedPositionableViewModelElementsProperty()));
+        }
 
         MenuItem deselectMenuItem = new MenuItem("Deselect All");
         deselectMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory().createDeselectAction()));
         deselectMenuItem.setAccelerator(Shortcuts.DESELECT_ALL.get());
+        if (editorViewModel != null) {
+            deselectMenuItem.disableProperty()
+                .bind(Bindings.createBooleanBinding(
+                    () -> editorViewModel.getSelectionManager().getCurrentSelection().isEmpty(),
+                    editorViewModel.getSelectionManager().getCurrentSelectionProperty()));
+        }
 
         contextMenu.getItems()
             .addAll(cutMenuItem, copyMenuItem, pasteMenuItem, separatorMenuItem, selectMenuItem, deselectMenuItem);

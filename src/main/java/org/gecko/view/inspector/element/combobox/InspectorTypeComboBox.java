@@ -17,6 +17,7 @@ public class InspectorTypeComboBox extends InspectorComboBox<String> {
         super(actionManager, Variable.BUILTIN_TYPES, viewModel.getTypeProperty());
         this.viewModel = viewModel;
         this.actionManager = actionManager;
+        setEditable(true);
     }
 
     @Override

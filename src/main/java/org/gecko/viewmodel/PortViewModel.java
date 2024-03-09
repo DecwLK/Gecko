@@ -71,14 +71,6 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
         return visitor.visit(this);
     }
 
-    public Color getBackgroundColor() {
-        return switch (visibilityProperty.getValue()) {
-            case INPUT -> Color.LIGHTGREEN;
-            case OUTPUT -> Color.LIGHTGOLDENRODYELLOW;
-            case STATE -> Color.LIGHTSEAGREEN;
-        };
-    }
-
     public static Color getBackgroundColor(Visibility visibility) {
         return switch (visibility) {
             case INPUT -> Color.LIGHTGREEN;

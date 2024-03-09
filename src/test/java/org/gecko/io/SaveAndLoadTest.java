@@ -41,16 +41,13 @@ public class SaveAndLoadTest {
         private static GeckoViewModel oneLevelGeckoViewModel;
         private static GeckoViewModel treeGeckoViewModel;
         private static ObjectMapper mapper;
-        static String EMPTY_GECKO_JSON = "{\"model\":\"{\\\"id\\\":0,\\\"name\\\":\\\"Element_0\\\",\\\"code\\\":null,"
-            + "\\\"automaton\\\":{\\\"startState\\\":null,\\\"regions\\\":[],\\\"states\\\":[],\\\"edges\\\":[]},"
-            + "\\\"children\\\":[],\\\"connections\\\":[],\\\"variables\\\":[]}\",\"startStates\":\"[]\","
-            + "\"viewModelProperties\":\"[]\"}";
-        static String NON_NULL_AUTOMATON_JSON = "\\\"automaton\\\":{";
-        static String NON_NULL_START_STATE_JSON = "\\\"startState\\\":{";
-        static String NON_NULL_REGIONS_JSON = "\\\"regions\\\":[{";
-        static String NON_NULL_REGION_STATES_JSON = "},\\\"states\\\":[{";
-        static String NO_CHILDREN = "\\\"children\\\":[]";
-        static String PRESENT_CHILDREN = "\\\"children\\\":[{\\\"id\\\":";
+        static String EMPTY_GECKO_JSON = "{\"model\":{\"id\":0,\"name\":\"Element_0\",\"code\":null,\"automaton\":{\"startState\":null,\"regions\":[],\"states\":[],\"edges\":[]},\"children\":[],\"connections\":[],\"variables\":[]},\"startStates\":[],\"viewModelProperties\":[]}";
+        static String NON_NULL_AUTOMATON_JSON = "\"automaton\":{";
+        static String NON_NULL_START_STATE_JSON = "\"startState\":{";
+        static String NON_NULL_REGIONS_JSON = "\"regions\":[{";
+        static String NON_NULL_REGION_STATES_JSON = "},\"states\":[{";
+        static String NO_CHILDREN = "\"children\":[]";
+        static String PRESENT_CHILDREN = "\"children\":[{\"id\":";
 
         @BeforeAll
         static void setUp() {
@@ -68,8 +65,8 @@ public class SaveAndLoadTest {
                 fail();
             }
 
-            SystemViewModel oneLevelRoot = (SystemViewModel) oneLevelGeckoViewModel
-                .getViewModelElement(oneLevelGeckoViewModel.getGeckoModel().getRoot());
+            SystemViewModel oneLevelRoot = (SystemViewModel) oneLevelGeckoViewModel.getViewModelElement(
+                oneLevelGeckoViewModel.getGeckoModel().getRoot());
             ViewModelFactory oneLevelFactory = oneLevelGeckoViewModel.getViewModelFactory();
 
             assertDoesNotThrow(() -> {
@@ -114,8 +111,8 @@ public class SaveAndLoadTest {
                 fail();
             }
 
-            SystemViewModel treeRoot = (SystemViewModel) treeGeckoViewModel
-                .getViewModelElement(treeGeckoViewModel.getGeckoModel().getRoot());
+            SystemViewModel treeRoot =
+                (SystemViewModel) treeGeckoViewModel.getViewModelElement(treeGeckoViewModel.getGeckoModel().getRoot());
             ViewModelFactory treeFactory = treeGeckoViewModel.getViewModelFactory();
 
             assertDoesNotThrow(() -> {
@@ -180,11 +177,10 @@ public class SaveAndLoadTest {
                 fail("File for one-level Gecko does not contain a JSON valid string.");
             }
 
-            assertTrue(oneLevel.toString().contains(NON_NULL_AUTOMATON_JSON)
-                && oneLevel.toString().contains(NON_NULL_START_STATE_JSON)
-                && oneLevel.toString().contains(NON_NULL_REGIONS_JSON)
-                && oneLevel.toString().contains(NON_NULL_REGION_STATES_JSON)
-                && oneLevel.toString().contains(NO_CHILDREN));
+            assertTrue(oneLevel.toString().contains(NON_NULL_AUTOMATON_JSON) && oneLevel.toString()
+                .contains(NON_NULL_START_STATE_JSON) && oneLevel.toString().contains(NON_NULL_REGIONS_JSON)
+                && oneLevel.toString().contains(NON_NULL_REGION_STATES_JSON) && oneLevel.toString()
+                .contains(NO_CHILDREN));
 
         }
 
@@ -200,11 +196,10 @@ public class SaveAndLoadTest {
                 fail("File for tree-structured Gecko does not contain a JSON valid string.");
             }
 
-            assertTrue(tree.toString().contains(NON_NULL_AUTOMATON_JSON)
-                && tree.toString().contains(NON_NULL_START_STATE_JSON)
-                && tree.toString().contains(NON_NULL_REGIONS_JSON)
-                && tree.toString().contains(NON_NULL_REGION_STATES_JSON)
-                && tree.toString().contains(PRESENT_CHILDREN));
+            assertTrue(
+                tree.toString().contains(NON_NULL_AUTOMATON_JSON) && tree.toString().contains(NON_NULL_START_STATE_JSON)
+                    && tree.toString().contains(NON_NULL_REGIONS_JSON) && tree.toString()
+                    .contains(NON_NULL_REGION_STATES_JSON) && tree.toString().contains(PRESENT_CHILDREN));
         }
     }
 
@@ -224,8 +219,7 @@ public class SaveAndLoadTest {
         void parse() {
             GeckoViewModel parsedEmptyGeckoViewModel = null;
             File fileForEmpty = new File("src/test/java/org/gecko/io/files/emptyGecko.json");
-            File serializedParsedEmpty
-                = new File("src/test/java/org/gecko/io/files/serializedParsedEmptyGecko.json");
+            File serializedParsedEmpty = new File("src/test/java/org/gecko/io/files/serializedParsedEmptyGecko.json");
 
             try {
                 parsedEmptyGeckoViewModel = projectFileParser.parse(fileForEmpty);
@@ -236,15 +230,16 @@ public class SaveAndLoadTest {
 
             ProjectFileSerializer serializer = new ProjectFileSerializer(parsedEmptyGeckoViewModel);
             assertDoesNotThrow(() -> serializer.writeToFile(serializedParsedEmpty));
-            assertDoesNotThrow(() -> assertEquals(mapper.readTree(fileForEmpty), mapper.readTree(serializedParsedEmpty)));
+            assertDoesNotThrow(
+                () -> assertEquals(mapper.readTree(fileForEmpty), mapper.readTree(serializedParsedEmpty)));
         }
 
         @Test
         void parseOneLevel() {
             GeckoViewModel parsedOneLevelGeckoViewModel = null;
             File fileForOneLevel = new File("src/test/java/org/gecko/io/files/oneLevelGecko.json");
-            File serializedParsedOneLevel
-                = new File("src/test/java/org/gecko/io/files/serializedParsedOneLevelGecko.json");
+            File serializedParsedOneLevel =
+                new File("src/test/java/org/gecko/io/files/serializedParsedOneLevelGecko.json");
             try {
                 parsedOneLevelGeckoViewModel = projectFileParser.parse(fileForOneLevel);
             } catch (IOException e) {
@@ -276,8 +271,7 @@ public class SaveAndLoadTest {
         void parseTree() {
             GeckoViewModel parsedTreeGeckoViewModel = null;
             File fileForTree = new File("src/test/java/org/gecko/io/files/treeGecko.json");
-            File serializedParsedTree
-                = new File("src/test/java/org/gecko/io/files/serializedParsedTreeGecko.json");
+            File serializedParsedTree = new File("src/test/java/org/gecko/io/files/serializedParsedTreeGecko.json");
             try {
                 parsedTreeGeckoViewModel = projectFileParser.parse(fileForTree);
             } catch (IOException e) {

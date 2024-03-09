@@ -31,6 +31,10 @@ public class ProjectFileParser implements FileParser {
         }
 
         System root = objectMapper.readValue(geckoJsonWrapper.getModel(), System.class);
+        if (root == null) {
+            throw new IOException();
+        }
+
         TypeReference<ArrayList<ViewModelPropertiesContainer>> typeRef = new TypeReference<>() {
         };
         List<ViewModelPropertiesContainer> newViewModelProperties =

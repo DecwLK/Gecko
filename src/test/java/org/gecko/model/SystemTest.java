@@ -121,6 +121,20 @@ public class SystemTest {
     }
 
     @Test
+    void getChildByName() {
+        assertNull(system.getChildByName("child1"));
+
+        system.addChild(child1);
+        system.addChild(child2);
+
+        assertEquals(child1, system.getChildByName("child1"));
+        assertEquals(child2, system.getChildByName("child2"));
+
+        system.removeChild(child1);
+        system.removeChild(child2);
+    }
+
+    @Test
     void getAllChildren() {
         assertTrue(system.getAllChildren().isEmpty());
 
@@ -210,6 +224,20 @@ public class SystemTest {
         assertThrows(NullPointerException.class, () -> system.addVariables(null));
         assertThrows(NullPointerException.class, () -> system.removeVariable(null));
         assertThrows(NullPointerException.class, () -> system.removeVariables(null));
+    }
+
+    @Test
+    void getVariableByName() {
+        assertNull(system.getVariableByName("var1"));
+
+        system.addVariable(variable1);
+        system.addVariable(variable2);
+
+        assertEquals(variable1, system.getVariableByName("var1"));
+        assertEquals(variable2, system.getVariableByName("var2"));
+
+        system.removeVariable(variable1);
+        system.removeVariable(variable2);
     }
 
     @Test

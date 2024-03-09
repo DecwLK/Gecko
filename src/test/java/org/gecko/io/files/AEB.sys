@@ -1,0 +1,228 @@
+defines {
+    PB1_DECEL : int := 0sd32_5
+    PB2_DECEL : int := 0sd32_10
+    FB_DECEL  : int := 0sd32_15
+
+    C1        : int := 0sd32_1
+
+    headawayOffset : int := 0sd32_3  // 3.7
+    reactTime      : int := 0sd32_2  // 1.5 seconds
+}
+
+{=
+     const int M_DEFAULT = 0, M_FCW = 1, M_PARTIAL_BREAKING_1 = 2,
+              M_PARTIAL_BREAKING_2 = 3, M_FULL_BREAKING = 4;
+    int abs(int x) { return x < 0 ? -x : x; }
+    int min(int x, int y) { return x < y ? x : y; }
+    int max(int x, int y) { return x > y ? x : y; }
+    int clamp(int l, int x, int u) { return min(max(x, l), u); }
+=}
+
+contract AEBLogic_Spec {
+    input TTC, FCWtime, PB1time, PB2time, FBtime : int
+    input stop : bool
+    output FCWactivate, decel, AEBstatus : int
+
+    sTANDBY -> sTANDBY :: !(abs(TTC) < FCWtime & TTC >= 0sd32_0) ==> AEBstatus = 0sd32_0 & decel = 0sd32_0 & FCWactivate = 0sd32_0
+    sTANDBY -> WARN    :: abs(TTC) < FCWtime & TTC >= 0sd32_0    ==> AEBstatus = 0sd32_0 & decel = 0sd32_0 & FCWactivate = 0sd32_1
+    WARN -> sTANDBY    :: abs(TTC) >= (0sd32_2 * FCWtime)        ==> AEBstatus = 0sd32_0 & decel = 0sd32_0 & FCWactivate = 0sd32_0
+    WARN -> BREAK      :: abs(TTC) < PB1time & TTC >= 0sd32_0    ==> AEBstatus > 0sd32_0 & decel > 0sd32_0 & FCWactivate = 0sd32_1
+    WARN -> WARN       :: !(abs(TTC) < PB1time & TTC >= 0sd32_0) ==> AEBstatus = 0sd32_0 & decel = 0sd32_0 & FCWactivate = 0sd32_1
+    BREAK -> BREAK     :: !stop & TTC>=0sd32_0 ==> AEBstatus > 0sd32_0 & decel > 0sd32_0 & FCWactivate = 0sd32_1
+    BREAK -> sTANDBY   :: stop  & TTC<0sd32_0  ==> AEBstatus = 0sd32_0 & decel = 0sd32_0 & FCWactivate = 0sd32_1
+}
+
+reactor AEBLogic {
+    input TTC, FCWtime, PB1time, PB2time, FBtime : int
+    input stop : bool
+    output FCWactivate, decel, AEBstatus : int
+
+    state mode : int
+
+    contract AEBLogic_Spec
+
+    {=
+        if ( mode == M_DEFAULT &&
+                (abs(TTC) < FCWtime && TTC >= 0))
+                 mode = M_FCW;
+        else if(mode == M_FCW) {
+                     if (abs(TTC) < PB1time && TTC >= 0) {
+                       mode = M_PARTIAL_BREAKING_1;
+                     } else if (abs(TTC) >= (2 * FCWtime)) {
+                       mode = M_DEFAULT;
+                     }
+                     }
+        else if(mode == M_PARTIAL_BREAKING_1) {
+                     if (abs(TTC) < PB2time && TTC >= 0) {
+                       mode = M_PARTIAL_BREAKING_2;
+                     } else if (stop) {
+                       mode = M_DEFAULT;
+                     }
+                     }
+                   else if(mode == M_PARTIAL_BREAKING_2){
+                     if (abs(TTC) < FBtime && TTC >= 0) {
+                       mode = M_FULL_BREAKING;
+                     } else if (stop) {
+                       mode = M_DEFAULT;
+                     }
+                     }
+         if(mode == M_FULL_BREAKING && stop) { mode = M_DEFAULT; }
+
+
+         switch (mode) {
+           case 0://M_DEFAULT:
+             AEBstatus = 0;
+             FCWactivate = 0;
+             decel = 0;
+             break;
+           case 1://M_FCW:
+             AEBstatus = 0;
+             FCWactivate = 1;
+             decel = 0;
+             break;
+           case 2://M_PARTIAL_BREAKING_1:
+             AEBstatus = 1;
+             FCWactivate = 1;
+             decel = PB1_DECEL;
+             break;
+           case 3://M_PARTIAL_BREAKING_2:
+             AEBstatus = 2;
+             FCWactivate = 1;
+             decel = PB2_DECEL;
+             break;
+           case 4://M_FULL_BREAKING:
+             AEBstatus = 3;
+             FCWactivate = 1;
+             decel = FB_DECEL;
+             break;
+           default:
+             assert(false);
+           }
+       =}
+}
+
+contract TTC_Spec {
+    input mioDistance, mioVelocity : int
+    output collision : bool
+    output TTC : int
+
+    s1 -> s1 ::  0sd32_0 <= mioDistance
+                    &            mioDistance <= 0sd32_1024
+                    & -0sd32_1024 <= mioVelocity
+                    &                mioVelocity <= 0sd32_1024
+                    ==>  (collision = ((mioDistance - headawayOffset) < 0sd32_2))
+}
+
+reactor TTCCalculation {
+    input mioDistance, mioVelocity : int
+    output collision : bool
+    output TTC : int
+
+    contract TTC_Spec
+
+    {=
+      int headaway = mioDistance - headawayOffset;
+      int abs = mioVelocity < 0 ? -mioVelocity : mioVelocity;
+      int clamped = clamp(10, abs, 150);
+      TTC = 128 * headaway / clamped;
+      TTC = TTC * (mioVelocity < 0 ? -1 : 1);
+      collision = headaway < 2;
+    =}
+}
+
+contract STC {
+    input egoVelocity : int
+    output FCWStoppingTime, PB1StoppingTime, PB2StoppingTime, FBStoppingTime :int
+
+    s1 -> s1 :: 0sd32_0 <= PB1_DECEL & PB1_DECEL <= PB2_DECEL
+                               & PB2_DECEL <= FB_DECEL
+                               & 0sd32_0 <= egoVelocity
+                    ==>
+                    reactTime <= FCWStoppingTime      &
+                     0sd32_0 <= FBStoppingTime          &
+                     FBStoppingTime <= PB1StoppingTime &
+                     PB1StoppingTime <= PB2StoppingTime
+}
+
+reactor StoppingTimeCalculation {
+    input egoVelocity : int
+    output FCWStoppingTime, PB1StoppingTime, PB2StoppingTime, FBStoppingTime :int
+
+    contract STC[]
+
+    {=
+      FBStoppingTime = egoVelocity / FB_DECEL;
+      PB1StoppingTime = egoVelocity / PB1_DECEL;
+      PB1StoppingTime = egoVelocity / PB2_DECEL;
+      FCWStoppingTime = FBStoppingTime + reactTime;
+    =}
+}
+
+
+contract Gt_Spec {
+    input  a : int
+    output v : bool
+    s1 -> s1 :: TRUE ==> v = (a <= C1)
+}
+
+reactor Gt  {
+    input  a : int
+    output v : bool
+
+    contract Gt_Spec[]
+
+    {= v = a <= C1; =}
+}
+
+contract AEBTop_Spec {
+    input  mioDistance, mioVelocity, egoVelocity : int
+    output collision, egoCarStop : bool
+    output FCWactivate, AEBstatus, deceleration : int
+
+    s1 -> s1 ::
+         0sd32_0 <= mioDistance & 0sd32_0 <= egoVelocity
+        & 0sd32_0 <= mioDistance & mioDistance <= 0sd32_1024
+        & -0sd32_1024 <= mioVelocity & mioVelocity <= 0sd32_1024
+         ==>
+         (AEBstatus > 0sd32_0) = (deceleration > 0sd32_0)
+        & (FCWactivate = 0sd32_1) | (FCWactivate = 0sd32_0)
+        & egoCarStop = (egoVelocity <= C1)
+}
+
+reactor AEBTop {
+    input  mioDistance, mioVelocity, egoVelocity : int
+    output collision, egoCarStop : bool
+    output FCWactivate, AEBstatus, deceleration : int
+
+    state logic : AEBLogic
+    state ttc   : TTCCalculation
+    state stc   : StoppingTimeCalculation
+    state gt    : Gt
+
+
+    contract AEBTop_Spec
+
+
+    logic.FCWactivate  -> self.FCWactivate
+    logic.decel        -> self.deceleration
+    logic.AEBstatus    -> self.AEBstatus
+
+    self.mioDistance -> ttc.mioDistance
+    self.mioVelocity -> ttc.mioVelocity
+
+    self.egoVelocity -> stc.egoVelocity
+    self.egoVelocity -> gt.a
+
+
+    gt.v -> self.egoCarStop
+    gt.v -> logic.stop
+
+    ttc.TTC -> logic.TTC
+    ttc.collision -> self.collision
+
+
+    stc.FCWStoppingTime ->  logic.FCWtime
+    stc.PB1StoppingTime -> logic.PB1time
+    stc.PB2StoppingTime -> logic.PB2time
+    stc.FBStoppingTime -> logic.FBtime
+}

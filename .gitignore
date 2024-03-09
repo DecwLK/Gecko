@@ -42,5 +42,9 @@ bin/
 .DS_Store
 
 .idea/
-*.json
-*.json
+src/test/java/org/gecko/io/files/treeGecko.json
+src/test/java/org/gecko/io/files/serializedParsedTreeGecko.json
+src/test/java/org/gecko/io/files/serializedParsedOneLevelGecko.json
+src/test/java/org/gecko/io/files/serializedParsedEmptyGecko.json
+src/test/java/org/gecko/io/files/oneLevelGecko.json
+src/test/java/org/gecko/io/files/emptyGecko.json

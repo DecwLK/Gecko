@@ -1,22 +1,31 @@
 package org.gecko.view.menubar;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
-import javafx.beans.binding.Bindings;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 import org.gecko.application.GeckoIOManager;
 import org.gecko.io.FileTypes;
+import org.gecko.tools.Tool;
 import org.gecko.tools.ToolType;
 import org.gecko.view.GeckoView;
+import org.gecko.view.inspector.element.label.InspectorLabel;
+import org.gecko.view.inspector.element.textfield.InspectorRenameField;
 import org.gecko.view.views.shortcuts.Shortcuts;
+import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
+import org.gecko.viewmodel.Renamable;
 import org.gecko.viewmodel.SystemViewModel;
 
 /**
@@ -34,8 +43,6 @@ public class MenuBarBuilder {
     private final MenuBar menuBar;
     private final GeckoView view;
     private final ActionManager actionManager;
-
-    private Menu toolsMenu;
 
     public MenuBarBuilder(GeckoView view, ActionManager actionManager) {
         this.view = view;
@@ -123,9 +130,8 @@ public class MenuBarBuilder {
 
         // Data transfer commands:
         MenuItem cutMenuItem = new MenuItem("Cut");
-        cutMenuItem.setOnAction(e -> {
-            actionManager.run(actionManager.getActionFactory().createCutPositionableViewModelElementAction());
-        });
+        cutMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createCutPositionableViewModelElementAction()));
         cutMenuItem.setAccelerator(Shortcuts.CUT.get());
 
         MenuItem copyMenuItem = new MenuItem("Copy");
@@ -153,11 +159,27 @@ public class MenuBarBuilder {
 
         SeparatorMenuItem dataTransferToSelectionSeparator = new SeparatorMenuItem();
 
+        SeparatorMenuItem renameRootSystemSeparator = new SeparatorMenuItem();
+
+        CustomMenuItem renameRootSystemCustomMenuItem = getRenameRootSystemCustomMenuItem();
+
         editMenu.getItems()
             .addAll(undoMenuItem, redoMenuItem, historyToDataTransferSeparator, cutMenuItem, copyMenuItem,
-                pasteMenuItem, dataTransferToSelectionSeparator, selectAllMenuItem, deselectAllMenuItem);
+                pasteMenuItem, dataTransferToSelectionSeparator, selectAllMenuItem, deselectAllMenuItem,
+                renameRootSystemSeparator, renameRootSystemCustomMenuItem);
 
         return editMenu;
+    }
+
+    private CustomMenuItem getRenameRootSystemCustomMenuItem() {
+        GeckoViewModel viewModel = view.getViewModel();
+        TextField renameRootSystemTextField = new InspectorRenameField(actionManager,
+            (Renamable) viewModel.getViewModelElement(viewModel.getGeckoModel().getRoot()));
+        Label renameRootSystemLabel = new InspectorLabel("Rename Root System");
+        VBox renameRootSystemContainer = new VBox(renameRootSystemLabel, renameRootSystemTextField);
+        CustomMenuItem renameRootSystemCustomMenuItem = new CustomMenuItem(renameRootSystemContainer, false);
+        renameRootSystemCustomMenuItem.setOnAction(e -> renameRootSystemTextField.requestFocus());
+        return renameRootSystemCustomMenuItem;
     }
 
     private Menu setupViewMenu() {
@@ -179,9 +201,7 @@ public class MenuBarBuilder {
         goToParentSystemMenuItem.setAccelerator(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get());
 
         MenuItem focusSelectedElementMenuItem = new MenuItem("Focus Selected Element");
-        focusSelectedElementMenuItem.setOnAction(e -> {
-            view.getCurrentView().getViewModel().moveToFocusedElement();
-        });
+        focusSelectedElementMenuItem.setOnAction(e -> view.getCurrentView().getViewModel().moveToFocusedElement());
         focusSelectedElementMenuItem.setAccelerator(Shortcuts.FOCUS_SELECTED_ELEMENT.get());
 
         SeparatorMenuItem viewSwitchToZoomSeparator = new SeparatorMenuItem();
@@ -213,7 +233,8 @@ public class MenuBarBuilder {
     }
 
     private Menu setupToolsMenu() {
-        toolsMenu = new Menu("Tools");
+        Menu toolsMenu = new Menu("Tools");
+
         // General tools:
         MenuItem cursorMenuItem = new MenuItem(ToolType.CURSOR.getLabel());
         cursorMenuItem.setOnAction(
@@ -233,16 +254,35 @@ public class MenuBarBuilder {
         SeparatorMenuItem generalFromSystemSeparator = new SeparatorMenuItem();
 
         // System view tools:
-        MenuItem systemCreatorMenuItem = toolMenuItem(ToolType.SYSTEM_CREATOR, false);
-        MenuItem systemConnectionCreatorMenuItem = toolMenuItem(ToolType.CONNECTION_CREATOR, false);
-        MenuItem variableBlockCreatorMenuItem = toolMenuItem(ToolType.VARIABLE_BLOCK_CREATOR, false);
+        MenuItem systemCreatorMenuItem = new MenuItem(ToolType.SYSTEM_CREATOR.getLabel());
+        systemCreatorMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(ToolType.SYSTEM_CREATOR)));
+
+        MenuItem systemConnectionCreatorMenuItem = new MenuItem(ToolType.CONNECTION_CREATOR.getLabel());
+        systemConnectionCreatorMenuItem.setOnAction(e -> actionManager.run(
+            actionManager.getActionFactory().createSelectToolAction(ToolType.CONNECTION_CREATOR)));
+
+        MenuItem variableBlockCreatorMenuItem = new MenuItem(ToolType.VARIABLE_BLOCK_CREATOR.getLabel());
+        variableBlockCreatorMenuItem.setOnAction(e -> actionManager.run(
+            actionManager.getActionFactory().createSelectToolAction(ToolType.VARIABLE_BLOCK_CREATOR)));
 
         SeparatorMenuItem systemFroAutomatonSeparator = new SeparatorMenuItem();
 
         // Automaton view tools:
-        MenuItem stateCreatorMenuItem = toolMenuItem(ToolType.STATE_CREATOR, true);
-        MenuItem edgeCreatorMenuItem = toolMenuItem(ToolType.EDGE_CREATOR, true);
-        MenuItem regionCreatorMenuItem = toolMenuItem(ToolType.REGION_CREATOR, true);
+        MenuItem stateCreatorMenuItem = new MenuItem(ToolType.STATE_CREATOR.getLabel());
+        stateCreatorMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(ToolType.STATE_CREATOR)));
+        stateCreatorMenuItem.setDisable(true);
+
+        MenuItem edgeCreatorMenuItem = new MenuItem(ToolType.EDGE_CREATOR.getLabel());
+        edgeCreatorMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(ToolType.EDGE_CREATOR)));
+        edgeCreatorMenuItem.setDisable(true);
+
+        MenuItem regionCreatorMenuItem = new MenuItem(ToolType.REGION_CREATOR.getLabel());
+        regionCreatorMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(ToolType.REGION_CREATOR)));
+        regionCreatorMenuItem.setDisable(true);
 
         toolsMenu.getItems()
             .addAll(cursorMenuItem, marqueeMenuItem, panMenuItem, generalFromSystemSeparator, systemCreatorMenuItem,
@@ -252,26 +292,40 @@ public class MenuBarBuilder {
         return toolsMenu;
     }
 
-    private MenuItem toolMenuItem(ToolType toolType, boolean isAutomatonTool) {
-        MenuItem toolMenuItem = new MenuItem(toolType.getLabel());
-        toolMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createSelectToolAction(toolType)));
-        toolMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> {
-            if (view.getCurrentView() == null) {
-                return true;
-            }
-            return view.getCurrentView().getViewModel().isAutomatonEditor() != isAutomatonTool;
-        }, view.getCurrentViewProperty()));
-        return toolMenuItem;
+    /**
+     * Updates the tools menu with the updated tool lists.
+     *
+     * @param menuBar   The menu bar to update
+     * @param toolLists The updated tool lists
+     */
+    public static void updateToolsMenu(MenuBar menuBar, List<List<Tool>> toolLists) {
+        List<Tool> constantTools = toolLists.get(0);
+        List<Tool> variableTools = toolLists.get(1);
+
+        menuBar.getMenus()
+            .stream()
+            .filter(menu -> menu.getText().equals("Tools"))
+            .findFirst()
+            .ifPresent(toolsMenu -> toolsMenu.getItems().forEach(toolMenu -> {
+                Tool constantTool = constantTools.stream()
+                    .filter(tool -> tool.getToolType().getLabel().equals(toolMenu.getText()))
+                    .findAny()
+                    .orElse(null);
+                Tool activeTool = variableTools.stream()
+                    .filter(tool -> tool.getToolType().getLabel().equals(toolMenu.getText()))
+                    .findAny()
+                    .orElse(null);
+                if (constantTool == null) {
+                    toolMenu.setDisable(activeTool == null);
+                }
+            }));
     }
 
     private Menu setupHelpMenu() {
         Menu helpMenu = new Menu("Help");
 
         MenuItem searchElementsMenuItem = new MenuItem("Search Elements");
-        searchElementsMenuItem.setOnAction(e -> {
-            view.getCurrentView().toggleSearchWindow();
-        });
+        searchElementsMenuItem.setOnAction(e -> view.getCurrentView().toggleSearchWindow());
         searchElementsMenuItem.setAccelerator(Shortcuts.TOGGLE_SEARCH.get());
 
 

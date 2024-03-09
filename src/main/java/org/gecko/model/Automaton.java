@@ -25,13 +25,13 @@ public class Automaton {
     private final Set<State> states;
     private final Set<Edge> edges;
 
+    @JsonCreator
     public Automaton() {
         this.regions = new HashSet<>();
         this.states = new HashSet<>();
         this.edges = new HashSet<>();
     }
 
-    @JsonCreator
     public Automaton(@JsonProperty("startState") State startState) {
         this.regions = new HashSet<>();
         this.states = new HashSet<>();

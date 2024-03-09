@@ -35,17 +35,27 @@ public class ProjectFileParser implements FileParser {
             throw new IOException();
         }
 
-        TypeReference<ArrayList<ViewModelPropertiesContainer>> typeRef = new TypeReference<>() {
+        TypeReference<ArrayList<StartStateContainer>> typeRefStates = new TypeReference<>() {
+        };
+        List<StartStateContainer> newStartStates =
+            objectMapper.readValue(geckoJsonWrapper.getStartStates(), typeRefStates);
+
+        TypeReference<ArrayList<ViewModelPropertiesContainer>> typeRefViewModel = new TypeReference<>() {
         };
         List<ViewModelPropertiesContainer> newViewModelProperties =
-            objectMapper.readValue(geckoJsonWrapper.getViewModelProperties(), typeRef);
+            objectMapper.readValue(geckoJsonWrapper.getViewModelProperties(), typeRefViewModel);
 
         GeckoModel model = new GeckoModel(root);
         GeckoViewModel viewModel = new GeckoViewModel(model);
 
-        ViewModelElementCreator creator = new ViewModelElementCreator(viewModel, newViewModelProperties);
+        ViewModelElementCreator creator
+            = new ViewModelElementCreator(viewModel, newViewModelProperties, newStartStates);
         creator.traverseModel(root);
         updateSystemParents(root);
+
+        if (creator.isFoundNonexistentStartState()) {
+            throw new IOException("Not all start-states belong to the corresponding automaton's states.");
+        }
 
         if (creator.isFoundNullContainer()) {
             throw new IOException("Not all elements have view model properties.");

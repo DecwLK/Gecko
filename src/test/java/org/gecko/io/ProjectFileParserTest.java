@@ -3,6 +3,7 @@ package org.gecko.io;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,15 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-import org.gecko.exceptions.ModelException;
-import org.gecko.model.GeckoModel;
-import org.gecko.model.Visibility;
 import org.gecko.viewmodel.GeckoViewModel;
-import org.gecko.viewmodel.PortViewModel;
-import org.gecko.viewmodel.RegionViewModel;
-import org.gecko.viewmodel.StateViewModel;
-import org.gecko.viewmodel.SystemViewModel;
-import org.gecko.viewmodel.ViewModelFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -114,5 +107,17 @@ public class ProjectFileParserTest {
         String parsedModel = scanner1.next();
         String serializedParsedModel = scanner2.next();
         assertEquals(parsedModel, serializedParsedModel);
+    }
+
+    @Test
+    void parseFileThatContainsANonexistentStartState() {
+        File fileForNonexistentStartState = new File("src/test/java/org/gecko/io/files/nonexistentStartState.json");
+        assertThrows(IOException.class, () -> projectFileParser.parse(fileForNonexistentStartState));
+    }
+
+    @Test
+    void parseFileWithValidStartStates() {
+        File fileForNonexistentStartState = new File("src/test/java/org/gecko/io/files/existentStartState.json");
+        assertDoesNotThrow(() -> projectFileParser.parse(fileForNonexistentStartState));
     }
 }

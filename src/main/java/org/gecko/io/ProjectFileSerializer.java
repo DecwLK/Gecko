@@ -34,6 +34,10 @@ public class ProjectFileSerializer implements FileSerializer {
 
         ViewModelElementSaver saver = new ViewModelElementSaver(viewModel);
         List<ViewModelPropertiesContainer> viewModelProperties = saver.getViewModelProperties(root);
+        List<StartStateContainer> startStates = saver.getStartStates();
+
+        String startStatesInJson = this.getStartStatesInJson(startStates);
+        geckoJsonWrapper.setStartStates(startStatesInJson);
 
         String viewModelPropertiesInJson = this.getViewModelPropertiesInJson(viewModelProperties);
         geckoJsonWrapper.setViewModelProperties(viewModelPropertiesInJson);
@@ -47,6 +51,11 @@ public class ProjectFileSerializer implements FileSerializer {
 
     private String getRootInJson(System root) throws JsonProcessingException {
         return objectMapper.writeValueAsString(root);
+    }
+
+    private String getStartStatesInJson(List<StartStateContainer> startStates)
+        throws JsonProcessingException {
+        return objectMapper.writeValueAsString(startStates);
     }
 
     private String getViewModelPropertiesInJson(List<ViewModelPropertiesContainer> viewModelProperties)

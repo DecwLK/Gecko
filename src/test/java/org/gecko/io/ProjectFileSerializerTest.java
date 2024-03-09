@@ -31,7 +31,8 @@ public class ProjectFileSerializerTest {
     private static ObjectMapper mapper;
     static String EMPTY_GECKO_JSON = "{\"model\":\"{\\\"id\\\":0,\\\"name\\\":\\\"Element_0\\\",\\\"code\\\":null,"
         + "\\\"automaton\\\":{\\\"startState\\\":null,\\\"regions\\\":[],\\\"states\\\":[],\\\"edges\\\":[]},"
-        + "\\\"children\\\":[],\\\"connections\\\":[],\\\"variables\\\":[]}\",\"viewModelProperties\":\"[]\"}";
+        + "\\\"children\\\":[],\\\"connections\\\":[],\\\"variables\\\":[]}\",\"startStates\":\"[]\","
+        + "\"viewModelProperties\":\"[]\"}";
     static String NON_NULL_AUTOMATON_JSON = "\\\"automaton\\\":{";
     static String NON_NULL_START_STATE_JSON = "\\\"startState\\\":{";
     static String NON_NULL_REGIONS_JSON = "\\\"regions\\\":[{";

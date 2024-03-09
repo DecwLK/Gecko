@@ -49,29 +49,18 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
     public Void visit(SystemViewModel systemViewModel) {
         java.lang.System.out.println("Copying system " + systemViewModel.getTarget().getName());
         System original = systemViewModel.getTarget();
-        System parentOfCopy = (System) originalToClipboard.get(original.getParent());
-        if (original.getParent() != geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget() && parentOfCopy == null) {
+        System copy;
+        try {
+            copy = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemViewModel.getTarget());
+        } catch (ModelException e) {
             unsuccessfulCopies.add(systemViewModel);
             return null;
-        }
-        System copy = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemViewModel.getTarget());
-        copy.setParent(parentOfCopy);
-        if (parentOfCopy != null) {
-            parentOfCopy.addChild(copy);
-        }
-        originalToClipboard.put(original, copy);
-        for (System childSystem : original.getChildren()) {
-            geckoViewModel.getViewModelElement(childSystem).accept(this);
-        }
-        for (Variable variable : original.getVariables()) {
-            Variable copyVariable = geckoViewModel.getGeckoModel().getModelFactory().copyVariable(variable);
-            copy.addVariable(copyVariable);
-            originalToClipboard.put(variable, copyVariable);
         }
         elementToPosAndSize.put(original,
             new Pair<>(systemViewModel.getPosition(), systemViewModel.getSize()));
         elementToPosAndSize.put(copy,
             new Pair<>(systemViewModel.getPosition(), systemViewModel.getSize()));
+        originalToClipboard.put(original, copy);
         return null;
     }
 

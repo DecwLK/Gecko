@@ -1,5 +1,7 @@
 package org.gecko.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
@@ -96,13 +98,40 @@ public class ModelFactory {
         return system;
     }
 
-    public System copySystem(@NonNull System system) {
+    public System copySystem(@NonNull System system) throws ModelException {
         int id = getNewElementId();
         System copy;
         try {
-            copy = new System(id, getDefaultName(id), DEFAULT_CODE, system.getAutomaton());
+            copy = new System(id, getDefaultName(id), DEFAULT_CODE, new Automaton());
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of the system", e);
+        }
+        Map<State, State> stateToCopy = new HashMap<>();
+        Map<Variable, Variable> variableToCopy = new HashMap<>();
+        for (State state : system.getAutomaton().getStates()) {
+            State copiedState = copyState(state);
+            copy.getAutomaton().addState(copiedState);
+            stateToCopy.put(state, copiedState);
+        }
+        for (Edge edge : system.getAutomaton().getEdges()) {
+            State copiedSource = stateToCopy.get(edge.getSource());
+            State copiedDestination = stateToCopy.get(edge.getDestination());
+            createEdge(copy.getAutomaton(), copiedSource, copiedDestination);
+        }
+        for (Variable variable : system.getVariables()) {
+            Variable copiedVariable = copyVariable(variable);
+            variableToCopy.put(variable, copiedVariable);
+            copy.addVariable(copiedVariable);
+        }
+        for (System childSystem : system.getChildren()) {
+            copy.addChild(copySystem(childSystem));
+        }
+        for (System childSystem : copy.getChildren()) {
+            childSystem.setParent(copy);
+        }
+        for (SystemConnection connection : system.getConnections()) {
+            copy.addConnection(copySystemConnection(connection, variableToCopy.get(connection.getSource()),
+                variableToCopy.get(connection.getDestination())));
         }
         return copy;
     }

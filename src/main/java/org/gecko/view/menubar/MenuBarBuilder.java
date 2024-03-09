@@ -130,9 +130,8 @@ public class MenuBarBuilder {
 
         // Data transfer commands:
         MenuItem cutMenuItem = new MenuItem("Cut");
-        cutMenuItem.setOnAction(e -> {
-            actionManager.run(actionManager.getActionFactory().createCutPositionableViewModelElementAction());
-        });
+        cutMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createCutPositionableViewModelElementAction()));
         cutMenuItem.setAccelerator(Shortcuts.CUT.get());
 
         MenuItem copyMenuItem = new MenuItem("Copy");
@@ -179,9 +178,7 @@ public class MenuBarBuilder {
         Label renameRootSystemLabel = new InspectorLabel("Rename Root System");
         VBox renameRootSystemContainer = new VBox(renameRootSystemLabel, renameRootSystemTextField);
         CustomMenuItem renameRootSystemCustomMenuItem = new CustomMenuItem(renameRootSystemContainer, false);
-        renameRootSystemCustomMenuItem.setOnAction(e -> {
-            renameRootSystemTextField.requestFocus();
-        });
+        renameRootSystemCustomMenuItem.setOnAction(e -> renameRootSystemTextField.requestFocus());
         return renameRootSystemCustomMenuItem;
     }
 
@@ -204,9 +201,7 @@ public class MenuBarBuilder {
         goToParentSystemMenuItem.setAccelerator(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get());
 
         MenuItem focusSelectedElementMenuItem = new MenuItem("Focus Selected Element");
-        focusSelectedElementMenuItem.setOnAction(e -> {
-            view.getCurrentView().getViewModel().moveToFocusedElement();
-        });
+        focusSelectedElementMenuItem.setOnAction(e -> view.getCurrentView().getViewModel().moveToFocusedElement());
         focusSelectedElementMenuItem.setAccelerator(Shortcuts.FOCUS_SELECTED_ELEMENT.get());
 
         SeparatorMenuItem viewSwitchToZoomSeparator = new SeparatorMenuItem();
@@ -330,9 +325,7 @@ public class MenuBarBuilder {
         Menu helpMenu = new Menu("Help");
 
         MenuItem searchElementsMenuItem = new MenuItem("Search Elements");
-        searchElementsMenuItem.setOnAction(e -> {
-            view.getCurrentView().toggleSearchWindow();
-        });
+        searchElementsMenuItem.setOnAction(e -> view.getCurrentView().toggleSearchWindow());
         searchElementsMenuItem.setAccelerator(Shortcuts.TOGGLE_SEARCH.get());
 
 

@@ -120,9 +120,7 @@ public class GeckoView {
         List<EditorView> editorViewsToRemove = openedViews.stream()
             .filter(editorView -> editorViewModelsToRemove.contains(editorView.getViewModel()))
             .toList();
-        editorViewsToRemove.forEach(editorView -> {
-            centerPane.getTabs().remove(editorView.getCurrentView());
-        });
+        editorViewsToRemove.forEach(editorView -> centerPane.getTabs().remove(editorView.getCurrentView()));
         openedViews.removeAll(editorViewsToRemove);
     }
 
@@ -144,9 +142,8 @@ public class GeckoView {
 
         mainPane.setLeft(currentView.drawToolbar());
         mainPane.setRight(currentView.drawInspector());
-        currentView.getCurrentInspector().addListener((Observable observable) -> {
-            mainPane.setRight(currentView.drawInspector());
-        });
+        currentView.getCurrentInspector()
+            .addListener((Observable observable) -> mainPane.setRight(currentView.drawInspector()));
         viewModel.switchEditor(currentView.getViewModel().getCurrentSystem(),
             currentView.getViewModel().isAutomatonEditor());
 

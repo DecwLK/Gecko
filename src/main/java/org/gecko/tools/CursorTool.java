@@ -65,6 +65,7 @@ public class CursorTool extends Tool {
     public void visit(SystemViewElement systemViewElement) {
         super.visit(systemViewElement);
         setDragAndSelectHandlers(systemViewElement);
+        setOpenSystemHandler(systemViewElement);
     }
 
     @Override
@@ -204,6 +205,19 @@ public class CursorTool extends Tool {
 
             actionManager.run(moveAction);
             cancelDrag(scaler);
+        });
+    }
+
+    private void setOpenSystemHandler(SystemViewElement systemViewElement) {
+        systemViewElement.setOnMouseClicked(event -> {
+            if (event.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+            if (event.getClickCount() == 2) {
+                Action openSystemAction =
+                    actionManager.getActionFactory().createViewSwitchAction(systemViewElement.getTarget(), false);
+                actionManager.run(openSystemAction);
+            }
         });
     }
 

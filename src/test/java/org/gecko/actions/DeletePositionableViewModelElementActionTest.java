@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Set;
 import org.gecko.exceptions.ModelException;
+import org.gecko.model.Visibility;
 import org.gecko.util.TestHelper;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
@@ -44,7 +45,11 @@ public class DeletePositionableViewModelElementActionTest {
         SystemViewModel systemViewModel1 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         SystemViewModel systemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
+        portViewModel1.setVisibility(Visibility.OUTPUT);
+        portViewModel1.updateTarget();
         PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
+        portViewModel2.setVisibility(Visibility.INPUT);
+        portViewModel2.updateTarget();
         SystemConnectionViewModel systemConnectionViewModel =
             viewModelFactory.createSystemConnectionViewModelIn(rootSystemViewModel, portViewModel1, portViewModel2);
 

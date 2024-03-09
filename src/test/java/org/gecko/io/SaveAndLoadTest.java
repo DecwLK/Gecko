@@ -81,11 +81,10 @@ public class SaveAndLoadTest {
                 port2.updateTarget();
             });
 
-            //        NOT OKAY, has to throw:
-            //        assertThrows(ModelException.class, () -> oneLevelFactory.createSystemConnectionViewModelIn(oneLevelRoot,
-            //            (PortViewModel) oneLevelGeckoViewModel.getViewModelElement(oneLevelRoot.getTarget()
-            //                .getVariableByName("emptyVar1")), (PortViewModel) oneLevelGeckoViewModel
-            //                .getViewModelElement(oneLevelRoot.getTarget().getVariableByName("emptyVar2"))));
+            assertThrows(ModelException.class, () -> oneLevelFactory.createSystemConnectionViewModelIn(oneLevelRoot,
+                (PortViewModel) oneLevelGeckoViewModel.getViewModelElement(oneLevelRoot.getTarget()
+                    .getVariableByName("emptyPort1")), (PortViewModel) oneLevelGeckoViewModel
+                    .getViewModelElement(oneLevelRoot.getTarget().getVariableByName("emptyPort2"))));
 
             assertDoesNotThrow(() -> {
                 oneLevelFactory.createRegionViewModelIn(oneLevelRoot);

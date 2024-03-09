@@ -3,6 +3,8 @@ package org.gecko.model;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -41,8 +43,25 @@ public class ModelFactoryTest {
         assertThrows(NullPointerException.class,
             () -> factory.createEdge(new Automaton(), new State(0, "source"), null));
 
-        assertDoesNotThrow(
-            () -> factory.createEdge(new Automaton(), new State(0, "source"), new State(1, "destination")));
+        Automaton automaton = new Automaton();
+        State source = null;
+        State destination = null;
+        try {
+            source = new State(0, "source");
+            destination = new State(1, "destination");
+        } catch (ModelException e) {
+            fail("Failed to create source and destination states for testing purposes of the creation of an edge.");
+        }
+        assertNotNull(source);
+        assertNotNull(destination);
+        automaton.addState(source);
+        automaton.addState(destination);
+
+        try {
+            factory.createEdge(automaton, source, destination);
+        } catch (ModelException e) {
+            fail("Failed to create edge from valid source and destination states.");
+        }
     }
 
     @Test
@@ -59,20 +78,61 @@ public class ModelFactoryTest {
 
     @Test
     void createSystemConnection() {
-        assertThrows(NullPointerException.class,
-            () -> factory.createSystemConnection(null, new Variable(1, "var1", "type", Visibility.OUTPUT),
-                new Variable(2, "var2", "type", Visibility.INPUT)));
-        assertThrows(NullPointerException.class,
-            () -> factory.createSystemConnection(new System(0, "system", null, new Automaton()), null,
-                new Variable(2, "var2", "type", Visibility.INPUT)));
-        assertThrows(NullPointerException.class,
-            () -> factory.createSystemConnection(new System(0, "system", null, new Automaton()),
-                new Variable(1, "var1", "type", Visibility.OUTPUT), null));
+        System system = null;
+        System child1;
+        System child2;
+        Variable variable1 = null;
+        Variable variable2 = null;
+        try {
+            system = new System(0, "system", null, new Automaton());
+            child1 = new System(1, "child1", null, new Automaton());
+            child2 = new System(2, "child2", null, new Automaton());
+            system.addChild(child1);
+            system.addChild(child2);
 
-        assertDoesNotThrow(
-            () -> factory.createSystemConnection(new System(0, "system", null, new Automaton()),
-                new Variable(1, "var1", "type", Visibility.OUTPUT),
-                new Variable(2, "var2", "type", Visibility.INPUT)));
+            variable1 = new Variable(3, "var1", "type", Visibility.OUTPUT);
+            variable2 = new Variable(4, "var2", "type", Visibility.INPUT);
+
+            child1.addVariable(variable1);
+            child2.addVariable(variable2);
+        } catch (ModelException e) {
+            fail("Failed to create elements for testing purposes of a system connection.");
+        }
+
+        assertNotNull(system);
+        model.getRoot().addChild(system);
+
+        SystemConnection systemConnection = null;
+        try {
+            systemConnection = factory.createSystemConnection(null, variable1, variable2);
+        } catch (NullPointerException e) {
+            assertNull(systemConnection);
+        } catch (ModelException e) {
+            fail("NullPointerException should be thrown before the model intervenes.");
+        }
+
+        try {
+            systemConnection = factory.createSystemConnection(system, null, variable2);
+        } catch (NullPointerException e) {
+            assertNull(systemConnection);
+        } catch (ModelException e) {
+            fail("NullPointerException should be thrown before the model intervenes.");
+        }
+
+        try {
+            systemConnection = factory.createSystemConnection(system, variable1, null);
+        } catch (NullPointerException e) {
+            assertNull(systemConnection);
+        } catch (ModelException e) {
+            fail("NullPointerException should be thrown before the model intervenes.");
+        }
+
+        assertNull(systemConnection);
+        try {
+            factory.createSystemConnection(system, variable1, variable2);
+        } catch (ModelException e) {
+            fail("System connection creation failed.");
+        }
     }
 
     @Test

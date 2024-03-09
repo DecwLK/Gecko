@@ -65,6 +65,12 @@ public class ModelFactory {
 
     public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull State destination)
         throws ModelException {
+        if (automaton.getStates().isEmpty() || !automaton.getStates().contains(source)
+            || !automaton.getStates().contains(destination)) {
+            throw new RuntimeException("Failed to create edge, because source and / or destination states "
+                + "are not part of the automaton.");
+        }
+
         int id = getNewElementId();
         Edge edge = new Edge(id, source, destination, getDefaultContract(), DEFAULT_KIND, DEFAULT_PRIORITY);
         automaton.addEdge(edge);
@@ -126,10 +132,40 @@ public class ModelFactory {
 
     public SystemConnection createSystemConnection(
         @NonNull System system, @NonNull Variable source, @NonNull Variable destination) throws ModelException {
+        System sourceParent = geckoModel.getSystemWithVariable(source);
+        System destinationParent = geckoModel.getSystemWithVariable(destination);
+
+        if (sourceParent == null || destinationParent == null) {
+            throw new RuntimeException("Failed to create system connection, because source and / or destination "
+                + "variables are not part of the project.");
+        }
+
+        if (source.equals(destination)) {
+            throw new ModelException("A system connection cannot connect a variable to itself.");
+        }
+
+        if (sourceParent.equals(system) && sourceParent.equals(destinationParent)) {
+            throw new ModelException("Two variables on the same level cannot be connected.");
+        }
+
+        if (!isConnectingAllowed(system, sourceParent, destinationParent, source, destination)) {
+            throw new ModelException("Failed to connect the source to the destination variable.");
+        }
+
         int id = getNewElementId();
         SystemConnection connection = new SystemConnection(id, source, destination);
         system.addConnection(connection);
         return connection;
+    }
+
+    private boolean isConnectingAllowed(System system, System sourceParent, System destinationParent, Variable source,
+                                        Variable destination) {
+        if (!sourceParent.equals(system) && !destinationParent.equals(system)) {
+            return source.getVisibility() == Visibility.OUTPUT && destination.getVisibility() == Visibility.INPUT;
+        } else if (sourceParent.equals(system)) {
+            return source.getVisibility() != Visibility.OUTPUT && destination.getVisibility() != Visibility.OUTPUT;
+        }
+        return source.getVisibility() != Visibility.INPUT && destination.getVisibility() != Visibility.INPUT;
     }
 
     public SystemConnection copySystemConnection(SystemConnection connection) {

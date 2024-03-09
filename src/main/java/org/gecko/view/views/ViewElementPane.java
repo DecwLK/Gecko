@@ -68,7 +68,6 @@ public class ViewElementPane {
         // Save the pivot to refocus after adding the element because changing the world size will change the pivot
         Point2D oldPivot = evm.getPivot();
         PositionableViewModelElement<?> target = element.getTarget();
-        world.getChildren().add(element.drawElement());
         elements.add(element);
 
         Node node = element.drawElement();
@@ -111,6 +110,10 @@ public class ViewElementPane {
             return;
         }
         focusLocalCoordinates(worldTolocalCoordinates(worldCoords));
+    }
+
+    private Point2D worldTolocalCoordinates(Point2D worldCoords) {
+        return worldCoords.multiply(evm.getZoomScale()).add(offset.getValue());
     }
 
     private Point2D localToWorldCoordinates(Point2D screenCoords) {
@@ -167,17 +170,11 @@ public class ViewElementPane {
         Point2D max = new Point2D(Math.max(0, maxWorldPosition.getX()), Math.max(0, maxWorldPosition.getY()));
         Point2D localMin = worldTolocalCoordinates(min);
         Point2D localMax = worldTolocalCoordinates(max);
-        double newWidth =
-            Math.max(pane.getViewportBounds().getWidth(), localMax.getX() - localMin.getX() + widthPadding.get() * 2);
-        double newHeight =
-            Math.max(pane.getViewportBounds().getHeight(), localMax.getY() - localMin.getY() + heightPadding.get() * 2);
+        double newWidth = localMax.getX() - localMin.getX() + widthPadding.get() * 2;
+        double newHeight = localMax.getY() - localMin.getY() + heightPadding.get() * 2;
         world.setMinSize(newWidth, newHeight);
         pane.layout();
         updateOffset();
-    }
-
-    private Point2D worldTolocalCoordinates(Point2D worldCoords) {
-        return worldCoords.multiply(evm.getZoomScale()).add(offset.getValue());
     }
 
     private Point2D localViewPortPosition() {
@@ -197,8 +194,8 @@ public class ViewElementPane {
     }
 
     private void updateOffset() {
-        double x = Math.max(0, -minWorldPosition.getX()) + widthPadding.get();
-        double y = Math.max(0, -minWorldPosition.getY()) + heightPadding.get();
+        double x = Math.max(0, -minWorldPosition.getX() * evm.getZoomScale()) + widthPadding.get();
+        double y = Math.max(0, -minWorldPosition.getY() * evm.getZoomScale()) + heightPadding.get();
         offset.setValue(new Point2D(x, y));
     }
 

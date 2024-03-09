@@ -2,6 +2,7 @@ package org.gecko.view.views;
 
 import javafx.scene.Node;
 import org.gecko.actions.ActionManager;
+import org.gecko.tools.ToolType;
 import org.gecko.view.GeckoView;
 import org.gecko.view.contextmenu.EdgeViewElementContextMenuBuilder;
 import org.gecko.view.contextmenu.RegionViewElementContextMenuBuilder;
@@ -107,7 +108,7 @@ public class ViewFactory {
 
     private void setContextMenu(Node newViewElement, ViewContextMenuBuilder contextMenuBuilder) {
         newViewElement.setOnContextMenuRequested(event -> {
-            geckoView.getCurrentView().switchToCursorTool();
+            actionManager.run(actionManager.getActionFactory().createSelectToolAction(ToolType.CURSOR));
             geckoView.getCurrentView().changeContextMenu(contextMenuBuilder.build());
             contextMenuBuilder.getContextMenu()
                 .getItems()

@@ -11,7 +11,11 @@ import org.gecko.viewmodel.StateViewModel;
  * A concrete representation of an {@link AbstractInspectorList} encapsulating an {@link InspectorContractItem}.
  */
 public class InspectorContractList extends AbstractInspectorList<InspectorContractItem> {
+    private static final double MIN_HEIGHT = 50;
+
     public InspectorContractList(ActionManager actionManager, StateViewModel stateViewModel) {
+        super();
+        setMinHeight(MIN_HEIGHT);
         ObservableList<InspectorContractItem> items = getItems();
         ObservableList<ContractViewModel> contractViewModels = stateViewModel.getContractsProperty();
 

@@ -13,7 +13,7 @@ import org.gecko.view.views.ViewElementPane;
 public class StateCreatorTool extends Tool {
 
     public StateCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.STATE_CREATOR);
+        super(actionManager, ToolType.STATE_CREATOR, false);
     }
 
     @Override

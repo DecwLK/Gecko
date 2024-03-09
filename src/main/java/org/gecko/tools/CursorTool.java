@@ -43,7 +43,7 @@ public class CursorTool extends Tool {
     private ViewElementPane viewPane;
 
     public CursorTool(ActionManager actionManager, SelectionManager selectionManager, EditorViewModel editorViewModel) {
-        super(actionManager, ToolType.CURSOR);
+        super(actionManager, ToolType.CURSOR, false);
         this.selectionManager = selectionManager;
         this.editorViewModel = editorViewModel;
     }

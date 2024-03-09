@@ -12,7 +12,7 @@ import org.gecko.view.views.ViewElementPane;
  */
 public class SystemCreatorTool extends Tool {
     public SystemCreatorTool(ActionManager actionManager) {
-        super(actionManager, ToolType.SYSTEM_CREATOR);
+        super(actionManager, ToolType.SYSTEM_CREATOR, false);
     }
 
     @Override

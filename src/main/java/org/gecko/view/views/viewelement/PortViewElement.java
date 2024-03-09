@@ -20,6 +20,9 @@ import org.gecko.viewmodel.PortViewModel;
 @Getter
 public class PortViewElement extends Pane {
 
+    private static final double MIN_WIDTH = 50;
+    private static final double MAX_WIDTH = 80;
+
     private final PortViewModel viewModel;
     private final StringProperty nameProperty;
     private final ObjectProperty<Visibility> visibilityProperty;
@@ -28,7 +31,8 @@ public class PortViewElement extends Pane {
         this.viewModel = viewModel;
         this.nameProperty = new SimpleStringProperty(viewModel.getName());
         this.visibilityProperty = new SimpleObjectProperty<>(viewModel.getVisibility());
-
+        setMinWidth(MIN_WIDTH);
+        setMaxWidth(MAX_WIDTH);
         bindToViewModel();
         constructVisualization();
     }
@@ -60,6 +64,7 @@ public class PortViewElement extends Pane {
     private void constructVisualization() {
         Label nameLabel = new Label();
         nameLabel.textProperty().bind(nameProperty);
+        nameLabel.setMaxWidth(MAX_WIDTH);
         updateBackgroundColor();
         getChildren().add(nameLabel);
     }

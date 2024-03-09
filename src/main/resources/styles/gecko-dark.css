@@ -6,13 +6,13 @@
     -fx-fg1: #6d6d6d;
     -fx-fg2: #878787;
     -fx-text: #e6e6e6;
-    -fx-highlight: #8b0000;
     -fx-highlight: #6b0000;
     -fx-highlight2: #41c2d3;
     -fx-highlight2-hover: #4179d3;
     -fx-highlight3: #96e876;
     -fx-highlight3-hover: #76e88e;
     -fx-green: #3a5311;
+    -fx-editable: #a0a0a0;
 }
 
 .root {

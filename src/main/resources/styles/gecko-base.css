@@ -360,6 +360,11 @@
     -fx-font: 12px "System";
 }
 
+.combo-box .cell:empty {
+    -fx-background-color: -fx-editable;
+    -fx-background-radius: 3 0 0 3;
+}
+
 .combo-box .cell:filled:selected {
     -fx-background-color: -fx-editable;
     -fx-background-radius: 3 0 0 3;

@@ -263,7 +263,7 @@ public class EditorViewModel {
             throw new IllegalArgumentException("Zoom factor must be positive");
         }
         double oldScale = zoomScaleProperty.get();
-        zoomScaleProperty.set((Math.clamp(zoomScaleProperty.get() * factor, MIN_ZOOM_SCALE, MAX_ZOOM_SCALE)));
+        zoomScaleProperty.set(Math.clamp(zoomScaleProperty.get() * factor, MIN_ZOOM_SCALE, MAX_ZOOM_SCALE));
         setPivot(getPivot().add(pivot.subtract(getPivot()).multiply(zoomScaleProperty.get() / oldScale - 1)));
     }
 

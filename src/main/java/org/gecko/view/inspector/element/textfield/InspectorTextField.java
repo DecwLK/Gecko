@@ -12,20 +12,35 @@ import org.gecko.view.inspector.element.InspectorElement;
  */
 public abstract class InspectorTextField extends TextField implements InspectorElement<TextField> {
 
+    private final StringProperty stringProperty;
+    private final ActionManager actionManager;
+
     protected InspectorTextField(StringProperty stringProperty, ActionManager actionManager) {
+        this.stringProperty = stringProperty;
+        this.actionManager = actionManager;
+
         setText(stringProperty.get());
         stringProperty.addListener((observable, oldValue, newValue) -> setText(newValue));
         setOnAction(event -> {
-            if (getText().isEmpty()) {
-                setText(stringProperty.get());
-            }
-            getParent().requestFocus();
-            if (getText().equals(stringProperty.get())) {
-                return;
-            }
-            actionManager.run(getAction());
-            setText(stringProperty.get());
+            updateText();
         });
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                updateText();
+            }
+        });
+    }
+
+    private void updateText() {
+        if (getText().isEmpty()) {
+            setText(stringProperty.get());
+        }
+        getParent().requestFocus();
+        if (getText().equals(stringProperty.get())) {
+            return;
+        }
+        actionManager.run(getAction());
+        setText(stringProperty.get());
     }
 
     protected abstract Action getAction();

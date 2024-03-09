@@ -2,6 +2,7 @@ package org.gecko.model;
 
 import java.util.Objects;
 import lombok.Getter;
+import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -17,6 +18,8 @@ public abstract class Element {
         }
         this.id = id;
     }
+
+    public abstract void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException;
 
     @Override
     public int hashCode() {

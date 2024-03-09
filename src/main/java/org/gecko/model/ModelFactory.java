@@ -54,11 +54,12 @@ public class ModelFactory {
         State copy;
         try {
             copy = new State(id, getDefaultName(id));
-            for (Contract contract : state.getContracts()) {
-                copy.addContract(contract);
-            }
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of the state", e);
+        }
+        for (Contract contract : state.getContracts()) {
+            Contract copiedContract = copyContract(contract);
+            copy.addContract(copiedContract);
         }
         return copy;
     }
@@ -100,9 +101,6 @@ public class ModelFactory {
         System copy;
         try {
             copy = new System(id, getDefaultName(id), DEFAULT_CODE, system.getAutomaton());
-            for (Variable variable : system.getVariables()) {
-                copy.addVariable(variable);
-            }
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of the system", e);
         }
@@ -178,6 +176,17 @@ public class ModelFactory {
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of a system connection", e);
         }
+    }
+
+    public SystemConnection copySystemConnection(SystemConnection connection, Variable copiedSource, Variable copiedDestination) {
+        SystemConnection result = copySystemConnection(connection);
+        try {
+            result.setSource(copiedSource);
+            result.setDestination(copiedDestination);
+        } catch (ModelException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     public Contract createContract(@NonNull State state) throws ModelException {

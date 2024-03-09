@@ -7,6 +7,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -40,6 +41,11 @@ public class Region extends Element implements Renamable {
             throw new ModelException("Region's name is invalid.");
         }
         this.name = name;
+    }
+
+    @Override
+    public void accept(ElementVisitor visitor) throws MatchException, ModelException, MissingViewModelElementException {
+        visitor.visit(this);
     }
 
     public void addState(@NonNull State state) {

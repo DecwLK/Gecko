@@ -54,6 +54,8 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         clipboardToPasted.putAll(copyResult.getValue());
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().addState(stateToPaste);
         StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(stateToPaste);
+        stateViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(stateFromClipboard).getKey().add(pasteOffset));
+        stateViewModel.setSize(copyVisitor.getElementToPosAndSize().get(stateFromClipboard).getValue());
         for (Contract contract : stateToPaste.getContracts()) {
             ContractViewModel contractViewModel = geckoViewModel.getViewModelFactory().createContractViewModelFrom(contract);
             stateViewModel.addContract(contractViewModel);
@@ -150,8 +152,8 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         clipboardToPasted.put(regionFromClipboard, regionToPaste);
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().addRegion(regionToPaste);
         RegionViewModel regionViewModel = geckoViewModel.getViewModelFactory().createRegionViewModelFrom(regionToPaste);
-        //regionViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getKey().add(pasteOffset));
-        //regionViewModel.setSize(copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getValue());
+        regionViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getKey().add(pasteOffset));
+        regionViewModel.setSize(copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getValue());
         pastedElements.add(regionViewModel);
     }
 

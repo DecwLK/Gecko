@@ -60,8 +60,6 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         }
         copy = copyResult.getKey();
         originalToClipboard.putAll(copyResult.getValue());
-        elementToPosAndSize.put(original,
-            new Pair<>(systemViewModel.getPosition(), systemViewModel.getSize()));
         elementToPosAndSize.put(copy,
             new Pair<>(systemViewModel.getPosition(), systemViewModel.getSize()));
         originalToClipboard.put(original, copy);
@@ -73,9 +71,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         Region original = regionViewModel.getTarget();
         Region copy = geckoViewModel.getGeckoModel().getModelFactory().copyRegion(original);
         originalToClipboard.put(original, copy);
-        originalToClipboard.put(regionViewModel.getTarget(),
-            geckoViewModel.getGeckoModel().getModelFactory().copyRegion(regionViewModel.getTarget()));
-        elementToPosAndSize.put(regionViewModel.getTarget(),
+        elementToPosAndSize.put(copy,
             new Pair<>(regionViewModel.getPosition(), regionViewModel.getSize()));
         return null;
     }
@@ -107,10 +103,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         Pair<State, Map<Contract, Contract>> copyResult = geckoViewModel.getGeckoModel().getModelFactory().copyState(original);
         State copy = copyResult.getKey();
         originalToClipboard.putAll(copyResult.getValue());
-        elementToPosAndSize.put(stateViewModel.getTarget(),
-            new Pair<>(stateViewModel.getPosition(), stateViewModel.getSize()));
-        elementToPosAndSize.put(originalToClipboard.get(stateViewModel.getTarget()),
-            new Pair<>(stateViewModel.getPosition(), stateViewModel.getSize()));
+        elementToPosAndSize.put(copy, new Pair<>(stateViewModel.getPosition(), stateViewModel.getSize()));
         originalToClipboard.put(original, copy);
         return null;
     }

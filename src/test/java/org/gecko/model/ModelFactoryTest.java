@@ -10,15 +10,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.gecko.exceptions.ModelException;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ModelFactoryTest {
-    static GeckoModel model;
-    static ModelFactory factory;
+    GeckoModel model;
+    ModelFactory factory;
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUp() {
         try {
             model = new GeckoModel();
         } catch (ModelException e) {
@@ -88,7 +88,9 @@ public class ModelFactoryTest {
             child1 = new System(1, "child1", null, new Automaton());
             child2 = new System(2, "child2", null, new Automaton());
             system.addChild(child1);
+            child1.setParent(system);
             system.addChild(child2);
+            child2.setParent(system);
 
             variable1 = new Variable(3, "var1", "type", Visibility.OUTPUT);
             variable2 = new Variable(4, "var2", "type", Visibility.INPUT);
@@ -101,6 +103,7 @@ public class ModelFactoryTest {
 
         assertNotNull(system);
         model.getRoot().addChild(system);
+        system.setParent(model.getRoot());
 
         SystemConnection systemConnection = null;
         try {
@@ -168,5 +171,169 @@ public class ModelFactoryTest {
         assertNotEquals("Element_1", children[1].getName());
         assertEquals("Element_2", children[1].getName());
         assertTrue(model.getRoot().getChildren().contains(children[1]));
+    }
+
+    @Test
+    void createEdgeBetweenInvalidStates() {
+        Automaton automaton = new Automaton();
+        State source = null;
+        State destination = null;
+        State other = null;
+        Edge edge = null;
+        try {
+            source = new State(0, "source");
+            destination = new State(1, "destination");
+            other = new State(2, "other");
+        } catch (ModelException e) {
+            fail("Failed to create source and destination states for testing purposes of the creation of an edge.");
+        }
+        assertNotNull(source);
+        assertNotNull(destination);
+        assertNotNull(other);
+
+        try { // Empty automaton:
+            edge = factory.createEdge(automaton, source, destination);
+        } catch (RuntimeException e) {
+            assertNull(edge);
+        } catch (ModelException e) {
+            fail("RuntimeException should be thrown before the model intervenes.");
+        }
+
+        automaton.addState(other);
+        try { // Source and destination not in automaton:
+            edge = factory.createEdge(automaton, source, destination);
+        } catch (RuntimeException e) {
+            assertNull(edge);
+        } catch (ModelException e) {
+            fail("RuntimeException should be thrown before the model intervenes.");
+        }
+
+        automaton.addState(source);
+        try { // Destination not in automaton:
+            edge = factory.createEdge(automaton, source, destination);
+        } catch (RuntimeException e) {
+            assertNull(edge);
+        } catch (ModelException e) {
+            fail("RuntimeException should be thrown before the model intervenes.");
+        }
+
+        automaton.addState(destination);
+        try {
+            edge = factory.createEdge(automaton, source, destination);
+        } catch (ModelException e) {
+            fail("Failed to create edge.");
+        } catch (RuntimeException e) {
+            fail("Failed to connect valid states with a new edge.");
+        }
+
+        automaton.addState(source);
+        automaton.addState(destination);
+    }
+
+    @Test
+    void createSystemConnectionBetweenInvalidStates() {
+        System parent = null;
+        System child1 = null;
+        System child2 = null;
+        Variable var1 = null;
+        Variable var2 = null;
+        SystemConnection connection = null;
+        try {
+            parent = factory.createSystem(model.getRoot());
+            child1 = new System(1, "child1", null, new Automaton());
+            child2 = new System(2, "child2", null, new Automaton());
+            var1 = new Variable(3, "var1", "int", Visibility.INPUT);
+            var2 = new Variable(4, "var2", "int", Visibility.INPUT);
+        } catch (ModelException e) {
+            fail("Failed to create source and destination states for testing purposes of the creation of an edge.");
+        }
+        assertNotNull(parent);
+        assertNotNull(child1);
+        assertNotNull(child2);
+        assertNotNull(var1);
+        assertNotNull(var2);
+
+        try { // Variables with no parents are not part of the model:
+            connection = factory.createSystemConnection(parent, var1, var2);
+        } catch (RuntimeException e) {
+            assertNull(connection);
+        } catch (ModelException e) {
+            fail("RuntimeException should be thrown before the model intervenes.");
+        }
+        assertNull(connection);
+
+        parent.addVariable(var1);
+        try { // Variable 2 with no parent is not part of the model:
+            connection = factory.createSystemConnection(parent, var1, var2);
+        } catch (RuntimeException e) {
+            assertNull(connection);
+        } catch (ModelException e) {
+            fail("RuntimeException should be thrown before the model intervenes.");
+        }
+        assertNull(connection);
+
+        parent.addVariable(var2);
+        try { // Variables have the same parent:
+            connection = factory.createSystemConnection(parent, var1, var2);
+        } catch (ModelException e) {
+            assertNull(connection);
+        }
+        assertNull(connection);
+
+        parent.removeVariable(var2);
+        child1.addVariable(var2);
+        try { // Valid variables, but child1 is not child of parent:
+            connection = factory.createSystemConnection(parent, var1, var2);
+        } catch (RuntimeException e) {
+            assertNull(connection);
+        } catch (ModelException e) {
+            fail("RuntimeException should be thrown before the model intervenes.");
+        }
+        assertNull(connection);
+
+        parent.addChild(child1);
+        child1.setParent(parent);
+        var2.setVisibility(Visibility.OUTPUT);
+        try { // Variable 1 in parent, variable 2 in child, but wrong visibilities:
+            connection = factory.createSystemConnection(parent, var1, var2);
+        } catch (ModelException e) {
+            assertNull(connection);
+        }
+        assertNull(connection);
+
+        var1.setVisibility(Visibility.OUTPUT);
+        try { // Variable 1 in parent, variable 2 in child, but wrong visibilities:
+            connection = factory.createSystemConnection(parent, var1, var2);
+        } catch (ModelException e) {
+            assertNull(connection);
+        }
+        assertNull(connection);
+
+        parent.removeVariable(var1);
+        child2.addVariable(var1);
+        try { // Variables in children, but child2 not child of parent:
+            connection = factory.createSystemConnection(parent, var2, var1);
+        } catch (RuntimeException e) {
+            assertNull(connection);
+        } catch (ModelException e) {
+            fail("RuntimeException should be thrown before the model intervenes.");
+        }
+        assertNull(connection);
+
+        parent.addChild(child2);
+        child2.setParent(parent);
+        try { // Variables in children, but wrong visibilities:
+            connection = factory.createSystemConnection(parent, var2, var1);
+        } catch (ModelException e) {
+            assertNull(connection);
+        }
+        assertNull(connection);
+
+        var2.setVisibility(Visibility.INPUT);
+        try {
+            connection = factory.createSystemConnection(parent, var1, var2);
+        } catch (ModelException e) {
+            fail("Failed to create system connection between valid variables.");
+        }
     }
 }

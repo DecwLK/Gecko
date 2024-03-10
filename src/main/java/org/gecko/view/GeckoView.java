@@ -84,6 +84,12 @@ public class GeckoView {
         centerPane.setPickOnBounds(false);
         refreshView();
 
+        centerPane.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                currentViewProperty.getValue().focus();
+            }
+        });
+
         centerPane.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
                 return;

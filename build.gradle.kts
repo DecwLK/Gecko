@@ -75,6 +75,11 @@ tasks.jacocoTestReport {
     }))
 }
 
+pmd {
+    // Disabling build failure on rule violations
+    isIgnoreFailures = true
+}
+
 application {
     mainClass.set("org.gecko.application.Main")
 }

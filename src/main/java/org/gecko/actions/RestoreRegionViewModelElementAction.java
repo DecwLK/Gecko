@@ -1,5 +1,6 @@
 package org.gecko.actions;
 
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Automaton;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.RegionViewModel;
@@ -22,9 +23,10 @@ public class RestoreRegionViewModelElementAction extends Action {
 
 
     @Override
-    boolean run() {
+    boolean run() throws ModelException {
         automaton.addRegion(regionViewModel.getTarget());
         geckoViewModel.addViewModelElement(regionViewModel);
+        geckoViewModel.getCurrentEditor().updateRegions();
         return true;
     }
 

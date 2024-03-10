@@ -18,11 +18,11 @@ import org.gecko.viewmodel.PortViewModel;
  */
 public class SystemConnectionCreatorTool extends Tool {
 
-    private PortViewModel firstPortViewModel;
+    private PortViewModel previousPortViewModel;
 
     public SystemConnectionCreatorTool(ActionManager actionManager) {
         super(actionManager, ToolType.CONNECTION_CREATOR, false);
-        firstPortViewModel = null;
+        previousPortViewModel = null;
     }
 
     @Override
@@ -61,14 +61,12 @@ public class SystemConnectionCreatorTool extends Tool {
         systemViewElement.setOnMouseClicked(null);
     }
 
-    private void setPortViewModel(PortViewModel portViewModel) {
-        if (firstPortViewModel == null || firstPortViewModel.equals(portViewModel)) {
-            firstPortViewModel = portViewModel;
-        } else {
+    private void setPortViewModel(PortViewModel viewModel) {
+        if (previousPortViewModel != null) {
             Action createAction = actionManager.getActionFactory()
-                .createCreateSystemConnectionViewModelElementAction(firstPortViewModel, portViewModel);
+                .createCreateSystemConnectionViewModelElementAction(previousPortViewModel, viewModel);
             actionManager.run(createAction);
-            firstPortViewModel = null;
         }
+        previousPortViewModel = viewModel;
     }
 }

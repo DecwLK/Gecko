@@ -11,12 +11,13 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 public class PastePositionableViewModelElementAction extends Action {
     private final GeckoViewModel geckoViewModel;
     private final Set<PositionableViewModelElement<?>> pastedElements;
-    private static final Point2D PASTE_OFFSET = new Point2D(50, 50);
+    private final Point2D pasteOffset;
     private CopyPositionableViewModelElementVisitor copyVisitor;
 
-    PastePositionableViewModelElementAction(GeckoViewModel geckoViewModel) {
+    PastePositionableViewModelElementAction(GeckoViewModel geckoViewModel, Point2D center) {
         this.geckoViewModel = geckoViewModel;
-        pastedElements = new HashSet<>();
+        this.pastedElements = new HashSet<>();
+        this.pasteOffset = center;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class PastePositionableViewModelElementAction extends Action {
         }
 
         PastePositionableViewModelElementVisitor pasteVisitor =
-            new PastePositionableViewModelElementVisitor(geckoViewModel, copyVisitor);
+            new PastePositionableViewModelElementVisitor(geckoViewModel, copyVisitor, pasteOffset);
         for (Element element : copyVisitor.getOriginalToClipboard().values()) {
             element.accept(pasteVisitor);
         }
@@ -41,6 +42,7 @@ public class PastePositionableViewModelElementAction extends Action {
                 element.accept(pasteVisitor);
             }
         }
+        pasteVisitor.updatePositions();
         pastedElements.addAll(pasteVisitor.getPastedElements());
         Action selectAction =
             geckoViewModel.getActionManager().getActionFactory().createSelectAction(pastedElements, true);

@@ -10,6 +10,7 @@ import javafx.util.Pair;
 import lombok.Getter;
 import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
+import org.gecko.model.Automaton;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.Element;
@@ -31,7 +32,7 @@ import org.gecko.viewmodel.SystemViewModel;
 public class PastePositionableViewModelElementVisitor implements ElementVisitor {
     private final GeckoViewModel geckoViewModel;
     private final CopyPositionableViewModelElementVisitor copyVisitor;
-    private final Point2D pasteOffset = new Point2D(50, 50);
+    private final Point2D pasteOffset;
     @Getter
     private final Set<PositionableViewModelElement<?>> pastedElements;
     private final BiMap<Element, Element> clipboardToPasted;
@@ -39,12 +40,13 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
     private final Set<Element> unsuccessfulPastes;
 
     PastePositionableViewModelElementVisitor(
-        GeckoViewModel geckoViewModel, CopyPositionableViewModelElementVisitor copyVisitor) {
+        GeckoViewModel geckoViewModel, CopyPositionableViewModelElementVisitor copyVisitor, Point2D pasteOffset) {
         this.geckoViewModel = geckoViewModel;
         this.copyVisitor = copyVisitor;
         pastedElements = new HashSet<>();
         clipboardToPasted = HashBiMap.create();
         unsuccessfulPastes = new HashSet<>();
+        this.pasteOffset = pasteOffset;
     }
 
     @Override
@@ -53,10 +55,13 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
             geckoViewModel.getGeckoModel().getModelFactory().copyState(stateFromClipboard);
         State stateToPaste = copyResult.getKey();
         clipboardToPasted.putAll(copyResult.getValue());
-        geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().addState(stateToPaste);
+        Automaton automaton = geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton();
+        automaton.addState(stateToPaste);
+        if (automaton.getStartState() == null) {
+            automaton.setStartState(stateToPaste);
+        }
         StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(stateToPaste);
-        stateViewModel.setPosition(
-            copyVisitor.getElementToPosAndSize().get(stateFromClipboard).getKey().add(pasteOffset));
+        stateViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(stateFromClipboard).getKey());
         stateViewModel.setSize(copyVisitor.getElementToPosAndSize().get(stateFromClipboard).getValue());
         clipboardToPasted.put(stateFromClipboard, stateToPaste);
         pastedElements.add(stateViewModel);
@@ -100,7 +105,6 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         Variable variableToPaste = geckoViewModel.getGeckoModel().getModelFactory().copyVariable(variableFromClipboard);
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().addVariable(variableToPaste);
         PortViewModel portViewModel = geckoViewModel.getViewModelFactory().createPortViewModelFrom(variableToPaste);
-        //portViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(variableFromClipboard).getKey().add(pasteOffset));
         clipboardToPasted.put(variableFromClipboard, variableToPaste);
         pastedElements.add(portViewModel);
     }
@@ -118,52 +122,6 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         systemToPaste.setParent(geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget());
         createRecursiveSystemViewModels(systemToPaste);
         clipboardToPasted.put(systemFromClipboard, systemToPaste);
-    }
-
-    private void createRecursiveSystemViewModels(System systemToPaste) {
-        System systemFromClipboard = (System) clipboardToPasted.inverse().get(systemToPaste);
-        SystemViewModel systemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelFrom(systemToPaste);
-        systemViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(systemFromClipboard).getKey());
-        pastedElements.add(systemViewModel);
-        for (Variable variable : systemToPaste.getVariables()) {
-            geckoViewModel.getViewModelFactory().createPortViewModelFrom(variable);
-        }
-        for (State state : systemToPaste.getAutomaton().getStates()) {
-            StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(state);
-            stateViewModel.setPosition(copyVisitor.getElementToPosAndSize()
-                .get(clipboardToPasted.inverse().get(state))
-                .getKey()
-                .add(pasteOffset));
-        }
-        for (Region region : systemToPaste.getAutomaton().getRegions()) {
-            try {
-                RegionViewModel regionViewModel =
-                    geckoViewModel.getViewModelFactory().createRegionViewModelFrom(region);
-                regionViewModel.setPosition(copyVisitor.getElementToPosAndSize()
-                    .get(clipboardToPasted.inverse().get(region))
-                    .getKey()
-                    .add(pasteOffset));
-            } catch (MissingViewModelElementException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        for (Edge edge : systemToPaste.getAutomaton().getEdges()) {
-            try {
-                geckoViewModel.getViewModelFactory().createEdgeViewModelFrom(edge);
-            } catch (MissingViewModelElementException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        for (System child : systemToPaste.getChildren()) {
-            createRecursiveSystemViewModels(child);
-        }
-        for (SystemConnection connection : systemToPaste.getConnections()) {
-            try {
-                geckoViewModel.getViewModelFactory().createSystemConnectionViewModelFrom(connection);
-            } catch (MissingViewModelElementException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     @Override
@@ -194,5 +152,67 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         copy.setContract(pastedContract);
         EdgeViewModel edgeViewModel = geckoViewModel.getViewModelFactory().createEdgeViewModelFrom(copy);
         pastedElements.add(edgeViewModel);
+    }
+
+    private void createRecursiveSystemViewModels(System systemToPaste) {
+        System systemFromClipboard = (System) clipboardToPasted.inverse().get(systemToPaste);
+        SystemViewModel systemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelFrom(systemToPaste);
+        systemViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(systemFromClipboard).getKey());
+        pastedElements.add(systemViewModel);
+        for (Variable variable : systemToPaste.getVariables()) {
+            geckoViewModel.getViewModelFactory().createPortViewModelFrom(variable);
+        }
+        for (State state : systemToPaste.getAutomaton().getStates()) {
+            StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(state);
+            stateViewModel.setPosition(
+                copyVisitor.getElementToPosAndSize().get(clipboardToPasted.inverse().get(state)).getKey());
+        }
+        for (Region region : systemToPaste.getAutomaton().getRegions()) {
+            try {
+                RegionViewModel regionViewModel =
+                    geckoViewModel.getViewModelFactory().createRegionViewModelFrom(region);
+                regionViewModel.setPosition(
+                    copyVisitor.getElementToPosAndSize().get(clipboardToPasted.inverse().get(region)).getKey());
+            } catch (MissingViewModelElementException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        for (Edge edge : systemToPaste.getAutomaton().getEdges()) {
+            try {
+                geckoViewModel.getViewModelFactory().createEdgeViewModelFrom(edge);
+            } catch (MissingViewModelElementException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        for (System child : systemToPaste.getChildren()) {
+            createRecursiveSystemViewModels(child);
+        }
+        for (SystemConnection connection : systemToPaste.getConnections()) {
+            try {
+                geckoViewModel.getViewModelFactory().createSystemConnectionViewModelFrom(connection);
+            } catch (MissingViewModelElementException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void updatePositions() {
+        Point2D minPos = new Point2D(Double.MAX_VALUE, Double.MAX_VALUE);
+        Point2D maxPos = new Point2D(-Double.MAX_VALUE, -Double.MAX_VALUE);
+        for (PositionableViewModelElement<?> element : pastedElements) {
+            if (element.getSize().equals(Point2D.ZERO)) {
+                continue;
+            }
+            double x = element.getPosition().getX();
+            double y = element.getPosition().getY();
+            minPos = new Point2D(Math.min(minPos.getX(), x), Math.min(minPos.getY(), y));
+            maxPos = new Point2D(Math.max(maxPos.getX(), x + element.getSize().getX()),
+                Math.max(maxPos.getY(), y + element.getSize().getY()));
+        }
+        Point2D center = minPos.midpoint(maxPos);
+        for (PositionableViewModelElement<?> element : pastedElements) {
+            Point2D pos = element.getCenter();
+            element.setCenter(pos.subtract(center).add(pasteOffset));
+        }
     }
 }

@@ -3,6 +3,7 @@ package org.gecko.view.menubar;
 import java.io.File;
 import java.util.Set;
 import javafx.beans.binding.Bindings;
+import javafx.geometry.Point2D;
 import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -142,8 +143,10 @@ public class MenuBarBuilder {
         copyMenuItem.setAccelerator(Shortcuts.COPY.get());
 
         MenuItem pasteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "paste"));
-        pasteMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createPastePositionableViewModelElementAction()));
+        pasteMenuItem.setOnAction(e -> {
+            Point2D center = view.getCurrentView().getViewElementPane().screenCenterWorldCoords();
+            actionManager.run(actionManager.getActionFactory().createPastePositionableViewModelElementAction(center));
+        });
         pasteMenuItem.setAccelerator(Shortcuts.PASTE.get());
 
         // General selection commands:

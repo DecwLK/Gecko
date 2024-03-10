@@ -1,13 +1,16 @@
 package org.gecko.view.contextmenu;
 
 import javafx.beans.binding.Bindings;
+import javafx.geometry.Point2D;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import lombok.Getter;
 import lombok.Setter;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.GeckoView;
 import org.gecko.view.ResourceHandler;
+import org.gecko.view.views.EditorView;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.EditorViewModel;
 
@@ -22,15 +25,18 @@ public class ViewContextMenuBuilder {
     protected EditorViewModel editorViewModel;
     @Getter
     protected ContextMenu contextMenu;
+    private final EditorView editorView;
 
-    public ViewContextMenuBuilder(ActionManager actionManager) {
+    public ViewContextMenuBuilder(ActionManager actionManager, GeckoView geckoView) {
         this.actionManager = actionManager;
         this.editorViewModel = null;
+        this.editorView = geckoView.getCurrentView();
     }
 
-    public ViewContextMenuBuilder(ActionManager actionManager, EditorViewModel editorViewModel) {
+    public ViewContextMenuBuilder(ActionManager actionManager, EditorViewModel editorViewModel, EditorView editorView) {
         this.actionManager = actionManager;
         this.editorViewModel = editorViewModel;
+        this.editorView = editorView;
     }
 
     public ContextMenu build() {
@@ -62,8 +68,10 @@ public class ViewContextMenuBuilder {
         }
 
         MenuItem pasteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "paste"));
-        pasteMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createPastePositionableViewModelElementAction()));
+        pasteMenuItem.setOnAction(e -> {
+            Point2D center = editorView.getViewElementPane().screenCenterWorldCoords();
+            actionManager.run(actionManager.getActionFactory().createPastePositionableViewModelElementAction(center));
+        });
         pasteMenuItem.setAccelerator(Shortcuts.PASTE.get());
 
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();

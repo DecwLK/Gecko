@@ -19,9 +19,6 @@ import org.gecko.viewmodel.EdgeViewModel;
  * {@link InspectorContractComboBox}.
  */
 public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel> {
-    private static final String SOURCE_KEY = "source";
-    private static final String TARGET_KEY = "source";
-    private static final String CONTRACTS_KEY = "contract_plural";
 
     public EdgeInspectorBuilder(ActionManager actionManager, EdgeViewModel viewModel) {
         super(actionManager, viewModel);
@@ -32,9 +29,9 @@ public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel
 
         // Connected states
         addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getSource(),
-            ResourceHandler.getString(INSPECTOR, SOURCE_KEY)));
+            ResourceHandler.getString("Inspector", "source")));
         addInspectorElement(new InspectorEdgeStateLabel(actionManager, viewModel.getDestination(),
-            ResourceHandler.getString(INSPECTOR, TARGET_KEY)));
+            ResourceHandler.getString("Inspector", "target")));
         addInspectorElement(new InspectorSeparator());
 
         // Priority
@@ -42,7 +39,7 @@ public class EdgeInspectorBuilder extends AbstractInspectorBuilder<EdgeViewModel
         addInspectorElement(new InspectorSeparator());
 
         // Contracts
-        addInspectorElement(new InspectorLabel(ResourceHandler.getString(INSPECTOR, CONTRACTS_KEY)));
+        addInspectorElement(new InspectorLabel(ResourceHandler.getString("Inspector", "contract_plural")));
         addInspectorElement(new InspectorContractComboBox(actionManager, viewModel));
     }
 }

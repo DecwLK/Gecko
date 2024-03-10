@@ -4,6 +4,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.SystemConnectionViewModel;
 
 /**
@@ -29,7 +30,7 @@ public class SystemConnectionViewElementContextMenuBuilder extends ViewContextMe
         SeparatorMenuItem dataTransferToEdgeEditingSeparator = new SeparatorMenuItem();
 
         // SystemConnection editing commands:
-        MenuItem deleteMenuItem = new MenuItem(DELETE_MENU_ITEM);
+        MenuItem deleteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "delete"));
         deleteMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createDeletePositionableViewModelElementAction(systemConnectionViewModel)));
 

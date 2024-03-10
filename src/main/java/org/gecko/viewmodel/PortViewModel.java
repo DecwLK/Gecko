@@ -27,15 +27,14 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
     private final Property<Point2D> systemPortSizeProperty;
 
     private static final Point2D DEFAULT_PORT_SIZE = new Point2D(100, 50);
-    private static final Point2D DEFAULT_SYSTEM_PORT_SIZE = new Point2D(0, 0);
 
     public PortViewModel(int id, @NonNull Variable target) {
         super(id, target);
         this.visibilityProperty = new SimpleObjectProperty<>(target.getVisibility());
         this.typeProperty = new SimpleStringProperty(target.getType());
         this.sizeProperty.setValue(DEFAULT_PORT_SIZE);
-        this.systemPortPositionProperty = new SimpleObjectProperty<>(PositionableViewModelElement.DEFAULT_POSITION);
-        this.systemPortSizeProperty = new SimpleObjectProperty<>(DEFAULT_SYSTEM_PORT_SIZE);
+        this.systemPortPositionProperty = new SimpleObjectProperty<>(Point2D.ZERO);
+        this.systemPortSizeProperty = new SimpleObjectProperty<>(Point2D.ZERO);
     }
 
     public void setSystemPortPosition(@NonNull Point2D position) {

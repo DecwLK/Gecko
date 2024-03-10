@@ -4,6 +4,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.SystemViewModel;
 
@@ -15,8 +16,6 @@ import org.gecko.viewmodel.SystemViewModel;
 public class SystemViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final SystemViewModel systemViewModel;
-
-    private static final String OPEN_SYSTEM_MENU_ITEM = "Open System";
 
     public SystemViewElementContextMenuBuilder(
         ActionManager actionManager, SystemViewModel systemViewModel) {
@@ -32,12 +31,12 @@ public class SystemViewElementContextMenuBuilder extends ViewContextMenuBuilder 
         SeparatorMenuItem dataTransferToSystemAccessSeparator = new SeparatorMenuItem();
 
         // Access system commands:
-        MenuItem openSystemMenuItem = new MenuItem(OPEN_SYSTEM_MENU_ITEM);
+        MenuItem openSystemMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "open_system"));
         openSystemMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createViewSwitchAction(systemViewModel, false)));
         openSystemMenuItem.setAccelerator(Shortcuts.OPEN_CHILD_SYSTEM_EDITOR.get());
 
-        MenuItem deleteMenuItem = new MenuItem(DELETE_MENU_ITEM);
+        MenuItem deleteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "delete"));
         deleteMenuItem.setOnAction(e -> actionManager.run(
             actionManager.getActionFactory().createDeletePositionableViewModelElementAction(systemViewModel)));
 

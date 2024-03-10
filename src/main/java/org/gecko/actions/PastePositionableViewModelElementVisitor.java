@@ -18,6 +18,7 @@ import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
+import org.gecko.viewmodel.AbstractViewModelElement;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
@@ -92,7 +93,7 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         Variable variableToPaste = geckoViewModel.getGeckoModel().getModelFactory().copyVariable(variableFromClipboard);
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().addVariable(variableToPaste);
         PortViewModel portViewModel = geckoViewModel.getViewModelFactory().createPortViewModelFrom(variableToPaste);
-        portViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(variableFromClipboard).getKey().add(pasteOffset));
+        //portViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(variableFromClipboard).getKey().add(pasteOffset));
         clipboardToPasted.put(variableFromClipboard, variableToPaste);
         pastedElements.add(portViewModel);
     }
@@ -118,7 +119,11 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
             geckoViewModel.getViewModelFactory().createPortViewModelFrom(variable);
         }
         for (State state : system.getAutomaton().getStates()) {
-            geckoViewModel.getViewModelFactory().createStateViewModelFrom(state);
+            StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(state);
+            for (Contract contract : state.getContracts()) {
+                ContractViewModel contractViewModel = geckoViewModel.getViewModelFactory().createContractViewModelFrom(contract);
+                stateViewModel.addContract(contractViewModel);
+            }
         }
         for (Edge edge : system.getAutomaton().getEdges()) {
             try {

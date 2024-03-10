@@ -113,13 +113,6 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
 
     @Override
     public Void visit(PortViewModel portViewModel) {
-        java.lang.System.out.println("actually Copying port");
-        /*Variable original = portViewModel.getTarget();
-        Variable copy = geckoViewModel.getGeckoModel().getModelFactory().copyVariable(original);
-        originalToClipboard.put(original, copy);
-
-        elementToPosAndSize.put(portViewModel.getTarget(),
-            new Pair<>(portViewModel.getPosition(), portViewModel.getSize()));*/
         return null;
     }
 

@@ -114,15 +114,23 @@ public class ModelFactory {
             throw new RuntimeException("Failed to create a copy of the system", e);
         }
         Map<State, State> stateToCopy = new HashMap<>();
+        Map<Contract, Contract> contractToCopy = new HashMap<>();
         for (State state : system.getAutomaton().getStates()) {
-            State copiedState = copyState(state).getKey();
+            Pair<State, Map<Contract, Contract>> copyResult = copyState(state);
+            State copiedState = copyResult.getKey();
+            /*if (system.getAutomaton().getStartState().equals(state)) {
+                copy.getAutomaton().setStartState(copiedState);
+            }*/
+            contractToCopy.putAll(copyResult.getValue());
             copy.getAutomaton().addState(copiedState);
             stateToCopy.put(state, copiedState);
         }
         for (Edge edge : system.getAutomaton().getEdges()) {
             State copiedSource = stateToCopy.get(edge.getSource());
             State copiedDestination = stateToCopy.get(edge.getDestination());
-            createEdge(copy.getAutomaton(), copiedSource, copiedDestination);
+            Edge copiedEdge = createEdge(copy.getAutomaton(), copiedSource, copiedDestination);
+            copiedEdge.setContract(contractToCopy.get(edge.getContract()));
+            copiedEdge.setKind(edge.getKind());
         }
         for (Variable variable : system.getVariables()) {
             Variable copiedVariable = copyVariable(variable);

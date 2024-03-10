@@ -118,11 +118,11 @@ public class ModelFactory {
         for (State state : system.getAutomaton().getStates()) {
             Pair<State, Map<Contract, Contract>> copyResult = copyState(state);
             State copiedState = copyResult.getKey();
-            /*if (system.getAutomaton().getStartState().equals(state)) {
-                copy.getAutomaton().setStartState(copiedState);
-            }*/
             contractToCopy.putAll(copyResult.getValue());
             copy.getAutomaton().addState(copiedState);
+            if (system.getAutomaton().getStartState().equals(state)) {
+                copy.getAutomaton().setStartState(copiedState);
+            }
             stateToCopy.put(state, copiedState);
         }
         for (Edge edge : system.getAutomaton().getEdges()) {

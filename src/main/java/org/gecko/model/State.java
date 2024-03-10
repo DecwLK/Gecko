@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.NonNull;
+import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -51,5 +52,10 @@ public class State extends Element implements Renamable {
         for (Contract contract : contracts) {
             removeContract(contract);
         }
+    }
+
+    @Override
+    public void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException {
+        visitor.visit(this);
     }
 }

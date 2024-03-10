@@ -13,6 +13,7 @@ import org.gecko.exceptions.ModelException;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.Element;
+import org.gecko.model.Region;
 import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
@@ -69,6 +70,9 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
 
     @Override
     public Void visit(RegionViewModel regionViewModel) {
+        Region original = regionViewModel.getTarget();
+        Region copy = geckoViewModel.getGeckoModel().getModelFactory().copyRegion(original);
+        originalToClipboard.put(original, copy);
         originalToClipboard.put(regionViewModel.getTarget(),
             geckoViewModel.getGeckoModel().getModelFactory().copyRegion(regionViewModel.getTarget()));
         elementToPosAndSize.put(regionViewModel.getTarget(),

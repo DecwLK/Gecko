@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -152,5 +153,10 @@ public class System extends Element implements Renamable {
     @JsonIgnore
     public System getChildSystemWithVariable(Variable variable) {
         return children.stream().filter(child -> child.getVariables().contains(variable)).findFirst().orElse(null);
+    }
+
+    @Override
+    public void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException {
+        visitor.visit(this);
     }
 }

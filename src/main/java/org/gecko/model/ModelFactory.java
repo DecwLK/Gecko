@@ -14,7 +14,7 @@ public class ModelFactory {
     private int elementId = 0;
     private static final String DEFAULT_NAME = "Element_%d";
     private static final String DEFAULT_TYPE = "int";
-    private static final String DEFAULT_CONDITION = "true";
+    private static final String DEFAULT_CONDITION = Condition.trueCondition().getCondition();
     private static final Kind DEFAULT_KIND = Kind.HIT;
     private static final int DEFAULT_PRIORITY = 0;
     private static final String DEFAULT_CODE = null;

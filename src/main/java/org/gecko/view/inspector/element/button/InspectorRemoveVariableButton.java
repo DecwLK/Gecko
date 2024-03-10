@@ -1,6 +1,8 @@
 package org.gecko.view.inspector.element.button;
 
+import javafx.scene.control.Tooltip;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.PortViewModel;
 
 /**
@@ -11,6 +13,7 @@ public class InspectorRemoveVariableButton extends AbstractInspectorButton {
 
     public InspectorRemoveVariableButton(ActionManager actionManager, PortViewModel portViewModel) {
         getStyleClass().add(ICON_STYLE_NAME);
+        setTooltip(new Tooltip(ResourceHandler.getString("Tooltips", "inspector_remove_variable")));
         setOnAction(event -> {
             actionManager.run(
                 actionManager.getActionFactory().createDeletePositionableViewModelElementAction(portViewModel));

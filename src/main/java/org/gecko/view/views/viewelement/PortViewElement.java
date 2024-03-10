@@ -4,10 +4,12 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import lombok.Getter;
 import org.gecko.model.Visibility;
@@ -22,6 +24,9 @@ public class PortViewElement extends Pane {
 
     private static final double MIN_WIDTH = 50;
     private static final double MAX_WIDTH = 80;
+    private static final Insets PADDING = new Insets(2);
+    private static final CornerRadii INPUT_RADII = new CornerRadii(0, 3, 3, 0, false);
+    private static final CornerRadii OUTPUT_RADII = new CornerRadii(3, 0, 0, 3, false);
 
     private final PortViewModel viewModel;
     private final StringProperty nameProperty;
@@ -65,13 +70,16 @@ public class PortViewElement extends Pane {
         Label nameLabel = new Label();
         nameLabel.textProperty().bind(nameProperty);
         nameLabel.setMaxWidth(MAX_WIDTH);
+        nameLabel.setPadding(PADDING);
         updateBackgroundColor();
         getChildren().add(nameLabel);
     }
 
     private void updateBackgroundColor() {
-        Background background = new Background(new BackgroundFill(PortViewModel.getBackgroundColor(
-            viewModel.getVisibility() == Visibility.INPUT ? Visibility.OUTPUT : Visibility.INPUT), null, null));
+        boolean isInput = viewModel.getVisibility() == Visibility.INPUT;
+        Background background = new Background(
+            new BackgroundFill(PortViewModel.getBackgroundColor(isInput ? Visibility.OUTPUT : Visibility.INPUT),
+                isInput ? INPUT_RADII : OUTPUT_RADII, null));
         setBackground(background);
     }
 }

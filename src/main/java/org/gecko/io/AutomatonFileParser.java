@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.gecko.exceptions.ModelException;
 import org.gecko.model.GeckoModel;
 import org.gecko.util.graphlayouting.Graphlayouter;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.GeckoViewModel;
 
 /**
@@ -60,8 +61,8 @@ public class AutomatonFileParser implements FileParser {
 
     private void showWarnings(Set<String> warnings) {
         Alert warningAlert = new Alert(Alert.AlertType.WARNING);
-        warningAlert.setTitle("Warning");
-        warningAlert.setHeaderText("The model has been successfully parsed, but warnings have been emitted");
+        warningAlert.setTitle(ResourceHandler.getString("Warnings", "title"));
+        warningAlert.setHeaderText(ResourceHandler.getString("Warnings", "parse_header"));
         warningAlert.setContentText(String.join(System.lineSeparator(), warnings));
         warningAlert.showAndWait();
     }

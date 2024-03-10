@@ -23,6 +23,7 @@ import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.Variable;
 import org.gecko.model.Visibility;
+import org.gecko.view.ResourceHandler;
 
 /**
  * Used for building a {@link GeckoModel} from a sys file. This class is a visitor for the ANTLR4 generated parser for
@@ -425,8 +426,8 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
         vBox.getChildren().add(comboBox);
 
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
-        alert.setHeaderText("Found multiple top level systems. Please choose a system as root of the project.");
+        alert.setTitle(ResourceHandler.getString("Warnings", "title"));
+        alert.setHeaderText(ResourceHandler.getString("Warnings", "multiple_top_level_header"));
         alert.getDialogPane().setContent(vBox);
 
         alert.setOnCloseRequest(event -> {

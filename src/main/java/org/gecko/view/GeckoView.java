@@ -73,6 +73,7 @@ public class GeckoView {
         // Menubar
         menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
         mainPane.setTop(menuBar);
+        mainPane.setCenter(centerPane);
 
         // Initial view
         currentViewProperty.setValue(viewFactory.createEditorView(viewModel.getCurrentEditor(),
@@ -171,7 +172,7 @@ public class GeckoView {
     }
 
     private void handleUserTabChange(Tab tab) {
-        if (tab == centerPane.getSelectionModel().getSelectedItem()) {
+        if (getView(tab).getViewModel().equals(viewModel.getCurrentEditor())) {
             return;
         }
         currentViewProperty.setValue(getView(tab));
@@ -183,9 +184,6 @@ public class GeckoView {
     }
 
     private void refreshView() {
-        mainPane.setCenter(centerPane);
-
-        // Focus current view
         centerPane.getSelectionModel().select(currentViewProperty.getValue().getCurrentView());
 
         mainPane.setLeft(currentViewProperty.getValue().drawToolbar());
@@ -193,14 +191,20 @@ public class GeckoView {
         currentViewProperty.getValue().getCurrentInspector().addListener((Observable observable) -> {
             mainPane.setRight(currentViewProperty.getValue().drawInspector());
         });
-        viewModel.switchEditor(currentViewProperty.getValue().getViewModel().getCurrentSystem(),
-            currentViewProperty.getValue().getViewModel().isAutomatonEditor());
 
         currentViewProperty.getValue().focus();
     }
 
     private void onUpdateCurrentEditorToViewModel(
         ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+        if (getView(newValue).getViewModel().equals(viewModel.getCurrentEditor())) {
+            return;
+        }
+        Action switchAction = viewModel.getActionManager()
+            .getActionFactory()
+            .createViewSwitchAction(getView(newValue).getViewModel().getCurrentSystem(),
+                getView(newValue).getViewModel().isAutomatonEditor());
+        viewModel.getActionManager().run(switchAction);
         refreshView();
     }
 

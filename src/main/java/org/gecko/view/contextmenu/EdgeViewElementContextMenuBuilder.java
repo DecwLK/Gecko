@@ -6,6 +6,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Kind;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.EdgeViewModel;
 
 /**
@@ -31,23 +32,23 @@ public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
         SeparatorMenuItem dataTransferToEdgeEditingSeparator = new SeparatorMenuItem();
 
         // Edge editing commands:
-        Menu changeKindMenu = new Menu("Change Kind"); // TODO: Synchronize fields showed in inspector.
+        Menu changeKindMenu = new Menu(ResourceHandler.getString("Buttons", "change_kind"));
 
-        MenuItem hitMenuItem = new MenuItem("HIT");
+        MenuItem hitMenuItem = new MenuItem(Kind.HIT.name());
         hitMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.HIT)));
 
-        MenuItem missMenuItem = new MenuItem("MISS");
+        MenuItem missMenuItem = new MenuItem(Kind.MISS.name());
         missMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.MISS)));
 
-        MenuItem failMenuItem = new MenuItem("FAIL");
+        MenuItem failMenuItem = new MenuItem(Kind.FAIL.name());
         failMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.FAIL)));
 
         changeKindMenu.getItems().addAll(hitMenuItem, missMenuItem, failMenuItem);
 
-        MenuItem deleteMenuItem = new MenuItem("Delete");
+        MenuItem deleteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "delete"));
         deleteMenuItem.setOnAction(e -> actionManager.run(
             actionManager.getActionFactory().createDeletePositionableViewModelElementAction(edgeViewModel)));
 

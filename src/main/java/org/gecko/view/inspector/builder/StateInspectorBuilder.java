@@ -2,6 +2,7 @@ package org.gecko.view.inspector.builder;
 
 import javafx.collections.ObservableList;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.button.InspectorSetStartStateButton;
 import org.gecko.view.inspector.element.container.InspectorContractLabel;
@@ -27,7 +28,7 @@ public class StateInspectorBuilder extends AbstractInspectorBuilder<StateViewMod
         super(actionManager, viewModel);
 
         // Region label
-        addInspectorElement(new InspectorLabel("Regions"));
+        addInspectorElement(new InspectorLabel(ResourceHandler.getString("Inspector", "region_plural")));
         ObservableList<RegionViewModel> regionViewModelList = editorViewModel.getRegionViewModels(viewModel);
         addInspectorElement(new InspectorRegionList(regionViewModelList));
 

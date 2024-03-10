@@ -18,6 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.StateViewModel;
 
@@ -113,10 +114,12 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
         contents.getChildren().add(new Separator());
 
         // Contracts
-        Labeled contracts = new Label("Contracts: " + stateViewModel.getContractsProperty().size());
+        Labeled contracts = new Label(
+            ResourceHandler.getString("Labels", "contract_plural") + ": " + stateViewModel.getContractsProperty()
+                .size());
         contracts.textProperty()
-            .bind(Bindings.createStringBinding(() -> "Contracts: " + stateViewModel.getContractsProperty().size(),
-                stateViewModel.getContractsProperty()));
+            .bind(Bindings.createStringBinding(() -> ResourceHandler.getString("Labels", "contract_plural") + ": "
+                + stateViewModel.getContractsProperty().size(), stateViewModel.getContractsProperty()));
 
         contents.getChildren().add(contracts);
 
@@ -146,13 +149,13 @@ public class StateViewElement extends BlockViewElement implements ViewElement<St
             contractLabel.textProperty().bind(contract.getNameProperty());
 
             HBox preconditionBox = new HBox();
-            Label preconditionLabel = new Label("PRE: ");
+            Label preconditionLabel = new Label(ResourceHandler.getString("Labels", "pre_condition_short") + ": ");
             Label precondition = new Label(contract.getPrecondition());
             precondition.textProperty().bind(contract.getPreConditionProperty());
             preconditionBox.getChildren().addAll(preconditionLabel, precondition);
 
             HBox postconditionBox = new HBox();
-            Label postconditionLabel = new Label("POST: ");
+            Label postconditionLabel = new Label(ResourceHandler.getString("Labels", "post_condition_short") + ": ");
             Label postcondition = new Label(contract.getPostcondition());
             postcondition.textProperty().bind(contract.getPostConditionProperty());
             postconditionBox.getChildren().addAll(postconditionLabel, postcondition);

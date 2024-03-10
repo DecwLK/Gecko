@@ -1,7 +1,6 @@
 package org.gecko.view.menubar;
 
 import java.io.File;
-import java.util.List;
 import java.util.Set;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.CustomMenuItem;
@@ -18,9 +17,9 @@ import javafx.scene.layout.VBox;
 import org.gecko.actions.ActionManager;
 import org.gecko.application.GeckoIOManager;
 import org.gecko.io.FileTypes;
-import org.gecko.tools.Tool;
 import org.gecko.tools.ToolType;
 import org.gecko.view.GeckoView;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.view.inspector.element.textfield.InspectorRenameField;
 import org.gecko.view.views.shortcuts.Shortcuts;
@@ -58,17 +57,17 @@ public class MenuBarBuilder {
     }
 
     private Menu setupFileMenu() {
-        Menu fileMenu = new Menu("File");
+        Menu fileMenu = new Menu(ResourceHandler.getString("Labels", "file"));
 
-        MenuItem newFileItem = new MenuItem("New");
+        MenuItem newFileItem = new MenuItem(ResourceHandler.getString("Buttons", "new"));
         newFileItem.setOnAction(e -> GeckoIOManager.getInstance().createNewProject());
         newFileItem.setAccelerator(Shortcuts.NEW.get());
 
-        MenuItem openFileItem = new MenuItem("Open");
+        MenuItem openFileItem = new MenuItem(ResourceHandler.getString("Buttons", "open"));
         openFileItem.setOnAction(e -> GeckoIOManager.getInstance().loadGeckoProject());
         openFileItem.setAccelerator(Shortcuts.OPEN.get());
 
-        MenuItem saveFileItem = new MenuItem("Save");
+        MenuItem saveFileItem = new MenuItem(ResourceHandler.getString("Buttons", "save"));
         saveFileItem.setOnAction(e -> {
             File file = GeckoIOManager.getInstance().getFile();
             if (file != null) {
@@ -83,7 +82,7 @@ public class MenuBarBuilder {
         });
         saveFileItem.setAccelerator(Shortcuts.SAVE.get());
 
-        MenuItem saveAsFileItem = new MenuItem("Save As");
+        MenuItem saveAsFileItem = new MenuItem(ResourceHandler.getString("Buttons", "save_as"));
         saveAsFileItem.setOnAction(e -> {
             File fileToSaveTo = GeckoIOManager.getInstance().getSaveFileChooser(FileTypes.JSON);
             if (fileToSaveTo != null) {
@@ -92,7 +91,7 @@ public class MenuBarBuilder {
         });
         saveAsFileItem.setAccelerator(Shortcuts.SAVE_AS.get());
 
-        MenuItem importFileItem = new MenuItem("Import");
+        MenuItem importFileItem = new MenuItem(ResourceHandler.getString("Buttons", "import"));
         importFileItem.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN));
         importFileItem.setOnAction(e -> {
             File fileToImport = GeckoIOManager.getInstance().getOpenFileChooser(FileTypes.SYS);
@@ -101,7 +100,7 @@ public class MenuBarBuilder {
             }
         });
 
-        MenuItem exportFileItem = new MenuItem("Export");
+        MenuItem exportFileItem = new MenuItem(ResourceHandler.getString("Buttons", "export"));
         exportFileItem.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));
         exportFileItem.setOnAction(e -> {
             File fileToSaveTo = GeckoIOManager.getInstance().getSaveFileChooser(FileTypes.SYS);
@@ -116,44 +115,44 @@ public class MenuBarBuilder {
     }
 
     private Menu setupEditMenu() {
-        Menu editMenu = new Menu("Edit");
+        Menu editMenu = new Menu(ResourceHandler.getString("Labels", "edit"));
 
         // Edit history navigation:
-        MenuItem undoMenuItem = new MenuItem("Undo");
+        MenuItem undoMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "undo"));
         undoMenuItem.setOnAction(e -> actionManager.undo());
         undoMenuItem.setAccelerator(Shortcuts.UNDO.get());
 
-        MenuItem redoMenuItem = new MenuItem("Redo");
+        MenuItem redoMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "redo"));
         redoMenuItem.setOnAction(e -> actionManager.redo());
         redoMenuItem.setAccelerator(Shortcuts.REDO.get());
 
         SeparatorMenuItem historyToDataTransferSeparator = new SeparatorMenuItem();
 
         // Data transfer commands:
-        MenuItem cutMenuItem = new MenuItem("Cut");
+        MenuItem cutMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "cut"));
         cutMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createCutPositionableViewModelElementAction()));
         cutMenuItem.setAccelerator(Shortcuts.CUT.get());
 
-        MenuItem copyMenuItem = new MenuItem("Copy");
+        MenuItem copyMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "copy"));
         copyMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createCopyPositionableViewModelElementAction()));
         copyMenuItem.setAccelerator(Shortcuts.COPY.get());
 
-        MenuItem pasteMenuItem = new MenuItem("Paste");
+        MenuItem pasteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "paste"));
         pasteMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createPastePositionableViewModelElementAction()));
         pasteMenuItem.setAccelerator(Shortcuts.PASTE.get());
 
         // General selection commands:
-        MenuItem selectAllMenuItem = new MenuItem("Select All");
+        MenuItem selectAllMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "select_all"));
         selectAllMenuItem.setOnAction(e -> {
             Set<PositionableViewModelElement<?>> allElements = view.getAllDisplayedElements();
             actionManager.run(actionManager.getActionFactory().createSelectAction(allElements, true));
         });
         selectAllMenuItem.setAccelerator(Shortcuts.SELECT_ALL.get());
 
-        MenuItem deselectAllMenuItem = new MenuItem("Deselect All");
+        MenuItem deselectAllMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "deselect_all"));
         deselectAllMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createDeselectAction()));
         deselectAllMenuItem.setAccelerator(Shortcuts.DESELECT_ALL.get());
@@ -176,7 +175,7 @@ public class MenuBarBuilder {
         GeckoViewModel viewModel = view.getViewModel();
         TextField renameRootSystemTextField = new InspectorRenameField(actionManager,
             (Renamable) viewModel.getViewModelElement(viewModel.getGeckoModel().getRoot()));
-        Label renameRootSystemLabel = new InspectorLabel("Rename Root System");
+        Label renameRootSystemLabel = new InspectorLabel(ResourceHandler.getString("Inspector", "rename_root_system"));
         VBox renameRootSystemContainer = new VBox(renameRootSystemLabel, renameRootSystemTextField);
         CustomMenuItem renameRootSystemCustomMenuItem = new CustomMenuItem(renameRootSystemContainer, false);
         renameRootSystemCustomMenuItem.setOnAction(e -> renameRootSystemTextField.requestFocus());
@@ -184,16 +183,16 @@ public class MenuBarBuilder {
     }
 
     private Menu setupViewMenu() {
-        Menu viewMenu = new Menu("View");
+        Menu viewMenu = new Menu(ResourceHandler.getString("Labels", "view"));
 
         // View change commands:
-        MenuItem changeViewMenuItem = new MenuItem("Change View");
+        MenuItem changeViewMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "change_view"));
         changeViewMenuItem.setOnAction(e -> actionManager.run(actionManager.getActionFactory()
             .createViewSwitchAction(view.getCurrentView().getViewModel().getCurrentSystem(),
                 !view.getCurrentView().getViewModel().isAutomatonEditor())));
         changeViewMenuItem.setAccelerator(Shortcuts.SWITCH_EDITOR.get());
 
-        MenuItem goToParentSystemMenuItem = new MenuItem("Go To Parent System");
+        MenuItem goToParentSystemMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "go_to_parent_system"));
         goToParentSystemMenuItem.setOnAction(e -> {
             boolean isAutomatonEditor = view.getCurrentView().getViewModel().isAutomatonEditor();
             SystemViewModel parentSystem = view.getCurrentView().getViewModel().getParentSystem();
@@ -201,7 +200,8 @@ public class MenuBarBuilder {
         });
         goToParentSystemMenuItem.setAccelerator(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get());
 
-        MenuItem focusSelectedElementMenuItem = new MenuItem("Focus Selected Element");
+        MenuItem focusSelectedElementMenuItem =
+            new MenuItem(ResourceHandler.getString("Buttons", "focus_selected_element"));
         focusSelectedElementMenuItem.setOnAction(e -> view.getCurrentView().getViewModel().moveToFocusedElement());
         focusSelectedElementMenuItem.setAccelerator(Shortcuts.FOCUS_SELECTED_ELEMENT.get());
 
@@ -209,23 +209,23 @@ public class MenuBarBuilder {
 
         // Zooming commands:
 
-        MenuItem zoomInMenuItem = new MenuItem("Zoom In");
+        MenuItem zoomInMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "zoom_in"));
         zoomInMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1.1)));
         zoomInMenuItem.setAccelerator(Shortcuts.ZOOM_IN.get());
 
-        MenuItem zoomOutMenuItem = new MenuItem("Zoom Out");
+        MenuItem zoomOutMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "zoom_out"));
         zoomOutMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1 / 1.1)));
         zoomOutMenuItem.setAccelerator(Shortcuts.ZOOM_OUT.get());
 
         SeparatorMenuItem zoomToAppearanceSeparator = new SeparatorMenuItem();
 
-        MenuItem toggleAppearanceMenuItem = new MenuItem("Toggle Appearance");
+        MenuItem toggleAppearanceMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "toggle_appearance"));
         toggleAppearanceMenuItem.setOnAction(e -> view.toggleAppearance());
         toggleAppearanceMenuItem.setAccelerator(Shortcuts.TOGGLE_APPEARANCE.get());
 
-        MenuItem searchElementsMenuItem = new MenuItem("Search Elements");
+        MenuItem searchElementsMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "search_elements"));
         searchElementsMenuItem.setOnAction(e -> view.getCurrentView().toggleSearchWindow());
         searchElementsMenuItem.setAccelerator(Shortcuts.TOGGLE_SEARCH.get());
 
@@ -238,7 +238,7 @@ public class MenuBarBuilder {
     }
 
     private Menu setupToolsMenu() {
-        Menu toolsMenu = new Menu("Tools");
+        Menu toolsMenu = new Menu(ResourceHandler.getString("Labels", "tools"));
 
         // General tools:
         MenuItem cursorMenuItem = new MenuItem(ToolType.CURSOR.getLabel());
@@ -288,34 +288,5 @@ public class MenuBarBuilder {
             return view.getCurrentView().getViewModel().isAutomatonEditor() != isAutomatonTool;
         }, view.getCurrentViewProperty()));
         return toolMenuItem;
-    }
-
-    /**
-     * Updates the tools menu with the updated tool lists.
-     *
-     * @param menuBar   The menu bar to update
-     * @param toolLists The updated tool lists
-     */
-    public static void updateToolsMenu(MenuBar menuBar, List<List<Tool>> toolLists) {
-        List<Tool> constantTools = toolLists.get(0);
-        List<Tool> variableTools = toolLists.get(1);
-
-        menuBar.getMenus()
-            .stream()
-            .filter(menu -> menu.getText().equals("Tools"))
-            .findFirst()
-            .ifPresent(toolsMenu -> toolsMenu.getItems().forEach(toolMenu -> {
-                Tool constantTool = constantTools.stream()
-                    .filter(tool -> tool.getToolType().getLabel().equals(toolMenu.getText()))
-                    .findAny()
-                    .orElse(null);
-                Tool activeTool = variableTools.stream()
-                    .filter(tool -> tool.getToolType().getLabel().equals(toolMenu.getText()))
-                    .findAny()
-                    .orElse(null);
-                if (constantTool == null) {
-                    toolMenu.setDisable(activeTool == null);
-                }
-            }));
     }
 }

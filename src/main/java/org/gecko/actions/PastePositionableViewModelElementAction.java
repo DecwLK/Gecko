@@ -3,6 +3,7 @@ package org.gecko.actions;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javafx.geometry.Point2D;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.model.Element;
 import org.gecko.viewmodel.GeckoViewModel;

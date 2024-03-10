@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,16 @@ public class ElementTest {
     @BeforeAll
     static void setUp() {
         assertThrows(ModelException.class, () -> element = new Element(-1) {
+            @Override
+            public void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException {
+
+            }
         });
         assertDoesNotThrow(() -> element = new Element(0) {
+            @Override
+            public void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException {
+
+            }
         });
     }
 
@@ -32,8 +41,16 @@ public class ElementTest {
 
         final Element[] other = new Element[4];
         assertDoesNotThrow(() -> other[0] = new Element(1) {
+            @Override
+            public void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException {
+
+            }
         });
         assertDoesNotThrow(() -> other[1] = new Element(0) {
+            @Override
+            public void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException {
+
+            }
         });
 
         assertDoesNotThrow(() -> other[2] = new State(2, "state"));

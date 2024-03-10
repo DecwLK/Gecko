@@ -201,4 +201,15 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     public void setSize(@NonNull Point2D position) {
         return;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof EdgeViewModel edge)) {
+            return false;
+        }
+        return id == edge.id;
+    }
 }

@@ -106,4 +106,15 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     public void setSize(@NonNull Point2D position) {
         return;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SystemConnectionViewModel connection)) {
+            return false;
+        }
+        return id == connection.id;
+    }
 }

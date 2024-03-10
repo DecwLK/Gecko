@@ -101,4 +101,15 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
             removeState(state);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof RegionViewModel region)) {
+            return false;
+        }
+        return id == region.id;
+    }
 }

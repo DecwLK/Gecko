@@ -61,7 +61,7 @@ Gecko can build shadow jars, which are executable jars that include all dependen
 To execute the compiled jar, execute the following command:
 
 ```bash
-java -jar build/libs/Gecko-0.1-all.jar
+java -jar build/libs/Gecko-1.0-all.jar
 ```
 
 ## License

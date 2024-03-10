@@ -2,7 +2,12 @@ package org.gecko.actions;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.gecko.exceptions.GeckoException;
+import org.gecko.model.Edge;
+import org.gecko.model.Element;
+import org.gecko.model.System;
+import org.gecko.model.SystemConnection;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 
@@ -32,13 +37,10 @@ public class CopyPositionableViewModelElementAction extends Action {
             }
         }
         do {
-            System.out.println("Trying to copy: " + copyQueue);
             visitor.getFailedCopies().clear();
             copyQueue.forEach(element -> element.accept(visitor));
             copyQueue = new HashSet<>(visitor.getFailedCopies());
         } while (!copyQueue.isEmpty());
-
-        System.out.println(visitor.getOriginalToClipboard());
 
         geckoViewModel.getActionManager().setCopyVisitor(visitor);
         return true;

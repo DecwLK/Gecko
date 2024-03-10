@@ -1,10 +1,13 @@
 package org.gecko.actions;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.gecko.exceptions.GeckoException;
 import org.gecko.model.Automaton;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.RegionViewModel;
+import org.gecko.viewmodel.StateViewModel;
 
 /**
  * A concrete representation of an {@link Action} that removes a {@link RegionViewModel} from the {@link GeckoViewModel}
@@ -25,7 +28,14 @@ public class DeleteRegionViewModelElementAction extends AbstractPositionableView
     @Override
     boolean run() throws GeckoException {
         automaton.removeRegion(regionViewModel.getTarget());
+        List<StateViewModel> states = new ArrayList<>(regionViewModel.getStatesProperty());
+
+        for (StateViewModel state : states) {
+            regionViewModel.removeState(state);
+        }
+
         geckoViewModel.deleteViewModelElement(regionViewModel);
+        geckoViewModel.getCurrentEditor().updateRegions();
         return true;
     }
 

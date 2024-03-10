@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javafx.geometry.Point2D;
+import javafx.util.Pair;
 import lombok.Getter;
 import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
@@ -17,6 +18,7 @@ import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
+import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -45,18 +47,17 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
     }
 
     @Override
-    public void visit(State state) throws ModelException {
-        State copy = geckoViewModel.getGeckoModel().getModelFactory().copyState(state);
-        geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().addState(copy);
-        copy.getContracts().clear();
-        for (Contract contract : (state.getContracts())) {
-            Contract copiedContract = geckoViewModel.getGeckoModel().getModelFactory().copyContract(contract);
-            copy.addContract(copiedContract);
-            clipboardToPasted.put(contract, copiedContract);
+    public void visit(State stateFromClipboard) throws ModelException {
+        Pair<State, Map<Contract, Contract>> copyResult = geckoViewModel.getGeckoModel().getModelFactory().copyState(stateFromClipboard);
+        State stateToPaste = copyResult.getKey();
+        clipboardToPasted.putAll(copyResult.getValue());
+        geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().addState(stateToPaste);
+        StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(stateToPaste);
+        for (Contract contract : stateToPaste.getContracts()) {
+            ContractViewModel contractViewModel = geckoViewModel.getViewModelFactory().createContractViewModelFrom(contract);
+            stateViewModel.addContract(contractViewModel);
         }
-        StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(copy);
-        stateViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(state).getKey());
-        clipboardToPasted.put(state, copy);
+        clipboardToPasted.put(stateFromClipboard, stateToPaste);
         pastedElements.add(stateViewModel);
     }
 
@@ -101,7 +102,9 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         if (systemFromClipboard.getParent() != null) {
             return;
         }
-        System systemToPaste = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemFromClipboard);
+        Pair<System, Map<Variable, Variable>> copyResult = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemFromClipboard);
+        System systemToPaste = copyResult.getKey();
+        clipboardToPasted.putAll(copyResult.getValue());
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().addChild(systemToPaste);
         systemToPaste.setParent(geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget());
         createRecursiveSystemViewModels(systemToPaste);
@@ -110,7 +113,6 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
 
     private void createRecursiveSystemViewModels(System system) {
         SystemViewModel systemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelFrom(system);
-        //systemViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(system).getKey());
         pastedElements.add(systemViewModel);
         for (Variable variable : system.getVariables()) {
             geckoViewModel.getViewModelFactory().createPortViewModelFrom(variable);
@@ -153,6 +155,7 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         Edge copy = geckoViewModel.getGeckoModel().getModelFactory().copyEdge(edge);
         State pastedSource = (State) clipboardToPasted.get(edge.getSource());
         State pastedDestination = (State) clipboardToPasted.get(edge.getDestination());
+        Contract pastedContract = (Contract) clipboardToPasted.get(edge.getContract());
         if (pastedSource == null || pastedDestination == null) {
             unsuccessfulPastes.add(edge);
             return;
@@ -160,7 +163,7 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().addEdge(copy);
         copy.setSource(pastedSource);
         copy.setDestination(pastedDestination);
-        copy.setContract((Contract) clipboardToPasted.get(edge.getContract()));
+        copy.setContract(pastedContract);
         EdgeViewModel edgeViewModel = geckoViewModel.getViewModelFactory().createEdgeViewModelFrom(copy);
         pastedElements.add(edgeViewModel);
     }

@@ -31,6 +31,7 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
         this.sourceProperty = new SimpleObjectProperty<>(source);
         this.destinationProperty = new SimpleObjectProperty<>(destination);
         this.edgePoints = FXCollections.observableArrayList();
+        sizeProperty.setValue(Point2D.ZERO);
     }
 
     public void setSource(@NonNull PortViewModel source) {
@@ -99,12 +100,10 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
 
     @Override
     public void setPosition(@NonNull Point2D position) {
-        return;
     }
 
     @Override
     public void setSize(@NonNull Point2D position) {
-        return;
     }
 
     @Override

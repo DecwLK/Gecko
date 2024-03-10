@@ -38,11 +38,9 @@ import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 
 /**
  * Represents a displayable view in the Gecko Graphic Editor, holding a collection of displayed {@link ViewElement}s and
- * other items specific to their vizualization.
+ * other items specific to their visualisation.
  */
 public class EditorView {
-    private static final double AUTOMATON_INSPECTOR_HEIGHT = 680;
-
     private final ViewFactory viewFactory;
     @Getter
     private final EditorViewModel viewModel;

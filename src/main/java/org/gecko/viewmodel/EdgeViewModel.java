@@ -59,6 +59,7 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
         this.endOffsetProperty = new SimpleObjectProperty<>(Point2D.ZERO);
         this.startPointProperty = new SimpleObjectProperty<>();
         this.endPointProperty = new SimpleObjectProperty<>();
+        sizeProperty.setValue(Point2D.ZERO);
         setBindings();
 
         getSource().getOutgoingEdges().add(this);
@@ -194,12 +195,10 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
 
     @Override
     public void setPosition(@NonNull Point2D position) {
-        return;
     }
 
     @Override
     public void setSize(@NonNull Point2D position) {
-        return;
     }
 
     @Override

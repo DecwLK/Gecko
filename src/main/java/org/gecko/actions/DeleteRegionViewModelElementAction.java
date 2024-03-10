@@ -28,7 +28,7 @@ public class DeleteRegionViewModelElementAction extends AbstractPositionableView
     @Override
     boolean run() throws GeckoException {
         automaton.removeRegion(regionViewModel.getTarget());
-       List<StateViewModel> states = new ArrayList<>(regionViewModel.getStatesProperty());
+        List<StateViewModel> states = new ArrayList<>(regionViewModel.getStatesProperty());
 
         for (StateViewModel state : states) {
             regionViewModel.removeState(state);

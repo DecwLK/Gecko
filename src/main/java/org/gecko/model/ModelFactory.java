@@ -137,7 +137,7 @@ public class ModelFactory {
 
         if (sourceParent == null || destinationParent == null) {
             throw new RuntimeException("Failed to create system connection, because source and / or destination "
-                + "variables are not part of the project.");
+                + "variables are not part of the model.");
         }
 
         if (source.equals(destination)) {
@@ -161,6 +161,9 @@ public class ModelFactory {
     private boolean isConnectingAllowed(System system, System sourceParent, System destinationParent, Variable source,
                                         Variable destination) {
         if (!sourceParent.equals(system) && !destinationParent.equals(system)) {
+            if (!sourceParent.getParent().equals(system) || !destinationParent.getParent().equals(system)) {
+                return false;
+            }
             return source.getVisibility() == Visibility.OUTPUT && destination.getVisibility() == Visibility.INPUT;
         } else if (sourceParent.equals(system)) {
             return source.getVisibility() != Visibility.OUTPUT && destination.getVisibility() != Visibility.OUTPUT;

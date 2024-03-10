@@ -101,11 +101,11 @@ public class ModelFactory {
         return system;
     }
 
-    public Pair<System, Map<Variable, Variable>> copySystem(@NonNull System system) throws ModelException {
+    public Pair<System, Map<Element, Element>> copySystem(@NonNull System system) throws ModelException {
         return copySystem(system, new HashMap<>());
     }
 
-    public Pair<System, Map<Variable, Variable>> copySystem(@NonNull System system, Map<Variable, Variable> variableToCopy) throws ModelException {
+    public Pair<System, Map<Element, Element>> copySystem(@NonNull System system, Map<Element, Element> originalToCopy) throws ModelException {
         int id = getNewElementId();
         System copy;
         try {
@@ -134,20 +134,27 @@ public class ModelFactory {
         }
         for (Variable variable : system.getVariables()) {
             Variable copiedVariable = copyVariable(variable);
-            variableToCopy.put(variable, copiedVariable);
+            originalToCopy.put(variable, copiedVariable);
             copy.addVariable(copiedVariable);
         }
         for (System childSystem : system.getChildren()) {
-            copy.addChild(copySystem(childSystem, variableToCopy).getKey());
+            System copiedChildSystem = copySystem(childSystem, originalToCopy).getKey();
+            copy.addChild(copiedChildSystem);
+            originalToCopy.put(childSystem, copiedChildSystem);
+
         }
         for (System childSystem : copy.getChildren()) {
             childSystem.setParent(copy);
         }
         for (SystemConnection connection : system.getConnections()) {
-            copy.addConnection(copySystemConnection(connection, variableToCopy.get(connection.getSource()),
-                variableToCopy.get(connection.getDestination())));
+            SystemConnection copiedConnection = copySystemConnection(connection, (Variable) originalToCopy.get(connection.getSource()),
+                (Variable) originalToCopy.get(connection.getDestination()));
+            copy.addConnection(copiedConnection);
+            originalToCopy.put(connection, copiedConnection);
         }
-        return new Pair<>(copy, variableToCopy);
+        copy.setCode(system.getCode());
+        originalToCopy.put(system, copy);
+        return new Pair<>(copy, originalToCopy);
     }
 
     public System createRoot() throws ModelException {

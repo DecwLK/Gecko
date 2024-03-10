@@ -1,5 +1,7 @@
 package org.gecko.actions;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -35,7 +37,7 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
     private final Point2D pasteOffset = new Point2D(50, 50);
     @Getter
     private final Set<PositionableViewModelElement<?>> pastedElements;
-    private final Map<Element, Element> clipboardToPasted;
+    private final BiMap<Element, Element> clipboardToPasted;
     @Getter
     private final Set<Element> unsuccessfulPastes;
 
@@ -43,7 +45,7 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         this.geckoViewModel = geckoViewModel;
         this.copyVisitor = copyVisitor;
         pastedElements = new HashSet<>();
-        clipboardToPasted = new HashMap<>();
+        clipboardToPasted = HashBiMap.create();
         unsuccessfulPastes = new HashSet<>();
     }
 
@@ -105,7 +107,7 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         if (systemFromClipboard.getParent() != null) {
             return;
         }
-        Pair<System, Map<Variable, Variable>> copyResult = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemFromClipboard);
+        Pair<System, Map<Element, Element>> copyResult = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemFromClipboard);
         System systemToPaste = copyResult.getKey();
         clipboardToPasted.putAll(copyResult.getValue());
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().addChild(systemToPaste);
@@ -114,30 +116,33 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         clipboardToPasted.put(systemFromClipboard, systemToPaste);
     }
 
-    private void createRecursiveSystemViewModels(System system) {
-        SystemViewModel systemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelFrom(system);
+    private void createRecursiveSystemViewModels(System systemToPaste) {
+        System systemFromClipboard = (System) clipboardToPasted.inverse().get(systemToPaste);
+        SystemViewModel systemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelFrom(systemToPaste);
+        systemViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(systemFromClipboard).getKey());
         pastedElements.add(systemViewModel);
-        for (Variable variable : system.getVariables()) {
+        for (Variable variable : systemToPaste.getVariables()) {
             geckoViewModel.getViewModelFactory().createPortViewModelFrom(variable);
         }
-        for (State state : system.getAutomaton().getStates()) {
+        for (State state : systemToPaste.getAutomaton().getStates()) {
             StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(state);
+            stateViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(clipboardToPasted.inverse().get(state)).getKey().add(pasteOffset));
             for (Contract contract : state.getContracts()) {
                 ContractViewModel contractViewModel = geckoViewModel.getViewModelFactory().createContractViewModelFrom(contract);
                 stateViewModel.addContract(contractViewModel);
             }
         }
-        for (Edge edge : system.getAutomaton().getEdges()) {
+        for (Edge edge : systemToPaste.getAutomaton().getEdges()) {
             try {
                 geckoViewModel.getViewModelFactory().createEdgeViewModelFrom(edge);
             } catch (MissingViewModelElementException e) {
                 throw new RuntimeException(e);
             }
         }
-        for (System child : system.getChildren()) {
+        for (System child : systemToPaste.getChildren()) {
             createRecursiveSystemViewModels(child);
         }
-        for (SystemConnection connection : system.getConnections()) {
+        for (SystemConnection connection : systemToPaste.getConnections()) {
             try {
                 geckoViewModel.getViewModelFactory().createSystemConnectionViewModelFrom(connection);
             } catch (MissingViewModelElementException e) {

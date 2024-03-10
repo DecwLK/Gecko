@@ -9,6 +9,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableSet;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
@@ -49,6 +50,8 @@ public class GeckoView {
     private final ArrayList<EditorView> openedViews;
     private boolean darkMode = false;
 
+    private boolean hasBeenFocused = false;
+
     public GeckoView(GeckoViewModel viewModel) {
         this.viewModel = viewModel;
         this.mainPane = new BorderPane();
@@ -79,6 +82,28 @@ public class GeckoView {
 
         centerPane.setPickOnBounds(false);
         refreshView();
+
+        centerPane.sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            newValue.focusOwnerProperty().addListener((observable1, oldValue1, newValue1) -> {
+                if (!currentViewProperty.getValue().getViewModel().getPositionableViewModelElements().isEmpty()
+                    && !hasBeenFocused) {
+                    EditorViewModel currentViewModel = currentViewProperty.getValue().getViewModel();
+
+                    // Evaluate the center of all elements by calculating the average position
+                    Point2D center = currentViewModel.getPositionableViewModelElements()
+                        .stream()
+                        .map(PositionableViewModelElement::getCenter)
+                        .reduce(new Point2D(0, 0), Point2D::add)
+                        .multiply(1.0 / currentViewModel.getPositionableViewModelElements().size());
+
+                    currentViewModel.setPivot(center);
+                }
+                hasBeenFocused = true;
+            });
+        });
     }
 
     private void onUpdateCurrentEditorFromViewModel(

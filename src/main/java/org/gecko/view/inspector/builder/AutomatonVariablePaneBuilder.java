@@ -16,6 +16,7 @@ import org.gecko.viewmodel.SystemViewModel;
 public class AutomatonVariablePaneBuilder {
 
     private static final int VARIABLE_PANE_WIDTH = 320;
+    private static final int VARIABLE_PANE_HEIGHT = 240;
     private static final int ELEMENT_SPACING = 10;
 
     private final ScrollPane scrollPane;
@@ -23,6 +24,9 @@ public class AutomatonVariablePaneBuilder {
     public AutomatonVariablePaneBuilder(ActionManager actionManager, SystemViewModel systemViewModel) {
         scrollPane = new ScrollPane();
         scrollPane.setPrefWidth(VARIABLE_PANE_WIDTH);
+        scrollPane.setPrefHeight(VARIABLE_PANE_HEIGHT);
+        scrollPane.setMinHeight(VARIABLE_PANE_HEIGHT);
+        scrollPane.setMaxHeight(VARIABLE_PANE_HEIGHT);
 
         VBox content = new VBox();
         InspectorElement<HBox> inputLabel =

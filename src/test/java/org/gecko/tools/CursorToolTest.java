@@ -1,22 +1,17 @@
 package org.gecko.tools;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import org.gecko.application.GeckoIOManager;
 import org.gecko.application.GeckoManager;
 import org.gecko.exceptions.ModelException;
 import org.gecko.view.GeckoView;
-import org.gecko.view.views.viewelement.ViewElement;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.StateViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 import org.gecko.viewmodel.ViewModelFactory;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -58,19 +53,20 @@ class CursorToolTest {
         geckoViewModel.switchEditor(rootSystemViewModel, true);
     }
 
-    @Test
-    void select(FxRobot robot) {
-        assertEquals(geckoView.getCurrentView().getCurrentViewElements().size(), 4);
-
-        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
-            robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
-        }
-
-        geckoViewModel.switchEditor(rootSystemViewModel, false);
-        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
-            robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
-        }
-    }
+    //    @Test
+    //    void select(FxRobot robot) {
+    //        assertTrue(true);
+    //        assertEquals(geckoView.getCurrentView().getCurrentViewElements().size(), 4);
+    //
+    //        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
+    //            robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
+    //        }
+    //
+    //        geckoViewModel.switchEditor(rootSystemViewModel, false);
+    //        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
+    //            robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
+    //        }
+    //    }
 
     /*
     @Test

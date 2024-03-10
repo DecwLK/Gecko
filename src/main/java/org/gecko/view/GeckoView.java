@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -42,12 +43,11 @@ public class GeckoView {
     @Getter
     private final GeckoViewModel viewModel;
     private final ViewFactory viewFactory;
-    private final MenuBar menuBar;
 
     @Getter
-    private Property<EditorView> currentViewProperty;
+    private final Property<EditorView> currentViewProperty;
 
-    private final ArrayList<EditorView> openedViews;
+    private final List<EditorView> openedViews;
     private boolean darkMode = false;
 
     private boolean hasBeenFocused = false;
@@ -72,7 +72,7 @@ public class GeckoView {
         centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
 
         // Menubar
-        menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
+        MenuBar menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
         mainPane.setTop(menuBar);
         mainPane.setCenter(centerPane);
 
@@ -96,12 +96,7 @@ public class GeckoView {
                 return;
             }
             newValue.focusOwnerProperty().addListener((observable1, oldValue1, newValue1) -> {
-                System.out.println("Focus changed, " + hasBeenFocused + " : " + currentViewProperty.getValue()
-                    .getCurrentViewElements()
-                    .size());
-                if (!currentViewProperty.getValue().getCurrentViewElements().isEmpty()
-                    && !hasBeenFocused) {
-                    System.out.println("Focus center");
+                if (!currentViewProperty.getValue().getCurrentViewElements().isEmpty() && !hasBeenFocused) {
                     focusCenter(currentViewProperty.getValue().getViewModel());
                 }
                 hasBeenFocused = true;
@@ -131,9 +126,8 @@ public class GeckoView {
                     viewFactory.createEditorView(editorViewModel, editorViewModel.isAutomatonEditor());
 
                 if (!openedViews.contains(newEditorView)) {
-                    Tab newTab = constructTab(newEditorView, editorViewModel);
-                    handleUserTabChange(newTab);
-                    hasBeenFocused = false;
+                    handleUserTabChange(constructTab(newEditorView, editorViewModel));
+                    Platform.runLater(() -> focusCenter(editorViewModel));
                 }
             }
 

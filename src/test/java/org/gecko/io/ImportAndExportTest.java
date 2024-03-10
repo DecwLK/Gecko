@@ -35,7 +35,8 @@ public class ImportAndExportTest {
         @Test
         void writeToFile() {
             File serializedParsedAEBFile = new File("src/test/java/org/gecko/io/files/serializedParsedAEB.sys");
-            AutomatonFileSerializer automatonFileSerializer = new AutomatonFileSerializer(geckoViewModel.getGeckoModel());
+            AutomatonFileSerializer automatonFileSerializer =
+                new AutomatonFileSerializer(geckoViewModel.getGeckoModel());
             assertDoesNotThrow(() -> automatonFileSerializer.writeToFile(serializedParsedAEBFile));
         }
 
@@ -51,7 +52,8 @@ public class ImportAndExportTest {
             }
 
             File serializedExportedComplexFile = new File("src/test/java/org/gecko/io/files/exportedComplexGecko.sys");
-            AutomatonFileSerializer automatonFileSerializer = new AutomatonFileSerializer(complexViewModel.getGeckoModel());
+            AutomatonFileSerializer automatonFileSerializer =
+                new AutomatonFileSerializer(complexViewModel.getGeckoModel());
             assertDoesNotThrow(() -> automatonFileSerializer.writeToFile(serializedExportedComplexFile));
         }
     }

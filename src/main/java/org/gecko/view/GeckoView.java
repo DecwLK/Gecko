@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -42,12 +43,11 @@ public class GeckoView {
     @Getter
     private final GeckoViewModel viewModel;
     private final ViewFactory viewFactory;
-    private final MenuBar menuBar;
 
     @Getter
-    private Property<EditorView> currentViewProperty;
+    private final Property<EditorView> currentViewProperty;
 
-    private final ArrayList<EditorView> openedViews;
+    private final List<EditorView> openedViews;
     private boolean darkMode = false;
 
     private boolean hasBeenFocused = false;
@@ -68,10 +68,11 @@ public class GeckoView {
         viewModel.getOpenedEditorsProperty().addListener(this::onOpenedEditorChanged);
 
         centerPane.setPickOnBounds(false);
+        centerPane.setFocusTraversable(false);
         centerPane.getSelectionModel().selectedItemProperty().addListener(this::onUpdateCurrentEditorToViewModel);
 
         // Menubar
-        menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
+        MenuBar menuBar = new MenuBarBuilder(this, viewModel.getActionManager()).build();
         mainPane.setTop(menuBar);
         mainPane.setCenter(centerPane);
 
@@ -95,18 +96,8 @@ public class GeckoView {
                 return;
             }
             newValue.focusOwnerProperty().addListener((observable1, oldValue1, newValue1) -> {
-                if (!currentViewProperty.getValue().getViewModel().getPositionableViewModelElements().isEmpty()
-                    && !hasBeenFocused) {
-                    EditorViewModel currentViewModel = currentViewProperty.getValue().getViewModel();
-
-                    // Evaluate the center of all elements by calculating the average position
-                    Point2D center = currentViewModel.getPositionableViewModelElements()
-                        .stream()
-                        .map(PositionableViewModelElement::getCenter)
-                        .reduce(new Point2D(0, 0), Point2D::add)
-                        .multiply(1.0 / currentViewModel.getPositionableViewModelElements().size());
-
-                    currentViewModel.setPivot(center);
+                if (!currentViewProperty.getValue().getCurrentViewElements().isEmpty() && !hasBeenFocused) {
+                    focusCenter(currentViewProperty.getValue().getViewModel());
                 }
                 hasBeenFocused = true;
             });
@@ -135,7 +126,8 @@ public class GeckoView {
                     viewFactory.createEditorView(editorViewModel, editorViewModel.isAutomatonEditor());
 
                 if (!openedViews.contains(newEditorView)) {
-                    constructTab(newEditorView, editorViewModel);
+                    handleUserTabChange(constructTab(newEditorView, editorViewModel));
+                    Platform.runLater(() -> focusCenter(editorViewModel));
                 }
             }
 
@@ -164,7 +156,7 @@ public class GeckoView {
         openedViews.removeAll(editorViewsToRemove);
     }
 
-    private void constructTab(EditorView editorView, EditorViewModel editorViewModel) {
+    private Tab constructTab(EditorView editorView, EditorViewModel editorViewModel) {
         openedViews.add(editorView);
         Tab tab = editorView.getCurrentView();
         Node graphic = tab.getGraphic();
@@ -175,6 +167,7 @@ public class GeckoView {
             openedViews.remove(editorView);
             viewModel.getOpenedEditorsProperty().remove(editorViewModel);
         });
+        return tab;
     }
 
     private void handleUserTabChange(Tab tab) {
@@ -212,6 +205,17 @@ public class GeckoView {
                 getView(newValue).getViewModel().isAutomatonEditor());
         viewModel.getActionManager().run(switchAction);
         refreshView();
+    }
+
+    private void focusCenter(EditorViewModel editorViewModel) {
+        // Evaluate the center of all elements by calculating the average position
+        Point2D center = editorViewModel.getPositionableViewModelElements()
+            .stream()
+            .map(PositionableViewModelElement::getCenter)
+            .reduce(new Point2D(0, 0), Point2D::add)
+            .multiply(1.0 / editorViewModel.getPositionableViewModelElements().size());
+
+        editorViewModel.setPivot(center);
     }
 
     /**

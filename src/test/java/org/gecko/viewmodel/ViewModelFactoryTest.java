@@ -132,10 +132,10 @@ class ViewModelFactoryTest {
 
     @Test
     void testAddEdgesToSystem() throws ModelException {
-        EdgeViewModel edgeViewModel1
-            = viewModelFactory.createEdgeViewModelIn(systemViewModel1, stateViewModel1, stateViewModel2);
-        EdgeViewModel edgeViewModel2
-            = viewModelFactory.createEdgeViewModelIn(systemViewModel1, stateViewModel1, stateViewModel1);
+        EdgeViewModel edgeViewModel1 =
+            viewModelFactory.createEdgeViewModelIn(systemViewModel1, stateViewModel1, stateViewModel2);
+        EdgeViewModel edgeViewModel2 =
+            viewModelFactory.createEdgeViewModelIn(systemViewModel1, stateViewModel1, stateViewModel1);
         assertTrue(systemViewModel1.getTarget().getAutomaton().getEdges().contains(edgeViewModel1.getTarget()));
         assertTrue(systemViewModel1.getTarget().getAutomaton().getEdges().contains(edgeViewModel2.getTarget()));
         assertEquals(stateViewModel2, edgeViewModel1.getDestination());

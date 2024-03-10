@@ -21,7 +21,8 @@ import org.gecko.viewmodel.SystemViewModel;
  * necessary delete-{@link Action}s for deleting all "lower level"-dependencies of a given parent-@link
  * SystemViewModel}.
  */
-public class DeleteActionsCreatorVisitor implements PositionableViewModelElementVisitor {
+public class DeleteActionsCreatorVisitor
+    implements PositionableViewModelElementVisitor<Set<AbstractPositionableViewModelElementAction>> {
 
     private final GeckoViewModel geckoViewModel;
     private final SystemViewModel parentSystemViewModel;

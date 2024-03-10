@@ -4,16 +4,16 @@ package org.gecko.viewmodel;
  * Represents a visitor pattern for performing operations on {@link PositionableViewModelElement}s. Concrete visitors
  * must implement this interface to define specific behavior for each {@link PositionableViewModelElement}.
  */
-public interface PositionableViewModelElementVisitor {
-    Object visit(SystemViewModel systemViewModel);
+public interface PositionableViewModelElementVisitor<T> {
+    T visit(SystemViewModel systemViewModel);
 
-    Object visit(RegionViewModel regionViewModel);
+    T visit(RegionViewModel regionViewModel);
 
-    Object visit(SystemConnectionViewModel systemConnectionViewModel);
+    T visit(SystemConnectionViewModel systemConnectionViewModel);
 
-    Object visit(EdgeViewModel edgeViewModel);
+    T visit(EdgeViewModel edgeViewModel);
 
-    Object visit(StateViewModel stateViewModel);
+    T visit(StateViewModel stateViewModel);
 
-    Object visit(PortViewModel portViewModel);
+    T visit(PortViewModel portViewModel);
 }

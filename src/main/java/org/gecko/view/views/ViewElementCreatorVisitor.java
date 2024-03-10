@@ -14,7 +14,7 @@ import org.gecko.viewmodel.SystemViewModel;
  * type of {@link ViewElement} through the {@link ViewFactory} by visiting a type of
  * {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement}.
  */
-public class ViewElementCreatorVisitor implements PositionableViewModelElementVisitor {
+public class ViewElementCreatorVisitor implements PositionableViewModelElementVisitor<ViewElement<?>> {
 
     private final ViewFactory viewFactory;
 

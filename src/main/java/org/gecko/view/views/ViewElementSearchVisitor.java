@@ -1,6 +1,7 @@
 package org.gecko.view.views;
 
 import java.util.Locale;
+import org.gecko.viewmodel.AbstractViewModelElement;
 import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -15,7 +16,7 @@ import org.gecko.viewmodel.SystemViewModel;
  * absolute or partial matches between a given {@link String} and the names of
  * {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement}s, if present.
  */
-public class ViewElementSearchVisitor implements PositionableViewModelElementVisitor {
+public class ViewElementSearchVisitor implements PositionableViewModelElementVisitor<AbstractViewModelElement<?>> {
     private final String search;
 
     public ViewElementSearchVisitor(String search) {

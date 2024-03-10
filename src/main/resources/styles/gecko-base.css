@@ -50,6 +50,7 @@
     -fx-background-radius: 5;
     -fx-background-color: -fx-fg0;
     -fx-background-size: 24px 24px;
+    -fx-background-insets: 0 0 1 0;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-text-alignment: center;
@@ -365,6 +366,10 @@
     -fx-background-radius: 3 0 0 3;
 }
 
+.combo-box .list-view .cell:empty {
+    -fx-background-color: -fx-fg0;
+}
+
 .combo-box .cell:filled:selected {
     -fx-background-color: -fx-editable;
     -fx-background-radius: 3 0 0 3;
@@ -422,6 +427,7 @@
 
 .inspector-start-state-button {
     -fx-background-color: -fx-green;
+    -fx-background-insets: 0 0 1 0;
 }
 
 .inspector-open-system-button {

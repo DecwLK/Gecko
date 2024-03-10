@@ -132,6 +132,11 @@ public class ModelFactory {
             copiedEdge.setContract(contractToCopy.get(edge.getContract()));
             copiedEdge.setKind(edge.getKind());
         }
+        for (Region region : system.getAutomaton().getRegions()) {
+            Region copiedRegion = copyRegion(region);
+            copy.getAutomaton().addRegion(copiedRegion);
+            originalToCopy.put(region, copiedRegion);
+        }
         for (Variable variable : system.getVariables()) {
             Variable copiedVariable = copyVariable(variable);
             originalToCopy.put(variable, copiedVariable);

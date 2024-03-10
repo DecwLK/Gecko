@@ -2,7 +2,6 @@ package org.gecko.actions;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -20,8 +19,6 @@ import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
-import org.gecko.viewmodel.AbstractViewModelElement;
-import org.gecko.viewmodel.ContractViewModel;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -58,10 +55,6 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(stateToPaste);
         stateViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(stateFromClipboard).getKey().add(pasteOffset));
         stateViewModel.setSize(copyVisitor.getElementToPosAndSize().get(stateFromClipboard).getValue());
-        for (Contract contract : stateToPaste.getContracts()) {
-            ContractViewModel contractViewModel = geckoViewModel.getViewModelFactory().createContractViewModelFrom(contract);
-            stateViewModel.addContract(contractViewModel);
-        }
         clipboardToPasted.put(stateFromClipboard, stateToPaste);
         pastedElements.add(stateViewModel);
     }
@@ -127,9 +120,13 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         for (State state : systemToPaste.getAutomaton().getStates()) {
             StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(state);
             stateViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(clipboardToPasted.inverse().get(state)).getKey().add(pasteOffset));
-            for (Contract contract : state.getContracts()) {
-                ContractViewModel contractViewModel = geckoViewModel.getViewModelFactory().createContractViewModelFrom(contract);
-                stateViewModel.addContract(contractViewModel);
+        }
+        for (Region region : systemToPaste.getAutomaton().getRegions()) {
+            try {
+                RegionViewModel regionViewModel = geckoViewModel.getViewModelFactory().createRegionViewModelFrom(region);
+                regionViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(clipboardToPasted.inverse().get(region)).getKey().add(pasteOffset));
+            } catch (MissingViewModelElementException e) {
+                throw new RuntimeException(e);
             }
         }
         for (Edge edge : systemToPaste.getAutomaton().getEdges()) {

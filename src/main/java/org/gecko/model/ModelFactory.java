@@ -105,7 +105,8 @@ public class ModelFactory {
         return copySystem(system, new HashMap<>());
     }
 
-    public Pair<System, Map<Element, Element>> copySystem(@NonNull System system, Map<Element, Element> originalToCopy) throws ModelException {
+    public Pair<System, Map<Element, Element>> copySystem(@NonNull System system, Map<Element, Element> originalToCopy)
+        throws ModelException {
         int id = getNewElementId();
         System copy;
         try {
@@ -152,8 +153,9 @@ public class ModelFactory {
             childSystem.setParent(copy);
         }
         for (SystemConnection connection : system.getConnections()) {
-            SystemConnection copiedConnection = copySystemConnection(connection, (Variable) originalToCopy.get(connection.getSource()),
-                (Variable) originalToCopy.get(connection.getDestination()));
+            SystemConnection copiedConnection =
+                copySystemConnection(connection, (Variable) originalToCopy.get(connection.getSource()),
+                    (Variable) originalToCopy.get(connection.getDestination()));
             copy.addConnection(copiedConnection);
             originalToCopy.put(connection, copiedConnection);
         }
@@ -233,7 +235,8 @@ public class ModelFactory {
         }
     }
 
-    public SystemConnection copySystemConnection(SystemConnection connection, Variable copiedSource, Variable copiedDestination) {
+    public SystemConnection copySystemConnection(
+        SystemConnection connection, Variable copiedSource, Variable copiedDestination) {
         SystemConnection result = copySystemConnection(connection);
         try {
             result.setSource(copiedSource);

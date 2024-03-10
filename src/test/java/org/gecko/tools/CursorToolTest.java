@@ -55,7 +55,6 @@ class CursorToolTest {
 
     //    @Test
     //    void select(FxRobot robot) {
-    //        assertTrue(true);
     //        assertEquals(geckoView.getCurrentView().getCurrentViewElements().size(), 4);
     //
     //        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {

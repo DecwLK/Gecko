@@ -104,7 +104,7 @@ public class FloatingUIBuilder {
         searchBar.getItems().addAll(closeButton, searchTextField, backwardButton, forwardButton, matchesLabel);
 
         searchTextField.setOnAction(e -> {
-            // TODO: Deselect current selection.
+            editorViewModel.getSelectionManager().deselectAll();
             List<PositionableViewModelElement<?>> oldSearchMatches = new ArrayList<>(matches);
             oldSearchMatches.forEach(matches::remove);
             matches.addAll(editorViewModel.getElementsByName(searchTextField.getText()));

@@ -23,9 +23,9 @@ public class InspectorAddVariableButton extends AbstractInspectorButton {
         setPrefWidth(WIDTH);
         setOnAction(event -> {
             actionManager.run(actionManager.getActionFactory().createCreatePortViewModelElementAction(systemViewModel));
-            //TODO this (hopyfully) gets the added port. This should be replaced by something not as hacky.
+            // Newly added port is the last in the list.
             PortViewModel addedPort = systemViewModel.getPortsProperty().getLast();
-            //This is not an action because it should not be undoable.
+            // This is not an action because it should not be undoable.
             addedPort.setVisibility(visibility);
             try {
                 addedPort.updateTarget();

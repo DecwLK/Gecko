@@ -31,7 +31,7 @@ public abstract class InspectorTextField extends TextField implements InspectorE
         });
     }
 
-    private void updateText() {
+    protected void updateText() {
         if (getText().isEmpty()) {
             setText(stringProperty.get());
         }

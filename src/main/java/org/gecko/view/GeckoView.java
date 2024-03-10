@@ -209,6 +209,11 @@ public class GeckoView {
 
     private void focusCenter(EditorViewModel editorViewModel) {
         // Evaluate the center of all elements by calculating the average position
+        if (editorViewModel.getPositionableViewModelElements().isEmpty()) {
+            editorViewModel.setPivot(new Point2D(0, 0));
+            return;
+        }
+
         Point2D center = editorViewModel.getPositionableViewModelElements()
             .stream()
             .map(PositionableViewModelElement::getCenter)

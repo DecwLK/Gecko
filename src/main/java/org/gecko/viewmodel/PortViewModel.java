@@ -22,6 +22,7 @@ import org.gecko.model.Visibility;
 public class PortViewModel extends BlockViewModelElement<Variable> {
     private final Property<Visibility> visibilityProperty;
     private final StringProperty typeProperty;
+    private final StringProperty valueProperty;
 
     private final Property<Point2D> systemPortPositionProperty;
     private final Property<Point2D> systemPortSizeProperty;
@@ -32,6 +33,7 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
         super(id, target);
         this.visibilityProperty = new SimpleObjectProperty<>(target.getVisibility());
         this.typeProperty = new SimpleStringProperty(target.getType());
+        this.valueProperty = new SimpleStringProperty(target.getValue());
         this.sizeProperty.setValue(DEFAULT_PORT_SIZE);
         this.systemPortPositionProperty = new SimpleObjectProperty<>(Point2D.ZERO);
         this.systemPortSizeProperty = new SimpleObjectProperty<>(Point2D.ZERO);
@@ -61,11 +63,20 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
         typeProperty.setValue(type);
     }
 
+    public String getValue() {
+        return valueProperty.getValue();
+    }
+
+    public void setValue(String value) {
+        valueProperty.setValue(value);
+    }
+
     @Override
     public void updateTarget() throws ModelException {
         super.updateTarget();
         target.setVisibility(getVisibility());
         target.setType(getType());
+        target.setValue(getValue());
     }
 
     @Override

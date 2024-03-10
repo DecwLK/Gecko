@@ -34,19 +34,15 @@ public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
         // Edge editing commands:
         Menu changeKindMenu = new Menu(ResourceHandler.getString("Buttons", "change_kind"));
 
-        MenuItem hitMenuItem = new MenuItem(Kind.HIT.name());
-        hitMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.HIT)));
+        for (Kind kind : Kind.values()) {
+            MenuItem kindMenuItem = createKindMenuItem(kind);
 
-        MenuItem missMenuItem = new MenuItem(Kind.MISS.name());
-        missMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.MISS)));
+            if (edgeViewModel.getKind() == kind) {
+                kindMenuItem.setDisable(true);
+            }
 
-        MenuItem failMenuItem = new MenuItem(Kind.FAIL.name());
-        failMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.FAIL)));
-
-        changeKindMenu.getItems().addAll(hitMenuItem, missMenuItem, failMenuItem);
+            changeKindMenu.getItems().add(kindMenuItem);
+        }
 
         MenuItem deleteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "delete"));
         deleteMenuItem.setOnAction(e -> actionManager.run(
@@ -54,5 +50,12 @@ public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
         edgeContextMenu.getItems().addAll(dataTransferToEdgeEditingSeparator, changeKindMenu, deleteMenuItem);
         return edgeContextMenu;
+    }
+
+    private MenuItem createKindMenuItem(Kind kind) {
+        MenuItem kindMenuItem = new MenuItem(kind.name());
+        kindMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, kind)));
+        return kindMenuItem;
     }
 }

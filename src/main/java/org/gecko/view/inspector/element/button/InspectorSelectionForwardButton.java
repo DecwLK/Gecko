@@ -2,6 +2,7 @@ package org.gecko.view.inspector.element.button;
 
 import javafx.scene.control.Tooltip;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.views.shortcuts.Shortcuts;
 
 /**
@@ -13,9 +14,11 @@ public class InspectorSelectionForwardButton extends AbstractInspectorButton {
 
     public InspectorSelectionForwardButton(ActionManager actionManager) {
         getStyleClass().add(ICON_STYLE_NAME);
+        String toolTip = "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "inspector_selection_forward"),
+            Shortcuts.SELECTION_FORWARD.get().getDisplayText());
+        setTooltip(new Tooltip(toolTip));
         setOnAction(event -> {
             actionManager.run(actionManager.getActionFactory().createSelectionHistoryForwardAction());
         });
-        setTooltip(new Tooltip(Shortcuts.SELECTION_FORWARD.get().getDisplayText()));
     }
 }

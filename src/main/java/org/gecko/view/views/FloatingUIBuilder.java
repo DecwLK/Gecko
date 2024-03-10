@@ -47,7 +47,9 @@ public class FloatingUIBuilder {
         zoomInButton.setOnAction(event -> {
             actionManager.run(actionManager.getActionFactory().createZoomCenterAction(ZOOM_SCALE));
         });
-        zoomInButton.setTooltip(new Tooltip(Shortcuts.ZOOM_IN.get().getDisplayText()));
+        String zoomInTooltip = "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "zoom_in"),
+            Shortcuts.ZOOM_IN.get().getDisplayText());
+        zoomInButton.setTooltip(new Tooltip(zoomInTooltip));
 
         Label zoomLabel = new Label();
         zoomLabel.textProperty().bind(Bindings.createStringBinding(() -> {
@@ -59,7 +61,9 @@ public class FloatingUIBuilder {
         zoomOutButton.getStyleClass().add(ZOOM_OUT_STYLE_CLASS);
         zoomOutButton.setOnAction(
             event -> actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1 / ZOOM_SCALE)));
-        zoomOutButton.setTooltip(new Tooltip(Shortcuts.ZOOM_OUT.get().getDisplayText()));
+        String zoomOutTooltip = "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "zoom_out"),
+            Shortcuts.ZOOM_OUT.get().getDisplayText());
+        zoomOutButton.setTooltip(new Tooltip(zoomOutTooltip));
 
         zoomButtons.getChildren().addAll(zoomInButton, zoomLabel, zoomOutButton);
         return zoomButtons;
@@ -92,7 +96,7 @@ public class FloatingUIBuilder {
 
         final List<PositionableViewModelElement<?>> matches = new ArrayList<>();
         TextField searchTextField = new TextField();
-        searchTextField.setPromptText("Search");
+        searchTextField.setPromptText(ResourceHandler.getString("Labels", "search"));
 
         searchBar.getItems().addAll(closeButton, searchTextField, backwardButton, forwardButton, matchesLabel);
 
@@ -168,7 +172,9 @@ public class FloatingUIBuilder {
             switchViewButton.getStyleClass()
                 .add(automatonEditor ? switchToSystemStyleClass : switchToAutomatonStyleClass);
         });
-        switchViewButton.setTooltip(new Tooltip(Shortcuts.SWITCH_EDITOR.get().getDisplayText()));
+        String switchViewTooltip = "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "switch_view"),
+            Shortcuts.SWITCH_EDITOR.get().getDisplayText());
+        switchViewButton.setTooltip(new Tooltip(switchViewTooltip));
 
         viewSwitchButtons.getChildren().add(switchViewButton);
 
@@ -177,8 +183,10 @@ public class FloatingUIBuilder {
             parentSystemSwitchButton.getStyleClass().add("floating-parent-system-switch-button");
             parentSystemSwitchButton.setOnAction(event -> actionManager.run(actionManager.getActionFactory()
                 .createViewSwitchAction(editorViewModel.getParentSystem(), editorViewModel.isAutomatonEditor())));
-            parentSystemSwitchButton.setTooltip(
-                new Tooltip(Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get().getDisplayText()));
+            String parentSystemSwitchTooltip =
+                "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "parent_system"),
+                    Shortcuts.OPEN_PARENT_SYSTEM_EDITOR.get().getDisplayText());
+            parentSystemSwitchButton.setTooltip(new Tooltip(parentSystemSwitchTooltip));
 
             viewSwitchButtons.getChildren().add(parentSystemSwitchButton);
         }

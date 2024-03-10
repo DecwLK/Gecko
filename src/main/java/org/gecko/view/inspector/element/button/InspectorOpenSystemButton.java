@@ -17,9 +17,11 @@ public class InspectorOpenSystemButton extends AbstractInspectorButton {
     public InspectorOpenSystemButton(ActionManager actionManager, SystemViewModel systemViewModel) {
         getStyleClass().add(STYLE);
         setText(ResourceHandler.getString("Buttons", "inspector_open_system"));
+        String toolTip = "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "inspector_open_system"),
+            Shortcuts.OPEN_CHILD_SYSTEM_EDITOR.get().getDisplayText());
+        setTooltip(new Tooltip(toolTip));
         setPrefWidth(WIDTH);
         setOnAction(event -> actionManager.run(
             actionManager.getActionFactory().createViewSwitchAction(systemViewModel, false)));
-        setTooltip(new Tooltip(Shortcuts.OPEN_CHILD_SYSTEM_EDITOR.get().getDisplayText()));
     }
 }

@@ -1,5 +1,6 @@
 package org.gecko.view.inspector.element.button;
 
+import javafx.scene.control.Tooltip;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Visibility;
 import org.gecko.view.ResourceHandler;
@@ -18,6 +19,7 @@ public class InspectorAddVariableButton extends AbstractInspectorButton {
         ActionManager actionManager, SystemViewModel systemViewModel, Visibility visibility) {
         getStyleClass().add(STYLE);
         setText(ResourceHandler.getString("Buttons", "inspector_add_variable"));
+        setTooltip(new Tooltip(ResourceHandler.getString("Tooltips", "inspector_add_variable")));
         setPrefWidth(WIDTH);
         setOnAction(event -> {
             actionManager.run(actionManager.getActionFactory().createCreatePortViewModelElementAction(systemViewModel));

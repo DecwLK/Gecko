@@ -50,7 +50,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
     @Override
     public Void visit(SystemViewModel systemViewModel) {
         System original = systemViewModel.getTarget();
-        Pair<System, Map<Variable, Variable>> copyResult;
+        Pair<System, Map<Element, Element>> copyResult;
         System copy;
         try {
             copyResult = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemViewModel.getTarget());
@@ -60,9 +60,8 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         }
         copy = copyResult.getKey();
         originalToClipboard.putAll(copyResult.getValue());
-        elementToPosAndSize.put(copy,
-            new Pair<>(systemViewModel.getPosition(), systemViewModel.getSize()));
         originalToClipboard.put(original, copy);
+        savePositionRecursively(original);
         return null;
     }
 
@@ -71,8 +70,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         Region original = regionViewModel.getTarget();
         Region copy = geckoViewModel.getGeckoModel().getModelFactory().copyRegion(original);
         originalToClipboard.put(original, copy);
-        elementToPosAndSize.put(copy,
-            new Pair<>(regionViewModel.getPosition(), regionViewModel.getSize()));
+        savePositionAndSize(copy, regionViewModel);
         return null;
     }
 
@@ -103,8 +101,8 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         Pair<State, Map<Contract, Contract>> copyResult = geckoViewModel.getGeckoModel().getModelFactory().copyState(original);
         State copy = copyResult.getKey();
         originalToClipboard.putAll(copyResult.getValue());
-        elementToPosAndSize.put(copy, new Pair<>(stateViewModel.getPosition(), stateViewModel.getSize()));
         originalToClipboard.put(original, copy);
+        savePositionAndSize(copy, stateViewModel);
         return null;
     }
 
@@ -136,5 +134,19 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
             originalToClipboard.put(original, copy);
         }
         return null;
+    }
+
+    private void savePositionRecursively(System original) {
+        System copy = (System) originalToClipboard.get(original);
+        savePositionAndSize(copy, geckoViewModel.getViewModelElement(original));
+        for (State state : original.getAutomaton().getStates()) {
+            savePositionAndSize(originalToClipboard.get(state), geckoViewModel.getViewModelElement(state));
+        }
+        for (System child : original.getChildren()) {
+            savePositionRecursively(child);
+        }
+    }
+    private void savePositionAndSize(Element key,PositionableViewModelElement<?> positionSource) {
+        elementToPosAndSize.put(key, new Pair<>(positionSource.getPosition(), positionSource.getSize()));
     }
 }

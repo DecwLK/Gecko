@@ -49,7 +49,6 @@ public class EditorView {
     private final StackPane currentViewPane;
     @Getter
     private final ToolBar toolBar;
-    private final ToolBarBuilder toolBarBuilder;
     private final InspectorFactory inspectorFactory;
     private final Inspector emptyInspector;
     private final Node searchWindow;
@@ -70,7 +69,7 @@ public class EditorView {
         ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel) {
         this.viewFactory = viewFactory;
         this.viewModel = viewModel;
-        this.toolBarBuilder = new ToolBarBuilder(actionManager, this, viewModel);
+        ToolBarBuilder toolBarBuilder = new ToolBarBuilder(actionManager, this, viewModel);
         this.toolBar = toolBarBuilder.build();
         this.inspectorFactory = new InspectorFactory(actionManager, viewModel);
 
@@ -86,8 +85,8 @@ public class EditorView {
         StringProperty tabName = new SimpleStringProperty("Error_Name");
         tabName.bind(Bindings.createStringBinding(() -> {
             String name = viewModel.getCurrentSystem().getName();
-            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
-                : " (" + ResourceHandler.getString("View", "system") + ")");
+            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")" :
+                " (" + ResourceHandler.getString("View", "system") + ")");
         }, viewModel.getCurrentSystem().getNameProperty()));
 
         Label tabLabel = new Label();
@@ -237,7 +236,7 @@ public class EditorView {
     }
 
     private void addElement(PositionableViewModelElement<?> element) {
-        PositionableViewModelElementVisitor visitor = new ViewElementCreatorVisitor(viewFactory);
+        PositionableViewModelElementVisitor<?> visitor = new ViewElementCreatorVisitor(viewFactory);
         ViewElement<?> viewElement = (ViewElement<?>) element.accept(visitor);
 
         // Add view element to current view elements

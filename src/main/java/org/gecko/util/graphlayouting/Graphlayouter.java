@@ -25,6 +25,8 @@ public class Graphlayouter {
     private final GeckoViewModel viewModel;
     private final ELKGraphCreator elkGraphCreator;
 
+    private static final double THIRD_OF_SYSTEM_WIDTH_DIVIDER = 3;
+
     public Graphlayouter(GeckoViewModel viewModel) {
         this.viewModel = viewModel;
         elkGraphCreator = new ELKGraphCreator(viewModel);
@@ -53,7 +55,7 @@ public class Graphlayouter {
             return;
         }
         root.setProperty(CoreOptions.ALGORITHM, layoutAlgorithm.toString());
-        double spacing = root.getChildren().getFirst().getWidth() / 3;
+        double spacing = root.getChildren().getFirst().getWidth() / THIRD_OF_SYSTEM_WIDTH_DIVIDER;
         root.setProperty(CoreOptions.SPACING_NODE_NODE, spacing);
         if (layoutAlgorithm == LayoutAlgorithms.LAYERED) {
             root.setProperty(LayeredOptions.SPACING_NODE_NODE_BETWEEN_LAYERS, spacing);

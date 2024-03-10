@@ -164,7 +164,7 @@ public class GeckoIOManager {
     private FileChooser getNewFileChooser(FileTypes fileType) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters()
-            .addAll(new FileChooser.ExtensionFilter(fileType.getFileDescription(), fileType.getFileNameRegex()));
+            .addAll(new FileChooser.ExtensionFilter(fileType.getFileDescription(), fileType.getFileNameGlob()));
         return fileChooser;
     }
 

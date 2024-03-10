@@ -51,6 +51,8 @@ public abstract class ConnectionViewElement extends Path {
      */
     protected List<Pair<DoubleProperty, DoubleProperty>> renderPathSource;
 
+    private static final int DEFAULT_STROKE_WIDTH = 5;
+
     protected ConnectionViewElement(ObservableList<Property<Point2D>> path) {
         this.pathSource = path;
         this.isLoopProperty = new SimpleBooleanProperty(false);
@@ -63,7 +65,7 @@ public abstract class ConnectionViewElement extends Path {
         isLoopProperty.addListener((observable, oldValue, newValue) -> updatePathVisualization());
         orientationProperty.addListener((observable, oldValue, newValue) -> updatePathVisualization());
 
-        setStrokeWidth(5);
+        setStrokeWidth(DEFAULT_STROKE_WIDTH);
         getStyleClass().add(STYLE_CLASS);
     }
 

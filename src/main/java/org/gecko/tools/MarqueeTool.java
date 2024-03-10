@@ -17,6 +17,9 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 public class MarqueeTool extends AreaTool {
     private final EditorViewModel editorViewModel;
 
+    private static final double STROKE_WIDTH = 1;
+    private static final double STROKE_DASH = 5d;
+
     public MarqueeTool(ActionManager actionManager, EditorViewModel editorViewModel) {
         super(actionManager, ToolType.MARQUEE_TOOL, true);
         this.editorViewModel = editorViewModel;
@@ -27,8 +30,8 @@ public class MarqueeTool extends AreaTool {
         Rectangle marquee = new Rectangle();
         marquee.setFill(null);
         marquee.setStroke(Color.BLUE);
-        marquee.setStrokeWidth(1);
-        marquee.getStrokeDashArray().addAll(5d, 5d);
+        marquee.setStrokeWidth(STROKE_WIDTH);
+        marquee.getStrokeDashArray().addAll(STROKE_DASH, STROKE_DASH);
         return marquee;
     }
 

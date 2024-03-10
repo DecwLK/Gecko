@@ -17,6 +17,7 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
     extends PositionableViewModelElement<T> implements Renamable {
     public static final double MIN_WIDTH = 100;
     public static final double MIN_HEIGHT = 100;
+    protected static final double HALF = 0.5;
 
     private final StringProperty nameProperty;
 
@@ -61,7 +62,7 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
 
     @Override
     public Point2D getCenter() {
-        return positionProperty.getValue().add(sizeProperty.getValue().multiply(0.5));
+        return positionProperty.getValue().add(sizeProperty.getValue().multiply(HALF));
     }
 
     @Override

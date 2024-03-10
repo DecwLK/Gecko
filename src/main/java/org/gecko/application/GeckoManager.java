@@ -14,6 +14,9 @@ public class GeckoManager {
     private Gecko gecko;
     private final Stage stage;
 
+    private static final int SCENE_WIDTH = 1024;
+    private static final int SCENE_HEIGHT = 768;
+
     public GeckoManager(Stage stage) throws ModelException {
         this.stage = stage;
         setGecko(new Gecko());
@@ -21,6 +24,6 @@ public class GeckoManager {
 
     public void setGecko(Gecko gecko) {
         this.gecko = gecko;
-        stage.setScene(new Scene(gecko.getView().getMainPane(), 1024, 768));
+        stage.setScene(new Scene(gecko.getView().getMainPane(), SCENE_WIDTH, SCENE_HEIGHT));
     }
 }

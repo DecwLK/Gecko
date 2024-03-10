@@ -9,4 +9,6 @@ import javafx.scene.Node;
  */
 public interface InspectorElement<T extends Node> {
     T getControl();
+
+    int FIELD_OFFSET = 50;
 }

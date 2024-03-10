@@ -27,11 +27,13 @@ public class SystemViewModel extends BlockViewModelElement<System> {
     private final ListProperty<PortViewModel> portsProperty;
     private StateViewModel startState;
 
+    private static final Point2D DEFAULT_SYSTEM_SIZE = new Point2D(300, 300);
+
     public SystemViewModel(int id, @NonNull System target) {
         super(id, target);
         this.codeProperty = new SimpleStringProperty(target.getCode());
         this.portsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
-        this.sizeProperty.setValue(new Point2D(300, 300));
+        this.sizeProperty.setValue(DEFAULT_SYSTEM_SIZE);
     }
 
     public List<PortViewModel> getPorts() {

@@ -42,9 +42,12 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
     private AutomatonFileScout scout;
     private int elementsCreated;
 
-
     private static final String START_STATE_REGEX = "[a-z].*";
-    private static final String SELF_REFERENCE_TOKEN = "self";
+    private static final int USER_SYSTEM_CHOICE_VBOX_SPACING = 10;
+    private static final int USER_SYSTEM_CHOICE_VBOX_PADDING = 20;
+    protected static final String SELF_REFERENCE_TOKEN = "self";
+    protected static final String CODE_BEGIN = "{=";
+    protected static final String CODE_END = "=}";
 
     public AutomatonFileVisitor() throws ModelException {
         this.model = new GeckoModel();
@@ -384,8 +387,7 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
     }
 
     private String cleanCode(String code) {
-        //length("{=") = 2
-        return code.substring(2, code.length() - 2);
+        return code.substring(CODE_BEGIN.length(), code.length() - CODE_BEGIN.length());
     }
 
     private System parseSystemReference(String name) {
@@ -421,8 +423,8 @@ public class AutomatonFileVisitor extends SystemDefBaseVisitor<Void> {
         comboBox.getItems().addAll(systemNames);
         comboBox.setPromptText("Choose a system");
 
-        VBox vBox = new VBox(10);
-        vBox.setPadding(new Insets(20));
+        VBox vBox = new VBox(USER_SYSTEM_CHOICE_VBOX_SPACING);
+        vBox.setPadding(new Insets(USER_SYSTEM_CHOICE_VBOX_PADDING));
         vBox.getChildren().add(comboBox);
 
         Alert alert = new Alert(Alert.AlertType.WARNING);

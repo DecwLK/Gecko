@@ -10,6 +10,7 @@ import org.gecko.view.views.viewelement.ViewElementVisitor;
  * It holds a reference to a Group containing the drawn target and borderline Path
  */
 public class SelectableViewElementDecorator extends ViewElementDecorator {
+    private static final String SELECTED_BORDER_STYLE_CLASS = "selected-border";
 
     public SelectableViewElementDecorator(ViewElement<?> decoratorTarget) {
         super(decoratorTarget);
@@ -23,9 +24,9 @@ public class SelectableViewElementDecorator extends ViewElementDecorator {
     @Override
     public void setSelected(boolean selected) {
         if (selected) {
-            getDecoratorTarget().drawElement().getStyleClass().add("selected-border");
+            getDecoratorTarget().drawElement().getStyleClass().add(SELECTED_BORDER_STYLE_CLASS);
         } else {
-            getDecoratorTarget().drawElement().getStyleClass().remove("selected-border");
+            getDecoratorTarget().drawElement().getStyleClass().remove(SELECTED_BORDER_STYLE_CLASS);
         }
         super.setSelected(selected);
         getDecoratorTarget().setSelected(selected);

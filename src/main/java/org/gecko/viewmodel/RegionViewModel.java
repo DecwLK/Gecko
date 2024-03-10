@@ -30,6 +30,8 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     private final ObservableList<StateViewModel> statesProperty;
     private final ContractViewModel contract;
 
+    private static final int MAXIMUM_RGB_COLOR_VALUE = 255;
+
     public RegionViewModel(
         int id, @NonNull Region target, @NonNull ContractViewModel contract) {
         super(id, target);
@@ -37,12 +39,11 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         this.invariantProperty = new SimpleStringProperty(target.getInvariant().getCondition());
         this.statesProperty = FXCollections.observableArrayList();
 
-        // TODO Alternatives: Fixed default color or random color from given palette.
         Random random = new Random(java.lang.System.currentTimeMillis());
-        int red = random.nextInt(255);
-        int green = random.nextInt(255);
-        int blue = random.nextInt(255);
-        this.colorProperty = new SimpleObjectProperty<>(Color.rgb(red, green, blue, 0.5));
+        int red = random.nextInt(MAXIMUM_RGB_COLOR_VALUE);
+        int green = random.nextInt(MAXIMUM_RGB_COLOR_VALUE);
+        int blue = random.nextInt(MAXIMUM_RGB_COLOR_VALUE);
+        this.colorProperty = new SimpleObjectProperty<>(Color.rgb(red, green, blue, BlockViewModelElement.HALF));
     }
 
     @Override

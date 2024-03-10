@@ -210,7 +210,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
                 getPosition().add(0, getSize().getY())));
         for (int i = 0; i < edgePoints.size(); i++) {
             Point2D p3 = edgePoints.get(i);
-            Point2D p4 = edgePoints.get((i + 1) % 4);
+            Point2D p4 = edgePoints.get((i + 1) % ORIENTATIONS);
             if (lineIntersectsLine(p1, p2, p3, p4)) {
                 return i;
             }

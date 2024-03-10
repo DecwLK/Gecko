@@ -20,6 +20,7 @@ import org.gecko.exceptions.ModelException;
  * afferent data.
  */
 @Getter
+@SuppressWarnings("JavaLangClash")
 public class System extends Element implements Renamable {
     private final Set<System> children;
     private final Set<SystemConnection> connections;

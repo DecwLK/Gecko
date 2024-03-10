@@ -15,11 +15,12 @@ import org.gecko.exceptions.ModelException;
  * {@link Visibility}.
  */
 @Getter
-@Setter(onParam_ = {@NonNull})
+@Setter
 public class Variable extends Element implements Renamable {
     private String name;
     private String type;
     private String value;
+    @Setter(onParam_ = @NonNull)
     private Visibility visibility;
     private boolean hasIncomingConnection;
 

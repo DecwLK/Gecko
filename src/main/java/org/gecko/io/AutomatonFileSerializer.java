@@ -147,7 +147,7 @@ public class AutomatonFileSerializer implements FileSerializer {
         switch (kind) {
             case MISS -> {
                 contract.setPreCondition(contract.getPreCondition().not());
-                contract.setPostCondition(new Condition("TRUE"));
+                contract.setPostCondition(Condition.trueCondition());
             }
             case FAIL -> {
                 contract.setPostCondition(contract.getPostCondition().not());

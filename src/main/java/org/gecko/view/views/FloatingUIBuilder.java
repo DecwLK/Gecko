@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
@@ -29,7 +30,6 @@ public class FloatingUIBuilder {
     private static final String FLOATING_BUTTON_STYLE_CLASS = "floating-ui-button";
     private static final String ZOOM_IN_STYLE_CLASS = "floating-zoom-in-button";
     private static final String ZOOM_OUT_STYLE_CLASS = "floating-zoom-out-button";
-    private static final String MATCHES_REGEX = "%d of %d matches";
 
     private final ActionManager actionManager;
     private final EditorViewModel editorViewModel;
@@ -105,11 +105,12 @@ public class FloatingUIBuilder {
             if (!matches.isEmpty()) {
                 actionManager.run(
                     actionManager.getActionFactory().createFocusPositionableViewModelElementAction(matches.getFirst()));
-                matchesLabel.setText(String.format(MATCHES_REGEX, 1, matches.size()));
+                matchesLabel.setText(
+                    String.format(ResourceHandler.getString("Labels", "matches_format_string"), 1, matches.size()));
                 backwardButton.setDisable(true);
                 forwardButton.setDisable(matches.size() == 1);
             } else {
-                matchesLabel.setText(String.format(MATCHES_REGEX, 0, 0));
+                matchesLabel.setText(String.format(ResourceHandler.getString("Labels", "matches_format_string"), 0, 0));
                 backwardButton.setDisable(true);
                 forwardButton.setDisable(true);
             }
@@ -143,7 +144,9 @@ public class FloatingUIBuilder {
         actionManager.run(actionManager.getActionFactory()
             .createFocusPositionableViewModelElementAction(matches.get(currentPosition + direction)));
         currentPosition += direction;
-        matchesLabel.setText(String.format(MATCHES_REGEX, currentPosition + 1, matches.size()));
+        matchesLabel.setText(
+            String.format(ResourceHandler.getString("Labels", "matches_format_string"), currentPosition + 1,
+                matches.size()));
         backwardButton.setDisable(currentPosition == 0);
         forwardButton.setDisable(currentPosition == matches.size() - 1);
     }

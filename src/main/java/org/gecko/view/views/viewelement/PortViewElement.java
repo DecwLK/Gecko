@@ -77,8 +77,9 @@ public class PortViewElement extends Pane {
 
     private void updateBackgroundColor() {
         boolean isInput = viewModel.getVisibility() == Visibility.INPUT;
-        Background background = new Background(new BackgroundFill(PortViewModel.getBackgroundColor(
-            isInput ? Visibility.OUTPUT : Visibility.INPUT), isInput ? INPUT_RADII : OUTPUT_RADII, null));
+        Background background = new Background(
+            new BackgroundFill(PortViewModel.getBackgroundColor(isInput ? Visibility.OUTPUT : Visibility.INPUT),
+                isInput ? INPUT_RADII : OUTPUT_RADII, null));
         setBackground(background);
     }
 }

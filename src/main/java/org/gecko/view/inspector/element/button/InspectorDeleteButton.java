@@ -19,7 +19,7 @@ public class InspectorDeleteButton extends AbstractInspectorButton {
             actionManager.run(
                 actionManager.getActionFactory().createDeletePositionableViewModelElementAction(elementToRemove));
         });
-        setText(ResourceHandler.getString("Buttons", "inspector_delete"));
+        setText(ResourceHandler.getString("Buttons", "delete"));
         setPrefWidth(WIDTH);
         getStyleClass().add(STYLE);
         setTooltip(new Tooltip(Shortcuts.DELETE.get().getDisplayText()));

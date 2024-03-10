@@ -4,6 +4,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.PortViewModel;
 
 /**
@@ -27,8 +28,7 @@ public class VariableBlockViewElementContextMenuBuilder extends ViewContextMenuB
 
         SeparatorMenuItem dataTransferToVariableBlockEditingSeparator = new SeparatorMenuItem();
 
-        // Variable Block editing commands:
-        MenuItem deleteMenuItem = new MenuItem("Delete");
+        MenuItem deleteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "delete"));
         deleteMenuItem.setOnAction(e -> actionManager.run(
             actionManager.getActionFactory().createDeletePositionableViewModelElementAction(portViewModel)));
 

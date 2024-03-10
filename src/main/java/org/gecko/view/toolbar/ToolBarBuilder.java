@@ -16,6 +16,7 @@ import org.gecko.actions.Action;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.Tool;
 import org.gecko.tools.ToolType;
+import org.gecko.view.ResourceHandler;
 import org.gecko.view.views.EditorView;
 import org.gecko.viewmodel.EditorViewModel;
 
@@ -65,7 +66,7 @@ public class ToolBarBuilder {
         toolBar.getItems().add(spacer);
 
         HBox undoButtonBox = new HBox();
-        Button undoButton = new Button("Undo");
+        Button undoButton = new Button(ResourceHandler.getString("Buttons", "undo"));
         undoButton.setOnAction(event -> actionManager.undo());
         undoButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);
         undoButton.getStyleClass().add(UNDO_ICON_STYLE_NAME);
@@ -74,7 +75,7 @@ public class ToolBarBuilder {
         toolBar.getItems().add(undoButtonBox);
 
         HBox redoButtonBox = new HBox();
-        Button redoButton = new Button("Redo");
+        Button redoButton = new Button(ResourceHandler.getString("Buttons", "redo"));
         redoButton.setOnAction(event -> actionManager.redo());
         redoButton.getStyleClass().add(DEFAULT_TOOLBAR_ICON_STYLE_NAME);
         redoButton.getStyleClass().add(REDO_ICON_STYLE_NAME);

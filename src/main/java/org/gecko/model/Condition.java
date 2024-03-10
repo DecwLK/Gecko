@@ -51,4 +51,13 @@ public class Condition {
     public String toString() {
         return condition;
     }
+
+    public static Condition trueCondition() {
+        //Name has to be this because true is reserved
+        try {
+            return new Condition("true");
+        } catch (ModelException e) {
+            return null;
+        }
+    }
 }

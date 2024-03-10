@@ -30,8 +30,8 @@ import org.gecko.viewmodel.StateViewModel;
  * {@link InspectorPreconditionField}s, {@link InspectorPostconditionField}s and an {link InspectorInvariantField} in
  * the case of a region.
  */
+@Getter
 public class InspectorContractItem extends VBox implements InspectorElement<VBox> {
-    @Getter
     private ContractViewModel viewModel;
 
     /**

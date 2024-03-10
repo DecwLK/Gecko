@@ -15,7 +15,7 @@ public class InspectorSetStartStateButton extends ToggleButton implements Inspec
     public InspectorSetStartStateButton(ActionManager actionManager, StateViewModel stateViewModel) {
         getStyleClass().add(START_STATE_STYLE);
         setMaxWidth(Double.MAX_VALUE);
-        setText(ResourceHandler.getString("Buttons", "inspector_set_start_state"));
+        setText(ResourceHandler.getString("Buttons", "set_start_state"));
         update(stateViewModel.getIsStartState());
         stateViewModel.getIsStartStateProperty().addListener((observable, oldValue, newValue) -> {
             update(newValue);

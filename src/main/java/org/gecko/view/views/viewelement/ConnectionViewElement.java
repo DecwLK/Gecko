@@ -27,11 +27,6 @@ import lombok.Setter;
  */
 @Getter
 public abstract class ConnectionViewElement extends Path {
-    private static final String STYLE_CLASS = "path";
-    private static final double ARROW_HEAD_LENGTH = 25;
-    private static final double ARROW_HEAD_ANGLE = 10;
-    private static final Point2D ANGLE_OFFSET_HELPER = new Point2D(50, 10);
-    private static final int MIN_REQUIRED_PATH_POINTS = 2;
 
     private final ObservableList<Property<Point2D>> pathSource;
     private MoveTo startElement;
@@ -44,14 +39,18 @@ public abstract class ConnectionViewElement extends Path {
     private boolean selected;
 
     /**
-     * The render path source is a list of pairs of double properties. The first element of the pair is the x property
-     * of the point, and the second element is the y property of the point. This list represents the actual points that
-     * are drawn on the screen. pathSource is a subset of renderPathSource. In order to draw a loop, extra points are
-     * added to renderPathSource.
+     * The first element of the pair is the x property of the point, and the second element is the y property of the
+     * point. This list represents the actual points that are drawn on the screen. pathSource is a subset of
+     * renderPathSource. In order to draw a loop, extra points are added to renderPathSource.
      */
     protected List<Pair<DoubleProperty, DoubleProperty>> renderPathSource;
 
-    private static final int DEFAULT_STROKE_WIDTH = 5;
+    private static final int STROKE_WIDTH = 5;
+    private static final String STYLE_CLASS = "path";
+    private static final double ARROW_HEAD_LENGTH = 25;
+    private static final double ARROW_HEAD_ANGLE = 10;
+    private static final Point2D ANGLE_OFFSET_HELPER = new Point2D(50, 10);
+    private static final int MIN_REQUIRED_PATH_POINTS = 2;
 
     protected ConnectionViewElement(ObservableList<Property<Point2D>> path) {
         this.pathSource = path;
@@ -65,7 +64,7 @@ public abstract class ConnectionViewElement extends Path {
         isLoopProperty.addListener((observable, oldValue, newValue) -> updatePathVisualization());
         orientationProperty.addListener((observable, oldValue, newValue) -> updatePathVisualization());
 
-        setStrokeWidth(DEFAULT_STROKE_WIDTH);
+        setStrokeWidth(STROKE_WIDTH);
         getStyleClass().add(STYLE_CLASS);
     }
 

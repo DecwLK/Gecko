@@ -35,17 +35,14 @@ public class ViewElementPane {
     @Getter
     private final Set<ViewElement<?>> elements;
 
-    private static final Point2D DEFAULT_MEASURE = new Point2D(0, 0);
-    private static final int DEFAULT_PADDING = 0;
-
     public ViewElementPane(EditorViewModel evm) {
         this.world = new Pane();
         this.pane = new ScrollPane();
-        this.offset = new SimpleObjectProperty<>(DEFAULT_MEASURE);
-        this.widthPadding = new SimpleDoubleProperty(DEFAULT_PADDING);
-        this.heightPadding = new SimpleDoubleProperty(DEFAULT_PADDING);
-        this.minWorldPosition = DEFAULT_MEASURE;
-        this.maxWorldPosition = DEFAULT_MEASURE;
+        this.offset = new SimpleObjectProperty<>(Point2D.ZERO);
+        this.widthPadding = new SimpleDoubleProperty(0);
+        this.heightPadding = new SimpleDoubleProperty(0);
+        this.minWorldPosition = Point2D.ZERO;
+        this.maxWorldPosition = Point2D.ZERO;
         this.elements = new HashSet<>();
         this.evm = evm;
 

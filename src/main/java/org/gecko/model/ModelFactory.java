@@ -65,8 +65,8 @@ public class ModelFactory {
 
     public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull State destination)
         throws ModelException {
-        if (automaton.getStates().isEmpty() || !automaton.getStates().contains(source)
-            || !automaton.getStates().contains(destination)) {
+        if (automaton.getStates().isEmpty() || !automaton.getStates().contains(source) || !automaton.getStates()
+            .contains(destination)) {
             throw new RuntimeException("Failed to create edge, because source and / or destination states "
                 + "are not part of the automaton.");
         }
@@ -158,8 +158,8 @@ public class ModelFactory {
         return connection;
     }
 
-    private boolean isConnectingAllowed(System system, System sourceParent, System destinationParent, Variable source,
-                                        Variable destination) {
+    private boolean isConnectingAllowed(
+        System system, System sourceParent, System destinationParent, Variable source, Variable destination) {
         if (!sourceParent.equals(system) && !destinationParent.equals(system)) {
             if (!sourceParent.getParent().equals(system) || !destinationParent.getParent().equals(system)) {
                 return false;

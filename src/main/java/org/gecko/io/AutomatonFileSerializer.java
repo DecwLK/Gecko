@@ -36,20 +36,17 @@ public class AutomatonFileSerializer implements FileSerializer {
     private final GeckoModel model;
 
     private static final String INDENT = "    ";
-    private static final String SERIALIZED_CONTRACT_NAME_REGEX = "contract %s";
-    private static final String AUTOMATON_SERIALIZATION_AS_SYSTEM_CONTRACT_REGEX
-        = SERIALIZED_CONTRACT_NAME_REGEX + " {";
-    private static final String SERIALIZED_CONTRACT_REGEX = SERIALIZED_CONTRACT_NAME_REGEX + " := %s ==> %s";
-    private static final String SERIALIZED_TRANSITION_REGEX = "%s -> %s :: %s";
-    private static final String SERIALIZED_SYSTEM_REGEX = "reactor %s {";
-    private static final String SERIALIZED_CONNECTION_REGEX = "%s.%s -> %s.%s";
-    private static final String SERIALIZED_STATE_REGEX = "state %s: %s";
-    private static final String VARIABLE_ATTRIBUTES_REGEX = " %s: %s";
-    private static final String TRUE_CONDITION = "TRUE";
+    private static final String SERIALIZED_CONTRACT_NAME = "contract %s";
+    private static final String AUTOMATON_SERIALIZATION_AS_SYSTEM_CONTRACT = SERIALIZED_CONTRACT_NAME + " {";
+    private static final String SERIALIZED_CONTRACT = SERIALIZED_CONTRACT_NAME + " := %s ==> %s";
+    private static final String SERIALIZED_TRANSITION = "%s -> %s :: %s";
+    private static final String SERIALIZED_SYSTEM = "reactor %s {";
+    private static final String SERIALIZED_CONNECTION = "%s.%s -> %s.%s";
+    private static final String SERIALIZED_STATE = "state %s: %s";
+    private static final String VARIABLE_ATTRIBUTES = " %s: %s";
     private static final String SERIALIZED_INPUT = "input";
     private static final String SERIALIZED_OUTPUT = "output";
-    private static final String SERIALIZED_STATE = "state";
-    private static final int HIGHEST_PRIORITY = 0;
+    private static final String SERIALIZED_STATE_VISIBILITY = "state";
 
     public AutomatonFileSerializer(GeckoModel model) {
         this.model = model;
@@ -84,7 +81,7 @@ public class AutomatonFileSerializer implements FileSerializer {
     private String serializeAutomaton(System system) {
         Automaton automaton = system.getAutomaton();
         StringJoiner joiner = new StringJoiner(java.lang.System.lineSeparator());
-        joiner.add(AUTOMATON_SERIALIZATION_AS_SYSTEM_CONTRACT_REGEX.formatted(system.getName()));
+        joiner.add(AUTOMATON_SERIALIZATION_AS_SYSTEM_CONTRACT.formatted(system.getName()));
         if (!system.getVariables().isEmpty()) {
             joiner.add(serializeIo(system));
             joiner.add("");
@@ -141,10 +138,10 @@ public class AutomatonFileSerializer implements FileSerializer {
         }
 
         //applying priorites
-        int prioIndex = HIGHEST_PRIORITY;
+        int prioIndex = 0;
         for (List<Edge> edgeGroup : groupedEdges) {
             for (Edge edge : edgeGroup) {
-                if (prioIndex == HIGHEST_PRIORITY) {
+                if (prioIndex == 0) {
                     continue; //Highest prio doesn't need to be altered
                 }
                 Contract contractWithPrio = newContracts.get(edge.getContract());
@@ -161,7 +158,7 @@ public class AutomatonFileSerializer implements FileSerializer {
         switch (kind) {
             case MISS -> {
                 contract.setPreCondition(contract.getPreCondition().not());
-                contract.setPostCondition(new Condition(TRUE_CONDITION));
+                contract.setPostCondition(Condition.trueCondition());
             }
             case FAIL -> {
                 contract.setPostCondition(contract.getPostCondition().not());
@@ -210,18 +207,18 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeContract(Contract contract) {
-        return INDENT + SERIALIZED_CONTRACT_REGEX.formatted(contract.getName(), contract.getPreCondition(),
+        return INDENT + SERIALIZED_CONTRACT.formatted(contract.getName(), contract.getPreCondition(),
             contract.getPostCondition());
     }
 
     private String serializeTransition(Edge edge) {
-        return INDENT + SERIALIZED_TRANSITION_REGEX
-            .formatted(edge.getSource().getName(), edge.getDestination().getName(), edge.getContract().getName());
+        return INDENT + SERIALIZED_TRANSITION.formatted(edge.getSource().getName(), edge.getDestination().getName(),
+            edge.getContract().getName());
     }
 
     private String serializeSystem(System system) {
         StringJoiner joiner = new StringJoiner(java.lang.System.lineSeparator());
-        joiner.add(SERIALIZED_SYSTEM_REGEX.formatted(system.getName()));
+        joiner.add(SERIALIZED_SYSTEM.formatted(system.getName()));
         if (!system.getVariables().isEmpty()) {
             joiner.add(serializeIo(system));
             joiner.add("");
@@ -231,7 +228,7 @@ public class AutomatonFileSerializer implements FileSerializer {
             joiner.add("");
         }
         if (system.getAutomaton() != null && !system.getAutomaton().isEmpty()) {
-            joiner.add(INDENT + SERIALIZED_CONTRACT_NAME_REGEX.formatted(system.getName()));
+            joiner.add(INDENT + SERIALIZED_CONTRACT_NAME.formatted(system.getName()));
             joiner.add("");
         }
         if (!system.getConnections().isEmpty()) {
@@ -255,7 +252,7 @@ public class AutomatonFileSerializer implements FileSerializer {
         String startPort = connection.getSource().getName();
         String endSystem = serializeSystemReference(parent, connection.getDestination());
         String endPort = connection.getDestination().getName();
-        return INDENT + SERIALIZED_CONNECTION_REGEX.formatted(startSystem, startPort, endSystem, endPort);
+        return INDENT + SERIALIZED_CONNECTION.formatted(startSystem, startPort, endSystem, endPort);
     }
 
     private String serializeSystemReference(System parent, Variable var) {
@@ -278,7 +275,7 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeChild(System system) {
-        return INDENT + SERIALIZED_STATE_REGEX.formatted(system.getName(), system.getName());
+        return INDENT + SERIALIZED_STATE.formatted(system.getName(), system.getName());
     }
 
     private String serializeVariable(Variable variable) {
@@ -286,10 +283,10 @@ public class AutomatonFileSerializer implements FileSerializer {
         output += INDENT + switch (variable.getVisibility()) {
             case INPUT -> SERIALIZED_INPUT;
             case OUTPUT -> SERIALIZED_OUTPUT;
-            case STATE -> SERIALIZED_STATE;
+            case STATE -> SERIALIZED_STATE_VISIBILITY;
             default -> throw new IllegalArgumentException("Unknown visibility: " + variable.getVisibility());
         };
-        output += VARIABLE_ATTRIBUTES_REGEX.formatted(variable.getName(), variable.getType());
+        output += VARIABLE_ATTRIBUTES.formatted(variable.getName(), variable.getType());
         //TODO append variable value
         return output;
     }

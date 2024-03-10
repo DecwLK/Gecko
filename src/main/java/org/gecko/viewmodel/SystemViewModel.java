@@ -82,4 +82,15 @@ public class SystemViewModel extends BlockViewModelElement<System> {
     public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SystemViewModel system)) {
+            return false;
+        }
+        return id == system.id;
+    }
 }

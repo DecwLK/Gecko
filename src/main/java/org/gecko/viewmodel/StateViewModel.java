@@ -200,4 +200,15 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
         return s >= 0 && s <= 1 && t >= 0 && t <= 1;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof StateViewModel state)) {
+            return false;
+        }
+        return id == state.id;
+    }
 }

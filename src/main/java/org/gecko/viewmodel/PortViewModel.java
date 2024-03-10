@@ -78,4 +78,15 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
             case STATE -> Color.LIGHTSEAGREEN;
         };
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PortViewModel port)) {
+            return false;
+        }
+        return id == port.id;
+    }
 }

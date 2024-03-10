@@ -39,15 +39,4 @@ public abstract class AbstractViewModelElement<T extends Element> {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof AbstractViewModelElement<?> element)) {
-            return false;
-        }
-        return id == element.id;
-    }
 }

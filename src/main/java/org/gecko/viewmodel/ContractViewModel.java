@@ -60,4 +60,15 @@ public class ContractViewModel extends AbstractViewModelElement<Contract> implem
     public void setName(String name) {
         nameProperty.setValue(name);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ContractViewModel contract)) {
+            return false;
+        }
+        return id == contract.id;
+    }
 }

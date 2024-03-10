@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.SetChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -106,11 +107,12 @@ public class EditorView {
         activateSearchWindow(false);
 
         AnchorPane floatingUI = new AnchorPane();
-        floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton, searchWindow);
+        floatingUI.getChildren().addAll(zoomButtons, currentViewLabel, viewSwitchButton);
         floatingUI.setPickOnBounds(false);
 
         // Build stack pane
-        currentViewPane.getChildren().addAll(viewElementPane.draw(), floatingUI);
+        currentViewPane.getChildren().addAll(viewElementPane.draw(), floatingUI, searchWindow);
+        StackPane.setAlignment(searchWindow, Pos.TOP_CENTER);
 
         // View element creator listener
         viewModel.getContainedPositionableViewModelElementsProperty().addListener(this::onUpdateViewElements);
@@ -194,8 +196,6 @@ public class EditorView {
      * @param activate true if the search window should be activated, false otherwise
      */
     public void activateSearchWindow(boolean activate) {
-        AnchorPane.setTopAnchor(searchWindow, currentViewPane.getHeight() / 2);
-        AnchorPane.setLeftAnchor(searchWindow, currentViewPane.getWidth() / 2);
         searchWindow.setVisible(activate);
         searchWindow.requestFocus();
     }

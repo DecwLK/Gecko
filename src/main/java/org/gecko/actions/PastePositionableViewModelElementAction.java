@@ -42,6 +42,8 @@ public class PastePositionableViewModelElementAction extends Action {
             }
         }
         pastedElements.addAll(pasteVisitor.getPastedElements());
+        Action selectAction = geckoViewModel.getActionManager().getActionFactory().createSelectAction(pastedElements, true);
+        geckoViewModel.getActionManager().run(selectAction);
         return true;
     }
 

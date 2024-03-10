@@ -25,7 +25,7 @@ import org.gecko.viewmodel.SystemViewModel;
 
 @Getter
 @Setter
-public class CopyPositionableViewModelElementVisitor implements PositionableViewModelElementVisitor {
+public class CopyPositionableViewModelElementVisitor implements PositionableViewModelElementVisitor<Void> {
     @Getter(AccessLevel.NONE)
     private GeckoViewModel geckoViewModel;
     private boolean isAutomatonCopy;

@@ -15,7 +15,7 @@ import org.gecko.viewmodel.SystemViewModel;
  * type of {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement} in order to create
  * inspectors for concrete {@link org.gecko.viewmodel.PositionableViewModelElement PositionableViewModelElement}s.
  */
-public class InspectorFactoryVisitor implements PositionableViewModelElementVisitor {
+public class InspectorFactoryVisitor implements PositionableViewModelElementVisitor<Void> {
 
     private final InspectorFactory inspectorFactory;
     @Getter
@@ -26,36 +26,36 @@ public class InspectorFactoryVisitor implements PositionableViewModelElementVisi
     }
 
     @Override
-    public Object visit(SystemViewModel systemViewModel) {
+    public Void visit(SystemViewModel systemViewModel) {
         inspector = inspectorFactory.createSystemInspector(systemViewModel);
         return null;
     }
 
     @Override
-    public Object visit(RegionViewModel regionViewModel) {
+    public Void visit(RegionViewModel regionViewModel) {
         inspector = inspectorFactory.createRegionInspector(regionViewModel);
         return null;
     }
 
     @Override
-    public Object visit(SystemConnectionViewModel systemConnectionViewModel) {
+    public Void visit(SystemConnectionViewModel systemConnectionViewModel) {
         return null;
     }
 
     @Override
-    public Object visit(EdgeViewModel edgeViewModel) {
+    public Void visit(EdgeViewModel edgeViewModel) {
         inspector = inspectorFactory.createEdgeInspector(edgeViewModel);
         return null;
     }
 
     @Override
-    public Object visit(StateViewModel stateViewModel) {
+    public Void visit(StateViewModel stateViewModel) {
         inspector = inspectorFactory.createStateInspector(stateViewModel);
         return null;
     }
 
     @Override
-    public Object visit(PortViewModel portViewModel) {
+    public Void visit(PortViewModel portViewModel) {
         inspector = inspectorFactory.createVariableBlockInspector(portViewModel);
         return null;
     }

@@ -95,6 +95,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
 
     public void setEdgeOffsets() {
         Map<Integer, List<EdgeViewModel>> intersectionOrientationEdges = getIntersectionOrientationEdges();
+        sortEdges(intersectionOrientationEdges);
         int loopOrientation = 0;
         int min = Integer.MAX_VALUE;
         for (int orientation = 0; orientation < ORIENTATIONS; orientation++) {
@@ -141,6 +142,30 @@ public class StateViewModel extends BlockViewModelElement<State> {
                 }
                 offset += part;
             }
+        }
+    }
+
+    private Point2D getOtherEdgePoint(EdgeViewModel edge) {
+        if (edge.getSource().equals(this)) {
+            return edge.getDestination().getCenter();
+        }
+        return edge.getSource().getCenter();
+    }
+
+    private int compareEdges(EdgeViewModel e1, EdgeViewModel e2, int orientation) {
+        return switch (orientation) {
+            case 0 -> Double.compare(getOtherEdgePoint(e1).getX(), getOtherEdgePoint(e2).getX());
+            case 1 -> Double.compare(getOtherEdgePoint(e1).getY(), getOtherEdgePoint(e2).getY());
+            case 2 -> Double.compare(getOtherEdgePoint(e2).getX(), getOtherEdgePoint(e1).getX());
+            case 3 -> Double.compare(getOtherEdgePoint(e2).getY(), getOtherEdgePoint(e1).getY());
+            default -> 0;
+        };
+    }
+
+    private void sortEdges(Map<Integer, List<EdgeViewModel>> intersectionOrientationEdges) {
+        for (int orientation = 0; orientation < ORIENTATIONS; orientation++) {
+            int finalOrientation = orientation;
+            intersectionOrientationEdges.get(orientation).sort((e1, e2) -> compareEdges(e1, e2, finalOrientation));
         }
     }
 

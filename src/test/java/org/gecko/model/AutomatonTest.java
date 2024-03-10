@@ -256,7 +256,6 @@ public class AutomatonTest {
 
     @Test
     void isEmpty() {
-        automatonWithStartState.getAllElements().forEach(e -> java.lang.System.out.println(e.getId()));
         assertTrue(defaultAutomaton.isEmpty());
         assertFalse(automatonWithStartState.isEmpty());
 

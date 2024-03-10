@@ -135,8 +135,10 @@ class CreateViewModelElementActionTest {
         SystemViewModel systemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
         portViewModel1.setVisibility(Visibility.OUTPUT);
+        portViewModel1.updateTarget();
         PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
         portViewModel2.setVisibility(Visibility.INPUT);
+        portViewModel2.updateTarget();
         Action createSystemConnectionViewModelElementAction =
             actionFactory.createCreateSystemConnectionViewModelElementAction(portViewModel1, portViewModel2);
         actionManager.run(createSystemConnectionViewModelElementAction);
@@ -149,8 +151,10 @@ class CreateViewModelElementActionTest {
         SystemViewModel systemViewModel2 = viewModelFactory.createSystemViewModelIn(rootSystemViewModel);
         PortViewModel portViewModel1 = viewModelFactory.createPortViewModelIn(systemViewModel1);
         portViewModel1.setVisibility(Visibility.OUTPUT);
+        portViewModel1.updateTarget();
         PortViewModel portViewModel2 = viewModelFactory.createPortViewModelIn(systemViewModel2);
         portViewModel2.setVisibility(Visibility.INPUT);
+        portViewModel2.updateTarget();
         Action createSystemConnectionViewModelElementAction =
             actionFactory.createCreateSystemConnectionViewModelElementAction(portViewModel1, portViewModel2);
         actionManager.run(createSystemConnectionViewModelElementAction);

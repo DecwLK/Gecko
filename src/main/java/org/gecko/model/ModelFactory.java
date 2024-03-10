@@ -125,6 +125,7 @@ public class ModelFactory {
                 copy.getAutomaton().setStartState(copiedState);
             }
             stateToCopy.put(state, copiedState);
+            originalToCopy.put(state, copiedState);
         }
         for (Edge edge : system.getAutomaton().getEdges()) {
             State copiedSource = stateToCopy.get(edge.getSource());

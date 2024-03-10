@@ -38,12 +38,14 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
     private HashMap<Element, Pair<Point2D, Point2D>> elementToPosAndSize;
     @Getter
     private Set<PositionableViewModelElement<?>> failedCopies;
+    private final Set<Element> copiedElements;
 
     public CopyPositionableViewModelElementVisitor(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
         isAutomatonCopy = geckoViewModel.getCurrentEditor().isAutomatonEditor();
         originalToClipboard = new HashMap<>();
         elementToPosAndSize = new HashMap<>();
+        copiedElements = new HashSet<>();
         failedCopies = new HashSet<>();
     }
 
@@ -62,6 +64,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         originalToClipboard.putAll(copyResult.getValue());
         originalToClipboard.put(original, copy);
         savePositionRecursively(original);
+        copiedElements.add(copy);
         return null;
     }
 
@@ -71,6 +74,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         Region copy = geckoViewModel.getGeckoModel().getModelFactory().copyRegion(original);
         originalToClipboard.put(original, copy);
         savePositionAndSize(copy, regionViewModel);
+        copiedElements.add(copy);
         return null;
     }
 
@@ -92,6 +96,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
             copy.setDestination(destinationOnClipboard);
             copy.setContract(contractOnClipboard);
             originalToClipboard.put(original, copy);
+            copiedElements.add(copy);
         }
         return null;
     }
@@ -105,6 +110,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         originalToClipboard.putAll(copyResult.getValue());
         originalToClipboard.put(original, copy);
         savePositionAndSize(copy, stateViewModel);
+        copiedElements.add(copy);
         return null;
     }
 
@@ -143,6 +149,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
                 throw new RuntimeException(e);
             }
             originalToClipboard.put(original, copy);
+            copiedElements.add(copy);
         }
         return null;
     }

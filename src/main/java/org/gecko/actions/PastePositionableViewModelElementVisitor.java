@@ -173,6 +173,8 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
                     geckoViewModel.getViewModelFactory().createRegionViewModelFrom(region);
                 regionViewModel.setPosition(
                     copyVisitor.getElementToPosAndSize().get(clipboardToPasted.inverse().get(region)).getKey());
+                regionViewModel.setSize(
+                    copyVisitor.getElementToPosAndSize().get(clipboardToPasted.inverse().get(region)).getValue());
             } catch (MissingViewModelElementException e) {
                 throw new RuntimeException(e);
             }

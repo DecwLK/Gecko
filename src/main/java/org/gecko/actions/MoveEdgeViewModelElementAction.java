@@ -54,7 +54,7 @@ public class MoveEdgeViewModelElementAction extends Action {
             elementScalerBlock.getIndex() == 0 ? edgeViewModel.getSource() : edgeViewModel.getDestination();
         if (stateViewModel == null) {
             stateViewModel = attemptRelocation();
-            if (stateViewModel == null) {
+            if (stateViewModel == null || stateViewModel.equals(previousStateViewModel)) {
                 edgeViewModel.setBindings();
                 return false;
             }

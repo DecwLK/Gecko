@@ -153,13 +153,18 @@ public class StateViewModel extends BlockViewModelElement<State> {
     }
 
     private int compareEdges(EdgeViewModel e1, EdgeViewModel e2, int orientation) {
-        return switch (orientation) {
+        int compare = switch (orientation) {
             case 0 -> Double.compare(getOtherEdgePoint(e1).getX(), getOtherEdgePoint(e2).getX());
             case 1 -> Double.compare(getOtherEdgePoint(e1).getY(), getOtherEdgePoint(e2).getY());
             case 2 -> Double.compare(getOtherEdgePoint(e2).getX(), getOtherEdgePoint(e1).getX());
             case 3 -> Double.compare(getOtherEdgePoint(e2).getY(), getOtherEdgePoint(e1).getY());
             default -> 0;
         };
+        if (compare == 0) {
+            int equalCompare = Integer.compare(e1.id, e2.id);
+            return orientation > 1 ? -equalCompare : equalCompare;
+        }
+        return compare;
     }
 
     private void sortEdges(Map<Integer, List<EdgeViewModel>> intersectionOrientationEdges) {

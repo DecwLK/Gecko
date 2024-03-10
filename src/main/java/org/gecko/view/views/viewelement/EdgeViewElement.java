@@ -78,10 +78,10 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
         pane.getChildren().add(label);
 
-        isLoopProperty.bind(edgeViewModel.getIsLoopProperty());
+        isLoopProperty.bind(edgeViewModel.getIsLoopProperty().and(edgeViewModel.getIsCurrentlyModified().not()));
         orientationProperty.bind(edgeViewModel.getOrientationProperty());
 
-
+        isLoopProperty.addListener((observable, oldValue, newValue) -> calculateLabelPosition());
         constructVisualization();
         calculateLabelPosition();
     }
@@ -89,7 +89,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
     private void calculateLabelPosition() {
         Point2D first;
         Point2D last;
-        if (edgeViewModel.isLoop()) {
+        if (isLoopProperty.get()) {
             Pair<Point2D, Point2D> loopPoints = getLoopPoints();
             first = loopPoints.getKey();
             last = loopPoints.getValue();

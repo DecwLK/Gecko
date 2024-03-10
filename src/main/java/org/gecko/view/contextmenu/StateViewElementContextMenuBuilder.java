@@ -4,7 +4,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
-import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.StateViewModel;
 
 /**
@@ -15,6 +14,8 @@ import org.gecko.viewmodel.StateViewModel;
 public class StateViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final StateViewModel stateViewModel;
+
+    private static final String START_STATE_MENU_ITEM = "Start State";
 
     public StateViewElementContextMenuBuilder(
         ActionManager actionManager, StateViewModel stateViewModel) {
@@ -29,12 +30,12 @@ public class StateViewElementContextMenuBuilder extends ViewContextMenuBuilder {
         SeparatorMenuItem dataTransferToStateEditingSeparator = new SeparatorMenuItem();
 
         // State editing commands:
-        MenuItem startStateMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "set_start_state"));
+        MenuItem startStateMenuItem = new MenuItem(START_STATE_MENU_ITEM);
         startStateMenuItem.setDisable(stateViewModel.getIsStartState());
         startStateMenuItem.setOnAction(e -> actionManager.run(
             actionManager.getActionFactory().createSetStartStateViewModelElementAction(stateViewModel)));
 
-        MenuItem deleteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "delete"));
+        MenuItem deleteMenuItem = new MenuItem(DELETE_MENU_ITEM);
         deleteMenuItem.setOnAction(e -> actionManager.run(
             actionManager.getActionFactory().createDeletePositionableViewModelElementAction(stateViewModel)));
 

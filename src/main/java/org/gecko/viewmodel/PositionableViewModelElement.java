@@ -26,10 +26,13 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
 
     private final Set<PositionableViewModelElement<?>> observers;
 
+    protected static final Point2D DEFAULT_POSITION = new Point2D(0, 0);
+    private static final Point2D DEFAULT_SIZE = new Point2D(200, 300);
+
     PositionableViewModelElement(int id, @NonNull T target) {
         super(id, target);
-        this.positionProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
-        this.sizeProperty = new SimpleObjectProperty<>(new Point2D(200, 300));
+        this.positionProperty = new SimpleObjectProperty<>(DEFAULT_POSITION);
+        this.sizeProperty = new SimpleObjectProperty<>(DEFAULT_SIZE);
         this.observers = new HashSet<>();
         this.isCurrentlyModified = new SimpleBooleanProperty(false);
     }

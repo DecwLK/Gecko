@@ -62,6 +62,13 @@ public class EditorView {
     private ShortcutHandler shortcutHandler;
     private ContextMenu contextMenu;
 
+    private static final String VIEW = "View";
+    private static final String SYSTEM_KEY = "system";
+    private static final String AUTOMATON_KEY = "automaton";
+    private static final double DEFAULT_ANCHOR_VALUE = 18.0;
+    private static final double LEFT_ANCHOR_VALUE = 15.0;
+
+
     public EditorView(
         ViewFactory viewFactory, ActionManager actionManager, EditorViewModel viewModel) {
         this.viewFactory = viewFactory;
@@ -82,8 +89,8 @@ public class EditorView {
         StringProperty tabName = new SimpleStringProperty("Error_Name");
         tabName.bind(Bindings.createStringBinding(() -> {
             String name = viewModel.getCurrentSystem().getName();
-            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
-                : " (" + ResourceHandler.getString("View", "system") + ")");
+            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString(VIEW, AUTOMATON_KEY) + ")"
+                : " (" + ResourceHandler.getString(VIEW, SYSTEM_KEY) + ")");
         }, viewModel.getCurrentSystem().getNameProperty()));
 
         Label tabLabel = new Label();
@@ -93,16 +100,16 @@ public class EditorView {
         // Floating UI
         FloatingUIBuilder floatingUIBuilder = new FloatingUIBuilder(actionManager, viewModel);
         Node zoomButtons = floatingUIBuilder.buildZoomButtons();
-        AnchorPane.setBottomAnchor(zoomButtons, 18.0);
-        AnchorPane.setRightAnchor(zoomButtons, 18.0);
+        AnchorPane.setBottomAnchor(zoomButtons, DEFAULT_ANCHOR_VALUE);
+        AnchorPane.setRightAnchor(zoomButtons, DEFAULT_ANCHOR_VALUE);
 
         Node currentViewLabel = floatingUIBuilder.buildCurrentViewLabel();
-        AnchorPane.setTopAnchor(currentViewLabel, 18.0);
-        AnchorPane.setLeftAnchor(currentViewLabel, 15.0);
+        AnchorPane.setTopAnchor(currentViewLabel, DEFAULT_ANCHOR_VALUE);
+        AnchorPane.setLeftAnchor(currentViewLabel, LEFT_ANCHOR_VALUE);
 
         Node viewSwitchButton = floatingUIBuilder.buildViewSwitchButtons();
-        AnchorPane.setTopAnchor(viewSwitchButton, 18.0);
-        AnchorPane.setRightAnchor(viewSwitchButton, 18.0);
+        AnchorPane.setTopAnchor(viewSwitchButton, DEFAULT_ANCHOR_VALUE);
+        AnchorPane.setRightAnchor(viewSwitchButton, DEFAULT_ANCHOR_VALUE);
 
         searchWindow = floatingUIBuilder.buildSearchWindow(this);
         activateSearchWindow(false);

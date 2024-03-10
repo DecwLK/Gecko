@@ -29,9 +29,6 @@ import org.gecko.viewmodel.SystemConnectionViewModel;
  * the {@link Point2D starting position}  and the afferent {@link javafx.scene.shape.Rectangle}.
  */
 public class CursorTool extends Tool {
-
-    private static final double DRAG_THRESHOLD = 4;
-
     private boolean isDragging = false;
     private final SelectionManager selectionManager;
     private final EditorViewModel editorViewModel;
@@ -39,8 +36,9 @@ public class CursorTool extends Tool {
     private Point2D previousDragPosition;
     private Point2D oldPosition;
     private Point2D oldSize;
-
     private ViewElementPane viewPane;
+
+    private static final double DRAG_THRESHOLD = 4;
 
     public CursorTool(ActionManager actionManager, SelectionManager selectionManager, EditorViewModel editorViewModel) {
         super(actionManager, ToolType.CURSOR, false);

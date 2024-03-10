@@ -22,7 +22,7 @@ import org.gecko.viewmodel.SystemViewModel;
 public class PastePositionableViewModelElementAction extends Action {
     private final GeckoViewModel geckoViewModel;
     private final Set<PositionableViewModelElement<?>> pastedElements;
-    private final Point2D pasteOffset = new Point2D(50, 50);
+    private static final Point2D PASTE_OFFSET = new Point2D(50, 50);
     private CopyPositionableViewModelElementVisitor copyVisitor;
 
     PastePositionableViewModelElementAction(GeckoViewModel geckoViewModel) {
@@ -57,7 +57,7 @@ public class PastePositionableViewModelElementAction extends Action {
             geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().addVariable(copy);
             copyVisitor.getCopiedPorts().put(v, copy);
             PortViewModel portViewModel = geckoViewModel.getViewModelFactory().createPortViewModelFrom(copy);
-            portViewModel.setPosition(copyVisitor.getCopiedPosAndSize().get(v).getKey().add(pasteOffset));
+            portViewModel.setPosition(copyVisitor.getCopiedPosAndSize().get(v).getKey().add(PASTE_OFFSET));
             pastedElements.add(portViewModel);
         }
         for (System s : copyVisitor.getCopiedSystems().keySet()) {
@@ -72,7 +72,7 @@ public class PastePositionableViewModelElementAction extends Action {
             }
             copyVisitor.getCopiedSystems().put(s, copy);
             SystemViewModel systemViewModel = geckoViewModel.getViewModelFactory().createSystemViewModelFrom(copy);
-            systemViewModel.setPosition(copyVisitor.getCopiedPosAndSize().get(s).getKey().add(pasteOffset));
+            systemViewModel.setPosition(copyVisitor.getCopiedPosAndSize().get(s).getKey().add(PASTE_OFFSET));
             pastedElements.add(systemViewModel);
         }
         return false;
@@ -91,7 +91,7 @@ public class PastePositionableViewModelElementAction extends Action {
             }
             copyVisitor.getCopiedStates().put(state, copy);
             StateViewModel stateViewModel = geckoViewModel.getViewModelFactory().createStateViewModelFrom(copy);
-            stateViewModel.setPosition(copyVisitor.getCopiedPosAndSize().get(state).getKey().add(pasteOffset));
+            stateViewModel.setPosition(copyVisitor.getCopiedPosAndSize().get(state).getKey().add(PASTE_OFFSET));
             stateViewModel.setSize(copyVisitor.getCopiedPosAndSize().get(state).getValue());
             pastedElements.add(stateViewModel);
         }
@@ -100,7 +100,7 @@ public class PastePositionableViewModelElementAction extends Action {
                 geckoViewModel.getGeckoModel().getModelFactory().copyRegion(copyVisitor.getCopiedRegions().get(region));
             geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().addRegion(copy);
             RegionViewModel regionViewModel = geckoViewModel.getViewModelFactory().createRegionViewModelFrom(copy);
-            regionViewModel.setPosition(copyVisitor.getCopiedPosAndSize().get(region).getKey().add(pasteOffset));
+            regionViewModel.setPosition(copyVisitor.getCopiedPosAndSize().get(region).getKey().add(PASTE_OFFSET));
             regionViewModel.setSize(copyVisitor.getCopiedPosAndSize().get(region).getValue());
             pastedElements.add(regionViewModel);
         }

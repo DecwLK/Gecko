@@ -1,6 +1,5 @@
 package org.gecko.view.inspector.element.button;
 
-import javafx.scene.control.Tooltip;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Visibility;
 import org.gecko.view.ResourceHandler;
@@ -13,13 +12,13 @@ import org.gecko.viewmodel.SystemViewModel;
  */
 public class InspectorAddVariableButton extends AbstractInspectorButton {
     private static final String STYLE = "inspector-add-button";
+    private static final String ADD_VARIABLE_BUTTON_KEY = "inspector_add_variable";
     private static final int WIDTH = 70;
 
     public InspectorAddVariableButton(
         ActionManager actionManager, SystemViewModel systemViewModel, Visibility visibility) {
         getStyleClass().add(STYLE);
-        setText(ResourceHandler.getString("Buttons", "inspector_add_variable"));
-        setTooltip(new Tooltip(ResourceHandler.getString("Tooltips", "inspector_add_variable")));
+        setText(ResourceHandler.getString(BUTTONS, ADD_VARIABLE_BUTTON_KEY));
         setPrefWidth(WIDTH);
         setOnAction(event -> {
             actionManager.run(actionManager.getActionFactory().createCreatePortViewModelElementAction(systemViewModel));
@@ -30,7 +29,7 @@ public class InspectorAddVariableButton extends AbstractInspectorButton {
             try {
                 addedPort.updateTarget();
             } catch (Exception e) {
-                throw new RuntimeException("Recieved error while changeing a port's visibility");
+                throw new RuntimeException("Failed while changing a port's visibility. This should never happen.");
             }
         });
     }

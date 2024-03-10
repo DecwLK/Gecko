@@ -38,6 +38,13 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
 
     private static final String STYLE = "region-view-element";
     private static final String INNER_STYLE = "region-inner-view-element";
+    private static final String LABELS = "Labels";
+    private static final String NAME_KEY = "name";
+    private static final String PRE_CONDITION_SHORT_KEY = "pre_condition_short";
+    private static final String POST_CONDITION_SHORT_KEY = "post_condition_short";
+    private static final String INVARIANT_KEY = "invariant_short";
+
+
 
     public RegionViewElement(RegionViewModel regionViewModel) {
         super(regionViewModel);
@@ -112,16 +119,16 @@ public class RegionViewElement extends BlockViewElement implements ViewElement<R
         GridPane gridPane = new GridPane();
         gridPane.getStyleClass().add(INNER_STYLE);
 
-        Label nameDesc = new Label(ResourceHandler.getString("Labels", "name") + ": ");
+        Label nameDesc = new Label(ResourceHandler.getString(LABELS, NAME_KEY) + ": ");
         Label name = new Label();
         name.textProperty().bind(nameProperty);
-        Label preConditionDesc = new Label(ResourceHandler.getString("Labels", "pre_condition_short") + ": ");
+        Label preConditionDesc = new Label(ResourceHandler.getString(LABELS, PRE_CONDITION_SHORT_KEY) + ": ");
         Label preCondition = new Label();
         preCondition.textProperty().bind(regionViewModel.getContract().getPreConditionProperty());
-        Label postConditionDesc = new Label(ResourceHandler.getString("Labels", "post_condition_short") + ": ");
+        Label postConditionDesc = new Label(ResourceHandler.getString(LABELS, POST_CONDITION_SHORT_KEY) + ": ");
         Label postCondition = new Label();
         postCondition.textProperty().bind(regionViewModel.getContract().getPostConditionProperty());
-        Label invariantDesc = new Label(ResourceHandler.getString("Labels", "invariant_short") + ": ");
+        Label invariantDesc = new Label(ResourceHandler.getString(LABELS, INVARIANT_KEY) + ": ");
         Label invariant = new Label();
         invariant.textProperty().bind(invariantProperty);
         gridPane.add(nameDesc, 0, 0);

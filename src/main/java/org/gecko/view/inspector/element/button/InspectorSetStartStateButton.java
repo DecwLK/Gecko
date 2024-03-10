@@ -1,7 +1,6 @@
 package org.gecko.view.inspector.element.button;
 
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.InspectorElement;
@@ -12,12 +11,12 @@ import org.gecko.viewmodel.StateViewModel;
  */
 public class InspectorSetStartStateButton extends ToggleButton implements InspectorElement<ToggleButton> {
     private static final String START_STATE_STYLE = "inspector-start-state-button";
+    private static final String SET_START_STATE_BUTTON_KEY = "inspector_set_start_state";
 
     public InspectorSetStartStateButton(ActionManager actionManager, StateViewModel stateViewModel) {
         getStyleClass().add(START_STATE_STYLE);
         setMaxWidth(Double.MAX_VALUE);
-        setText(ResourceHandler.getString("Buttons", "set_start_state"));
-        setTooltip(new Tooltip(ResourceHandler.getString("Tooltips", "set_start_state")));
+        setText(ResourceHandler.getString(AbstractInspectorButton.BUTTONS, SET_START_STATE_BUTTON_KEY));
         update(stateViewModel.getIsStartState());
         stateViewModel.getIsStartStateProperty().addListener((observable, oldValue, newValue) -> {
             update(newValue);

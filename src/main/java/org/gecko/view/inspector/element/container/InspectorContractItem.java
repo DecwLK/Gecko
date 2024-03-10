@@ -9,7 +9,9 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.ResourceHandler;
+import org.gecko.view.inspector.builder.AbstractInspectorBuilder;
 import org.gecko.view.inspector.element.InspectorElement;
+import org.gecko.view.inspector.element.button.AbstractInspectorButton;
 import org.gecko.view.inspector.element.button.InspectorCollapseContractButton;
 import org.gecko.view.inspector.element.button.InspectorRemoveContractButton;
 import org.gecko.view.inspector.element.label.InspectorLabel;
@@ -34,6 +36,11 @@ import org.gecko.viewmodel.StateViewModel;
 public class InspectorContractItem extends VBox implements InspectorElement<VBox> {
     private ContractViewModel viewModel;
 
+    protected static final String PRE_CONDITION_KEY = "pre_condition";
+    protected static final String POST_CONDITION_KEY = "post_condition";
+    protected static final String INVARIANT_KEY = "invariant";
+    private static final int CONTRACT_FIELD_OFFSET = FIELD_OFFSET + 10;
+
     /**
      * Constructor for the State contract item.
      *
@@ -50,19 +57,20 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
 
         GridPane contractConditions = new GridPane();
 
-        InspectorLabel preConditionLabel = new InspectorLabel(ResourceHandler.getString("Inspector", "pre_condition"));
+        InspectorLabel preConditionLabel
+            = new InspectorLabel(ResourceHandler.getString(AbstractInspectorBuilder.INSPECTOR, PRE_CONDITION_KEY));
         InspectorAreaField preConditionField = new InspectorPreconditionField(actionManager, contractViewModel);
         contractFields.add(preConditionField);
-        preConditionField.prefWidthProperty().bind(widthProperty().subtract(50));
+        preConditionField.prefWidthProperty().bind(widthProperty().subtract(FIELD_OFFSET));
         contractConditions.add(preConditionLabel, 0, 0);
         contractConditions.add(preConditionField, 1, 0);
 
 
         InspectorLabel postConditionLabel =
-            new InspectorLabel(ResourceHandler.getString("Inspector", "post_condition"));
+            new InspectorLabel(ResourceHandler.getString(AbstractInspectorBuilder.INSPECTOR, POST_CONDITION_KEY));
         InspectorAreaField postConditionField = new InspectorPostconditionField(actionManager, contractViewModel);
         contractFields.add(postConditionField);
-        postConditionField.prefWidthProperty().bind(widthProperty().subtract(50));
+        postConditionField.prefWidthProperty().bind(widthProperty().subtract(FIELD_OFFSET));
         contractConditions.add(postConditionLabel, 0, 1);
         contractConditions.add(postConditionField, 1, 1);
         HBox contractNameBox = new HBox();
@@ -88,11 +96,11 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
     public InspectorContractItem(ActionManager actionManager, RegionViewModel regionViewModel) {
 
         GridPane regionConditions = new GridPane();
-        addContractItem(ResourceHandler.getString("Inspector", "pre_condition"),
+        addContractItem(ResourceHandler.getString(AbstractInspectorBuilder.INSPECTOR, PRE_CONDITION_KEY),
             new InspectorPreconditionField(actionManager, regionViewModel.getContract()), 0, regionConditions);
-        addContractItem(ResourceHandler.getString("Inspector", "post_condition"),
+        addContractItem(ResourceHandler.getString(AbstractInspectorBuilder.INSPECTOR, POST_CONDITION_KEY),
             new InspectorPostconditionField(actionManager, regionViewModel.getContract()), 1, regionConditions);
-        addContractItem(ResourceHandler.getString("Inspector", "invariant"),
+        addContractItem(ResourceHandler.getString(AbstractInspectorBuilder.INSPECTOR, INVARIANT_KEY),
             new InspectorInvariantField(actionManager, regionViewModel), 2, regionConditions);
 
         // Build the contract item
@@ -101,7 +109,7 @@ public class InspectorContractItem extends VBox implements InspectorElement<VBox
 
     private void addContractItem(String label, InspectorAreaField field, int row, GridPane gridPane) {
         gridPane.add(new InspectorLabel(label), 0, row);
-        field.prefWidthProperty().bind(widthProperty().subtract(60));
+        field.prefWidthProperty().bind(widthProperty().subtract(CONTRACT_FIELD_OFFSET));
         gridPane.add(field, 1, row);
     }
 

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class FileTypesTest {
     @Test
     void getFileNameRegex() {
-        assertEquals("*.json", FileTypes.JSON.getFileNameRegex());
-        assertEquals("*.sys", FileTypes.SYS.getFileNameRegex());
+        assertEquals("*.json", FileTypes.JSON.getFileNameGlob());
+        assertEquals("*.sys", FileTypes.SYS.getFileNameGlob());
     }
 }

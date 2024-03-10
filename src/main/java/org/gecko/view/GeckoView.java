@@ -97,10 +97,7 @@ public class GeckoView {
                         .stream()
                         .map(PositionableViewModelElement::getCenter)
                         .reduce(new Point2D(0, 0), Point2D::add)
-                        .multiply(1.0 / currentViewProperty.getValue()
-                            .getViewModel()
-                            .getPositionableViewModelElements()
-                            .size());
+                        .multiply(1.0 / currentViewModel.getPositionableViewModelElements().size());
 
                     currentViewModel.setPivot(center);
                 }

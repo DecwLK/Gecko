@@ -172,8 +172,8 @@ public class ActionFactory {
             elementScalerBlock, portViewModel, isVariableBlock);
     }
 
-    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction() {
-        return new PastePositionableViewModelElementAction(geckoViewModel);
+    public PastePositionableViewModelElementAction createPastePositionableViewModelElementAction(Point2D center) {
+        return new PastePositionableViewModelElementAction(geckoViewModel, center);
     }
 
     public RenameViewModelElementAction createRenameViewModelElementAction(Renamable renamable, String name) {

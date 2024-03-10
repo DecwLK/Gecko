@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
 
 /**
@@ -14,11 +15,12 @@ import org.gecko.exceptions.ModelException;
  * {@link Visibility}.
  */
 @Getter
-@Setter(onParam_ = {@NonNull})
+@Setter
 public class Variable extends Element implements Renamable {
     private String name;
     private String type;
     private String value;
+    @Setter(onParam_ = @NonNull)
     private Visibility visibility;
     private boolean hasIncomingConnection;
 
@@ -61,5 +63,10 @@ public class Variable extends Element implements Renamable {
             throw new ModelException("Variable's value is invalid.");
         }
         this.value = value;
+    }
+
+    @Override
+    public void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException {
+        visitor.visit(this);
     }
 }

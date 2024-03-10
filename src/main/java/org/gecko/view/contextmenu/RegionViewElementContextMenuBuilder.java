@@ -4,6 +4,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.GeckoView;
 import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.RegionViewModel;
 
@@ -17,8 +18,8 @@ public class RegionViewElementContextMenuBuilder extends ViewContextMenuBuilder 
     private final RegionViewModel regionViewModel;
 
     public RegionViewElementContextMenuBuilder(
-        ActionManager actionManager, RegionViewModel regionViewModel) {
-        super(actionManager);
+        ActionManager actionManager, RegionViewModel regionViewModel, GeckoView geckoView) {
+        super(actionManager, geckoView);
 
         this.regionViewModel = regionViewModel;
     }

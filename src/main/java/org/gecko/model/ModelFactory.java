@@ -1,5 +1,8 @@
 package org.gecko.model;
 
+import java.util.HashMap;
+import java.util.Map;
+import javafx.util.Pair;
 import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
@@ -49,18 +52,21 @@ public class ModelFactory {
         return state;
     }
 
-    public State copyState(@NonNull State state) {
+    public Pair<State, Map<Contract, Contract>> copyState(@NonNull State state) {
         int id = getNewElementId();
+        Map<Contract, Contract> contractToCopy = new HashMap<>();
         State copy;
         try {
             copy = new State(id, getDefaultName(id));
-            for (Contract contract : state.getContracts()) {
-                copy.addContract(contract);
-            }
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of the state", e);
         }
-        return copy;
+        for (Contract contract : state.getContracts()) {
+            Contract copiedContract = copyContract(contract);
+            copy.addContract(copiedContract);
+            contractToCopy.put(contract, copiedContract);
+        }
+        return new Pair<>(copy, contractToCopy);
     }
 
     public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull State destination)
@@ -95,18 +101,65 @@ public class ModelFactory {
         return system;
     }
 
-    public System copySystem(@NonNull System system) {
+    public Pair<System, Map<Element, Element>> copySystem(@NonNull System system) throws ModelException {
+        return copySystem(system, new HashMap<>());
+    }
+
+    public Pair<System, Map<Element, Element>> copySystem(@NonNull System system, Map<Element, Element> originalToCopy)
+        throws ModelException {
         int id = getNewElementId();
         System copy;
         try {
-            copy = new System(id, getDefaultName(id), DEFAULT_CODE, system.getAutomaton());
-            for (Variable variable : system.getVariables()) {
-                copy.addVariable(variable);
-            }
+            copy = new System(id, getDefaultName(id), DEFAULT_CODE, new Automaton());
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of the system", e);
         }
-        return copy;
+        for (State state : system.getAutomaton().getStates()) {
+            Pair<State, Map<Contract, Contract>> copyResult = copyState(state);
+            State copiedState = copyResult.getKey();
+            originalToCopy.putAll(copyResult.getValue());
+            copy.getAutomaton().addState(copiedState);
+            if (system.getAutomaton().getStartState().equals(state)) {
+                copy.getAutomaton().setStartState(copiedState);
+            }
+            originalToCopy.put(state, copiedState);
+        }
+        for (Edge edge : system.getAutomaton().getEdges()) {
+            State copiedSource = (State) originalToCopy.get(edge.getSource());
+            State copiedDestination = (State) originalToCopy.get(edge.getDestination());
+            Edge copiedEdge = createEdge(copy.getAutomaton(), copiedSource, copiedDestination);
+            copiedEdge.setContract((Contract) originalToCopy.get(edge.getContract()));
+            copiedEdge.setKind(edge.getKind());
+        }
+        for (Region region : system.getAutomaton().getRegions()) {
+            Region copiedRegion = copyRegion(region);
+            copy.getAutomaton().addRegion(copiedRegion);
+            originalToCopy.put(region, copiedRegion);
+        }
+        for (Variable variable : system.getVariables()) {
+            Variable copiedVariable = copyVariable(variable);
+            originalToCopy.put(variable, copiedVariable);
+            copy.addVariable(copiedVariable);
+        }
+        for (System childSystem : system.getChildren()) {
+            System copiedChildSystem = copySystem(childSystem, originalToCopy).getKey();
+            copy.addChild(copiedChildSystem);
+            originalToCopy.put(childSystem, copiedChildSystem);
+
+        }
+        for (System childSystem : copy.getChildren()) {
+            childSystem.setParent(copy);
+        }
+        for (SystemConnection connection : system.getConnections()) {
+            SystemConnection copiedConnection =
+                copySystemConnection(connection, (Variable) originalToCopy.get(connection.getSource()),
+                    (Variable) originalToCopy.get(connection.getDestination()));
+            copy.addConnection(copiedConnection);
+            originalToCopy.put(connection, copiedConnection);
+        }
+        copy.setCode(system.getCode());
+        originalToCopy.put(system, copy);
+        return new Pair<>(copy, originalToCopy);
     }
 
     public System createRoot() throws ModelException {
@@ -178,6 +231,18 @@ public class ModelFactory {
         } catch (ModelException e) {
             throw new RuntimeException("Failed to create a copy of a system connection", e);
         }
+    }
+
+    public SystemConnection copySystemConnection(
+        SystemConnection connection, Variable copiedSource, Variable copiedDestination) {
+        SystemConnection result = copySystemConnection(connection);
+        try {
+            result.setSource(copiedSource);
+            result.setDestination(copiedDestination);
+        } catch (ModelException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     public Contract createContract(@NonNull State state) throws ModelException {

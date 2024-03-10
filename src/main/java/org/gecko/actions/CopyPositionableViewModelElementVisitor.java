@@ -1,11 +1,15 @@
 package org.gecko.actions;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.gecko.exceptions.ModelException;
 import org.gecko.model.Contract;
 import org.gecko.model.Edge;
 import org.gecko.model.Element;
@@ -17,6 +21,7 @@ import org.gecko.model.Variable;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
+import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.PositionableViewModelElementVisitor;
 import org.gecko.viewmodel.RegionViewModel;
 import org.gecko.viewmodel.StateViewModel;
@@ -29,90 +34,141 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
     @Getter(AccessLevel.NONE)
     private GeckoViewModel geckoViewModel;
     private boolean isAutomatonCopy;
-    private HashMap<State, State> copiedStates;
-    private HashMap<System, System> copiedSystems;
-    private HashMap<Region, Region> copiedRegions;
-    private HashMap<Edge, Edge> copiedEdges;
-    private HashMap<SystemConnection, SystemConnection> copiedSystemConnections;
-    private HashMap<Variable, Variable> copiedPorts;
-    private HashMap<Contract, Contract> copiedContracts;
-    private HashMap<Element, Pair<Point2D, Point2D>> copiedPosAndSize;
+    private HashMap<Element, Element> originalToClipboard;
+    private HashMap<Element, Pair<Point2D, Point2D>> elementToPosAndSize;
+    @Getter
+    private Set<PositionableViewModelElement<?>> failedCopies;
+    private final Set<Element> copiedElements;
 
     public CopyPositionableViewModelElementVisitor(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
         isAutomatonCopy = geckoViewModel.getCurrentEditor().isAutomatonEditor();
-        copiedStates = new HashMap<>();
-        copiedSystems = new HashMap<>();
-        copiedRegions = new HashMap<>();
-        copiedEdges = new HashMap<>();
-        copiedSystemConnections = new HashMap<>();
-        copiedPorts = new HashMap<>();
-        copiedContracts = new HashMap<>();
-        copiedPosAndSize = new HashMap<>();
+        originalToClipboard = new HashMap<>();
+        elementToPosAndSize = new HashMap<>();
+        copiedElements = new HashSet<>();
+        failedCopies = new HashSet<>();
     }
 
     @Override
     public Void visit(SystemViewModel systemViewModel) {
-        copiedSystems.put(systemViewModel.getTarget(),
-            geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemViewModel.getTarget()));
-        copiedPosAndSize.put(systemViewModel.getTarget(),
-            new Pair<>(systemViewModel.getPosition(), systemViewModel.getSize()));
-        for (PortViewModel p : systemViewModel.getPorts()) {
-            if (copiedPorts.get(p.getTarget()) == null) {
-                continue;
-            }
-            copiedPorts.put(p.getTarget(),
-                geckoViewModel.getGeckoModel().getModelFactory().copyVariable(p.getTarget()));
-            copiedPosAndSize.put(p.getTarget(), new Pair<>(p.getPosition(), p.getSize()));
+        System original = systemViewModel.getTarget();
+        Pair<System, Map<Element, Element>> copyResult;
+        System copy;
+        try {
+            copyResult = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemViewModel.getTarget());
+        } catch (ModelException e) {
+            failedCopies.add(systemViewModel);
+            return null;
         }
+        copy = copyResult.getKey();
+        originalToClipboard.putAll(copyResult.getValue());
+        originalToClipboard.put(original, copy);
+        savePositionRecursively(original);
+        copiedElements.add(copy);
         return null;
     }
 
     @Override
     public Void visit(RegionViewModel regionViewModel) {
-        copiedRegions.put(regionViewModel.getTarget(),
-            geckoViewModel.getGeckoModel().getModelFactory().copyRegion(regionViewModel.getTarget()));
-        copiedPosAndSize.put(regionViewModel.getTarget(),
-            new Pair<>(regionViewModel.getPosition(), regionViewModel.getSize()));
+        Region original = regionViewModel.getTarget();
+        Region copy = geckoViewModel.getGeckoModel().getModelFactory().copyRegion(original);
+        originalToClipboard.put(original, copy);
+        savePositionAndSize(copy, regionViewModel);
+        copiedElements.add(copy);
         return null;
     }
 
     @Override
     public Void visit(EdgeViewModel edgeViewModel) {
-        var selection = geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
+        Set<PositionableViewModelElement<?>> selection =
+            geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
         if (selection.contains(edgeViewModel.getSource()) && selection.contains(edgeViewModel.getDestination())) {
-            copiedEdges.put(edgeViewModel.getTarget(),
-                geckoViewModel.getGeckoModel().getModelFactory().copyEdge(edgeViewModel.getTarget()));
+            Edge original = edgeViewModel.getTarget();
+            Edge copy = geckoViewModel.getGeckoModel().getModelFactory().copyEdge(original);
+            State sourceOnClipboard = (State) originalToClipboard.get(original.getSource());
+            State destinationOnClipboard = (State) originalToClipboard.get(original.getDestination());
+            Contract contractOnClipboard = (Contract) originalToClipboard.get(original.getContract());
+            if (sourceOnClipboard == null || destinationOnClipboard == null) {
+                failedCopies.add(edgeViewModel);
+                return null;
+            }
+            copy.setSource(sourceOnClipboard);
+            copy.setDestination(destinationOnClipboard);
+            copy.setContract(contractOnClipboard);
+            originalToClipboard.put(original, copy);
+            copiedElements.add(copy);
         }
         return null;
     }
 
     @Override
     public Void visit(StateViewModel stateViewModel) {
-        copiedStates.put(stateViewModel.getTarget(),
-            geckoViewModel.getGeckoModel().getModelFactory().copyState(stateViewModel.getTarget()));
-        copiedPosAndSize.put(stateViewModel.getTarget(),
-            new Pair<>(stateViewModel.getPosition(), stateViewModel.getSize()));
-        for (Contract c : stateViewModel.getTarget().getContracts()) {
-            copiedContracts.put(c, geckoViewModel.getGeckoModel().getModelFactory().copyContract(c));
-        }
-        for (EdgeViewModel evm : stateViewModel.getOutgoingEdges()) {
-            evm.accept(this);
-        }
+        State original = stateViewModel.getTarget();
+        Pair<State, Map<Contract, Contract>> copyResult =
+            geckoViewModel.getGeckoModel().getModelFactory().copyState(original);
+        State copy = copyResult.getKey();
+        originalToClipboard.putAll(copyResult.getValue());
+        originalToClipboard.put(original, copy);
+        savePositionAndSize(copy, stateViewModel);
+        copiedElements.add(copy);
         return null;
     }
 
     @Override
     public Void visit(PortViewModel portViewModel) {
-        copiedPorts.put(portViewModel.getTarget(),
-            geckoViewModel.getGeckoModel().getModelFactory().copyVariable(portViewModel.getTarget()));
-        copiedPosAndSize.put(portViewModel.getTarget(),
-            new Pair<>(portViewModel.getPosition(), portViewModel.getSize()));
         return null;
     }
 
     @Override
     public Void visit(SystemConnectionViewModel systemConnectionViewModel) {
+        Set<PositionableViewModelElement<?>> selection =
+            geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
+        SystemViewModel sourceSystemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(
+            geckoViewModel.getCurrentEditor()
+                .getCurrentSystem()
+                .getTarget()
+                .getChildSystemWithVariable(systemConnectionViewModel.getTarget().getSource()));
+        SystemViewModel destinationSystemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(
+            geckoViewModel.getCurrentEditor()
+                .getCurrentSystem()
+                .getTarget()
+                .getChildSystemWithVariable(systemConnectionViewModel.getTarget().getDestination()));
+        if (selection.contains(sourceSystemViewModel) && selection.contains(destinationSystemViewModel)) {
+            SystemConnection original = systemConnectionViewModel.getTarget();
+            SystemConnection copy = geckoViewModel.getGeckoModel().getModelFactory().copySystemConnection(original);
+            Variable sourceOnClipboard = (Variable) originalToClipboard.get(original.getSource());
+            Variable destinationOnClipboard = (Variable) originalToClipboard.get(original.getDestination());
+            if (sourceOnClipboard == null || destinationOnClipboard == null) {
+                failedCopies.add(systemConnectionViewModel);
+                return null;
+            }
+            try {
+                copy.setSource(sourceOnClipboard);
+                copy.setDestination(destinationOnClipboard);
+            } catch (ModelException e) {
+                throw new RuntimeException(e);
+            }
+            originalToClipboard.put(original, copy);
+            copiedElements.add(copy);
+        }
         return null;
+    }
+
+    private void savePositionRecursively(System original) {
+        System copy = (System) originalToClipboard.get(original);
+        savePositionAndSize(copy, geckoViewModel.getViewModelElement(original));
+        for (State state : original.getAutomaton().getStates()) {
+            savePositionAndSize(originalToClipboard.get(state), geckoViewModel.getViewModelElement(state));
+        }
+        for (Region region : original.getAutomaton().getRegions()) {
+            savePositionAndSize(originalToClipboard.get(region), geckoViewModel.getViewModelElement(region));
+        }
+        for (System child : original.getChildren()) {
+            savePositionRecursively(child);
+        }
+    }
+
+    private void savePositionAndSize(Element key, PositionableViewModelElement<?> positionSource) {
+        elementToPosAndSize.put(key, new Pair<>(positionSource.getPosition(), positionSource.getSize()));
     }
 }

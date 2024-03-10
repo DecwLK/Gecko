@@ -291,6 +291,9 @@ public class EditorViewModel {
      */
     public Set<PositionableViewModelElement<?>> getElementsInArea(Bounds bound) {
         return containedPositionableViewModelElementsProperty.stream().filter(element -> {
+            if (element.getSize().equals(Point2D.ZERO)) {
+                return false;
+            }
             Bounds elementBound =
                 new BoundingBox(element.getPosition().getX(), element.getPosition().getY(), element.getSize().getX(),
                     element.getSize().getY());

@@ -36,21 +36,17 @@ public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
         SeparatorMenuItem dataTransferToEdgeEditingSeparator = new SeparatorMenuItem();
 
         // Edge editing commands:
-        Menu changeKindMenu = new Menu(CHANGE_KIND_MENU_ITEM); // TODO: Synchronize fields showed in inspector.
+        Menu changeKindMenu = new Menu(CHANGE_KIND_MENU_ITEM);
 
-        MenuItem hitMenuItem = new MenuItem(HIT_MENU_ITEM);
-        hitMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.HIT)));
+        for (Kind kind : Kind.values()) {
+            MenuItem kindMenuItem = createKindMenuItem(kind);
 
-        MenuItem missMenuItem = new MenuItem(MISS_KIND_MENU_ITEM);
-        missMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.MISS)));
+            if (edgeViewModel.getKind() == kind) {
+                kindMenuItem.setDisable(true);
+            }
 
-        MenuItem failMenuItem = new MenuItem(FAIL_KIND_MENU_ITEM);
-        failMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, Kind.FAIL)));
-
-        changeKindMenu.getItems().addAll(hitMenuItem, missMenuItem, failMenuItem);
+            changeKindMenu.getItems().add(kindMenuItem);
+        }
 
         MenuItem deleteMenuItem = new MenuItem(DELETE_MENU_ITEM);
         deleteMenuItem.setOnAction(e -> actionManager.run(
@@ -58,5 +54,12 @@ public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
         edgeContextMenu.getItems().addAll(dataTransferToEdgeEditingSeparator, changeKindMenu, deleteMenuItem);
         return edgeContextMenu;
+    }
+
+    private MenuItem createKindMenuItem(Kind kind) {
+        MenuItem kindMenuItem = new MenuItem(kind.toString());
+        kindMenuItem.setOnAction(
+            e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, kind)));
+        return kindMenuItem;
     }
 }

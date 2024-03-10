@@ -4,6 +4,7 @@ import org.gecko.actions.ActionManager;
 import org.gecko.view.inspector.element.InspectorSeparator;
 import org.gecko.view.inspector.element.container.InspectorTypeLabel;
 import org.gecko.view.inspector.element.container.InspectorVisibilityPicker;
+import org.gecko.view.inspector.element.textfield.InspectorVariableValueField;
 import org.gecko.viewmodel.PortViewModel;
 
 /**
@@ -24,5 +25,8 @@ public class VariableBlockInspectorBuilder extends AbstractInspectorBuilder<Port
 
         // Type
         addInspectorElement(new InspectorTypeLabel(actionManager, viewModel));
+
+        // Value
+        addInspectorElement(new InspectorVariableValueField(actionManager, viewModel));
     }
 }

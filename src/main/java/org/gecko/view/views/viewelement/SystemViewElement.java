@@ -163,7 +163,6 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         if (oldValue == newValue) {
             return;
         }
-        //TODO this is ugly
         PortViewModel portViewModel =
             portsProperty.stream().filter(pvm -> pvm.getVisibilityProperty() == observable).findFirst().orElseThrow();
         PortViewElement portViewElement =

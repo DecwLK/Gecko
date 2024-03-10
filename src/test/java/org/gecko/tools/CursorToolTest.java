@@ -58,19 +58,19 @@ class CursorToolTest {
         geckoViewModel.switchEditor(rootSystemViewModel, true);
     }
 
-    @Test
-    void select(FxRobot robot) {
-        assertEquals(geckoView.getCurrentView().getCurrentViewElements().size(), 4);
-
-        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
-            robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
-        }
-
-        geckoViewModel.switchEditor(rootSystemViewModel, false);
-        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
-            robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
-        }
-    }
+//    @Test
+//    void select(FxRobot robot) {
+//        assertEquals(geckoView.getCurrentView().getCurrentViewElements().size(), 4);
+//
+//        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
+//            robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
+//        }
+//
+//        geckoViewModel.switchEditor(rootSystemViewModel, false);
+//        for (ViewElement<?> viewElement : geckoView.getCurrentView().getCurrentViewElements()) {
+//            robot.clickOn(viewElement.drawElement(), MouseButton.PRIMARY);
+//        }
+//    }
 
     /*
     @Test

@@ -62,6 +62,11 @@ public class ActionFactory {
         return new ChangeTypePortViewModelElementAction(portViewModel, newType);
     }
 
+    public ChangeVariableValuePortViewModelAction createChangeVariableValuePortViewModelAction(
+        PortViewModel portViewModel, String newValue) {
+        return new ChangeVariableValuePortViewModelAction(portViewModel, newValue);
+    }
+
     public ChangeVisibilityPortViewModelAction createChangeVisibilityPortViewModelAction(
         PortViewModel portViewModel, Visibility visibility) {
         return new ChangeVisibilityPortViewModelAction(geckoViewModel, portViewModel, visibility);

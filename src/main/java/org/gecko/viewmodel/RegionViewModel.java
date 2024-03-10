@@ -64,6 +64,10 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
         statesProperty.remove(state);
     }
 
+    public void clearStates() {
+        statesProperty.clear();
+    }
+
     @Override
     public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
         return visitor.visit(this);
@@ -86,7 +90,7 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
     }
 
     /**
-     * Checks if the given state is in the region and adds it to the region if it is or removes it if it is not.
+     * Checks if the given state is in the region and adds it to the region if it is.
      *
      * @param state the state to check
      */
@@ -98,8 +102,6 @@ public class RegionViewModel extends BlockViewModelElement<Region> {
                 state.getSize().getY());
         if (regionBound.intersects(stateBound)) {
             addState(state);
-        } else {
-            removeState(state);
         }
     }
 

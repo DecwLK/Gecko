@@ -111,6 +111,7 @@ public class EditorViewModel {
             .map(element -> (StateViewModel) element)
             .collect(Collectors.toSet());
         for (RegionViewModel regionViewModel : regionViewModels) {
+            regionViewModel.clearStates();
             for (StateViewModel stateViewModel : stateViewModels) {
                 regionViewModel.checkStateInRegion(stateViewModel);
                 regionViewModel.updateTarget();

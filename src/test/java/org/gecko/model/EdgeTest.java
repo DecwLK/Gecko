@@ -59,4 +59,37 @@ public class EdgeTest {
         edge.setContract(null);
         assertNull(edge.getContract());
     }
+
+    @Test
+    void testNullParametersInEdge() {
+        Edge edge = null;
+        try {
+            edge = new Edge(0, new State(1, "source"), new State(2, "destination"),
+                new Contract(3, "contract", new Condition("true"), new Condition("true")), Kind.HIT, 0);
+        } catch (ModelException e) {
+            fail("Failed to create edge for testing purposes of its setters.");
+        }
+
+        try {
+            edge.setSource(null);
+        } catch (NullPointerException e) {
+            assertNotNull(edge.getSource());
+        }
+
+        try {
+            edge.setDestination(null);
+        } catch (NullPointerException e) {
+            assertNotNull(edge.getDestination());
+        }
+
+        try {
+            edge.setKind(null);
+        } catch (NullPointerException e) {
+            assertNotNull(edge.getKind());
+        }
+
+        assertNotNull(edge.getSource());
+        assertNotNull(edge.getDestination());
+        assertNotNull(edge.getKind());
+    }
 }

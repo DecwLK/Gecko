@@ -1,5 +1,6 @@
 package org.gecko.model;
 
+import static org.gecko.model.GeckoModelTest.NULL_PARAMETERS_FAIL;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -255,5 +257,32 @@ public class SystemTest {
         system.removeChild(child1);
         system.removeVariable(variable1);
         system.removeConnection(connection1);
+    }
+
+    @Test
+    void testNullParametersInSystem() {
+        System system = null;
+        try {
+            system = new System(0, "system", null, new Automaton());
+        } catch (ModelException e) {
+            fail("Failed to create system for testing purposes of a its setters.");
+        }
+
+        try {
+            system.setName(null);
+        } catch (NullPointerException e) {
+            assertNotNull(system.getName());
+        } catch (ModelException e) {
+            fail(NULL_PARAMETERS_FAIL);
+        }
+
+        try {
+            system.setAutomaton(null);
+        } catch (NullPointerException e) {
+            assertNotNull(system.getAutomaton());
+        }
+
+        assertNotNull(system.getName());
+        assertNotNull(system.getAutomaton());
     }
 }

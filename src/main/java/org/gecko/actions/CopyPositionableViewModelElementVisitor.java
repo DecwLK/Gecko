@@ -142,6 +142,9 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         for (State state : original.getAutomaton().getStates()) {
             savePositionAndSize(originalToClipboard.get(state), geckoViewModel.getViewModelElement(state));
         }
+        for (Region region : original.getAutomaton().getRegions()) {
+            savePositionAndSize(originalToClipboard.get(region), geckoViewModel.getViewModelElement(region));
+        }
         for (System child : original.getChildren()) {
             savePositionRecursively(child);
         }

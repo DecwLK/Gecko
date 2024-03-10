@@ -2,7 +2,6 @@ package org.gecko.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,7 +64,7 @@ public class AutomatonFileSerializer implements FileSerializer {
         }
         joiner.add(serializeAutomata(model));
         joiner.add(serializeSystems(model));
-        Files.write(file.toPath(), joiner.toString().getBytes(StandardCharsets.UTF_8));
+        Files.writeString(file.toPath(), joiner.toString());
     }
 
     private String serializeAutomata(GeckoModel model) {
@@ -160,9 +159,7 @@ public class AutomatonFileSerializer implements FileSerializer {
                 contract.setPreCondition(contract.getPreCondition().not());
                 contract.setPostCondition(Condition.trueCondition());
             }
-            case FAIL -> {
-                contract.setPostCondition(contract.getPostCondition().not());
-            }
+            case FAIL -> contract.setPostCondition(contract.getPostCondition().not());
             case HIT -> {
             }
             default -> throw new IllegalArgumentException("Unknown kind: " + kind);
@@ -264,7 +261,6 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeIo(System system) {
-        //TODO group variables of the same type into one line
         List<Variable> orderedVariables =
             system.getVariables().stream().sorted(Comparator.comparing(Variable::getVisibility)).toList();
         return serializeCollectionWithMapping(orderedVariables, this::serializeVariable);
@@ -287,7 +283,9 @@ public class AutomatonFileSerializer implements FileSerializer {
             default -> throw new IllegalArgumentException("Unknown visibility: " + variable.getVisibility());
         };
         output += VARIABLE_ATTRIBUTES.formatted(variable.getName(), variable.getType());
-        //TODO append variable value
+        if (variable.getValue() != null) {
+            output += " := " + variable.getValue();
+        }
         return output;
     }
 

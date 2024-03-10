@@ -169,6 +169,7 @@
 .text-field {
     -fx-background-radius: 5;
     -fx-border-radius: 5;
+    -fx-background-insets: 1 1 1 1;
     -fx-border-color: -fx-text;
     -fx-text-fill: -fx-text;
     -fx-font-size: 12px;
@@ -361,6 +362,10 @@
     -fx-font: 12px "System";
 }
 
+.combo-box {
+    -fx-background-insets: 1 1 1 1;
+}
+
 .combo-box .cell:empty {
     -fx-background-color: -fx-editable;
     -fx-background-radius: 3 0 0 3;
@@ -394,6 +399,12 @@
     -fx-font-weight: bold;
     -fx-padding: 2px;
     -fx-font: 12px "System";
+}
+
+.spinner .text-field {
+    -fx-background-radius: 3 0 0 3;
+    -fx-border-radius: 3 0 0 3;
+    -fx-background-insets: 1 1 1 1;
 }
 
 .spinner .increment-arrow-button, .spinner .decrement-arrow-button {

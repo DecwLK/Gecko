@@ -26,6 +26,7 @@ public class DeleteRegionViewModelElementAction extends AbstractPositionableView
     boolean run() throws GeckoException {
         automaton.removeRegion(regionViewModel.getTarget());
         geckoViewModel.deleteViewModelElement(regionViewModel);
+        geckoViewModel.getCurrentEditor().updateRegions();
         return true;
     }
 

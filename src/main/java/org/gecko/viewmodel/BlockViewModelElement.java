@@ -49,8 +49,8 @@ public abstract class BlockViewModelElement<T extends Element & org.gecko.model.
         Point2D newEndPosition = new Point2D(Math.max(firstCornerPoint.getX(), secondCornerPoint.getX()),
             Math.max(firstCornerPoint.getY(), secondCornerPoint.getY()));
 
-        if (Math.abs(newEndPosition.getX() - newStartPosition.getX()) < MIN_WIDTH
-            || Math.abs(newEndPosition.getY() - newStartPosition.getY()) < MIN_HEIGHT) {
+        if (Math.abs(newEndPosition.getX() - newStartPosition.getX()) * Math.abs(
+            newEndPosition.getY() - newStartPosition.getY()) <= MIN_HEIGHT * MIN_WIDTH) {
             return false;
         }
 

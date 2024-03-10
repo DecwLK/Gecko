@@ -17,6 +17,7 @@ public class ActionManager {
     private final ActionFactory actionFactory;
     private final ArrayDeque<Action> undoStack;
     private final ArrayDeque<Action> redoStack;
+    private static final int MAX_STACK_SIZE = 1000;
 
     @Getter
     @Setter
@@ -86,6 +87,9 @@ public class ActionManager {
         Action undoAction = action.getUndoAction(actionFactory);
         if (undoAction != null) {
             undoStack.addFirst(undoAction);
+            if (undoStack.size() > MAX_STACK_SIZE) {
+                undoStack.removeLast();
+            }
             redoStack.clear();
         }
     }

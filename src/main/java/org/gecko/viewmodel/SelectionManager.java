@@ -13,6 +13,7 @@ import lombok.Data;
  */
 @Data
 public class SelectionManager {
+    private static final int MAX_STACK_SIZE = 2000;
     private ArrayDeque<Set<PositionableViewModelElement<?>>> undoSelectionStack;
     private ArrayDeque<Set<PositionableViewModelElement<?>>> redoSelectionStack;
     private ObjectProperty<Set<PositionableViewModelElement<?>>> currentSelectionProperty;
@@ -61,7 +62,7 @@ public class SelectionManager {
             return;
         }
         redoSelectionStack.clear();
-        undoSelectionStack.push(new HashSet<>(currentSelectionProperty.get()));
+        addSelectionToUndoStack(new HashSet<>(currentSelectionProperty.get()));
         currentSelectionProperty.set(elements);
     }
 
@@ -80,7 +81,7 @@ public class SelectionManager {
             return;
         }
         redoSelectionStack.clear();
-        undoSelectionStack.push(new HashSet<>(currentSelectionProperty.get()));
+        addSelectionToUndoStack(new HashSet<>(currentSelectionProperty.get()));
         Set<PositionableViewModelElement<?>> newSelection = new HashSet<>(currentSelectionProperty.get());
         newSelection.removeAll(elements);
         currentSelectionProperty.set(newSelection);
@@ -126,5 +127,12 @@ public class SelectionManager {
 
     public void updateSelections(PositionableViewModelElement<?> removedElement) {
         updateSelections(Set.of(removedElement));
+    }
+
+    private void addSelectionToUndoStack(Set<PositionableViewModelElement<?>> selection) {
+        if (undoSelectionStack.size() >= MAX_STACK_SIZE) {
+            undoSelectionStack.removeLast();
+        }
+        undoSelectionStack.push(selection);
     }
 }

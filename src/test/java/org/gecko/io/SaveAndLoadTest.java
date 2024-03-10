@@ -84,9 +84,10 @@ public class SaveAndLoadTest {
             });
 
             assertThrows(ModelException.class, () -> oneLevelFactory.createSystemConnectionViewModelIn(oneLevelRoot,
-                (PortViewModel) oneLevelGeckoViewModel.getViewModelElement(oneLevelRoot.getTarget()
-                    .getVariableByName("emptyPort1")), (PortViewModel) oneLevelGeckoViewModel
-                    .getViewModelElement(oneLevelRoot.getTarget().getVariableByName("emptyPort2"))));
+                (PortViewModel) oneLevelGeckoViewModel.getViewModelElement(
+                    oneLevelRoot.getTarget().getVariableByName("emptyPort1")),
+                (PortViewModel) oneLevelGeckoViewModel.getViewModelElement(
+                    oneLevelRoot.getTarget().getVariableByName("emptyPort2"))));
 
             assertDoesNotThrow(() -> {
                 oneLevelFactory.createRegionViewModelIn(oneLevelRoot);
@@ -302,15 +303,13 @@ public class SaveAndLoadTest {
 
         @Test
         void parseFileThatContainsANonexistentStartState() {
-            File fileForNonexistentStartState
-                = new File("src/test/java/org/gecko/io/files/nonexistentStartState.json");
+            File fileForNonexistentStartState = new File("src/test/java/org/gecko/io/files/nonexistentStartState.json");
             assertThrows(IOException.class, () -> projectFileParser.parse(fileForNonexistentStartState));
         }
 
         @Test
         void parseFileWithValidStartStates() {
-            File fileForNonexistentStartState
-                = new File("src/test/java/org/gecko/io/files/existentStartState.json");
+            File fileForNonexistentStartState = new File("src/test/java/org/gecko/io/files/existentStartState.json");
             assertDoesNotThrow(() -> projectFileParser.parse(fileForNonexistentStartState));
         }
 

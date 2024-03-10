@@ -16,7 +16,6 @@ import org.gecko.viewmodel.RegionViewModel;
  * {@link InspectorContractItem}.
  */
 public class RegionInspectorBuilder extends AbstractInspectorBuilder<RegionViewModel> {
-    private static final String CONTRACT_KEY = "contract";
 
     public RegionInspectorBuilder(ActionManager actionManager, RegionViewModel viewModel) {
         super(actionManager, viewModel);
@@ -26,7 +25,7 @@ public class RegionInspectorBuilder extends AbstractInspectorBuilder<RegionViewM
         addInspectorElement(new InspectorSeparator());
 
         // Contracts
-        addInspectorElement(new InspectorLabel(ResourceHandler.getString(INSPECTOR, CONTRACT_KEY)));
+        addInspectorElement(new InspectorLabel(ResourceHandler.getString("Inspector", "contract")));
         addInspectorElement(new InspectorContractItem(actionManager, viewModel));
     }
 }

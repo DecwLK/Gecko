@@ -14,8 +14,9 @@ import org.gecko.exceptions.ModelException;
 public class Condition {
     private String condition;
 
-    private static final String AND_CONDITION_REGEX = "(%s) & (%s)";
-    private static final String NOT_CONDITION_REGEX = "! (%s)";
+    private static final String AND_CONDITIONS = "(%s) & (%s)";
+    private static final String NOT_CONDITION = "! (%s)";
+    private static final String TRUE_CONDITION = "true";
 
     @JsonCreator
     public Condition(@JsonProperty("condition") String condition) throws ModelException {
@@ -33,7 +34,7 @@ public class Condition {
     public Condition and(Condition other) {
         try {
             // This and other are always valid
-            return new Condition(AND_CONDITION_REGEX.formatted(condition, other.condition));
+            return new Condition(AND_CONDITIONS.formatted(condition, other.condition));
         } catch (ModelException e) {
             return null;
         }
@@ -43,7 +44,7 @@ public class Condition {
     public Condition not() {
         try {
             // This is always valid
-            return new Condition(NOT_CONDITION_REGEX.formatted(condition));
+            return new Condition(NOT_CONDITION.formatted(condition));
         } catch (ModelException e) {
             return null;
         }
@@ -58,7 +59,7 @@ public class Condition {
     public static Condition trueCondition() {
         //Name has to be this because true is reserved
         try {
-            return new Condition("true");
+            return new Condition(TRUE_CONDITION);
         } catch (ModelException e) {
             return null;
         }

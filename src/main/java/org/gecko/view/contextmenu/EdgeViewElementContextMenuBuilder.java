@@ -6,6 +6,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
 import org.gecko.model.Kind;
+import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.EdgeViewModel;
 
 /**
@@ -16,11 +17,6 @@ import org.gecko.viewmodel.EdgeViewModel;
 public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
 
     private final EdgeViewModel edgeViewModel;
-
-    private static final String CHANGE_KIND_MENU_ITEM = "Change Kind";
-    private static final String HIT_MENU_ITEM = "HIT";
-    private static final String MISS_KIND_MENU_ITEM = "MISS";
-    private static final String FAIL_KIND_MENU_ITEM = "FAIL";
 
     public EdgeViewElementContextMenuBuilder(
         ActionManager actionManager, EdgeViewModel edgeViewModel) {
@@ -36,7 +32,7 @@ public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
         SeparatorMenuItem dataTransferToEdgeEditingSeparator = new SeparatorMenuItem();
 
         // Edge editing commands:
-        Menu changeKindMenu = new Menu(CHANGE_KIND_MENU_ITEM);
+        Menu changeKindMenu = new Menu(ResourceHandler.getString("Buttons", "change_kind"));
 
         for (Kind kind : Kind.values()) {
             MenuItem kindMenuItem = createKindMenuItem(kind);
@@ -48,7 +44,7 @@ public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
             changeKindMenu.getItems().add(kindMenuItem);
         }
 
-        MenuItem deleteMenuItem = new MenuItem(DELETE_MENU_ITEM);
+        MenuItem deleteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "delete"));
         deleteMenuItem.setOnAction(e -> actionManager.run(
             actionManager.getActionFactory().createDeletePositionableViewModelElementAction(edgeViewModel)));
 
@@ -57,7 +53,7 @@ public class EdgeViewElementContextMenuBuilder extends ViewContextMenuBuilder {
     }
 
     private MenuItem createKindMenuItem(Kind kind) {
-        MenuItem kindMenuItem = new MenuItem(kind.toString());
+        MenuItem kindMenuItem = new MenuItem(kind.name());
         kindMenuItem.setOnAction(
             e -> actionManager.run(actionManager.getActionFactory().createChangeKindAction(edgeViewModel, kind)));
         return kindMenuItem;

@@ -48,7 +48,6 @@ public class EditorViewModel {
     private static final double MAX_ZOOM_SCALE = 2.5;
     private static final double MIN_ZOOM_SCALE = 0.1;
     private static final double DEFAULT_ZOOM_SCALE = 1;
-    private static final Point2D INITIAL_PIVOT = new Point2D(0, 0);
     private final int id;
     private final ActionManager actionManager;
     private final SystemViewModel currentSystem;
@@ -79,7 +78,7 @@ public class EditorViewModel {
         this.selectionManager = new SelectionManager();
         this.currentToolProperty = new SimpleObjectProperty<>();
         this.focusedElementProperty = new SimpleObjectProperty<>();
-        this.pivotProperty = new SimpleObjectProperty<>(INITIAL_PIVOT);
+        this.pivotProperty = new SimpleObjectProperty<>(Point2D.ZERO);
         this.zoomScaleProperty = new SimpleDoubleProperty(DEFAULT_ZOOM_SCALE);
         this.needsRefocusProperty = new SimpleBooleanProperty(false);
         initializeTools();

@@ -12,15 +12,16 @@ import org.gecko.viewmodel.SystemViewModel;
  */
 public class InspectorOpenSystemButton extends AbstractInspectorButton {
     private static final String STYLE = "inspector-open-system-button";
-    private static final String OPEN_SYSTEM_BUTTON_KEY = "inspector_open_system";
     private static final int WIDTH = 300;
 
     public InspectorOpenSystemButton(ActionManager actionManager, SystemViewModel systemViewModel) {
         getStyleClass().add(STYLE);
-        setText(ResourceHandler.getString(BUTTONS, OPEN_SYSTEM_BUTTON_KEY));
+        setText(ResourceHandler.getString("Buttons", "inspector_open_system"));
+        String toolTip = "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "inspector_open_system"),
+            Shortcuts.OPEN_CHILD_SYSTEM_EDITOR.get().getDisplayText());
+        setTooltip(new Tooltip(toolTip));
         setPrefWidth(WIDTH);
         setOnAction(event -> actionManager.run(
             actionManager.getActionFactory().createViewSwitchAction(systemViewModel, false)));
-        setTooltip(new Tooltip(Shortcuts.OPEN_CHILD_SYSTEM_EDITOR.get().getDisplayText()));
     }
 }

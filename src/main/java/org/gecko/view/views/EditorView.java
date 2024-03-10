@@ -62,9 +62,6 @@ public class EditorView {
     private ShortcutHandler shortcutHandler;
     private ContextMenu contextMenu;
 
-    private static final String VIEW = "View";
-    private static final String SYSTEM_KEY = "system";
-    private static final String AUTOMATON_KEY = "automaton";
     private static final double DEFAULT_ANCHOR_VALUE = 18.0;
     private static final double LEFT_ANCHOR_VALUE = 15.0;
 
@@ -89,8 +86,8 @@ public class EditorView {
         StringProperty tabName = new SimpleStringProperty("Error_Name");
         tabName.bind(Bindings.createStringBinding(() -> {
             String name = viewModel.getCurrentSystem().getName();
-            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString(VIEW, AUTOMATON_KEY) + ")"
-                : " (" + ResourceHandler.getString(VIEW, SYSTEM_KEY) + ")");
+            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
+                : " (" + ResourceHandler.getString("View", "system") + ")");
         }, viewModel.getCurrentSystem().getNameProperty()));
 
         Label tabLabel = new Label();

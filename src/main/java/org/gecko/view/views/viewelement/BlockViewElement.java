@@ -25,13 +25,12 @@ public abstract class BlockViewElement extends Pane {
     private boolean selected;
 
     protected static final int BACKGROUND_ROUNDING = 15;
-    private static final Point2D DEFAULT_EDGE_POINT_POSITION = new Point2D(0, 0);
 
     protected BlockViewElement(PositionableViewModelElement<? extends Element> positionableViewModelElement) {
         // Initialize edge points for a rectangular shaped block
         this.edgePoints = FXCollections.observableArrayList();
         for (int i = 0; i < 4; i++) {
-            edgePoints.add(new SimpleObjectProperty<>(DEFAULT_EDGE_POINT_POSITION));
+            edgePoints.add(new SimpleObjectProperty<>(Point2D.ZERO));
         }
 
         // Auto calculate new edge points on size and position changes
@@ -49,7 +48,7 @@ public abstract class BlockViewElement extends Pane {
         Point2D position = target.getPosition();
         double width = target.getSize().getX();
         double height = target.getSize().getY();
-        edgePoints.get(0).setValue(position.add(DEFAULT_EDGE_POINT_POSITION));
+        edgePoints.get(0).setValue(position.add(Point2D.ZERO));
         edgePoints.get(1).setValue(position.add(new Point2D(width, 0)));
         edgePoints.get(2).setValue(position.add(new Point2D(width, height)));
         edgePoints.get(3).setValue(position.add(new Point2D(0, height)));

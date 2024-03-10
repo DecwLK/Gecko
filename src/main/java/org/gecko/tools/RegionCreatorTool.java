@@ -16,8 +16,6 @@ import org.gecko.viewmodel.BlockViewModelElement;
 public class RegionCreatorTool extends AreaTool {
     private Color color;
 
-    private static final double MEDIUM_OPACITY = 0.5;
-
     public RegionCreatorTool(ActionManager actionManager) {
         super(actionManager, ToolType.REGION_CREATOR, false);
     }
@@ -27,7 +25,7 @@ public class RegionCreatorTool extends AreaTool {
         Rectangle region = new Rectangle();
         color = Color.color(Math.random(), Math.random(), Math.random());
         region.setFill(color);
-        region.setOpacity(MEDIUM_OPACITY);
+        region.setOpacity(0.5);
         return region;
     }
 

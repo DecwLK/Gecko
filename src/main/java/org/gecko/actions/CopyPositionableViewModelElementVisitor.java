@@ -76,7 +76,8 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
 
     @Override
     public Void visit(EdgeViewModel edgeViewModel) {
-        Set<PositionableViewModelElement<?>> selection = geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
+        Set<PositionableViewModelElement<?>> selection =
+            geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
         if (selection.contains(edgeViewModel.getSource()) && selection.contains(edgeViewModel.getDestination())) {
             Edge original = edgeViewModel.getTarget();
             Edge copy = geckoViewModel.getGeckoModel().getModelFactory().copyEdge(original);
@@ -98,7 +99,8 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
     @Override
     public Void visit(StateViewModel stateViewModel) {
         State original = stateViewModel.getTarget();
-        Pair<State, Map<Contract, Contract>> copyResult = geckoViewModel.getGeckoModel().getModelFactory().copyState(original);
+        Pair<State, Map<Contract, Contract>> copyResult =
+            geckoViewModel.getGeckoModel().getModelFactory().copyState(original);
         State copy = copyResult.getKey();
         originalToClipboard.putAll(copyResult.getValue());
         originalToClipboard.put(original, copy);
@@ -113,9 +115,18 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
 
     @Override
     public Void visit(SystemConnectionViewModel systemConnectionViewModel) {
-        Set<PositionableViewModelElement<?>> selection = geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
-        SystemViewModel sourceSystemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getChildSystemWithVariable(systemConnectionViewModel.getTarget().getSource()));
-        SystemViewModel destinationSystemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getChildSystemWithVariable(systemConnectionViewModel.getTarget().getDestination()));
+        Set<PositionableViewModelElement<?>> selection =
+            geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
+        SystemViewModel sourceSystemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(
+            geckoViewModel.getCurrentEditor()
+                .getCurrentSystem()
+                .getTarget()
+                .getChildSystemWithVariable(systemConnectionViewModel.getTarget().getSource()));
+        SystemViewModel destinationSystemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(
+            geckoViewModel.getCurrentEditor()
+                .getCurrentSystem()
+                .getTarget()
+                .getChildSystemWithVariable(systemConnectionViewModel.getTarget().getDestination()));
         if (selection.contains(sourceSystemViewModel) && selection.contains(destinationSystemViewModel)) {
             SystemConnection original = systemConnectionViewModel.getTarget();
             SystemConnection copy = geckoViewModel.getGeckoModel().getModelFactory().copySystemConnection(original);
@@ -149,7 +160,8 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
             savePositionRecursively(child);
         }
     }
-    private void savePositionAndSize(Element key,PositionableViewModelElement<?> positionSource) {
+
+    private void savePositionAndSize(Element key, PositionableViewModelElement<?> positionSource) {
         elementToPosAndSize.put(key, new Pair<>(positionSource.getPosition(), positionSource.getSize()));
     }
 }

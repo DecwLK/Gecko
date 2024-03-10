@@ -1,7 +1,6 @@
 package org.gecko.actions;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point2D;
 import org.gecko.exceptions.GeckoException;
@@ -30,7 +29,8 @@ public class PastePositionableViewModelElementAction extends Action {
             return false;
         }
 
-        PastePositionableViewModelElementVisitor pasteVisitor = new PastePositionableViewModelElementVisitor(geckoViewModel, copyVisitor);
+        PastePositionableViewModelElementVisitor pasteVisitor =
+            new PastePositionableViewModelElementVisitor(geckoViewModel, copyVisitor);
         for (Element element : copyVisitor.getOriginalToClipboard().values()) {
             element.accept(pasteVisitor);
         }
@@ -42,7 +42,8 @@ public class PastePositionableViewModelElementAction extends Action {
             }
         }
         pastedElements.addAll(pasteVisitor.getPastedElements());
-        Action selectAction = geckoViewModel.getActionManager().getActionFactory().createSelectAction(pastedElements, true);
+        Action selectAction =
+            geckoViewModel.getActionManager().getActionFactory().createSelectAction(pastedElements, true);
         geckoViewModel.getActionManager().run(selectAction);
         return true;
     }

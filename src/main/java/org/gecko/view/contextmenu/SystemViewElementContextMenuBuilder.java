@@ -4,6 +4,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
+import org.gecko.view.GeckoView;
 import org.gecko.view.ResourceHandler;
 import org.gecko.view.views.shortcuts.Shortcuts;
 import org.gecko.viewmodel.SystemViewModel;
@@ -18,8 +19,8 @@ public class SystemViewElementContextMenuBuilder extends ViewContextMenuBuilder 
     private final SystemViewModel systemViewModel;
 
     public SystemViewElementContextMenuBuilder(
-        ActionManager actionManager, SystemViewModel systemViewModel) {
-        super(actionManager);
+        ActionManager actionManager, SystemViewModel systemViewModel, GeckoView geckoView) {
+        super(actionManager, geckoView);
 
         this.systemViewModel = systemViewModel;
     }

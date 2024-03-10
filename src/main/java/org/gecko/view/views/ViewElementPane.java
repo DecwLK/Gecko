@@ -185,7 +185,7 @@ public class ViewElementPane {
         return new Point2D(x, y);
     }
 
-    private Point2D screenCenterWorldCoords() {
+    public Point2D screenCenterWorldCoords() {
         //Can't use screenToLocal because we don't want the pane.localToScreen() offset
         Point2D screenCenter =
             new Point2D(pane.getViewportBounds().getWidth() / 2, pane.getViewportBounds().getHeight() / 2);

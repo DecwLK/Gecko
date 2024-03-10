@@ -53,7 +53,7 @@ public class EditorView {
     private final InspectorFactory inspectorFactory;
     private final Inspector emptyInspector;
     private final Node searchWindow;
-
+    @Getter
     private final ViewElementPane viewElementPane;
 
     @Getter
@@ -86,8 +86,8 @@ public class EditorView {
         StringProperty tabName = new SimpleStringProperty("Error_Name");
         tabName.bind(Bindings.createStringBinding(() -> {
             String name = viewModel.getCurrentSystem().getName();
-            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")" :
-                " (" + ResourceHandler.getString("View", "system") + ")");
+            return name + (viewModel.isAutomatonEditor() ? " (" + ResourceHandler.getString("View", "automaton") + ")"
+                : " (" + ResourceHandler.getString("View", "system") + ")");
         }, viewModel.getCurrentSystem().getNameProperty()));
 
         Label tabLabel = new Label();
@@ -129,7 +129,8 @@ public class EditorView {
         // Set current tool
         viewModel.getCurrentToolProperty().addListener(this::onToolChanged);
 
-        ViewContextMenuBuilder contextMenuBuilder = new ViewContextMenuBuilder(viewModel.getActionManager(), viewModel);
+        ViewContextMenuBuilder contextMenuBuilder =
+            new ViewContextMenuBuilder(viewModel.getActionManager(), viewModel, this);
         this.contextMenu = contextMenuBuilder.build();
         currentViewPane.setOnContextMenuRequested(event -> {
             changeContextMenu(contextMenuBuilder.getContextMenu());

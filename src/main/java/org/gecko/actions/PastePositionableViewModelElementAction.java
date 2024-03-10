@@ -35,7 +35,6 @@ public class PastePositionableViewModelElementAction extends Action {
             element.accept(pasteVisitor);
         }
         while (!pasteVisitor.getUnsuccessfulPastes().isEmpty()) {
-            System.out.println("Unsuccessful pastes: " + pasteVisitor.getUnsuccessfulPastes());
             Set<Element> unsuccessfulPastes = new HashSet<>(pasteVisitor.getUnsuccessfulPastes());
             pasteVisitor.getUnsuccessfulPastes().clear();
             for (Element element : unsuccessfulPastes) {

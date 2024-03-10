@@ -20,9 +20,9 @@ public class CopyPositionableViewModelElementAction extends Action {
         Set<PositionableViewModelElement<?>> copyQueue = geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
         do {
             System.out.println("Trying to copy: " + copyQueue);
-            visitor.getUnsuccessfulCopies().clear();
+            visitor.getFailedCopies().clear();
             copyQueue.forEach(element -> element.accept(visitor));
-            copyQueue = new HashSet<>(visitor.getUnsuccessfulCopies());
+            copyQueue = new HashSet<>(visitor.getFailedCopies());
         } while (!copyQueue.isEmpty());
 
         System.out.println(visitor.getOriginalToClipboard());

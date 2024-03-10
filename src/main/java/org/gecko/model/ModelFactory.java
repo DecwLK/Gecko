@@ -2,6 +2,7 @@ package org.gecko.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import javafx.util.Pair;
 import lombok.NonNull;
 import lombok.Setter;
 import org.gecko.exceptions.ModelException;
@@ -51,8 +52,9 @@ public class ModelFactory {
         return state;
     }
 
-    public State copyState(@NonNull State state) {
+    public Pair<State, Map<Contract, Contract>> copyState(@NonNull State state) {
         int id = getNewElementId();
+        Map<Contract, Contract> contractToCopy = new HashMap<>();
         State copy;
         try {
             copy = new State(id, getDefaultName(id));
@@ -62,8 +64,9 @@ public class ModelFactory {
         for (Contract contract : state.getContracts()) {
             Contract copiedContract = copyContract(contract);
             copy.addContract(copiedContract);
+            contractToCopy.put(contract, copiedContract);
         }
-        return copy;
+        return new Pair<>(copy, contractToCopy);
     }
 
     public Edge createEdge(@NonNull Automaton automaton, @NonNull State source, @NonNull State destination)
@@ -98,11 +101,11 @@ public class ModelFactory {
         return system;
     }
 
-    public System copySystem(@NonNull System system) throws ModelException {
+    public Pair<System, Map<Variable, Variable>> copySystem(@NonNull System system) throws ModelException {
         return copySystem(system, new HashMap<>());
     }
 
-    public System copySystem(@NonNull System system, Map<Variable, Variable> variableToCopy) throws ModelException {
+    public Pair<System, Map<Variable, Variable>> copySystem(@NonNull System system, Map<Variable, Variable> variableToCopy) throws ModelException {
         int id = getNewElementId();
         System copy;
         try {
@@ -112,7 +115,7 @@ public class ModelFactory {
         }
         Map<State, State> stateToCopy = new HashMap<>();
         for (State state : system.getAutomaton().getStates()) {
-            State copiedState = copyState(state);
+            State copiedState = copyState(state).getKey();
             copy.getAutomaton().addState(copiedState);
             stateToCopy.put(state, copiedState);
         }
@@ -127,7 +130,7 @@ public class ModelFactory {
             copy.addVariable(copiedVariable);
         }
         for (System childSystem : system.getChildren()) {
-            copy.addChild(copySystem(childSystem, variableToCopy));
+            copy.addChild(copySystem(childSystem, variableToCopy).getKey());
         }
         for (System childSystem : copy.getChildren()) {
             childSystem.setParent(copy);
@@ -136,7 +139,7 @@ public class ModelFactory {
             copy.addConnection(copySystemConnection(connection, variableToCopy.get(connection.getSource()),
                 variableToCopy.get(connection.getDestination())));
         }
-        return copy;
+        return new Pair<>(copy, variableToCopy);
     }
 
     public System createRoot() throws ModelException {

@@ -2,6 +2,7 @@ package org.gecko.actions;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
@@ -35,27 +36,29 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
     private HashMap<Element, Element> originalToClipboard;
     private HashMap<Element, Pair<Point2D, Point2D>> elementToPosAndSize;
     @Getter
-    private Set<PositionableViewModelElement<?>> unsuccessfulCopies;
+    private Set<PositionableViewModelElement<?>> failedCopies;
 
     public CopyPositionableViewModelElementVisitor(GeckoViewModel geckoViewModel) {
         this.geckoViewModel = geckoViewModel;
         isAutomatonCopy = geckoViewModel.getCurrentEditor().isAutomatonEditor();
         originalToClipboard = new HashMap<>();
         elementToPosAndSize = new HashMap<>();
-        unsuccessfulCopies = new HashSet<>();
+        failedCopies = new HashSet<>();
     }
 
     @Override
     public Void visit(SystemViewModel systemViewModel) {
-        java.lang.System.out.println("Copying system " + systemViewModel.getTarget().getName());
         System original = systemViewModel.getTarget();
+        Pair<System, Map<Variable, Variable>> copyResult;
         System copy;
         try {
-            copy = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemViewModel.getTarget());
+            copyResult = geckoViewModel.getGeckoModel().getModelFactory().copySystem(systemViewModel.getTarget());
         } catch (ModelException e) {
-            unsuccessfulCopies.add(systemViewModel);
+            failedCopies.add(systemViewModel);
             return null;
         }
+        copy = copyResult.getKey();
+        originalToClipboard.putAll(copyResult.getValue());
         elementToPosAndSize.put(original,
             new Pair<>(systemViewModel.getPosition(), systemViewModel.getSize()));
         elementToPosAndSize.put(copy,
@@ -78,15 +81,17 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
         Set<PositionableViewModelElement<?>> selection = geckoViewModel.getCurrentEditor().getSelectionManager().getCurrentSelection();
         if (selection.contains(edgeViewModel.getSource()) && selection.contains(edgeViewModel.getDestination())) {
             Edge original = edgeViewModel.getTarget();
-            Edge copy = geckoViewModel.getGeckoModel().getModelFactory().copyEdge(edgeViewModel.getTarget());
+            Edge copy = geckoViewModel.getGeckoModel().getModelFactory().copyEdge(original);
             State sourceOnClipboard = (State) originalToClipboard.get(original.getSource());
             State destinationOnClipboard = (State) originalToClipboard.get(original.getDestination());
+            Contract contractOnClipboard = (Contract) originalToClipboard.get(original.getContract());
             if (sourceOnClipboard == null || destinationOnClipboard == null) {
-                unsuccessfulCopies.add(edgeViewModel);
+                failedCopies.add(edgeViewModel);
                 return null;
             }
             copy.setSource(sourceOnClipboard);
             copy.setDestination(destinationOnClipboard);
+            copy.setContract(contractOnClipboard);
             originalToClipboard.put(original, copy);
         }
         return null;
@@ -94,27 +99,27 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
 
     @Override
     public Void visit(StateViewModel stateViewModel) {
-        originalToClipboard.put(stateViewModel.getTarget(),
-            geckoViewModel.getGeckoModel().getModelFactory().copyState(stateViewModel.getTarget()));
+        State original = stateViewModel.getTarget();
+        Pair<State, Map<Contract, Contract>> copyResult = geckoViewModel.getGeckoModel().getModelFactory().copyState(original);
+        State copy = copyResult.getKey();
+        originalToClipboard.putAll(copyResult.getValue());
         elementToPosAndSize.put(stateViewModel.getTarget(),
             new Pair<>(stateViewModel.getPosition(), stateViewModel.getSize()));
         elementToPosAndSize.put(originalToClipboard.get(stateViewModel.getTarget()),
             new Pair<>(stateViewModel.getPosition(), stateViewModel.getSize()));
-        /*for (EdgeViewModel evm : stateViewModel.getOutgoingEdges()) {
-            evm.accept(this);
-        }*/
+        originalToClipboard.put(original, copy);
         return null;
     }
 
     @Override
     public Void visit(PortViewModel portViewModel) {
-        java.lang.System.out.println("Copying port");
-        Variable original = portViewModel.getTarget();
+        java.lang.System.out.println("actually Copying port");
+        /*Variable original = portViewModel.getTarget();
         Variable copy = geckoViewModel.getGeckoModel().getModelFactory().copyVariable(original);
         originalToClipboard.put(original, copy);
 
         elementToPosAndSize.put(portViewModel.getTarget(),
-            new Pair<>(portViewModel.getPosition(), portViewModel.getSize()));
+            new Pair<>(portViewModel.getPosition(), portViewModel.getSize()));*/
         return null;
     }
 
@@ -129,7 +134,7 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
             Variable sourceOnClipboard = (Variable) originalToClipboard.get(original.getSource());
             Variable destinationOnClipboard = (Variable) originalToClipboard.get(original.getDestination());
             if (sourceOnClipboard == null || destinationOnClipboard == null) {
-                unsuccessfulCopies.add(systemConnectionViewModel);
+                failedCopies.add(systemConnectionViewModel);
                 return null;
             }
             try {

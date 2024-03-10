@@ -24,6 +24,8 @@ public abstract class AbstractInspectorBuilder<T extends PositionableViewModelEl
     private final ActionManager actionManager;
     private final List<InspectorElement<?>> inspectorElements;
 
+    public static final String INSPECTOR = "Inspector";
+
     protected AbstractInspectorBuilder(ActionManager actionManager, T viewModel) {
         this.actionManager = actionManager;
         this.viewModel = viewModel;

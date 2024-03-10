@@ -4,7 +4,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.gecko.actions.ActionManager;
-import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.RegionViewModel;
 
 /**
@@ -30,7 +29,7 @@ public class RegionViewElementContextMenuBuilder extends ViewContextMenuBuilder 
         SeparatorMenuItem dataTransferToRegionEditingSeparator = new SeparatorMenuItem();
 
         // Region editing commands:
-        MenuItem deleteMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "delete"));
+        MenuItem deleteMenuItem = new MenuItem(DELETE_MENU_ITEM);
         deleteMenuItem.setOnAction(e -> actionManager.run(
             actionManager.getActionFactory().createDeletePositionableViewModelElementAction(regionViewModel)));
 

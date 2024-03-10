@@ -18,7 +18,7 @@ public enum FileTypes {
         this.fileExtension = fileExtension;
     }
 
-    public String getFileNameRegex() {
+    public String getFileNameGlob() {
         return "*." + fileExtension;
     }
 }

@@ -33,9 +33,23 @@ import org.gecko.model.Variable;
  * to Gecko, such as regions, kinds and priorities, to be compatible with the sys file format.
  */
 public class AutomatonFileSerializer implements FileSerializer {
-
     private final GeckoModel model;
+
     private static final String INDENT = "    ";
+    private static final String SERIALIZED_CONTRACT_NAME_REGEX = "contract %s";
+    private static final String AUTOMATON_SERIALIZATION_AS_SYSTEM_CONTRACT_REGEX
+        = SERIALIZED_CONTRACT_NAME_REGEX + " {";
+    private static final String SERIALIZED_CONTRACT_REGEX = SERIALIZED_CONTRACT_NAME_REGEX + " := %s ==> %s";
+    private static final String SERIALIZED_TRANSITION_REGEX = "%s -> %s :: %s";
+    private static final String SERIALIZED_SYSTEM_REGEX = "reactor %s {";
+    private static final String SERIALIZED_CONNECTION_REGEX = "%s.%s -> %s.%s";
+    private static final String SERIALIZED_STATE_REGEX = "state %s: %s";
+    private static final String VARIABLE_ATTRIBUTES_REGEX = " %s: %s";
+    private static final String TRUE_CONDITION = "TRUE";
+    private static final String SERIALIZED_INPUT = "input";
+    private static final String SERIALIZED_OUTPUT = "output";
+    private static final String SERIALIZED_STATE = "state";
+    private static final int HIGHEST_PRIORITY = 0;
 
     public AutomatonFileSerializer(GeckoModel model) {
         this.model = model;
@@ -70,7 +84,7 @@ public class AutomatonFileSerializer implements FileSerializer {
     private String serializeAutomaton(System system) {
         Automaton automaton = system.getAutomaton();
         StringJoiner joiner = new StringJoiner(java.lang.System.lineSeparator());
-        joiner.add("contract %s {".formatted(system.getName()));
+        joiner.add(AUTOMATON_SERIALIZATION_AS_SYSTEM_CONTRACT_REGEX.formatted(system.getName()));
         if (!system.getVariables().isEmpty()) {
             joiner.add(serializeIo(system));
             joiner.add("");
@@ -127,10 +141,10 @@ public class AutomatonFileSerializer implements FileSerializer {
         }
 
         //applying priorites
-        int prioIndex = 0;
+        int prioIndex = HIGHEST_PRIORITY;
         for (List<Edge> edgeGroup : groupedEdges) {
             for (Edge edge : edgeGroup) {
-                if (prioIndex == 0) {
+                if (prioIndex == HIGHEST_PRIORITY) {
                     continue; //Highest prio doesn't need to be altered
                 }
                 Contract contractWithPrio = newContracts.get(edge.getContract());
@@ -147,7 +161,7 @@ public class AutomatonFileSerializer implements FileSerializer {
         switch (kind) {
             case MISS -> {
                 contract.setPreCondition(contract.getPreCondition().not());
-                contract.setPostCondition(Condition.trueCondition());
+                contract.setPostCondition(new Condition(TRUE_CONDITION));
             }
             case FAIL -> {
                 contract.setPostCondition(contract.getPostCondition().not());
@@ -196,18 +210,18 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeContract(Contract contract) {
-        return INDENT + "contract %s := %s ==> %s".formatted(contract.getName(), contract.getPreCondition(),
+        return INDENT + SERIALIZED_CONTRACT_REGEX.formatted(contract.getName(), contract.getPreCondition(),
             contract.getPostCondition());
     }
 
     private String serializeTransition(Edge edge) {
-        return INDENT + "%s -> %s :: %s".formatted(edge.getSource().getName(), edge.getDestination().getName(),
-            edge.getContract().getName());
+        return INDENT + SERIALIZED_TRANSITION_REGEX
+            .formatted(edge.getSource().getName(), edge.getDestination().getName(), edge.getContract().getName());
     }
 
     private String serializeSystem(System system) {
         StringJoiner joiner = new StringJoiner(java.lang.System.lineSeparator());
-        joiner.add("reactor %s {".formatted(system.getName()));
+        joiner.add(SERIALIZED_SYSTEM_REGEX.formatted(system.getName()));
         if (!system.getVariables().isEmpty()) {
             joiner.add(serializeIo(system));
             joiner.add("");
@@ -217,7 +231,7 @@ public class AutomatonFileSerializer implements FileSerializer {
             joiner.add("");
         }
         if (system.getAutomaton() != null && !system.getAutomaton().isEmpty()) {
-            joiner.add(INDENT + "contract %s".formatted(system.getName()));
+            joiner.add(INDENT + SERIALIZED_CONTRACT_NAME_REGEX.formatted(system.getName()));
             joiner.add("");
         }
         if (!system.getConnections().isEmpty()) {
@@ -241,12 +255,12 @@ public class AutomatonFileSerializer implements FileSerializer {
         String startPort = connection.getSource().getName();
         String endSystem = serializeSystemReference(parent, connection.getDestination());
         String endPort = connection.getDestination().getName();
-        return INDENT + "%s.%s -> %s.%s".formatted(startSystem, startPort, endSystem, endPort);
+        return INDENT + SERIALIZED_CONNECTION_REGEX.formatted(startSystem, startPort, endSystem, endPort);
     }
 
     private String serializeSystemReference(System parent, Variable var) {
         if (parent.getVariables().contains(var)) {
-            return "self";
+            return AutomatonFileVisitor.SELF_REFERENCE_TOKEN;
         } else {
             return parent.getChildSystemWithVariable(var).getName();
         }
@@ -264,24 +278,24 @@ public class AutomatonFileSerializer implements FileSerializer {
     }
 
     private String serializeChild(System system) {
-        return INDENT + "state %s: %s".formatted(system.getName(), system.getName());
+        return INDENT + SERIALIZED_STATE_REGEX.formatted(system.getName(), system.getName());
     }
 
     private String serializeVariable(Variable variable) {
         String output = "";
         output += INDENT + switch (variable.getVisibility()) {
-            case INPUT -> "input";
-            case OUTPUT -> "output";
-            case STATE -> "state";
+            case INPUT -> SERIALIZED_INPUT;
+            case OUTPUT -> SERIALIZED_OUTPUT;
+            case STATE -> SERIALIZED_STATE;
             default -> throw new IllegalArgumentException("Unknown visibility: " + variable.getVisibility());
         };
-        output += " %s: %s".formatted(variable.getName(), variable.getType());
+        output += VARIABLE_ATTRIBUTES_REGEX.formatted(variable.getName(), variable.getType());
         //TODO append variable value
         return output;
     }
 
     private String serializeCode(String code) {
-        return INDENT + "{=" + code + "=}";
+        return INDENT + AutomatonFileVisitor.CODE_BEGIN + code + AutomatonFileVisitor.CODE_END;
     }
 
     private <T> String serializeCollectionWithMapping(Collection<T> collection, Function<T, String> mapping) {

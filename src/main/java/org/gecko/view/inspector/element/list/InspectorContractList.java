@@ -12,6 +12,7 @@ import org.gecko.viewmodel.StateViewModel;
  */
 public class InspectorContractList extends AbstractInspectorList<InspectorContractItem> {
     private static final double MIN_HEIGHT = 50;
+    private static final int CONTRACT_ITEM_OFFSET = 20;
 
     public InspectorContractList(ActionManager actionManager, StateViewModel stateViewModel) {
         super();
@@ -31,7 +32,7 @@ public class InspectorContractList extends AbstractInspectorList<InspectorContra
                     for (ContractViewModel item : change.getAddedSubList()) {
                         InspectorContractItem newContractItem =
                             new InspectorContractItem(actionManager, stateViewModel, item);
-                        newContractItem.prefWidthProperty().bind(widthProperty().subtract(20));
+                        newContractItem.prefWidthProperty().bind(widthProperty().subtract(CONTRACT_ITEM_OFFSET));
                         items.add(newContractItem);
                     }
                 } else if (change.wasRemoved()) {

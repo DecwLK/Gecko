@@ -12,6 +12,7 @@ import org.gecko.viewmodel.PositionableViewModelElement;
 public class InspectorDeleteButton extends AbstractInspectorButton {
 
     private static final String STYLE = "inspector-delete-button";
+    private static final String DELETE_BUTTON_KEY = "inspector_delete";
     private static final int WIDTH = 300;
 
     public InspectorDeleteButton(ActionManager actionManager, PositionableViewModelElement<?> elementToRemove) {
@@ -19,11 +20,9 @@ public class InspectorDeleteButton extends AbstractInspectorButton {
             actionManager.run(
                 actionManager.getActionFactory().createDeletePositionableViewModelElementAction(elementToRemove));
         });
-        setText(ResourceHandler.getString("Buttons", "delete"));
-        String toolTip = "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "delete"),
-            Shortcuts.DELETE.get().getDisplayText());
-        setTooltip(new Tooltip(toolTip));
+        setText(ResourceHandler.getString(BUTTONS, DELETE_BUTTON_KEY));
         setPrefWidth(WIDTH);
         getStyleClass().add(STYLE);
+        setTooltip(new Tooltip(Shortcuts.DELETE.get().getDisplayText()));
     }
 }

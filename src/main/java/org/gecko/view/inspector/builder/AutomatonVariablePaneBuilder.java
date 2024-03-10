@@ -18,6 +18,7 @@ public class AutomatonVariablePaneBuilder {
     private static final int VARIABLE_PANE_WIDTH = 320;
     private static final int VARIABLE_PANE_HEIGHT = 240;
     private static final int ELEMENT_SPACING = 10;
+    private static final double ELEMENT_PADDING = ELEMENT_SPACING / 2.0;
 
     private final ScrollPane scrollPane;
 
@@ -42,7 +43,7 @@ public class AutomatonVariablePaneBuilder {
             .addAll(inputLabel.getControl(), inputList.getControl(), outputLabel.getControl(), outputList.getControl());
         content.setSpacing(ELEMENT_SPACING);
         scrollPane.setFitToWidth(true);
-        scrollPane.setPadding(new Insets(ELEMENT_SPACING / 2.0));
+        scrollPane.setPadding(new Insets(ELEMENT_PADDING));
         scrollPane.setContent(content);
     }
 

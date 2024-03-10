@@ -31,6 +31,7 @@ import org.gecko.viewmodel.SystemViewModel;
 public class SystemViewElement extends BlockViewElement implements ViewElement<SystemViewModel> {
 
     private static final int Z_PRIORITY = 30;
+    private static final int PORT_SPACING = 10;
 
     private final SystemViewModel systemViewModel;
     @Getter
@@ -187,7 +188,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
             //Center names vertically and space them out
             VBox.setVgrow(aligner, Priority.ALWAYS);
             aligner.setAlignment(Pos.CENTER);
-            aligner.setSpacing(10);
+            aligner.setSpacing(PORT_SPACING);
             container.getChildren().add(aligner);
             //Width isn't set yet, so we need to listen to it
             widthProperty().addListener((observable, oldValue, newValue) -> {

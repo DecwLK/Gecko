@@ -16,6 +16,7 @@ public class CreatePortViewModelElementAction extends Action {
     private final GeckoViewModel geckoViewModel;
     private final SystemViewModel systemViewModel;
     private PortViewModel createdPortViewModel;
+    private static final int MARGIN = 2;
 
     CreatePortViewModelElementAction(GeckoViewModel geckoViewModel, SystemViewModel parentSystem) {
         this.geckoViewModel = geckoViewModel;
@@ -26,7 +27,7 @@ public class CreatePortViewModelElementAction extends Action {
     boolean run() throws GeckoException {
         createdPortViewModel = geckoViewModel.getViewModelFactory().createPortViewModelIn(systemViewModel);
         double offset = createdPortViewModel.getSize().getY() * (systemViewModel.getPorts().size() - 1);
-        createdPortViewModel.setPosition(new Point2D(2, 2 + offset));
+        createdPortViewModel.setPosition(new Point2D(MARGIN, MARGIN + offset));
         return true;
     }
 

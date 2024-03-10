@@ -14,6 +14,9 @@ import org.gecko.exceptions.ModelException;
 public class Condition {
     private String condition;
 
+    private static final String AND_CONDITION_REGEX = "(%s) & (%s)";
+    private static final String NOT_CONDITION_REGEX = "! (%s)";
+
     @JsonCreator
     public Condition(@JsonProperty("condition") String condition) throws ModelException {
         setCondition(condition);
@@ -30,7 +33,7 @@ public class Condition {
     public Condition and(Condition other) {
         try {
             // This and other are always valid
-            return new Condition("(" + condition + ") & (" + other.condition + ")");
+            return new Condition(AND_CONDITION_REGEX.formatted(condition, other.condition));
         } catch (ModelException e) {
             return null;
         }
@@ -40,7 +43,7 @@ public class Condition {
     public Condition not() {
         try {
             // This is always valid
-            return new Condition("! (" + condition + ")");
+            return new Condition(NOT_CONDITION_REGEX.formatted(condition));
         } catch (ModelException e) {
             return null;
         }

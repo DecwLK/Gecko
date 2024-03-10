@@ -31,6 +31,10 @@ public class ViewModelFactory {
     private final ModelFactory modelFactory;
     private final GeckoViewModel geckoViewModel;
 
+    private static final int PLUS = 1;
+    private static final int MINUS = -1;
+    private static final double HALF = 0.5;
+
     public ViewModelFactory(ActionManager actionManager, GeckoViewModel geckoViewModel, ModelFactory modelFactory) {
         this.actionManager = actionManager;
         this.geckoViewModel = geckoViewModel;
@@ -285,9 +289,9 @@ public class ViewModelFactory {
     }
 
     private Point2D calculateEndPortPosition(Point2D position, Point2D size, Visibility visibility, boolean isPort) {
-        int sign = isPort ? 1 : -1;
-        return position.add(size.multiply(0.5))
-            .subtract((visibility == Visibility.INPUT ? 1 : -1) * sign * size.getX() / 2, 0);
+        int sign = isPort ? PLUS : MINUS;
+        return position.add(size.multiply(HALF))
+            .subtract((visibility == Visibility.INPUT ? PLUS : MINUS) * sign * size.getX() / 2, 0);
     }
 
     private boolean isPort(SystemViewModel systemViewModel, PortViewModel portViewModel) {

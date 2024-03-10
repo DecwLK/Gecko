@@ -1,6 +1,5 @@
 package org.gecko.view.inspector.element.button;
 
-import javafx.scene.control.Tooltip;
 import org.gecko.actions.ActionManager;
 import org.gecko.view.ResourceHandler;
 import org.gecko.viewmodel.StateViewModel;
@@ -12,11 +11,11 @@ import org.gecko.viewmodel.StateViewModel;
 public class InspectorAddContractButton extends AbstractInspectorButton {
     private static final String STYLE = "inspector-add-button";
     private static final int WIDTH = 70;
+    private static final String ADD_CONTRACT_BUTTON_KEY = "inspector_add_contract";
 
     public InspectorAddContractButton(ActionManager actionManager, StateViewModel stateViewModel) {
         getStyleClass().add(STYLE);
-        setText(ResourceHandler.getString("Buttons", "inspector_add_contract"));
-        setTooltip(new Tooltip(ResourceHandler.getString("Tooltips", "inspector_add_contract")));
+        setText(ResourceHandler.getString(BUTTONS, ADD_CONTRACT_BUTTON_KEY));
         setPrefWidth(WIDTH);
         setOnAction(event -> {
             actionManager.run(

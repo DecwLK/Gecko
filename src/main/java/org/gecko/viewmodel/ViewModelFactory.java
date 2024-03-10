@@ -65,10 +65,6 @@ public class ViewModelFactory {
      */
     public StateViewModel createStateViewModelFrom(State state) {
         StateViewModel result = new StateViewModel(getNewViewModelElementId(), state);
-        for (Contract contract : state.getContracts()) {
-            ContractViewModel contractViewModel = createContractViewModelFrom(contract);
-            result.addContract(contractViewModel);
-        }
         geckoViewModel.addViewModelElement(result);
         updateStartState(state);
         return result;

@@ -2,7 +2,9 @@ package org.gecko.viewmodel;
 
 import java.util.HashSet;
 import java.util.Set;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import lombok.Getter;
@@ -20,7 +22,7 @@ import org.gecko.model.Element;
 public abstract class PositionableViewModelElement<T extends Element> extends AbstractViewModelElement<T> {
     protected final Property<Point2D> positionProperty;
     protected final Property<Point2D> sizeProperty;
-    private boolean isCurrentlyModified;
+    private final BooleanProperty isCurrentlyModified;
 
     private final Set<PositionableViewModelElement<?>> observers;
 
@@ -29,6 +31,7 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
         this.positionProperty = new SimpleObjectProperty<>(new Point2D(0, 0));
         this.sizeProperty = new SimpleObjectProperty<>(new Point2D(200, 300));
         this.observers = new HashSet<>();
+        this.isCurrentlyModified = new SimpleBooleanProperty(false);
     }
 
     public Point2D getPosition() {
@@ -55,6 +58,14 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
     public void setCenter(@NonNull Point2D point) {
         setPosition(new Point2D(point.getX() - sizeProperty.getValue().getX() / 2,
             point.getY() - sizeProperty.getValue().getY() / 2));
+    }
+
+    public void setCurrentlyModified(boolean isCurrentlyModified) {
+        this.isCurrentlyModified.setValue(isCurrentlyModified);
+    }
+
+    public boolean isCurrentlyModified() {
+        return isCurrentlyModified.getValue();
     }
 
     public abstract Object accept(@NonNull PositionableViewModelElementVisitor visitor);

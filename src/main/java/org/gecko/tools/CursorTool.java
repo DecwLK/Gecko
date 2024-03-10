@@ -191,6 +191,7 @@ public class CursorTool extends Tool {
 
             startDraggingElementHandler(event);
             scaler.setDragging(true);
+            scaler.getDecoratorTarget().getTarget().setCurrentlyModified(true);
             event.consume();
         });
         scaler.setOnMouseDragged(event -> {
@@ -223,6 +224,7 @@ public class CursorTool extends Tool {
             }
 
             actionManager.run(moveAction);
+            scaler.getDecoratorTarget().getTarget().setCurrentlyModified(false);
             cancelDrag(scaler);
             event.consume();
         });

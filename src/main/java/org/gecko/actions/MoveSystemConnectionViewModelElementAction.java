@@ -65,9 +65,15 @@ public class MoveSystemConnectionViewModelElementAction extends Action {
         PortViewModel destinationPortViewModel = systemConnectionViewModel.getDestination();
 
         if (isSource()) {
+            if (portViewModel.equals(sourcePortViewModel)) {
+                return false;
+            }
             wasVariableBlock = geckoViewModel.getSystemViewModelWithPort(sourcePortViewModel).equals(parentSystem);
             sourcePortViewModel = portViewModel;
         } else {
+            if (portViewModel.equals(destinationPortViewModel)) {
+                return false;
+            }
             wasVariableBlock = geckoViewModel.getSystemViewModelWithPort(destinationPortViewModel).equals(parentSystem);
             destinationPortViewModel = portViewModel;
         }

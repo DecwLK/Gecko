@@ -72,7 +72,7 @@ public class StateViewModel extends BlockViewModelElement<State> {
     }
 
     @Override
-    public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
+    public <S> S accept(@NonNull PositionableViewModelElementVisitor<S> visitor) {
         return visitor.visit(this);
     }
 

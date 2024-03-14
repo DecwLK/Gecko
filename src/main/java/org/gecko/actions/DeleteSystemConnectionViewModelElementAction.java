@@ -25,6 +25,8 @@ public class DeleteSystemConnectionViewModelElementAction extends AbstractPositi
     @Override
     boolean run() throws GeckoException {
         system.removeConnection(systemConnectionViewModel.getTarget());
+        systemConnectionViewModel.getSource().removeOutgoingConnection(systemConnectionViewModel);
+        systemConnectionViewModel.getDestination().removeIncomingConnection(systemConnectionViewModel);
         geckoViewModel.deleteViewModelElement(systemConnectionViewModel);
         return true;
     }

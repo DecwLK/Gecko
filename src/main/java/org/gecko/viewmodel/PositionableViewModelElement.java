@@ -70,5 +70,5 @@ public abstract class PositionableViewModelElement<T extends Element> extends Ab
         return isCurrentlyModified.getValue();
     }
 
-    public abstract Object accept(@NonNull PositionableViewModelElementVisitor visitor);
+    public abstract <S> S accept(@NonNull PositionableViewModelElementVisitor<S> visitor);
 }

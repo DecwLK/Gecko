@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -22,6 +24,7 @@ import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import org.gecko.model.Visibility;
 import org.gecko.viewmodel.PortViewModel;
+import org.gecko.viewmodel.SystemConnectionViewModel;
 import org.gecko.viewmodel.SystemViewModel;
 
 /**
@@ -44,6 +47,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
     private final VBox inputPortsAligner;
     private final VBox outputPortsAligner;
     private final ListProperty<PortViewElement> portViewElements;
+    private final ChangeListener<Point2D> positionListener = (observable, oldValue, newValue) -> reorderPorts();
 
     public SystemViewElement(SystemViewModel systemViewModel) {
         super(systemViewModel);
@@ -56,6 +60,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         this.outputPortsAligner = new VBox();
 
         bindViewModel();
+        addPortPositionListeners();
         constructVisualization();
     }
 
@@ -141,6 +146,9 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         } else if (portViewModel.getVisibility() == Visibility.OUTPUT) {
             outputPortsAligner.getChildren().add(portViewElement);
         }
+        portViewModel.getIncomingConnections().addListener(this::onConnectionChanged);
+        portViewModel.getOutgoingConnections().addListener(this::onConnectionChanged);
+        reorderPorts();
     }
 
     private void removePort(PortViewModel portViewModel) {
@@ -156,6 +164,9 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
             inputPortsAligner.getChildren().remove(portViewElement);
             outputPortsAligner.getChildren().remove(portViewElement);
         }
+        portViewModel.getIncomingConnections().removeListener(this::onConnectionChanged);
+        portViewModel.getOutgoingConnections().removeListener(this::onConnectionChanged);
+        reorderPorts();
     }
 
     private void onVisibilityChanged(
@@ -177,6 +188,7 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
             inputPortsAligner.getChildren().remove(portViewElement);
             outputPortsAligner.getChildren().remove(portViewElement);
         }
+        reorderPorts();
     }
 
     private List<HBox> setupPortContainers() {
@@ -223,5 +235,86 @@ public class SystemViewElement extends BlockViewElement implements ViewElement<S
         HBox.setHgrow(spacer, Priority.ALWAYS);
         spacer.getChildren().add(nameContainer);
         return spacer;
+    }
+
+    private void reorderPorts() {
+        List<PortViewElement> inputs =
+            new ArrayList<>(inputPortsAligner.getChildren().stream().map(PortViewElement.class::cast).toList());
+        List<PortViewElement> outputs =
+            new ArrayList<>(outputPortsAligner.getChildren().stream().map(PortViewElement.class::cast).toList());
+        inputs.sort(this::compare);
+        outputs.sort(this::compare);
+        inputPortsAligner.getChildren().setAll(inputs);
+        outputPortsAligner.getChildren().setAll(outputs);
+    }
+
+    private int compare(PortViewElement p1, PortViewElement p2) {
+        int compare = Double.compare(getOtherPortY(p1.getViewModel()), getOtherPortY(p2.getViewModel()));
+        if (compare == 0) {
+            compare = Integer.compare(p1.getViewModel().getId(), p2.getViewModel().getId());
+        }
+        return compare;
+    }
+
+    private Point2D getSortPosition(PortViewModel portViewModel) {
+        if (isVariableBlock(portViewModel)) {
+            return portViewModel.getCenter();
+        }
+        return portViewModel.getSystemPositionProperty()
+            .getValue()
+            .add(portViewModel.getSystemPortOffsetProperty().getValue());
+    }
+
+    private double getOtherPortY(PortViewModel portViewModel) {
+        List<SystemConnectionViewModel> connections =
+            portViewModel.getVisibility() == Visibility.INPUT ? portViewModel.getIncomingConnections()
+                : portViewModel.getOutgoingConnections();
+        double minY = Double.MAX_VALUE;
+        for (SystemConnectionViewModel connection : connections) {
+            if (connection.getSource().equals(portViewModel)) {
+                minY = Math.min(minY, getSortPosition(connection.getDestination()).getY());
+            } else {
+                minY = Math.min(minY, getSortPosition(connection.getSource()).getY());
+            }
+        }
+        return minY;
+    }
+
+    private boolean isVariableBlock(PortViewModel portViewModel) {
+        return systemViewModel.getTarget().getParent().getVariables().contains(portViewModel.getTarget());
+    }
+
+    private void onConnectionChanged(ListChangeListener.Change<? extends SystemConnectionViewModel> change) {
+        while (change.next()) {
+            if (change.wasAdded()) {
+                change.getAddedSubList()
+                    .forEach(connection -> connection.getEdgePoints().addListener(this::onEdgePointsChanged));
+            } else if (change.wasRemoved()) {
+                change.getRemoved()
+                    .forEach(connection -> connection.getEdgePoints().removeListener(this::onEdgePointsChanged));
+            }
+        }
+        reorderPorts();
+    }
+
+    private void onEdgePointsChanged(ListChangeListener.Change<? extends Property<Point2D>> change) {
+        while (change.next()) {
+            if (change.wasAdded()) {
+                change.getAddedSubList().forEach(point -> point.addListener(positionListener));
+            } else if (change.wasRemoved()) {
+                change.getRemoved().forEach(point -> point.removeListener(positionListener));
+            }
+        }
+    }
+
+    private void addPortPositionListeners() {
+        for (PortViewModel portViewModel : portsProperty) {
+            List<SystemConnectionViewModel> connections = new ArrayList<>(portViewModel.getIncomingConnections());
+            connections.addAll(portViewModel.getOutgoingConnections());
+            for (SystemConnectionViewModel connection : connections) {
+                connection.getEdgePoints().addListener(this::onEdgePointsChanged);
+                connection.getEdgePoints().forEach(point -> point.addListener(positionListener));
+            }
+        }
     }
 }

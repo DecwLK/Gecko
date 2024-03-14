@@ -4,6 +4,8 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import lombok.Getter;
@@ -27,6 +29,12 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
     private final Property<Point2D> systemPortPositionProperty;
     private final Property<Point2D> systemPortSizeProperty;
 
+    private final ObservableList<SystemConnectionViewModel> incomingConnections;
+    private final ObservableList<SystemConnectionViewModel> outgoingConnections;
+
+    private final Property<Point2D> systemPositionProperty;
+    private final Property<Point2D> systemPortOffsetProperty;
+
     private static final Point2D DEFAULT_PORT_SIZE = new Point2D(100, 50);
 
     public PortViewModel(int id, @NonNull Variable target) {
@@ -37,6 +45,10 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
         this.sizeProperty.setValue(DEFAULT_PORT_SIZE);
         this.systemPortPositionProperty = new SimpleObjectProperty<>(Point2D.ZERO);
         this.systemPortSizeProperty = new SimpleObjectProperty<>(Point2D.ZERO);
+        this.systemPositionProperty = new SimpleObjectProperty<>(Point2D.ZERO);
+        this.systemPortOffsetProperty = new SimpleObjectProperty<>(Point2D.ZERO);
+        this.incomingConnections = FXCollections.observableArrayList();
+        this.outgoingConnections = FXCollections.observableArrayList();
     }
 
     public void setSystemPortPosition(@NonNull Point2D position) {
@@ -71,6 +83,22 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
         valueProperty.setValue(value);
     }
 
+    public void addIncomingConnection(SystemConnectionViewModel connection) {
+        incomingConnections.add(connection);
+    }
+
+    public void removeIncomingConnection(SystemConnectionViewModel connection) {
+        incomingConnections.remove(connection);
+    }
+
+    public void addOutgoingConnection(SystemConnectionViewModel connection) {
+        outgoingConnections.add(connection);
+    }
+
+    public void removeOutgoingConnection(SystemConnectionViewModel connection) {
+        outgoingConnections.remove(connection);
+    }
+
     @Override
     public void updateTarget() throws ModelException {
         super.updateTarget();
@@ -80,7 +108,7 @@ public class PortViewModel extends BlockViewModelElement<Variable> {
     }
 
     @Override
-    public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
+    public <T> T accept(@NonNull PositionableViewModelElementVisitor<T> visitor) {
         return visitor.visit(this);
     }
 

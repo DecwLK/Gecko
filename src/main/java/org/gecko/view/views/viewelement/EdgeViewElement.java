@@ -105,7 +105,7 @@ public class EdgeViewElement extends ConnectionViewElement implements ViewElemen
 
         Point2D p;
         Point2D newPos;
-        double mp = 0;
+        double mp;
         if (isVertical) {
             mp = (label.getHeight() / 2) / Math.sin(angle);
             p = vec.normalize().multiply(Math.abs(mp)).multiply(Math.signum(angle)).add(mid);

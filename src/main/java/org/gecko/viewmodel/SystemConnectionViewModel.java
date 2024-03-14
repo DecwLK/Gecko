@@ -32,10 +32,14 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
         this.destinationProperty = new SimpleObjectProperty<>(destination);
         this.edgePoints = FXCollections.observableArrayList();
         sizeProperty.setValue(Point2D.ZERO);
+        source.addOutgoingConnection(this);
+        destination.addIncomingConnection(this);
     }
 
     public void setSource(@NonNull PortViewModel source) {
+        sourceProperty.getValue().removeOutgoingConnection(this);
         sourceProperty.setValue(source);
+        source.addOutgoingConnection(this);
     }
 
     public PortViewModel getSource() {
@@ -43,7 +47,9 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     }
 
     public void setDestination(@NonNull PortViewModel destination) {
+        destinationProperty.getValue().removeIncomingConnection(this);
         destinationProperty.setValue(destination);
+        destination.addIncomingConnection(this);
     }
 
     public PortViewModel getDestination() {
@@ -57,7 +63,7 @@ public class SystemConnectionViewModel extends PositionableViewModelElement<Syst
     }
 
     @Override
-    public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
+    public <S> S accept(@NonNull PositionableViewModelElementVisitor<S> visitor) {
         return visitor.visit(this);
     }
 

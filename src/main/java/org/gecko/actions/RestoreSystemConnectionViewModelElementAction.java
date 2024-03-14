@@ -26,6 +26,8 @@ public class RestoreSystemConnectionViewModelElementAction extends Action {
     boolean run() throws GeckoException {
         system.addConnection(systemConnectionViewModel.getTarget());
         systemConnectionViewModel.getDestination().getTarget().setHasIncomingConnection(true);
+        systemConnectionViewModel.getSource().getOutgoingConnections().add(systemConnectionViewModel);
+        systemConnectionViewModel.getDestination().getIncomingConnections().add(systemConnectionViewModel);
         geckoViewModel.addViewModelElement(systemConnectionViewModel);
         return true;
     }

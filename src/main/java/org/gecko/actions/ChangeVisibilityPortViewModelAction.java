@@ -67,8 +67,7 @@ public class ChangeVisibilityPortViewModelAction extends Action {
     private ActionGroup getSystemConnectionDeleteActionGroup() {
         System containingSystem = geckoViewModel.getSystemViewModelWithPort(portViewModel).getTarget();
         System parentSystem = containingSystem.getParent();
-        List<Action> deleteActions = new ArrayList<>();
-        deleteActions.addAll(getSystemConnectionDeleteActions(containingSystem));
+        List<Action> deleteActions = new ArrayList<>(getSystemConnectionDeleteActions(containingSystem));
 
         if (parentSystem != null) {
             deleteActions.addAll(getSystemConnectionDeleteActions(parentSystem));

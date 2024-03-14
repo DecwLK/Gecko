@@ -1,5 +1,6 @@
 package org.gecko.view.views.viewelement;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -64,6 +65,9 @@ public class PortViewElement extends Pane {
         nameProperty.bind(viewModel.getNameProperty());
         visibilityProperty.bind(viewModel.getVisibilityProperty());
         visibilityProperty.addListener((observable, oldValue, newValue) -> updateBackgroundColor());
+        viewModel.getSystemPortOffsetProperty().bind(Bindings.createObjectBinding(() -> {
+            return new Point2D(getLayoutX(), getLayoutY());
+        }, layoutXProperty(), layoutYProperty()));
     }
 
     private void constructVisualization() {

@@ -59,10 +59,12 @@ public class SystemViewModel extends BlockViewModelElement<System> {
 
     public void addPort(@NonNull PortViewModel port) {
         portsProperty.add(port);
+        port.getSystemPositionProperty().bind(positionProperty);
     }
 
     public void removePort(@NonNull PortViewModel port) {
         portsProperty.remove(port);
+        port.getSystemPositionProperty().unbind();
     }
 
     /**
@@ -81,7 +83,7 @@ public class SystemViewModel extends BlockViewModelElement<System> {
     }
 
     @Override
-    public Object accept(@NonNull PositionableViewModelElementVisitor visitor) {
+    public <S> S accept(@NonNull PositionableViewModelElementVisitor<S> visitor) {
         return visitor.visit(this);
     }
 

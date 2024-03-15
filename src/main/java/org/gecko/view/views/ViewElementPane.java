@@ -1,14 +1,17 @@
 package org.gecko.view.views;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -35,12 +38,15 @@ public class ViewElementPane {
     @Getter
     private final Set<ViewElement<?>> elements;
 
+    private final Map<Node, ViewElement<?>> nodeToElement;
+
     public ViewElementPane(EditorViewModel evm) {
         this.world = new Pane();
         this.pane = new ScrollPane();
         this.offset = new SimpleObjectProperty<>(Point2D.ZERO);
         this.widthPadding = new SimpleDoubleProperty(0);
         this.heightPadding = new SimpleDoubleProperty(0);
+        this.nodeToElement = new HashMap<>();
         this.minWorldPosition = Point2D.ZERO;
         this.maxWorldPosition = Point2D.ZERO;
         this.elements = new HashSet<>();
@@ -71,6 +77,7 @@ public class ViewElementPane {
         elements.add(element);
 
         Node node = element.drawElement();
+        nodeToElement.put(node, element);
         node.setLayoutX(worldTolocalCoordinates(target.getPosition()).getX());
         node.setLayoutY(worldTolocalCoordinates(target.getPosition()).getY());
         node.layoutXProperty()
@@ -251,10 +258,10 @@ public class ViewElementPane {
     }
 
     private void orderChildren() {
-        List<Node> sortedElements = elements.stream()
-            .sorted(Comparator.comparingInt(ViewElement::getZPriority))
-            .map(ViewElement::drawElement)
-            .toList();
-        world.getChildren().setAll(sortedElements);
+        List<Node> newElements =
+            elements.stream().map(ViewElement::drawElement).filter(e -> !world.getChildren().contains(e)).toList();
+        world.getChildren().addAll(newElements);
+        FXCollections.sort(world.getChildren(),
+            Comparator.comparingInt(node -> nodeToElement.get(node).getZPriority()));
     }
 }

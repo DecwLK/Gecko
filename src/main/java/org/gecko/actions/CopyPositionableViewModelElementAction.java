@@ -35,10 +35,15 @@ public class CopyPositionableViewModelElementAction extends Action {
             .getCurrentSystem()
             .getTarget()
             .getConnections()) {
-            System sourceSystem = geckoViewModel.getGeckoModel().getSystemWithVariable(connection.getSource());
-            System destinationSystem =
-                geckoViewModel.getGeckoModel().getSystemWithVariable(connection.getDestination());
-            if (elementToCopy.contains(sourceSystem) && elementToCopy.contains(destinationSystem)) {
+
+            boolean sourceSelected =
+                elementToCopy.contains(geckoViewModel.getGeckoModel().getSystemWithVariable(connection.getSource()))
+                    || elementToCopy.contains(connection.getSource());
+            boolean destinationSelected = elementToCopy.contains(
+                geckoViewModel.getGeckoModel().getSystemWithVariable(connection.getDestination()))
+                || elementToCopy.contains(connection.getDestination());
+
+            if (sourceSelected && destinationSelected) {
                 copyQueue.add(geckoViewModel.getViewModelElement(connection));
             }
         }

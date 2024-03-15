@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
+import javax.sound.sampled.Port;
 import lombok.Getter;
 import org.gecko.exceptions.MissingViewModelElementException;
 import org.gecko.exceptions.ModelException;
@@ -20,6 +21,7 @@ import org.gecko.model.State;
 import org.gecko.model.System;
 import org.gecko.model.SystemConnection;
 import org.gecko.model.Variable;
+import org.gecko.view.views.viewelement.VariableBlockViewElement;
 import org.gecko.viewmodel.EdgeViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PortViewModel;
@@ -95,18 +97,25 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
 
     @Override
     public void visit(Variable variableFromClipboard) throws ModelException {
-        if (!geckoViewModel.getCurrentEditor()
-            .getCurrentSystem()
-            .getTarget()
-            .getVariables()
-            .contains(variableFromClipboard)) {
-            return;
-        }
         Variable variableToPaste = geckoViewModel.getGeckoModel().getModelFactory().copyVariable(variableFromClipboard);
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().addVariable(variableToPaste);
         PortViewModel portViewModel = geckoViewModel.getViewModelFactory().createPortViewModelFrom(variableToPaste);
         clipboardToPasted.put(variableFromClipboard, variableToPaste);
         pastedElements.add(portViewModel);
+
+        if (!geckoViewModel.getCurrentEditor()
+            .getCurrentSystem()
+            .getTarget()
+            .getVariables()
+            .contains(variableFromClipboard)) {
+
+            SystemViewModel systemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(
+                geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget());
+            systemViewModel.addPort(portViewModel);
+
+            portViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(variableFromClipboard).getKey());
+            portViewModel.setSize(copyVisitor.getElementToPosAndSize().get(variableFromClipboard).getValue());
+        }
     }
 
     @Override
@@ -130,8 +139,7 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         clipboardToPasted.put(regionFromClipboard, regionToPaste);
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().addRegion(regionToPaste);
         RegionViewModel regionViewModel = geckoViewModel.getViewModelFactory().createRegionViewModelFrom(regionToPaste);
-        regionViewModel.setPosition(
-            copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getKey());
+        regionViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getKey());
         regionViewModel.setSize(copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getValue());
         pastedElements.add(regionViewModel);
     }

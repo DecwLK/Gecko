@@ -116,6 +116,11 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
 
     @Override
     public Void visit(PortViewModel portViewModel) {
+        Variable original = portViewModel.getTarget();
+        Variable copy = geckoViewModel.getGeckoModel().getModelFactory().copyVariable(original);
+        originalToClipboard.put(original, copy);
+        savePositionAndSize(copy, portViewModel);
+        copiedElements.add(copy);
         return null;
     }
 
@@ -128,13 +133,21 @@ public class CopyPositionableViewModelElementVisitor implements PositionableView
                 .getCurrentSystem()
                 .getTarget()
                 .getChildSystemWithVariable(systemConnectionViewModel.getTarget().getSource()));
+
         SystemViewModel destinationSystemViewModel = (SystemViewModel) geckoViewModel.getViewModelElement(
             geckoViewModel.getCurrentEditor()
                 .getCurrentSystem()
                 .getTarget()
                 .getChildSystemWithVariable(systemConnectionViewModel.getTarget().getDestination()));
-        if (selection.contains(sourceSystemViewModel) && selection.contains(destinationSystemViewModel)) {
-            SystemConnection original = systemConnectionViewModel.getTarget();
+
+        SystemConnection original = systemConnectionViewModel.getTarget();
+
+        boolean sourceSelected = selection.contains(sourceSystemViewModel) || selection.contains(
+            geckoViewModel.getViewModelElement(original.getSource()));
+        boolean destinationSelected = selection.contains(destinationSystemViewModel) || selection.contains(
+            geckoViewModel.getViewModelElement(original.getDestination()));
+
+        if (sourceSelected && destinationSelected) {
             SystemConnection copy = geckoViewModel.getGeckoModel().getModelFactory().copySystemConnection(original);
             Variable sourceOnClipboard = (Variable) originalToClipboard.get(original.getSource());
             Variable destinationOnClipboard = (Variable) originalToClipboard.get(original.getDestination());

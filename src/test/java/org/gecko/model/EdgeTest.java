@@ -28,8 +28,6 @@ public class EdgeTest {
             fail("States or contract for testing purposes of the edge could not be initialized.");
         }
 
-        // Edge can get null source / destination. @nonnull onParam!!
-
         assertThrows(ModelException.class, () -> edge = new Edge(2, source, destination, contract, Kind.HIT, -5));
 
         try {

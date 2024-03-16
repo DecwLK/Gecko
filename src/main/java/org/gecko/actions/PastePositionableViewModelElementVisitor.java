@@ -130,8 +130,7 @@ public class PastePositionableViewModelElementVisitor implements ElementVisitor 
         clipboardToPasted.put(regionFromClipboard, regionToPaste);
         geckoViewModel.getCurrentEditor().getCurrentSystem().getTarget().getAutomaton().addRegion(regionToPaste);
         RegionViewModel regionViewModel = geckoViewModel.getViewModelFactory().createRegionViewModelFrom(regionToPaste);
-        regionViewModel.setPosition(
-            copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getKey());
+        regionViewModel.setPosition(copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getKey());
         regionViewModel.setSize(copyVisitor.getElementToPosAndSize().get(regionFromClipboard).getValue());
         pastedElements.add(regionViewModel);
     }

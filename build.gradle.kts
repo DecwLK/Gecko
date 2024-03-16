@@ -2,6 +2,7 @@ import net.ltgt.gradle.errorprone.errorprone
 
 plugins {
     jacoco
+    id("checkstyle")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("java")
     id("application")
@@ -46,6 +47,10 @@ dependencies {
 tasks.withType<JavaCompile>().configureEach {
     options.errorprone.disable("SameNameButDifferent")
     options.errorprone.disableWarningsInGeneratedCode.set(true)
+}
+
+checkstyle {
+    toolVersion = "10.12.5"
 }
 
 val generateGrammarSource by tasks.existing(AntlrTask::class) {

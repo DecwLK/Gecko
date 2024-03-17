@@ -261,6 +261,13 @@ public class ViewElementPane {
         List<Node> newElements =
             elements.stream().map(ViewElement::drawElement).filter(e -> !world.getChildren().contains(e)).toList();
         world.getChildren().addAll(newElements);
+        List<Node> removedElements = world.getChildren()
+            .stream()
+            .map(nodeToElement::get)
+            .filter(e -> !elements.contains(e))
+            .map(ViewElement::drawElement)
+            .toList();
+        world.getChildren().removeAll(removedElements);
         FXCollections.sort(world.getChildren(),
             Comparator.comparingInt(node -> nodeToElement.get(node).getZPriority()));
     }

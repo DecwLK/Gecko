@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -117,7 +116,6 @@ public class AutomatonFileSerializer implements FileSerializer {
         //Building the conditions for the priorities
         List<List<Edge>> groupedEdges =
             new ArrayList<>(edges.stream().collect(Collectors.groupingBy(Edge::getPriority)).values());
-        Collections.reverse(groupedEdges); //This just makes this easier to think about
         List<Condition> preConditionsByPrio = new ArrayList<>();
         for (List<Edge> edgeGroup : groupedEdges) {
             //OrElseThrow because validity needs to be ensured by model

@@ -44,7 +44,7 @@ public class Region extends Element implements Renamable {
     }
 
     @Override
-    public void accept(ElementVisitor visitor) throws MatchException, ModelException, MissingViewModelElementException {
+    public void accept(ElementVisitor visitor) throws ModelException, MissingViewModelElementException {
         visitor.visit(this);
     }
 

@@ -202,6 +202,11 @@ public class EdgeViewModel extends PositionableViewModelElement<Edge> {
     }
 
     @Override
+    public Point2D getCenter() {
+        return startPointProperty.getValue().midpoint(endPointProperty.getValue());
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

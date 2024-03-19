@@ -11,6 +11,7 @@ import org.gecko.actions.ActionFactory;
 import org.gecko.actions.ActionManager;
 import org.gecko.tools.ToolType;
 import org.gecko.view.views.EditorView;
+import org.gecko.viewmodel.EditorViewModel;
 
 /**
  * An abstract representation of a handler for shortcut events, implementing the {@link EventHandler} interface, which
@@ -19,7 +20,6 @@ import org.gecko.view.views.EditorView;
  * allow for actions to be run by using keyboard shortcuts.
  */
 public abstract class ShortcutHandler implements EventHandler<KeyEvent> {
-    private static final double ZOOM_FACTOR = 1.1;
     protected HashMap<KeyCodeCombination, Runnable> shortcuts = new HashMap<>();
     protected ActionManager actionManager;
     protected ActionFactory actionFactory;
@@ -65,10 +65,10 @@ public abstract class ShortcutHandler implements EventHandler<KeyEvent> {
 
     private void addZoomShortcuts() {
         shortcuts.put(Shortcuts.ZOOM_IN.get(), () -> {
-            actionManager.run(actionFactory.createZoomCenterAction(ZOOM_FACTOR));
+            actionManager.run(actionFactory.createZoomCenterAction(EditorViewModel.getDefaultZoomStep()));
         });
         shortcuts.put(Shortcuts.ZOOM_OUT.get(), () -> {
-            actionManager.run(actionFactory.createZoomCenterAction(1 / ZOOM_FACTOR));
+            actionManager.run(actionFactory.createZoomCenterAction(1 / EditorViewModel.getDefaultZoomStep()));
         });
     }
 

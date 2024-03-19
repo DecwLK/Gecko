@@ -24,8 +24,6 @@ import org.gecko.viewmodel.PositionableViewModelElement;
  */
 public class FloatingUIBuilder {
 
-    private static final double ZOOM_SCALE = 1.1;
-
     private static final int DEFAULT_BUTTON_SIZE = 30;
     private static final String FLOATING_BUTTON_STYLE_CLASS = "floating-ui-button";
     private static final String ZOOM_IN_STYLE_CLASS = "floating-zoom-in-button";
@@ -48,7 +46,8 @@ public class FloatingUIBuilder {
         Button zoomInButton = createStyledButton();
         zoomInButton.getStyleClass().add(ZOOM_IN_STYLE_CLASS);
         zoomInButton.setOnAction(event -> {
-            actionManager.run(actionManager.getActionFactory().createZoomCenterAction(ZOOM_SCALE));
+            actionManager.run(
+                actionManager.getActionFactory().createZoomCenterAction(EditorViewModel.getDefaultZoomStep()));
         });
         String zoomInTooltip = "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "zoom_in"),
             Shortcuts.ZOOM_IN.get().getDisplayText());
@@ -62,8 +61,8 @@ public class FloatingUIBuilder {
 
         Button zoomOutButton = createStyledButton();
         zoomOutButton.getStyleClass().add(ZOOM_OUT_STYLE_CLASS);
-        zoomOutButton.setOnAction(
-            event -> actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1 / ZOOM_SCALE)));
+        zoomOutButton.setOnAction(event -> actionManager.run(
+            actionManager.getActionFactory().createZoomCenterAction(1 / EditorViewModel.getDefaultZoomStep())));
         String zoomOutTooltip = "%s (%s)".formatted(ResourceHandler.getString("Tooltips", "zoom_out"),
             Shortcuts.ZOOM_OUT.get().getDisplayText());
         zoomOutButton.setTooltip(new Tooltip(zoomOutTooltip));

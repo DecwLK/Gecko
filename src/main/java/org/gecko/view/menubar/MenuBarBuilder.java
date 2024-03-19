@@ -24,6 +24,7 @@ import org.gecko.view.ResourceHandler;
 import org.gecko.view.inspector.element.label.InspectorLabel;
 import org.gecko.view.inspector.element.textfield.InspectorRenameField;
 import org.gecko.view.views.shortcuts.Shortcuts;
+import org.gecko.viewmodel.EditorViewModel;
 import org.gecko.viewmodel.GeckoViewModel;
 import org.gecko.viewmodel.PositionableViewModelElement;
 import org.gecko.viewmodel.Renamable;
@@ -44,8 +45,6 @@ public class MenuBarBuilder {
     private final MenuBar menuBar;
     private final GeckoView view;
     private final ActionManager actionManager;
-
-    private static final double ZOOM_SCALE = 1.1;
 
     public MenuBarBuilder(GeckoView view, ActionManager actionManager) {
         this.view = view;
@@ -215,13 +214,13 @@ public class MenuBarBuilder {
         // Zooming commands:
 
         MenuItem zoomInMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "zoom_in"));
-        zoomInMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createZoomCenterAction(ZOOM_SCALE)));
+        zoomInMenuItem.setOnAction(e -> actionManager.run(
+            actionManager.getActionFactory().createZoomCenterAction(EditorViewModel.getDefaultZoomStep())));
         zoomInMenuItem.setAccelerator(Shortcuts.ZOOM_IN.get());
 
         MenuItem zoomOutMenuItem = new MenuItem(ResourceHandler.getString("Buttons", "zoom_out"));
-        zoomOutMenuItem.setOnAction(
-            e -> actionManager.run(actionManager.getActionFactory().createZoomCenterAction(1 / ZOOM_SCALE)));
+        zoomOutMenuItem.setOnAction(e -> actionManager.run(
+            actionManager.getActionFactory().createZoomCenterAction(1 / EditorViewModel.getDefaultZoomStep())));
         zoomOutMenuItem.setAccelerator(Shortcuts.ZOOM_OUT.get());
 
         SeparatorMenuItem zoomToAppearanceSeparator = new SeparatorMenuItem();

@@ -2,6 +2,7 @@ package org.gecko.tools;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +21,7 @@ import org.gecko.view.views.viewelement.decorator.BlockElementScalerViewElementD
 import org.gecko.view.views.viewelement.decorator.ConnectionElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.ElementScalerViewElementDecorator;
 import org.gecko.view.views.viewelement.decorator.SelectableViewElementDecorator;
+import org.gecko.viewmodel.EditorViewModel;
 
 /**
  * An abstract representation of a tool used in the Gecko Graphic Editor, characterized by a {@link ToolType}. Follows
@@ -48,6 +50,16 @@ public abstract class Tool implements ViewElementVisitor {
         pane.draw().setCursor(Cursor.DEFAULT);
         setAllHandlers(pane.draw(), null);
         setAllHandlers(pane.getWorld(), null);
+        pane.getWorld().setOnScroll(e -> {
+            if (!e.isControlDown() || e.getDeltaY() == 0) {
+                return;
+            }
+            e.consume();
+            double defaultZoomStep = EditorViewModel.getDefaultZoomStep();
+            double zoomFactor = e.getDeltaY() > 0 ? defaultZoomStep : 1 / defaultZoomStep;
+            Point2D pivot = pane.screenToWorldCoordinates(e.getScreenX(), e.getScreenY());
+            actionManager.run(actionManager.getActionFactory().createZoomAction(pivot, zoomFactor));
+        });
     }
 
     /**

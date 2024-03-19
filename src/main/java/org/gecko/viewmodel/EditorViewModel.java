@@ -48,6 +48,7 @@ public class EditorViewModel {
     private static final double MAX_ZOOM_SCALE = 2.5;
     private static final double MIN_ZOOM_SCALE = 0.1;
     private static final double DEFAULT_ZOOM_SCALE = 1;
+    private static final double DEFAULT_ZOOM_STEP = 1.1;
     private final int id;
     private final ActionManager actionManager;
     private final SystemViewModel currentSystem;
@@ -59,7 +60,6 @@ public class EditorViewModel {
     private final Property<Point2D> pivotProperty;
     private final DoubleProperty zoomScaleProperty;
     private final BooleanProperty needsRefocusProperty;
-
 
     private final Property<Tool> currentToolProperty;
     private final Property<PositionableViewModelElement<?>> focusedElementProperty;
@@ -258,6 +258,10 @@ public class EditorViewModel {
 
     public double getZoomScale() {
         return zoomScaleProperty.get();
+    }
+
+    public static double getDefaultZoomStep() {
+        return DEFAULT_ZOOM_STEP;
     }
 
     public void zoom(double factor, Point2D pivot) {

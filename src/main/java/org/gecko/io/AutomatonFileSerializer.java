@@ -175,8 +175,8 @@ public class AutomatonFileSerializer implements FileSerializer {
             return newContract;
         }
         List<Condition> newConditions = andConditions(relevantRegions);
-        newContract.setPreCondition(newConditions.getFirst());
-        newContract.setPostCondition(newConditions.get(1));
+        newContract.setPreCondition(newConditions.getFirst().and(newContract.getPreCondition()));
+        newContract.setPostCondition(newConditions.get(1).and(newContract.getPostCondition()));
         return newContract;
     }
 
@@ -191,8 +191,11 @@ public class AutomatonFileSerializer implements FileSerializer {
         } catch (ModelException e) {
             throw new RuntimeException("Failed to build conditions out of other valid conditions", e);
         }
+        newPre = newPre.and(first.getInvariant());
+        newPost = newPost.and(first.getInvariant());
 
-        for (Region region : regions) {
+        for (int i = 1; i < regions.size(); i++) {
+            Region region = regions.get(i);
             newPre = newPre.and(region.getPreAndPostCondition().getPreCondition());
             newPre = newPre.and(region.getInvariant());
             newPost = newPost.and(region.getPreAndPostCondition().getPostCondition());

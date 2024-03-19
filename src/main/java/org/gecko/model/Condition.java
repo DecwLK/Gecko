@@ -32,9 +32,15 @@ public class Condition {
 
     @JsonIgnore
     public Condition and(Condition other) {
+        String newCondition;
+        if (other.getCondition().equals(TRUE_CONDITION)) {
+            newCondition = condition;
+        } else {
+            newCondition = AND_CONDITIONS.formatted(condition, other.condition);
+        }
         try {
             // This and other are always valid
-            return new Condition(AND_CONDITIONS.formatted(condition, other.condition));
+            return new Condition(newCondition);
         } catch (ModelException e) {
             return null;
         }

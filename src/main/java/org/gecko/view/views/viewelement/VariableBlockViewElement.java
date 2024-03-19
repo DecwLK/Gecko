@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -88,6 +89,8 @@ public class VariableBlockViewElement extends BlockViewElement implements ViewEl
         container.getChildren().add(rectangle);
         Label label = new Label();
         label.textProperty().bind(nameProperty);
+        label.setMaxWidth(portViewModel.getSize().getX());
+        label.setAlignment(Pos.CENTER);
         container.getChildren().add(label);
         getChildren().add(container);
     }

@@ -35,6 +35,8 @@ public class Condition {
         String newCondition;
         if (other.getCondition().equals(TRUE_CONDITION)) {
             newCondition = condition;
+        } else if (getCondition().equals(TRUE_CONDITION)) {
+            newCondition = other.condition;
         } else {
             newCondition = AND_CONDITIONS.formatted(condition, other.condition);
         }

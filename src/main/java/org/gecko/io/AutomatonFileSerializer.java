@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -102,25 +103,26 @@ public class AutomatonFileSerializer implements FileSerializer {
             return "";
         }
         //Creating new contracts to not alter the model
-        Map<Contract, Contract> newContracts = new HashMap<>();
+        Map<Edge, Contract> newContracts = new HashMap<>();
         for (Edge edge : edges) {
             Contract newContract = applyRegionsToContract(relevantRegions, edge.getContract());
             try {
                 applyKindToContract(newContract, edge.getKind());
+                newContract.setName(getContractName(edge));
             } catch (ModelException e) {
                 throw new RuntimeException("Failed to apply kind to contract", e);
             }
-            newContracts.put(edge.getContract(), newContract);
+            newContracts.put(edge, newContract);
         }
 
         //Building the conditions for the priorities
         List<List<Edge>> groupedEdges =
             new ArrayList<>(edges.stream().collect(Collectors.groupingBy(Edge::getPriority)).values());
+        Collections.reverse(groupedEdges);
         List<Condition> preConditionsByPrio = new ArrayList<>();
         for (List<Edge> edgeGroup : groupedEdges) {
             //OrElseThrow because validity needs to be ensured by model
             Condition newPre = edgeGroup.stream()
-                .map(Edge::getContract)
                 .map(newContracts::get)
                 .map(Contract::getPreCondition)
                 .reduce(Condition::and)
@@ -141,10 +143,10 @@ public class AutomatonFileSerializer implements FileSerializer {
                 if (prioIndex == 0) {
                     continue; //Highest prio doesn't need to be altered
                 }
-                Contract contractWithPrio = newContracts.get(edge.getContract());
+                Contract contractWithPrio = newContracts.get(edge);
                 contractWithPrio.setPreCondition(
                     contractWithPrio.getPreCondition().and(allLowerPrioPreConditions.get(prioIndex - 1).not()));
-                newContracts.put(edge.getContract(), contractWithPrio);
+                newContracts.put(edge, contractWithPrio);
             }
             prioIndex++;
         }
@@ -211,7 +213,7 @@ public class AutomatonFileSerializer implements FileSerializer {
 
     private String serializeTransition(Edge edge) {
         return INDENT + SERIALIZED_TRANSITION.formatted(edge.getSource().getName(), edge.getDestination().getName(),
-            edge.getContract().getName());
+            getContractName(edge));
     }
 
     private String serializeSystem(System system) {
@@ -317,5 +319,22 @@ public class AutomatonFileSerializer implements FileSerializer {
             joiner.add(result);
         }
         return joiner.toString();
+    }
+
+    private String getContractName(Edge edge) {
+        String name = edge.getContract().getName();
+        if (edge.getKind() == Kind.HIT) {
+            return name;
+        }
+        return makeNameUnique("%s_%s".formatted(name, edge.getKind().name()));
+    }
+
+    private String makeNameUnique(String baseName) {
+        String name = baseName;
+        int i = 1;
+        while (!model.isNameUnique(name)) {
+            name = "%s_%d".formatted(baseName, i++);
+        }
+        return name;
     }
 }

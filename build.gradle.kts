@@ -1,9 +1,8 @@
 import net.ltgt.gradle.errorprone.errorprone
+import org.gradle.jvm.tasks.Jar
 
 plugins {
     jacoco
-    id("checkstyle")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("java")
     id("application")
     id("antlr")
@@ -14,7 +13,7 @@ plugins {
 }
 
 group = "org.gecko"
-version = "0.1"
+version = "1.0.1"
 
 javafx {
     version = "21.0.1"
@@ -26,6 +25,11 @@ repositories {
 }
 
 dependencies {
+    implementation("org.eclipse.elk:org.eclipse.elk.core:0.8.1")
+    implementation("org.eclipse.elk:org.eclipse.elk.alg.common:0.8.1")
+    implementation("org.eclipse.elk:org.eclipse.elk.alg.force:0.8.1")
+    implementation("org.eclipse.elk:org.eclipse.elk.alg.layered:0.8.1")
+
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
@@ -38,19 +42,16 @@ dependencies {
     implementation("org.antlr:antlr4-runtime:4.13.1")
     antlr("org.antlr:antlr4:4.13.1")
 
-    implementation("org.eclipse.elk:org.eclipse.elk.core:0.8.1")
-    implementation("org.eclipse.elk:org.eclipse.elk.alg.common:0.8.1")
-    implementation("org.eclipse.elk:org.eclipse.elk.alg.force:0.8.1")
-    implementation("org.eclipse.elk:org.eclipse.elk.alg.layered:0.8.1")
+
+    runtimeOnly("org.openjfx:javafx-graphics:$javafx.version")
+//    runtimeOnly("org.openjfx:javafx-graphics:$javafx.version:win")
+//    runtimeOnly("org.openjfx:javafx-graphics:$javafx.version:linux")
+//    runtimeOnly("org.openjfx:javafx-graphics:$javafx.version:mac")
 }
 
 tasks.withType<JavaCompile>().configureEach {
     options.errorprone.disable("SameNameButDifferent")
     options.errorprone.disableWarningsInGeneratedCode.set(true)
-}
-
-checkstyle {
-    toolVersion = "10.12.5"
 }
 
 val generateGrammarSource by tasks.existing(AntlrTask::class) {
@@ -89,8 +90,19 @@ application {
     mainClass.set("org.gecko.application.Main")
 }
 
-tasks {
-    shadowJar {
-        exclude("module-info.class")
-    }
+tasks.register<Jar>("uberJar") {
+    archiveClassifier = "uber"
+
+    from(sourceSets.main.get().output)
+    manifest.attributes["Main-Class"] = "org.gecko.application.Main"
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude("META-INF/*.SF")
+    exclude("META-INF/*.DSA")
+    exclude("META-INF/*.RSA")
+    exclude("META-INF/LICENSE")
 }
